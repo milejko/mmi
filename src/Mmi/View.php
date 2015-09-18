@@ -359,6 +359,10 @@ class View extends \Mmi\DataObject {
 			//pobieranie pierwszego jeśli jest i w vendor i src
 			return is_array($structure[$module]['layout']) ? $structure[$module]['layout'][0] : $structure[$module]['layout'];
 		}
+		//layout aplikacyjny app
+		if (isset($structure['app']['layout'])) {
+			return $structure['app']['layout'];
+		}
 		//brak layoutu
 		throw new \Exception('Layout not found.');
 	}

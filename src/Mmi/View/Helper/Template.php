@@ -20,7 +20,7 @@ class Template extends HelperAbstract {
 	public function template($input) {
 
 		//buforowanie renderowanie szablonu
-		$input = preg_replace_callback('/\{\'([a-z\-]+)\/([a-zA-Z]+)\/([a-zA-Z]+)\'\}/', [&$this, '_render'], $input);
+		$input = preg_replace_callback('/\{\'([a-z\-]+)\/([a-zA-Z]+)\/?([a-zA-Z]+)?\'\}/', [&$this, '_render'], $input);
 
 		/**
 		 * obsługa klamr
@@ -212,10 +212,18 @@ class Template extends HelperAbstract {
 	 */
 	private function _render(array $matches) {
 		$structure = \Mmi\Controller\Front::getInstance()->getStructure('template');
-		if (!isset($structure[$matches[1]][$matches[2]][$matches[3]])) {
-			return '';
+		//brak w strukturze
+		if (count($matches) == 4) {
+			if (!isset($structure[$matches[1]][$matches[2]][$matches[3]])) {
+				return '';
+			}
+			$template = is_array($structure[$matches[1]][$matches[2]][$matches[3]]) ? $structure[$matches[1]][$matches[2]][$matches[3]][0] : $structure[$matches[1]][$matches[2]][$matches[3]];
+		} elseif (count($matches) == 3) {
+			if (!isset($structure[$matches[1]][$matches[2]])) {
+				return '';
+			}
+			$template = is_array($structure[$matches[1]][$matches[2]]) ? $structure[$matches[1]][$matches[2]][0] : $structure[$matches[1]][$matches[2]];
 		}
-		$template = is_array($structure[$matches[1]][$matches[2]][$matches[3]]) ? $structure[$matches[1]][$matches[2]][$matches[3]][0] : $structure[$matches[1]][$matches[2]][$matches[3]];
 		return preg_replace_callback('/\{\'(.[^\']+)\'\}/', [&$this, '_render'], file_get_contents($template));
 	}
 
