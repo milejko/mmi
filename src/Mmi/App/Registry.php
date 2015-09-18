@@ -8,13 +8,13 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\App;
 
 abstract class Registry {
 
 	/**
 	 * Konfiguracja aplikacji
-	 * @var \Mmi\Config
+	 * @var \Mmi\App\Config\App
 	 */
 	public static $config;
 	

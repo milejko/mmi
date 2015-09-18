@@ -8,16 +8,16 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\App\Config;
 
 /**
  * Klasa konfiguracji aplikacji
  */
-abstract class Config {
+abstract class App {
 
 	/**
 	 * Podstawowa konfiguracja aplikacji
-	 * @var \Mmi\Application\Config
+	 * @var \Mmi\App\Config\App
 	 */
 	public $application;
 
@@ -51,9 +51,58 @@ abstract class Config {
 	 */
 	public $session;
 
+	/**
+	 * Charset
+	 * @var string
+	 */
+	public $charset = 'utf-8';
+
+	/**
+	 * Tryb debugowania
+	 * @var boolean
+	 */
+	public $debug = true;
+
+	/**
+	 * Bezwarunkowa kompilacja
+	 * @var boolean
+	 */
+	public $compile = false;
+
+	/**
+	 * Strefa czasowa
+	 * @var string
+	 */
+	public $timeZone = 'Europe/Warsaw';
+
+	/**
+	 * Globalna sól aplikacji
+	 * @var string
+	 */
+	public $salt = 'change-this-value';
+
+	/**
+	 * Języki obsługiwane przez aplikację
+	 * np. pl, en, fr
+	 * @var array
+	 */
+	public $languages = [];
+
+	/**
+	 * Pluginy włączone w aplikacji
+	 * np. MmiTest\Controller\Plugin
+	 * @var array
+	 */
+	public $plugins = [];
+
+	/**
+	 * Domyślny host, jeśli nie ustawiony
+	 * @var string
+	 */
+	public $host = 'localhost';
+
 	public function __construct() {
 
-		$this->application = new \Mmi\Application\Config();
 		$this->cache = new \Mmi\Cache\Config();
 		$this->db = new \Mmi\Db\Config();
 		$this->navigation = new \Mmi\Navigation\Config();

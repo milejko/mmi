@@ -10,11 +10,11 @@
 
 namespace Mmi {
 
-	class Application {
+	class App {
 
 		/**
 		 * Obiekt bootstrap
-		 * @var \Mmi\Application\BootstrapInterface
+		 * @var \Mmi\App\BootstrapInterface
 		 */
 		private $_bootstrap;
 
@@ -22,7 +22,7 @@ namespace Mmi {
 		 * Konstruktor
 		 * @param string $path
 		 */
-		public function __construct($bootstrapName = '\Mmi\Application\Bootstrap') {
+		public function __construct($bootstrapName = '\Mmi\App\Bootstrap') {
 			//inicjalizacja aplikacji
 			$this->_initPaths()
 				->_initEncoding()
@@ -30,10 +30,10 @@ namespace Mmi {
 				->_initErrorHandler();
 			//tworzenie instancji bootstrapa
 			$this->_bootstrap = new $bootstrapName();
-			\Mmi\Profiler::event('Application: bootstrap executed');
+			\Mmi\Profiler::event('App: bootstrap executed');
 			//bootstrap nie implementuje właściwego interfeace'u
-			if (!($this->_bootstrap instanceof \Mmi\Application\BootstrapInterface)) {
-				throw new \Exception('\Mmi\Application bootstrap should be implementing \Mmi\Application\Bootstrap\Interface');
+			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {
+				throw new \Exception('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace Mmi {
 
 		/**
 		 * Ustawia kodowanie na UTF-8
-		 * @return \Mmi\Application
+		 * @return \Mmi\App
 		 */
 		protected function _initEncoding() {
 			//wewnętrzne kodowanie znaków
@@ -63,11 +63,11 @@ namespace Mmi {
 		/**
 		 * Definicja ścieżek
 		 * @param string $systemPath
-		 * @return \Mmi\Application
+		 * @return \Mmi\App
 		 */
 		protected function _initPaths() {
 			//pierwszy event profilera
-			\Mmi\Profiler::event('Application: startup');
+			\Mmi\Profiler::event('App: startup');
 			//zasoby publiczne
 			define('PUBLIC_PATH', BASE_PATH . '/web');
 			//dane
@@ -79,25 +79,25 @@ namespace Mmi {
 
 		/**
 		 * Inicjalizacja konfiguracji PHP
-		 * @return \Mmi\Application
+		 * @return \Mmi\App
 		 */
 		protected function _initPhpConfiguration() {
 			//obsługa włączonych magic quotes
 			if (ini_get('magic_quotes_gpc')) {
-				throw new \Exception('\Mmi\Application: magic quotes enabled');
+				throw new \Exception('\Mmi\App: magic quotes enabled');
 			}
 			return $this;
 		}
 
 		/**
 		 * Ustawia handler błędów
-		 * @return \Mmi\Application
+		 * @return \Mmi\App
 		 */
 		protected function _initErrorHandler() {
 			//domyślne przechwycenie wyjątków
-			set_exception_handler(['\Mmi\Application\Error', 'exceptionHandler']);
+			set_exception_handler(['\Mmi\App\Error', 'exceptionHandler']);
 			//domyślne przechwycenie błędów
-			set_error_handler(['\Mmi\Application\Error', 'errorHandler']);
+			set_error_handler(['\Mmi\App\Error', 'errorHandler']);
 			return $this;
 		}
 
