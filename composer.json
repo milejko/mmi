@@ -1,5 +1,5 @@
 {
-	"name": "milejko/mmi",
+	"name": "mmi/mmi",
 	"type": "library",
 	"description": "MMi Framework Library",
 	"keywords": ["mmi, framework"],
@@ -8,6 +8,14 @@
 		{
 			"name": "Mariusz Miłejko",
 			"email": "mariusz@milejko.pl"
+		},
+		{
+			"name": "Bartłomiej Wołos",
+			"email": "funfel@onet.pl"
+		},
+		{
+			"name": "Maciej Pawłowski",
+			"email": "mac@macu.eu"
 		}
 	],
 	"require": {
