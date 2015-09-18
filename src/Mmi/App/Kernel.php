@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi {
+namespace Mmi\App {
 
-	class App {
+	class Kernel {
 
 		/**
 		 * Obiekt bootstrap
@@ -46,7 +46,7 @@ namespace Mmi {
 
 		/**
 		 * Ustawia kodowanie na UTF-8
-		 * @return \Mmi\App
+		 * @return \Mmi\App\Kernel
 		 */
 		protected function _initEncoding() {
 			//wewnętrzne kodowanie znaków
@@ -62,7 +62,7 @@ namespace Mmi {
 		/**
 		 * Definicja ścieżek
 		 * @param string $systemPath
-		 * @return \Mmi\App
+		 * @return \Mmi\App\Kernel
 		 */
 		protected function _initPaths() {
 			//pierwszy event profilera
@@ -78,19 +78,19 @@ namespace Mmi {
 
 		/**
 		 * Inicjalizacja konfiguracji PHP
-		 * @return \Mmi\App
+		 * @return \Mmi\App\Kernel
 		 */
 		protected function _initPhpConfiguration() {
 			//obsługa włączonych magic quotes
 			if (ini_get('magic_quotes_gpc')) {
-				throw new \Exception('\Mmi\App: magic quotes enabled');
+				throw new \Exception('\Mmi\App\Kernel: magic quotes enabled');
 			}
 			return $this;
 		}
 
 		/**
 		 * Ustawia handler błędów
-		 * @return \Mmi\App
+		 * @return \Mmi\App\Kernel
 		 */
 		protected function _initErrorHandler() {
 			//domyślne przechwycenie wyjątków

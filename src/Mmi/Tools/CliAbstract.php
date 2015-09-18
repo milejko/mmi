@@ -20,10 +20,10 @@ abstract class CliAbstract {
 	 */
 	public final function __construct() {
 		//określanie ścieżki
-		define('BASE_PATH', realpath(dirname(__FILE__) . '/../../../'));
+		define('BASE_PATH', realpath(dirname(__FILE__) . '/../'));
 
 		//ładowanie autoloadera aplikacji
-		require BASE_PATH . '/app/autoload.php';
+		require BASE_PATH . '/vendor/autoload.php';
 
 		//powołanie aplikacji
 		$application = new \Mmi\App('\Mmi\App\BootstrapCli');
