@@ -61,7 +61,7 @@ abstract class App {
 	 * Tryb debugowania
 	 * @var boolean
 	 */
-	public $debug = true;
+	public $debug = false;
 
 	/**
 	 * Bezwarunkowa kompilacja
