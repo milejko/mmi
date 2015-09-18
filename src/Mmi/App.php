@@ -20,7 +20,6 @@ namespace Mmi {
 
 		/**
 		 * Konstruktor
-		 * @param string $path
 		 */
 		public function __construct($bootstrapName = '\Mmi\App\Bootstrap') {
 			//inicjalizacja aplikacji
