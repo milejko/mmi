@@ -2,7 +2,7 @@
 	"name": "mmi/mmi",
 	"type": "library",
 	"description": "MMi Framework Library",
-	"keywords": ["mmi, framework"],
+	"keywords": ["mmi", "framework"],
 	"license": "MIT",
 	"authors": [
 		{
@@ -23,5 +23,10 @@
 	},
 	"require-dev": {
 		"monolog/monolog": "~1.11"
+	},
+	"autoload": {
+		"psr-4": {
+			"Mmi\\": "src/Mmi"
+		}
 	}
 }
