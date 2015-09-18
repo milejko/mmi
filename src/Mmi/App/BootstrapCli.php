@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Application;
+namespace Mmi\App;
 
 /**
  * Bootstrap aplikacji CMD
  */
-class BootstrapCli extends \Mmi\Application\Bootstrap {
+class BootstrapCli extends \Mmi\App\Bootstrap {
 
 	public function __construct() {
 		parent::__construct();
@@ -26,8 +26,8 @@ class BootstrapCli extends \Mmi\Application\Bootstrap {
 		$front = \Mmi\Controller\Front::getInstance();
 		$request = new \Mmi\Controller\Request();
 		//ustawianie domyślnego języka jeśli istnieje
-		if (isset(\App\Registry::$config->application->languages[0])) {
-			$request->lang = \App\Registry::$config->application->languages[0];
+		if (isset(\App\Registry::$config->languages[0])) {
+			$request->lang = \App\Registry::$config->languages[0];
 		}
 		$request->setModuleName('mmi')
 			->setControllerName('index')

@@ -59,7 +59,7 @@ class Config {
 	 * Ścieżka zapisu sesji
 	 * @var tmp
 	 */
-	public $path;
+	public $path = BASE_PATH . '/var/session';
 
 	/**
 	 * Orm autoryzacyjny

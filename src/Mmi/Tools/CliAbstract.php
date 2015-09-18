@@ -26,7 +26,7 @@ abstract class CliAbstract {
 		require BASE_PATH . '/app/autoload.php';
 
 		//powołanie aplikacji
-		$application = new \Mmi\Application('\Mmi\Application\BootstrapCli');
+		$application = new \Mmi\App('\Mmi\App\BootstrapCli');
 
 		//ustawienie typu odpowiedzi na plain
 		\Mmi\Controller\Front::getInstance()->getResponse()->setTypePlain();

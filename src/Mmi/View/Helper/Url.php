@@ -71,7 +71,7 @@ class Url extends HelperAbstract {
 					$protocol = 'http://';
 				}
 			}
-			$url = $protocol . \App\Registry::$config->application->host . $url;
+			$url = $protocol . \App\Registry::$config->host . $url;
 		}
 		return $url ? $url : '/';
 	}

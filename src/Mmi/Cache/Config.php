@@ -16,7 +16,7 @@ class Config {
 	 * Buforowanie włączone
 	 * @var boolean
 	 */
-	public $active = false;
+	public $active = true;
 
 	/**
 	 * Czas życia bufora
@@ -35,6 +35,6 @@ class Config {
 	 * Ścieżka dla handlerów plikowych i memcache
 	 * @var string
 	 */
-	public $path;
+	public $path = BASE_PATH . '/var/cache';
 
 }
