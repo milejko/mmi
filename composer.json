@@ -1,0 +1,19 @@
+{
+	"name": "milejko/mmi",
+	"type": "library",
+	"description": "MMi Framework Library",
+	"keywords": ["mmi, framework"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Mariusz Miłejko",
+			"email": "mariusz@milejko.pl"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"require-dev": {
+		"monolog/monolog": "~1.11"
+	}
+}
