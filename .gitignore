@@ -1,6 +1,5 @@
 /nbproject/
 /vendor/
 /composer.lock
-/web
+/src/App/Config/Local.php
 /var
-/src/App

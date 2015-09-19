@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Config;
+
+/**
+ * Lokalna konfiguracja aplikacji
+ */
+class Local extends \App\Config\App {
+
+	public function __construct() {
+		parent::__construct();
+		//domyślnie włączony debug i kompilacja + wyłączenie cache
+		$this->debug = true;
+		$this->compile = true;
+		$this->cache->active = false;
+	}
+
+}
