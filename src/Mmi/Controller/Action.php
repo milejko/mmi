@@ -79,16 +79,6 @@ class Action {
 	}
 
 	/**
-	 * Łapacz nieodnalezionej metody
-	 * rzuca wyjątkiem
-	 * @param string $name nazwa metody
-	 * @param array $params parametry metody
-	 */
-	public final function __call($name, array $params = []) {
-		throw new Action\ExceptionNotFound('Action: ' . $name . ' not found in class: ' . get_class($this));
-	}
-
-	/**
 	 * Funkcja dla użytkownika ładowana na końcu konstruktora
 	 */
 	public function init() {

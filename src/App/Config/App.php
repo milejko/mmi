@@ -14,5 +14,5 @@ namespace App\Config;
  * Ogólna konfiguracja aplikacji
  */
 class App extends \Mmi\App\Config\App {
-
+	
 }

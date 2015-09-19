@@ -10,6 +10,9 @@
 
 namespace Mmi\Navigation;
 
+/**
+ * Klasa konfiguracji nawigatora
+ */
 class Config {
 
 	/**

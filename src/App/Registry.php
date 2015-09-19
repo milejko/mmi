@@ -10,6 +10,9 @@
 
 namespace App;
 
+/**
+ * Rejestr aplikacji
+ */
 class Registry extends \Mmi\App\Registry {
 
 }

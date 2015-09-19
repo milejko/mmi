@@ -104,7 +104,7 @@ class Action {
 		$structure = \Mmi\Controller\Front::getInstance()->getStructure('module');
 		//brak w strukturze
 		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-			throw new \Exception('Action not found: ' . $actionLabel);
+			throw new \Mmi\Controller\NotFoundException('Action not found: ' . $actionLabel);
 		}
 		//ustawienie requestu w widoku
 		\Mmi\Controller\Front::getInstance()->getView()->setRequest($request);

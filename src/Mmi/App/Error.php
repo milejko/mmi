@@ -22,7 +22,7 @@ class Error {
 	 * @return boolean
 	 */
 	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
-		throw new \Exception($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
+		throw new Exception($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
 	}
 
 	/**
@@ -47,27 +47,32 @@ class Error {
 			$view->_exception = $exception;
 			//błąd bez layoutu lub nie HTML
 			if ($view->isLayoutDisabled() || $response->getType() != 'html') {
-				$response
-					->setCodeError()
-					->setContent(self::_rawErrorResponse($response, $exception))
-					->send();
+				//domyślna prezentacja błędów
+				self::_sendRawResponse($response, $exception);
 				return true;
 			}
 			//błąd z prezentacją HTML
-			$response
-				->setCodeError()
+			$response->setCodeError()
 				->setContent($view->setPlaceholder('content', \Mmi\Controller\Action\Helper\Action::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
 					->renderLayout('mmi', 'index'))
 				->send();
 			return true;
 		} catch (\Exception $e) {
 			//domyślna prezentacja błędów
-			$response
-				->setCodeError()
-				->setContent(self::_rawErrorResponse($response, $exception))
-				->send();
+			self::_sendRawResponse($response, $exception);
 		}
 		return true;
+	}
+
+	/**
+	 * 
+	 * @param type $response
+	 * @param Exception $exception
+	 */
+	private static function _sendRawResponse(\Mmi\Controller\Response $response, \Exception $exception) {
+		$response->setCodeError()
+			->setContent(self::_rawErrorResponse($response, $exception))
+			->send();
 	}
 
 	/**

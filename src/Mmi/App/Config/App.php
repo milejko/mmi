@@ -33,12 +33,6 @@ abstract class App {
 	 */
 	public $db;
 
-	/*
-	 * Nawigacja
-	 * @var \Mmi\Navigation\Config
-	 */
-	public $navigation;
-
 	/**
 	 * Konfiguracja routera
 	 * @var \Mmi\Controller\Router\Config
@@ -101,12 +95,17 @@ abstract class App {
 	 */
 	public $host = 'localhost';
 
+	/**
+	 * Konstruktor konfiguracji
+	 */
 	public function __construct() {
-
+		//konfiguracja bufora
 		$this->cache = new \Mmi\Cache\Config();
+		//konfiguracja bazy danych
 		$this->db = new \Mmi\Db\Config();
-		$this->navigation = new \Mmi\Navigation\Config();
+		//ustawienia routera
 		$this->router = new \Mmi\Controller\Router\Config();
+		//konfiguracja sesji
 		$this->session = new \Mmi\Session\Config();
 	}
 

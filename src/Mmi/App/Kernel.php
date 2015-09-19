@@ -25,8 +25,8 @@ namespace Mmi\App {
 			//inicjalizacja aplikacji
 			$this->_initPaths()
 				->_initEncoding()
-				->_initPhpConfiguration()
 				->_initErrorHandler();
+			\Mmi\Profiler::event('App: bootstrap startup');
 			//tworzenie instancji bootstrapa
 			$this->_bootstrap = new $bootstrapName();
 			\Mmi\Profiler::event('App: bootstrap executed');
@@ -73,18 +73,6 @@ namespace Mmi\App {
 			define('DATA_PATH', BASE_PATH . '/var/data');
 			//domyślna ścieżka ładowania (vendors)
 			set_include_path(BASE_PATH . '/vendor');
-			return $this;
-		}
-
-		/**
-		 * Inicjalizacja konfiguracji PHP
-		 * @return \Mmi\App\Kernel
-		 */
-		protected function _initPhpConfiguration() {
-			//obsługa włączonych magic quotes
-			if (ini_get('magic_quotes_gpc')) {
-				throw new \Exception('\Mmi\App\Kernel: magic quotes enabled');
-			}
 			return $this;
 		}
 

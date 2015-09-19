@@ -14,7 +14,7 @@ abstract class Registry {
 
 	/**
 	 * Konfiguracja aplikacji
-	 * @var \Mmi\App\Config\App
+	 * @var \App\Config\App
 	 */
 	public static $config;
 
@@ -42,7 +42,7 @@ abstract class Registry {
 	 * @param mixed $value
 	 * @return mixed
 	 */
-	public static function setVar($key, $value) {
+	public static final function setVar($key, $value) {
 		return static::$_userData[$key] = $value;
 	}
 
@@ -50,7 +50,7 @@ abstract class Registry {
 	 * Kasuje zmienną użytkownika
 	 * @param string $key
 	 */
-	public static function unsetVar($key) {
+	public static final function unsetVar($key) {
 		unset(static::$_userData[$key]);
 	}
 
@@ -59,7 +59,7 @@ abstract class Registry {
 	 * @param string $key
 	 * @return mixed
 	 */
-	public static function getVar($key) {
+	public static final function getVar($key) {
 		return isset(static::$_userData[$key]) ? static::$_userData[$key] : null;
 	}
 
@@ -68,7 +68,7 @@ abstract class Registry {
 	 * @param string $key
 	 * @return boolean
 	 */
-	public static function issetVar($key) {
+	public static final function issetVar($key) {
 		return array_key_exists($key, static::$_userData);
 	}
 
@@ -76,7 +76,7 @@ abstract class Registry {
 	 * Zwraca wszystkie zmienne użytkownika w tablicy
 	 * @return array
 	 */
-	public static function getAllVars() {
+	public static final function getAllVars() {
 		return static::$_userData;
 	}
 
