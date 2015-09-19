@@ -17,12 +17,18 @@ abstract class Registry {
 	 * @var \Mmi\App\Config\App
 	 */
 	public static $config;
-	
+
 	/**
 	 * Obiekt bufora
 	 * @var \Mmi\Cache
 	 */
 	public static $cache;
+
+	/**
+	 * Obiekt adaptera bazodanowego
+	 * @var \Mmi\Db\Adapter\Pdo\PdoAbstract
+	 */
+	public static $db;
 
 	/**
 	 * Tablica ze zmiennymi użytkownika
