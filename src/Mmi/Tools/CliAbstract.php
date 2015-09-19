@@ -20,7 +20,7 @@ abstract class CliAbstract {
 	 */
 	public final function __construct() {
 		//określanie ścieżki
-		define('BASE_PATH', __DIR__ . '/../../..');
+		define('BASE_PATH', $this->_calculatePath());
 		//ładowanie autoloadera aplikacji
 		require BASE_PATH . '/vendor/autoload.php';
 
@@ -32,6 +32,21 @@ abstract class CliAbstract {
 
 		//uruchomienie aplikacji
 		$application->run();
+	}
+	
+	/**
+	 * Obliczanie ścieżki
+	 * @return string
+	 * @throws \Exception
+	 */
+	protected function _calculatePath() {
+		$paths = [__DIR__ . '/..', __DIR__ . '/../../..', __DIR__ . '/../../../../..'];
+		foreach ($paths as $path) {
+			if (file_exists($path . '/vendor/autoload.php')) {
+				return $path;
+			}
+		}
+		throw new \Exception('Autoloader not found');
 	}
 
 	/**
