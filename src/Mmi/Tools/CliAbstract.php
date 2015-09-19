@@ -20,13 +20,12 @@ abstract class CliAbstract {
 	 */
 	public final function __construct() {
 		//określanie ścieżki
-		define('BASE_PATH', realpath(dirname(__FILE__) . '/../'));
-
+		define('BASE_PATH', __DIR__ . '/../../..');
 		//ładowanie autoloadera aplikacji
 		require BASE_PATH . '/vendor/autoload.php';
 
 		//powołanie aplikacji
-		$application = new \Mmi\App('\Mmi\App\BootstrapCli');
+		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli');
 
 		//ustawienie typu odpowiedzi na plain
 		\Mmi\Controller\Front::getInstance()->getResponse()->setTypePlain();
