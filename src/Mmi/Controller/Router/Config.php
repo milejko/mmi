@@ -47,7 +47,7 @@ class Config {
 		$this->_data[$route->name] = $route;
 		return $this;
 	}
-	
+
 	/**
 	 * Ustawia routy
 	 * @param array $routes tablica z obiektami rout
@@ -93,6 +93,13 @@ class Config {
 	 */
 	public function isRoute($name) {
 		return isset($this->_data[$name]);
+	}
+
+	/**
+	 * Zwraca tablicę routingu
+	 */
+	public function toArray() {
+		return $this->_data;
 	}
 
 }
