@@ -40,12 +40,15 @@ abstract class CliAbstract {
 	 * @throws \Exception
 	 */
 	protected function _calculatePath() {
-		$paths = [__DIR__ . '/..', __DIR__ . '/../../..', __DIR__ . '/../../../../..'];
+		//dopuszczalne ścieżki /bin ; /src/Module/Tools ; /vendor/name/subname/src/Module/Tools
+		$paths = [__DIR__ . '/..', __DIR__ . '/../../..', __DIR__ . '/../../../../../..'];
+		//sprawdzanie poprawności ścieżek
 		foreach ($paths as $path) {
 			if (file_exists($path . '/vendor/autoload.php')) {
 				return $path;
 			}
 		}
+		//brak autoloadera
 		throw new \Exception('Autoloader not found');
 	}
 
