@@ -7,12 +7,11 @@
  * @copyright  Copyright (c) 2010-2015 Mariusz Miłejko (http://milejko.com)
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
-//określanie ścieżki
+//definicja katalogu bazowego
 define('BASE_PATH', __DIR__ . '/../');
 
-//ładowanie autoloadera aplikacji
-require BASE_PATH . '/vendor/autoload.php';
+//dołączenie autoloadera
+require BASE_PATH . 'vendor/autoload.php';
 
-//powołanie i uruchomienie aplikacji
-$app = new \Mmi\App\Kernel('\Mmi\App\Bootstrap');
-$app->run();
+//uruchomienie aplikacji
+(new \Mmi\App\Kernel('\Mmi\App\Bootstrap'))->run();

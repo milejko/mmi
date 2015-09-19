@@ -19,10 +19,8 @@ abstract class CliAbstract {
 	 * Konstruktor konfiguruje środowisko dla linii komend
 	 */
 	public final function __construct() {
-		//określanie ścieżki
-		define('BASE_PATH', $this->_calculatePath());
-		//ładowanie autoloadera aplikacji
-		require BASE_PATH . '/vendor/autoload.php';
+		//konfiguracja autoloadera
+		$this->_setupAutoload();
 
 		//powołanie aplikacji
 		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli');
@@ -33,20 +31,23 @@ abstract class CliAbstract {
 		//uruchomienie aplikacji
 		$application->run();
 	}
-	
+
 	/**
 	 * Obliczanie ścieżki
 	 * @return string
 	 * @throws \Exception
 	 */
-	protected function _calculatePath() {
+	protected function _setupAutoload() {
 		//dopuszczalne ścieżki /bin ; /src/Module/Tools ; /vendor/name/subname/src/Module/Tools
-		$paths = [__DIR__ . '/..', __DIR__ . '/../../..', __DIR__ . '/../../../../../..'];
-		//sprawdzanie poprawności ścieżek
-		foreach ($paths as $path) {
-			if (file_exists($path . '/vendor/autoload.php')) {
-				return $path;
+		foreach ([__DIR__ . '/..', __DIR__ . '/../../..', __DIR__ . '/../../../../../..'] as $path) {
+			if (!file_exists($path . '/vendor/autoload.php')) {
+				continue;
 			}
+			//określanie ścieżki
+			define('BASE_PATH', $path);
+			//ładowanie autoloadera aplikacji
+			include BASE_PATH . '/vendor/autoload.php';
+			return;
 		}
 		//brak autoloadera
 		throw new \Exception('Autoloader not found');
