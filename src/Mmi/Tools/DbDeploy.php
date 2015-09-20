@@ -26,16 +26,23 @@ class DbDeploy extends CliAbstract {
 		ob_end_flush();
 		//wyłączenie cache
 		\App\Registry::$config->cache->active = false;
-
-		//iteracja po modułach
-		foreach (glob(BASE_PATH . '/src/*') as $module) {
-			//iteracja po inkrementalach
+		//iteracja po modułach aplikacji
+		foreach (\Mmi\App\StructureParser::getModules() as $module) {
+			//moduł nie zawiera incrementali
+			if (!file_exists($module . '/Resource/incremental/' . \App\Registry::$config->db->driver)) {
+				continue;
+			}
+			//iteracja po incrementalach
 			foreach (glob($module . '/Resource/incremental/' . \App\Registry::$config->db->driver . '/*.sql') as $file) {
 				$this->_importIncremental($file);
 			}
 		}
 	}
 
+	/**
+	 * Importuje pojedynczy plik
+	 * @param string $file
+	 */
 	protected function _importIncremental($file) {
 		//nazwa pliku
 		$baseFileName = basename($file);

@@ -17,14 +17,6 @@ class Structure {
 	 * @return array 
 	 */
 	public static function getStructure() {
-		return array_merge_recursive(self::_parseModules(BASE_PATH . '/src'), self::_analyseVendors());
-	}
-
-	/**
-	 * Zwraca dostępne komponenty aplikacyjne w systemie
-	 * @return array
-	 */
-	private static function _analyseVendors() {
 		$components = ['module' => [],
 			'template' => [],
 			'translate' => [],
@@ -32,23 +24,8 @@ class Structure {
 			'filter' => [],
 			'validator' => []
 		];
-		//brak vendorów
-		if (!file_exists(BASE_PATH . '/vendor')) {
-			return $components;
-		}
-		foreach (new \DirectoryIterator(BASE_PATH . '/vendor') as $vendor) {
-			if (!$vendor->isDir() || $vendor->isDot()) {
-				continue;
-			}
-			foreach (new \DirectoryIterator($vendor->getPathname()) as $vendorName) {
-				if (!$vendorName->isDir() || $vendorName->isDot()) {
-					continue;
-				}
-				if (!file_exists($vendorName->getPathname() . '/src')) {
-					continue;
-				}
-				$components = array_merge_recursive(self::_parseModules($vendorName->getPathname() . '/src'), $components);
-			}
+		foreach (\Mmi\App\StructureParser::getModules() as $module) {
+			$components = array_merge_recursive(self::_parseModule($module), $components);
 		}
 		return $components;
 	}
@@ -58,7 +35,7 @@ class Structure {
 	 * @param string $path
 	 * @return array
 	 */
-	private static function _parseModules($path) {
+	private static function _parseModule($path) {
 		$components = ['module' => [],
 			'template' => [],
 			'translate' => [],
@@ -70,25 +47,19 @@ class Structure {
 		if (!file_exists($path)) {
 			return $components;
 		}
-		foreach (new \DirectoryIterator($path) as $module) {
-			if ($module->isDot()) {
-				continue;
-			}
-			//nazwa modułu
-			$moduleName = lcfirst(substr($module->getFilename(), strrpos($module->getFilename(), '/')));
-			//helpery widoku
-			self::_parseAdditions($components['helper'], $module->getFileName(), $module->getPathname() . '/View/Helper');
-			//filtry
-			self::_parseAdditions($components['filter'], $module->getFileName(), $module->getPathname() . '/Filter');
-			//walidatory
-			self::_parseAdditions($components['validator'], $module->getFileName(), $module->getPathname() . '/Validate');
-			//tłumaczenia
-			self::_parseAdditions($components['translate'], $module->getFileName(), $module->getPathname() . '/Resource/i18n');
-			//kontrolery
-			self::_parseControllers($components['module'], $moduleName, $module->getPathname() . '/Controller');
-			//kontrolery
-			self::_parseTemplates($components['template'], $moduleName, $module->getPathname() . '/Resource/template');
-		}
+		$module = basename($path);
+		//helpery widoku
+		self::_parseAdditions($components['helper'], $module, $path . '/View/Helper');
+		//filtry
+		self::_parseAdditions($components['filter'], $module, $path . '/Filter');
+		//walidatory
+		self::_parseAdditions($components['validator'], $module, $path . '/Validate');
+		//tłumaczenia
+		self::_parseAdditions($components['translate'], $module, $path . '/Resource/i18n');
+		//kontrolery
+		self::_parseControllers($components['module'], lcfirst($module), $path . '/Controller');
+		//kontrolery
+		self::_parseTemplates($components['template'], lcfirst($module), $path . '/Resource/template');
 		return $components;
 	}
 
