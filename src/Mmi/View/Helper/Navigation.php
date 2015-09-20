@@ -18,11 +18,11 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia obiekt nawigatora
 	 * @param \Mmi\Navigation\Component $navigation
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Navigation\Component
 	 */
 	public static function setNavigation(\Mmi\Navigation\Component $navigation) {
 		self::$_navigation = $navigation;
-		return $this;
+		return $navigation;
 	}
 
 	/**
