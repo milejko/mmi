@@ -26,7 +26,7 @@ abstract class ElementAbstract extends Base\Element {
 
 	/**
 	 * Formularz macierzysty
-	 * @var \Mmi\Form
+	 * @var \Mmi\Form\Component
 	 */
 	protected $_form = null;
 
@@ -48,17 +48,17 @@ abstract class ElementAbstract extends Base\Element {
 
 	/**
 	 * Ustawia form macierzysty
-	 * @param \Mmi\Form $form
+	 * @param \Mmi\Form\Component $form
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
-	public final function setForm(\Mmi\Form $form) {
+	public final function setForm(\Mmi\Form\Component $form) {
 		$this->_form = $form;
 		return $this;
 	}
 
 	/**
 	 * Pobranie formularza macierzystego
-	 * @return \Mmi\Form
+	 * @return \Mmi\Form\Component
 	 */
 	public final function getForm() {
 		return $this->_form;
