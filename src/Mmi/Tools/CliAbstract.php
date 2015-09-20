@@ -44,7 +44,7 @@ abstract class CliAbstract {
 				continue;
 			}
 			//określanie ścieżki
-			define('BASE_PATH', $path);
+			define('BASE_PATH', $path . '/');
 			//ładowanie autoloadera aplikacji
 			include BASE_PATH . '/vendor/autoload.php';
 			return;
