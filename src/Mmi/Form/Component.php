@@ -15,7 +15,7 @@ namespace Mmi\Form;
  * wymaga zdefiniowania metody init()
  * w metodzie init należy skonfigurować pola formularza
  */
-abstract class Component extends Form\Base {
+abstract class Component extends Base {
 
 	/**
 	 * Button
