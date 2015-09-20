@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace App\Config;
+namespace App;
 
 /**
  * Lokalna konfiguracja aplikacji
  */
-class Local extends \App\Config\App {
+class LocalConfig extends KernelConfig {
 
 	public function __construct() {
 		parent::__construct();

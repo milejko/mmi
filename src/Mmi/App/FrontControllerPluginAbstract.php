@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Plugin;
+namespace Mmi\App;
 
-class PluginAbstract {
+class FrontControllerPluginAbstract {
 
 	/**
 	 * Metoda wykona się przed routingiem

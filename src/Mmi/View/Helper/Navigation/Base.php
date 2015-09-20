@@ -101,32 +101,32 @@ class Base extends \Mmi\View\Helper\HelperAbstract {
 
 	/**
 	 * Obiekt ACL
-	 * @var \Mmi\Acl
+	 * @var \Mmi\Security\Acl
 	 */
 	protected static $_acl;
 
 	/**
 	 * Obiekt Auth
-	 * @var \Mmi\Auth
+	 * @var \Mmi\Security\Auth
 	 */
 	protected static $_auth;
 
 	/**
 	 * Ustawia obiekt ACL
-	 * @param \Mmi\Acl $acl
-	 * @return \Mmi\Acl
+	 * @param \Mmi\Security\Acl $acl
+	 * @return \Mmi\Security\Acl
 	 */
-	public static function setAcl(\Mmi\Acl $acl) {
+	public static function setAcl(\Mmi\Security\Acl $acl) {
 		self::$_acl = $acl;
 		return $acl;
 	}
 
 	/**
 	 * Ustawia obiekt autoryzacji
-	 * @param \Mmi\Auth $auth
-	 * @return \Mmi\Auth
+	 * @param \Mmi\Security\Auth $auth
+	 * @return \Mmi\Security\Auth
 	 */
-	public static function setAuth(\Mmi\Auth $auth) {
+	public static function setAuth(\Mmi\Security\Auth $auth) {
 		self::$_auth = $auth;
 		return $auth;
 	}

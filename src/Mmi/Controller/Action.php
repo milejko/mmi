@@ -37,7 +37,7 @@ class Action {
 		//request
 		$this->_request = $request;
 		//response
-		$this->_response = \Mmi\Controller\Front::getInstance()->getResponse();
+		$this->_response = \Mmi\App\FrontController::getInstance()->getResponse();
 		//inicjalizacja domyślna
 		$this->_init();
 		//inicjacja programisty kontrolera
@@ -118,15 +118,15 @@ class Action {
 
 	/**
 	 * Pobiera helper messengera
-	 * @return \Mmi\Controller\Action\Helper\Messenger
+	 * @return \Mmi\FlashMessenger
 	 */
 	public final function getHelperMessenger() {
-		return new Action\Helper\Messenger();
+		return new \Mmi\FlashMessenger();
 	}
 
 	/**
 	 * Pobiera helper akcji
-	 * @return \Mmi\Controller\Action\Helper\Action
+	 * @return \Mmi\Controller\ActionPerformer
 	 */
 	public final function getHelperAction() {
 		return Action\Helper\Action::getInstance();
@@ -137,7 +137,7 @@ class Action {
 	 */
 	private function _init() {
 		//przypięcie widoku
-		$this->view = \Mmi\Controller\Front::getInstance()->getView();
+		$this->view = \Mmi\App\FrontController::getInstance()->getView();
 
 		//inicjalizacja tłumaczeń
 		$this->_initTranslaction($this->_request->__get('module'), $this->_request->__get('lang'));
@@ -151,7 +151,7 @@ class Action {
 	 */
 	private function _initTranslaction($module, $lang) {
 		//pobranie struktury translatora
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('translate');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('translate');
 		//brak tłumaczenia w strukturze
 		if (!isset($structure[$module][$lang])) {
 			return;

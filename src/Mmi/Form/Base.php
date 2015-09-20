@@ -79,7 +79,7 @@ abstract class Base extends \Mmi\OptionObject {
 		$this->hasNotEmptyRecord() && $this->setFromRecord($this->_record);
 
 		//dane z POST
-		$this->isMine() && $this->setFromPost(\Mmi\Controller\Front::getInstance()->getRequest()->getPost());
+		$this->isMine() && $this->setFromPost(\Mmi\App\FrontController::getInstance()->getRequest()->getPost());
 
 		//zapis formularza
 		$this->save();
@@ -152,7 +152,7 @@ abstract class Base extends \Mmi\OptionObject {
 	 */
 	public final function isMine() {
 		//sprawdzenie istnienia w POST prawidłowo nazwanej zmiennej CTRL
-		return \Mmi\Controller\Front::getInstance()
+		return \Mmi\App\FrontController::getInstance()
 				->getRequest()
 				->getPost()
 				->__isset($this->_formBaseName . '__ctrl');
@@ -340,18 +340,18 @@ abstract class Base extends \Mmi\OptionObject {
 			return $this->_saved = (false !== $this->beforeSave()) && (false !== $this->afterSave());
 		}
 		//wybranie DAO i rozpoczęcie transakcji
-		\Mmi\Orm::getAdapter()->beginTransaction();
+		\Mmi\Orm\DbConnector::getAdapter()->beginTransaction();
 		//ustawianie danych rekordu
 		$this->_setRecordData();
 		//metoda przed zapisem, zapis i po zapisie
 		//transakcja jest odrzucana w przypadku niepowodzenia którejkolwiek
 		if (false === $this->beforeSave() || false === $this->_record->save() || false === $this->afterSave()) {
 			//odrzucenie transakcji
-			\Mmi\Orm::getAdapter()->rollback();
+			\Mmi\Orm\DbConnector::getAdapter()->rollback();
 			return $this->_saved = false;
 		}
 		//zatwierdzenie transakcji
-		\Mmi\Orm::getAdapter()->commit();
+		\Mmi\Orm\DbConnector::getAdapter()->commit();
 		return $this->_saved = true;
 	}
 

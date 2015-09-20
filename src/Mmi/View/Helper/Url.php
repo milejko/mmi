@@ -24,7 +24,7 @@ class Url extends HelperAbstract {
 	 */
 	public function url(array $params = [], $reset = false, $absolute = false, $https = null, array $unset = []) {
 		if (!$reset) {
-			$params = array_merge(\Mmi\Controller\Front::getInstance()->getRequest()->toArray(), $params);
+			$params = array_merge(\Mmi\App\FrontController::getInstance()->getRequest()->toArray(), $params);
 		}
 		foreach ($params as $key => $param) {
 			if (null === $param) {
@@ -55,13 +55,13 @@ class Url extends HelperAbstract {
 				unset($params[$key]);
 			}
 		}
-		$url = \Mmi\Controller\Front::getInstance()->getRouter()->encodeUrl($params);
+		$url = \Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params);
 		if (!is_null($https)) {
 			$absolute = true;
 		}
 		if ($absolute) {
 			$protocol = 'http://';
-			if (\Mmi\Controller\Front::getInstance()->getEnvironment()->httpSecure) {
+			if (\Mmi\App\FrontController::getInstance()->getEnvironment()->httpSecure) {
 				$protocol = 'https://';
 			}
 			if (!is_null($https)) {

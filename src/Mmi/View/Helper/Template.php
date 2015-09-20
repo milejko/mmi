@@ -183,7 +183,7 @@ class Template extends HelperAbstract {
 				$absolute = false;
 				break;
 		}
-		return \Mmi\Controller\Front::getInstance()->getView()->getHelper('url')->url($params, true, $absolute, $https);
+		return \Mmi\App\FrontController::getInstance()->getView()->getHelper('url')->url($params, true, $absolute, $https);
 	}
 	
 	/**
@@ -201,7 +201,7 @@ class Template extends HelperAbstract {
 	 * @return string
 	 */
 	private function _text(array $matches) {
-		return \Mmi\Controller\Front::getInstance()->getView()->getHelper('text')->text($matches[1]);
+		return \Mmi\App\FrontController::getInstance()->getView()->getHelper('text')->text($matches[1]);
 	}
 
 	/**
@@ -211,7 +211,7 @@ class Template extends HelperAbstract {
 	 * @return string
 	 */
 	private function _render(array $matches) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('template');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
 		//brak w strukturze
 		if (count($matches) == 4) {
 			if (!isset($structure[$matches[1]][$matches[2]][$matches[3]])) {

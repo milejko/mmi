@@ -81,7 +81,7 @@ abstract class Grid {
 	 * @throws exception
 	 */
 	public function __construct(array $options = []) {
-		$this->_view = \Mmi\Controller\Front::getInstance()->getView();
+		$this->_view = \Mmi\App\FrontController::getInstance()->getView();
 		$this->_request = $this->_view->request;
 		$this->_setDefaultOptions();
 		$this->_view->headScript()->prependFile($this->_view->baseUrl . '/resource/cms/js/jquery/jquery.js');

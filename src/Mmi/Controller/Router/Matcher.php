@@ -90,7 +90,7 @@ class Matcher {
 			}
 			if ((preg_match('/\$([0-9]+)(\|[a-z]+)?/', $value, $mt) && isset($params[$key]))) {
 				if (!empty($mt) && count($mt) > 2) {
-					$filter = \Mmi\Controller\Front::getInstance()->getView()->getFilter(ucfirst(ltrim($mt[2], '|')));
+					$filter = \Mmi\App\FrontController::getInstance()->getView()->getFilter(ucfirst(ltrim($mt[2], '|')));
 					$params[$key] = $filter->filter($params[$key]);
 				}
 				$matches[$value] = $params[$key];

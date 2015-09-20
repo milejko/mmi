@@ -173,7 +173,7 @@ class Translate {
 	private function _logUntranslated($key) {
 		//otwieranie loga
 		$log = fopen(BASE_PATH . '/var/log/error.translation.log', 'a');
-		$requestUri = \Mmi\Controller\Front::getInstance()->getEnvironment()->requestUri;
+		$requestUri = \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri;
 		//zapis zdarzenia
 		fwrite($log, date('Y-m-d H:i:s') . ' ' . $requestUri . ' [' . $this->_locale . '] {#' . $key . "#}\n");
 		fclose($log);

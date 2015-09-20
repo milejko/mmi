@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\Navigation;
 
 /**
  * Klasa nawigacji (struktura menu)
  */
-class Navigation {
+class Component {
 
 	/**
 	 * Klasa kongiguracji

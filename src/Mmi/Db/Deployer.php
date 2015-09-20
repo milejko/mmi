@@ -8,22 +8,18 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Tools;
-
-//nie ma tu jeszcze autoloadera ładowanie CliAbstract
-require_once 'CliAbstract.php';
+namespace Mmi\Db;
 
 /**
  * Klasa wdrożeń incrementali bazy danych
  */
-class DbDeploy extends CliAbstract {
+class Deployer {
 
 	/**
 	 * Metoda uruchamiająca
 	 * @throws \Exception
 	 */
-	public function run() {
-		ob_end_flush();
+	public function deploy() {
 		//wyłączenie cache
 		\App\Registry::$config->cache->active = false;
 		//iteracja po modułach aplikacji
@@ -76,7 +72,7 @@ class DbDeploy extends CliAbstract {
 		$this->_importSql($file);
 
 		//resetowanie struktur tabeli
-		\Mmi\Orm::resetTableStructures();
+		\Mmi\Orm\DbConnector::resetTableStructures();
 
 		//brak restore - zakłada nowy rekord
 		$newDc = new \Mmi\Orm\Changelog\Record();
@@ -124,6 +120,3 @@ class DbDeploy extends CliAbstract {
 	}
 
 }
-
-//powołanie obiektu
-new DbDeploy();

@@ -137,7 +137,7 @@ class Ro {
 		}
 		//podpięcie joinów pod główny rekord
 		foreach ($joinedRows as $tableName => $rows) {
-			$recordName = \Mmi\Orm::getRecordNameByTable($tableName);
+			$recordName = \Mmi\Orm\DbConnector::getRecordNameByTable($tableName);
 			$record = new $recordName;
 			$record->setFromArray($rows);
 			$this->_joined[$tableName] = $record;
@@ -204,7 +204,7 @@ class Ro {
 	 * @return string
 	 */
 	protected function _pkWhere($bindKey) {
-		return 'WHERE ' . \Mmi\Orm::getAdapter()->prepareField('id') . ' = :' . $bindKey;
+		return 'WHERE ' . \Mmi\Orm\DbConnector::getAdapter()->prepareField('id') . ' = :' . $bindKey;
 	}
 
 }

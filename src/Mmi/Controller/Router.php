@@ -44,7 +44,7 @@ class Router {
 	public function __construct(\Mmi\Controller\Router\Config $config, $defaultLanguage = null) {
 		$this->_config = $config;
 		$this->_defaultLanguage = $defaultLanguage;
-		$this->_url = urldecode(trim(\Mmi\Controller\Front::getInstance()->getEnvironment()->requestUri, '/ '));
+		$this->_url = urldecode(trim(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri, '/ '));
 		if (!(false === strpos($this->_url, '?'))) {
 			$this->_url = substr($this->_url, 0, strpos($this->_url, '?'));
 		}

@@ -8,31 +8,31 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Action\Helper;
+namespace Mmi\Controller;
 
-class Action {
+class ActionPerformer {
 
 	/**
 	 * Obiekt ACL
-	 * @var \Mmi\Acl
+	 * @var \Mmi\Security\Acl
 	 */
 	protected $_acl;
 
 	/**
 	 * Obiekt Auth
-	 * @var \Mmi\Auth
+	 * @var \Mmi\Security\Auth
 	 */
 	protected $_auth;
 	
 	/**
 	 * Instancja helpera akcji
-	 * @var \Mmi\Controller\Action\Helper\Action 
+	 * @var \Mmi\Controller\ActionPerformer 
 	 */
 	protected static $_instance;
 
 	/**
 	 * Pobranie instancji
-	 * @return \Mmi\Controller\Action\Helper\Action
+	 * @return \Mmi\Controller\ActionPerformer
 	 */
 	public static function getInstance() {
 		//jeśli nie istnieje instancja tworzenie nowej
@@ -44,20 +44,20 @@ class Action {
 
 	/**
 	 * Ustawia obiekt ACL
-	 * @param \Mmi\Acl $acl
-	 * @return \Mmi\Acl
+	 * @param \Mmi\Security\Acl $acl
+	 * @return \Mmi\Security\Acl
 	 */
-	public function setAcl(\Mmi\Acl $acl) {
+	public function setAcl(\Mmi\Security\Acl $acl) {
 		$this->_acl = $acl;
 		return $this;
 	}
 
 	/**
 	 * Ustawia obiekt autoryzacji
-	 * @param \Mmi\Auth $auth
-	 * @return \Mmi\Auth
+	 * @param \Mmi\Security\Auth $auth
+	 * @return \Mmi\Security\Auth
 	 */
-	public function setAuth(\Mmi\Auth $auth) {
+	public function setAuth(\Mmi\Security\Auth $auth) {
 		$this->_auth = $auth;
 		return $this;
 	}
@@ -68,7 +68,7 @@ class Action {
 	 * @return mixed
 	 */
 	public function action(array $params = []) {
-		$frontRequest = \Mmi\Controller\Front::getInstance()->getRequest();
+		$frontRequest = \Mmi\App\FrontController::getInstance()->getRequest();
 		$controllerRequest = new \Mmi\Controller\Request(array_merge($frontRequest->toArray(), $params));
 		$actionLabel = $controllerRequest->getModuleName() . ':' . $controllerRequest->getControllerName() . ':' . $controllerRequest->getActionName();
 		//sprawdzenie ACL
@@ -81,15 +81,15 @@ class Action {
 		\Mmi\Profiler::event('Action executed: ' . $actionLabel);
 		//jeśli akcja zwraca cokolwiek, automatycznie jest to content
 		if ($actionContent !== null) {
-			\Mmi\Controller\Front::getInstance()->getView()
+			\Mmi\App\FrontController::getInstance()->getView()
 				->setLayoutDisabled()
 				->setRequest($frontRequest);
 			return $actionContent;
 		}
 		//rendering szablonu jeśli akcja zwraca null
-		$content = \Mmi\Controller\Front::getInstance()->getView()->renderTemplate($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName());
+		$content = \Mmi\App\FrontController::getInstance()->getView()->renderTemplate($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName());
 		//przywrócenie do widoku request'a z front controllera
-		\Mmi\Controller\Front::getInstance()->getView()->setRequest($frontRequest);
+		\Mmi\App\FrontController::getInstance()->getView()->setRequest($frontRequest);
 		return $content;
 	}
 	
@@ -101,13 +101,13 @@ class Action {
 	 * @throws \Exception
 	 */
 	protected function _invokeAction(\Mmi\Controller\Request $request, $actionLabel) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('module');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('module');
 		//brak w strukturze
 		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
 			throw new \Mmi\Controller\NotFoundException('Action not found: ' . $actionLabel);
 		}
 		//ustawienie requestu w widoku
-		\Mmi\Controller\Front::getInstance()->getView()->setRequest($request);
+		\Mmi\App\FrontController::getInstance()->getView()->setRequest($request);
 		//powołanie kontrolera
 		$controllerParts = explode('-', $request->getControllerName());
 		foreach ($controllerParts as $key => $controllerPart) {

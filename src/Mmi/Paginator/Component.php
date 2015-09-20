@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\Paginator;
 
-class Paginator extends Paginator\Base\Renderer {
+class Component extends Base\Renderer {
 
 	/**
 	 * Konstruktor, przyjmuje opcje, ustawia wartości domyślne

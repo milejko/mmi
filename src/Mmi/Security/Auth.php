@@ -61,7 +61,7 @@ class Auth {
 	/**
 	 * Ustawia sól
 	 * @param string $salt
-	 * @return \Mmi\Auth
+	 * @return \Mmi\Security\Auth
 	 */
 	public function setSalt($salt) {
 		$this->_salt = $salt;
@@ -93,7 +93,7 @@ class Auth {
 
 	/**
 	 * Usuwa pamięć o automatycznym logowaniu użytkownika
-	 * @return \Mmi\Auth
+	 * @return \Mmi\Security\Auth
 	 */
 	public function forgetMe() {
 		//usuwanie ciasteczka
@@ -175,7 +175,7 @@ class Auth {
 	/**
 	 * Ustawia nazwę modelu
 	 * @param string $modelName
-	 * @return \Mmi\Auth
+	 * @return \Mmi\Security\Auth
 	 */
 	public function setModelName($modelName) {
 		$this->_modelName = $modelName;
@@ -193,7 +193,7 @@ class Auth {
 	/**
 	 * Ustawia identyfikator do autoryzacji (np. login)
 	 * @param string $identity identyfikator
-	 * @return \Mmi\Auth
+	 * @return \Mmi\Security\Auth
 	 */
 	public function setIdentity($identity) {
 		$this->_identity = $identity;
@@ -203,7 +203,7 @@ class Auth {
 	/**
 	 * Ustawia ciąg uwierzytelniający do autoryzacji (np. hasło)
 	 * @param string $credential ciąg uwierzytelniający
-	 * @return \Mmi\Auth
+	 * @return \Mmi\Security\Auth
 	 */
 	public function setCredential($credential) {
 		$this->_credential = $credential;
@@ -213,7 +213,7 @@ class Auth {
 	/**
 	 * Czyści tożsamość
 	 * @param boolean $cookies czyści także ciastka zapamiętujące użytkownika
-	 * @return \Mmi\Auth
+	 * @return \Mmi\Security\Auth
 	 */
 	public function clearIdentity($cookies = true) {
 		//usuwa ciasteczka
@@ -244,8 +244,8 @@ class Auth {
 			return false;
 		}
 		//zła klasa rekordu
-		if (!$record instanceof \Mmi\Auth\Record) {
-			throw new\Exception('Authentication record is not an instance of \Mmi\Auth\Record');
+		if (!$record instanceof \Mmi\Security\Auth\Record) {
+			throw new\Exception('Authentication record is not an instance of \Mmi\Security\Auth\Record');
 		}
 		//ustawia autoryzację
 		return $this->_setAuthentication($record);
@@ -253,10 +253,10 @@ class Auth {
 
 	/**
 	 * Wymuszenie ustawienia autoryzacji
-	 * @param \Mmi\Auth\Record $record
+	 * @param \Mmi\Security\Auth\Record $record
 	 * @return boolean
 	 */
-	protected function _setAuthentication(\Mmi\Auth\Record $record) {
+	protected function _setAuthentication(\Mmi\Security\Auth\Record $record) {
 		$this->_session->id = $record->id;
 		$this->_session->username = $record->username;
 		$this->_session->email = $record->email;
@@ -280,8 +280,8 @@ class Auth {
 			return false;
 		}
 		//błędny obiekt
-		if (!$record instanceof \Mmi\Auth\Record) {
-			throw new \Exception('Authentication result is not an instance of \Mmi\Auth\Record');
+		if (!$record instanceof \Mmi\Security\Auth\Record) {
+			throw new \Exception('Authentication result is not an instance of \Mmi\Security\Auth\Record');
 		}
 		//ustawia autoryzację
 		return $this->_setAuthentication($record);
@@ -294,8 +294,8 @@ class Auth {
 	 */
 	public function httpAuth($realm = '', $errorMessage = '') {
 		//pobieranie usera i hasła ze zmiennych środowiskowych
-		$this->setIdentity(\Mmi\Controller\Front::getInstance()->getEnvironment()->authUser)
-			->setCredential(\Mmi\Controller\Front::getInstance()->getEnvironment()->authPassword);
+		$this->setIdentity(\Mmi\App\FrontController::getInstance()->getEnvironment()->authUser)
+			->setCredential(\Mmi\App\FrontController::getInstance()->getEnvironment()->authPassword);
 
 		$model = $this->_modelName;
 		$record = $model::authenticate($this->_identity, $this->_credential);
@@ -304,7 +304,7 @@ class Auth {
 			return;
 		}
 		//odpowiedź 401
-		\Mmi\Controller\Front::getInstance()->getResponse()
+		\Mmi\App\FrontController::getInstance()->getResponse()
 			->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
 			->setCodeForbidden()
 			->setContent($errorMessage)

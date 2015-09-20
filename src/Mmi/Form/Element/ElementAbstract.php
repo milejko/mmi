@@ -79,7 +79,7 @@ abstract class ElementAbstract extends Base\Element {
 	 * @return \Mmi\Translate
 	 */
 	public final function getTranslate() {
-		$translate = \Mmi\Controller\Front::getInstance()->getView()->getTranslate();
+		$translate = \Mmi\App\FrontController::getInstance()->getView()->getTranslate();
 		return (null === $translate) ? new \Mmi\Translate() : $translate;
 	}
 
@@ -152,7 +152,7 @@ abstract class ElementAbstract extends Base\Element {
 	 * @return \Mmi\Filter\FilterAbstract
 	 */
 	protected final function _getFilter($name) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('filter');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('filter');
 		foreach ($structure as $namespace => $filters) {
 			if (!isset($filters[$name])) {
 				continue;
@@ -171,7 +171,7 @@ abstract class ElementAbstract extends Base\Element {
 	 * @return \Mmi\Validate\ValidateAbstract
 	 */
 	protected final function _getValidator($name) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('validator');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('validator');
 		foreach ($structure as $namespace => $validators) {
 			if (!isset($validators[$name])) {
 				continue;

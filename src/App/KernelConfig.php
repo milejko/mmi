@@ -8,11 +8,11 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace App\Config;
+namespace App;
 
 /**
  * Ogólna konfiguracja aplikacji
  */
-class App extends \Mmi\App\Config\App {
+class KernelConfig extends \Mmi\App\KernelConfig {
 	
 }

@@ -20,7 +20,7 @@ class Part {
 	 * @return string
 	 */
 	public static function getEnvHtml() {
-		$env = \Mmi\Controller\Front::getInstance()->getEnvironment();
+		$env = \Mmi\App\FrontController::getInstance()->getEnvironment();
 		return '<p style="margin: 0; padding: 0;">Connection: <b>' . $env->serverAddress . ':' . $env->serverPort . '</b> <---> <b>' . $env->remoteAddress . ':' . $env->remotePort . '</b></p>' .
 			'<p style="margin: 0; padding: 0;">Browser: <b>' . substr($env->httpUserAgent, 0, 93) . '</b></p>' .
 			'<p style="margin: 0; padding: 0;">Server: <b>' . $env->serverSoftware . ' + PHP ' . phpversion() . ' (' . php_sapi_name() . ', ' . php_uname('s') . ' ' . php_uname('m') . ': ' . php_uname('n') . ')</b></p>' .

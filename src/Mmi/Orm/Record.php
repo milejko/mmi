@@ -33,7 +33,7 @@ class Record extends \Mmi\Orm\Record\Ro {
 		}
 		$query = $this->_queryClass;
 		$bindKey = \Mmi\Db\Adapter\Pdo\PdoAbstract::generateBindKey();
-		$result = \Mmi\Orm::getAdapter()->delete($query::factory()->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
+		$result = \Mmi\Orm\DbConnector::getAdapter()->delete($query::factory()->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
 		return ($result > 0) ? true : false;
 	}
 
@@ -44,10 +44,10 @@ class Record extends \Mmi\Orm\Record\Ro {
 	protected function _insert() {
 		$query = $this->_queryClass;
 		$table = $query::factory()->getTableName();
-		$result = \Mmi\Orm::getAdapter()->insert($table, $this->_truncateToStructure());
+		$result = \Mmi\Orm\DbConnector::getAdapter()->insert($table, $this->_truncateToStructure());
 		//odczyt id z sekwencji
 		if ($result && property_exists($this, 'id') && $this->id === null) {
-			$this->id = \Mmi\Orm::getAdapter()->lastInsertId(\Mmi\Orm::getAdapter()->prepareSequenceName($table));
+			$this->id = \Mmi\Orm\DbConnector::getAdapter()->lastInsertId(\Mmi\Orm\DbConnector::getAdapter()->prepareSequenceName($table));
 		}
 		//utrwalanie bieżącego stanu
 		$this->clearModified();
@@ -61,7 +61,7 @@ class Record extends \Mmi\Orm\Record\Ro {
 	protected function _update() {
 		$query = $this->_queryClass;
 		$bindKey = \Mmi\Db\Adapter\Pdo\PdoAbstract::generateBindKey();
-		$result = \Mmi\Orm::getAdapter()->update($query::factory()->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
+		$result = \Mmi\Orm\DbConnector::getAdapter()->update($query::factory()->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
 		//utrwalanie bieżącego stanu
 		$this->clearModified();
 		return ($result >= 0);
@@ -75,7 +75,7 @@ class Record extends \Mmi\Orm\Record\Ro {
 	protected final function _truncateToStructure($modifiedOnly = false) {
 		$tableData = [];
 		$query = $this->_queryClass;
-		$structure = \Mmi\Orm::getTableStructure($query::factory()->getTableName());
+		$structure = \Mmi\Orm\DbConnector::getTableStructure($query::factory()->getTableName());
 		foreach ($this as $field => $value) {
 			//jeśli tylko zmodyfikowane i pole nie jest modyfikowane - omijanie
 			if ($modifiedOnly && !$this->isModified($field)) {

@@ -8,14 +8,14 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\Form;
 
 /**
- * Abstrakcyjna klasa formularza
+ * Abstrakcyjna klasa komponentu formularza
  * wymaga zdefiniowania metody init()
  * w metodzie init należy skonfigurować pola formularza
  */
-abstract class Form extends Form\Base {
+abstract class Component extends Form\Base {
 
 	/**
 	 * Button

@@ -26,7 +26,7 @@ class Renderer extends Core {
 		if ($pagesCount < 2) {
 			return '';
 		}
-		$view = \Mmi\Controller\Front::getInstance()->getView();
+		$view = \Mmi\App\FrontController::getInstance()->getView();
 		/* if (!$this->getPage()) {
 		  $this->getOffset();
 		  } */

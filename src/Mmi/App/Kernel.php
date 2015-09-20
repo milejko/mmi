@@ -82,9 +82,9 @@ namespace Mmi\App {
 		 */
 		protected function _initErrorHandler() {
 			//domyślne przechwycenie wyjątków
-			set_exception_handler(['\Mmi\App\Error', 'exceptionHandler']);
+			set_exception_handler(['\Mmi\App\ErrorHandler', 'exceptionHandler']);
 			//domyślne przechwycenie błędów
-			set_error_handler(['\Mmi\App\Error', 'errorHandler']);
+			set_error_handler(['\Mmi\App\ErrorHandler', 'errorHandler']);
 			return $this;
 		}
 

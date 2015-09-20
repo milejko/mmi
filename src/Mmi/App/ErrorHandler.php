@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-class Error {
+class ErrorHandler {
 
 	/**
 	 * Obsługuje błędy, ostrzeżenia
@@ -39,11 +39,11 @@ class Error {
 			ob_start();
 		}
 		//logowanie błędu
-		\Mmi\Exception\Logger::log($exception);
-		$response = \Mmi\Controller\Front::getInstance()->getResponse();
+		\Mmi\App\ExceptionLogger::log($exception);
+		$response = \Mmi\App\FrontController::getInstance()->getResponse();
 		try {
 			//widok
-			$view = \Mmi\Controller\Front::getInstance()->getView();
+			$view = \Mmi\App\FrontController::getInstance()->getView();
 			$view->_exception = $exception;
 			//błąd bez layoutu lub nie HTML
 			if ($view->isLayoutDisabled() || $response->getType() != 'html') {
@@ -53,7 +53,7 @@ class Error {
 			}
 			//błąd z prezentacją HTML
 			$response->setCodeError()
-				->setContent($view->setPlaceholder('content', \Mmi\Controller\Action\Helper\Action::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
+				->setContent($view->setPlaceholder('content', \Mmi\Controller\ActionPerformer::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
 					->renderLayout('mmi', 'index'))
 				->send();
 			return true;

@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Tools;
+namespace Mmi\Command;
 
 //nie ma tu jeszcze autoloadera ładowanie CliAbstract
 require_once 'CliAbstract.php';

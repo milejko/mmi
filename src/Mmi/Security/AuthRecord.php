@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Auth;
+namespace Mmi\Security;
 
 /**
  * Klasa rekordu autoryzacji
  */
-class Record {
+class AuthRecord {
 	
 	/**
 	 * Identyfikator użytkownika

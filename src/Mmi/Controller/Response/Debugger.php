@@ -24,7 +24,7 @@ class Debugger {
 	 * Konstruktor - modyfikuje response o dane debbugera
 	 */
 	public function __construct() {
-		$response = \Mmi\Controller\Front::getInstance()->getResponse();
+		$response = \Mmi\App\FrontController::getInstance()->getResponse();
 		//odpowiedź nie jest znakowa
 		if (!is_string($response->getContent())) {
 			return;
@@ -82,7 +82,7 @@ class Debugger {
 	 * @return string
 	 */
 	public function getHtml() {
-		$view = \Mmi\Controller\Front::getInstance()->getView();
+		$view = \Mmi\App\FrontController::getInstance()->getView();
 		if ($view->getCache() === null || !$view->getCache()->isActive()) {
 			$cacheInfo = '<span style="color: #f22;">no cache</span>';
 		} else {
@@ -135,7 +135,7 @@ class Debugger {
 		//zmienne requesta
 		$html .= '<p style="margin: 0px;">Request Variables: </p>';
 		$html .= self::PRE_OPEN;
-		$html .= Debugger\Colorify::colorify(print_r(\Mmi\Controller\Front::getInstance()->getRequest()->toArray(), true)) . '</pre>';
+		$html .= Debugger\Colorify::colorify(print_r(\Mmi\App\FrontController::getInstance()->getRequest()->toArray(), true)) . '</pre>';
 
 		//zmienne widoku
 		if ($view !== null) {

@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Action\Helper;
+namespace Mmi;
 
-class Messenger {
+class FlashMessenger {
 
 	/**
 	 * Przestrzeń w sesji zarezerwowana dla wiadomości
@@ -25,10 +25,10 @@ class Messenger {
 	private $_namespace;
 
 	/**
-	 * Konstruktor pozwala zdefiniować w opcjach 'namespace' czyli nazwę przestrzeni
+	 * Konstruktor pozwala zdefiniować nazwę przestrzeni w sesji
 	 */
-	public function __construct() {
-		$this->_namespace = '\Mmi\Action\Helper\Messenger';
+	public function __construct($namespace = 'FlashMessenger') {
+		$this->_namespace = $namespace;
 		self::$_session = new \Mmi\Session\Space($this->_namespace);
 	}
 
@@ -37,7 +37,7 @@ class Messenger {
 	 * @param string $message wiadomość
 	 * @param bool $type true - pozytywna, false - negatywna, brak - neutralna
 	 * @param array $vars zmienne
-	 * @return \Mmi\Controller\Action\Helper\Messenger
+	 * @return \Mmi\FlashMessenger
 	 */
 	public function addMessage($message, $type = null, array $vars = []) {
 		if ($type) {
@@ -66,18 +66,21 @@ class Messenger {
 	 * Pobiera wiadomości
 	 * @return array
 	 */
-	public function getMessages() {
+	public function getMessages($clear = true) {
+		$messages = [];
 		if (is_array(self::$_session->messages)) {
 			$messages = self::$_session->messages;
-		} else {
-			$messages = [];
+		}
+		//czyszczenie
+		if ($clear) {
+			$this->clearMessages();
 		}
 		return $messages;
 	}
 
 	/**
 	 * Czyści wiadomości
-	 * @return \Mmi\Controller\Action\Helper\Messenger
+	 * @return \Mmi\FlashMessenger
 	 */
 	public function clearMessages() {
 		self::$_session->unsetAll();

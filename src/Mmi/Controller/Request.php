@@ -67,7 +67,7 @@ class Request extends \Mmi\DataObject {
 	 * @return string
 	 */
 	public function getReferer() {
-		return \Mmi\Controller\Front::getInstance()->getEnvironment()->httpReferer;
+		return \Mmi\App\FrontController::getInstance()->getEnvironment()->httpReferer;
 	}
 
 	/**

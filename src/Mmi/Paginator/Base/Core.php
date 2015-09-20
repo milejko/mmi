@@ -28,7 +28,7 @@ class Core extends \Mmi\OptionObject {
 		if ($this->getOption('page')) {
 			return $this->getOption('page');
 		}
-		$requestPage = \Mmi\Controller\Front::getInstance()->getView()->request->__get($this->getOption('pageVariable'));
+		$requestPage = \Mmi\App\FrontController::getInstance()->getView()->request->__get($this->getOption('pageVariable'));
 		$page = ($requestPage > 0) ? $requestPage : 1;
 		$this->setOption('page', $page);
 		return $page;

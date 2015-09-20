@@ -51,7 +51,7 @@ class Builder {
 			$recordCode = file_get_contents($path);
 		}
 		//odczyt struktury tabeli
-		$structure = \Mmi\Orm::getTableStructure($tableName);
+		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
 		//błędna struktrura lub brak
 		if (empty($structure)) {
 			throw new\Exception('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
@@ -89,7 +89,7 @@ class Builder {
 		$classPrefix = self::_getClassNamePrefixByTableName($tableName);
 		$queryClassName = $classPrefix . '\Query';
 		//odczyt struktury
-		$structure = \Mmi\Orm::getTableStructure($tableName);
+		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
 		$methods = '';
 		//budowanie komentarzy do metod
 		foreach ($structure as $fieldName => $fieldDetails) {
@@ -187,7 +187,7 @@ class Builder {
 			$queryCode = file_get_contents($path);
 		}
 		//odczyt struktury
-		$structure = \Mmi\Orm::getTableStructure($tableName);
+		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
 		//pusta, lub błędna struktura
 		if (empty($structure)) {
 			throw new \Exception('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);

@@ -285,7 +285,7 @@ class Response {
 		//jeśli włączone resetowanie parametrów
 		if (!$reset) {
 			//parametry z requestu front controllera
-			$requestParams = \Mmi\Controller\Front::getInstance()->getRequest()->toArray();
+			$requestParams = \Mmi\App\FrontController::getInstance()->getRequest()->toArray();
 			//łączenie z parametrami z metody
 			$params = array_merge($requestParams, $params);
 		}
@@ -307,7 +307,7 @@ class Response {
 	 * @param array $params parametry
 	 */
 	public function redirectToRoute(array $params = []) {
-		$this->redirectToUrl(\Mmi\Controller\Front::getInstance()->getRouter()->encodeUrl($params));
+		$this->redirectToUrl(\Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params));
 	}
 	
 	/**

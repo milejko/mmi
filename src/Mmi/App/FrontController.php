@@ -8,16 +8,16 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller;
+namespace Mmi\App;
 
 /**
  * Klasa implementująca kontroler frontu
  */
-class Front {
+class FrontController {
 
 	/**
 	 * Instancja front kontrolera
-	 * @var \Mmi\Controller\Front
+	 * @var \Mmi\App\FrontController
 	 */
 	private static $_instance;
 
@@ -77,7 +77,7 @@ class Front {
 
 	/**
 	 * Pobranie instancji
-	 * @return \Mmi\Controller\Front
+	 * @return \Mmi\App\FrontController
 	 */
 	public static function getInstance() {
 		//jeśli nie istnieje instancja tworzenie nowej
@@ -91,7 +91,7 @@ class Front {
 	/**
 	 * Ustawia strukturę frontu
 	 * @param array $structure
-	 * @return \Mmi\Controller\Front
+	 * @return \Mmi\App\FrontController
 	 */
 	public function setStructure(array $structure = []) {
 		$this->_structure = $structure;
@@ -100,10 +100,10 @@ class Front {
 
 	/**
 	 * Dodanie pluginu
-	 * @param \Mmi\Controller\Plugin\PluginAbstract $plugin
-	 * @return \Mmi\Controller\Front
+	 * @param \Mmi\App\FrontControllerPluginAbstract $plugin
+	 * @return \Mmi\App\FrontController
 	 */
-	public function registerPlugin(\Mmi\Controller\Plugin\PluginAbstract $plugin) {
+	public function registerPlugin(\Mmi\App\FrontControllerPluginAbstract $plugin) {
 		$this->_plugins[] = $plugin;
 		return $this;
 	}
@@ -111,7 +111,7 @@ class Front {
 	/**
 	 * Ustawienie żądania
 	 * @param \Mmi\Controller\Request $request
-	 * @return \Mmi\Controller\Front
+	 * @return \Mmi\App\FrontController
 	 */
 	public function setRequest(\Mmi\Controller\Request $request) {
 		$this->_request = $request;
@@ -121,7 +121,7 @@ class Front {
 	/**
 	 * Ustawienie odpowiedzi
 	 * @param \Mmi\Controller\Response $response
-	 * @return \Mmi\Controller\Front
+	 * @return \Mmi\App\FrontController
 	 */
 	public function setResponse(\Mmi\Controller\Response $response) {
 		$this->_response = $response;
@@ -131,7 +131,7 @@ class Front {
 	/**
 	 * Ustawia router
 	 * @param \Mmi\Controller\Router $router
-	 * @return \Mmi\Controller\Front
+	 * @return \Mmi\App\FrontController
 	 */
 	public function setRouter(\Mmi\Controller\Router $router) {
 		$this->_router = $router;
@@ -141,7 +141,7 @@ class Front {
 	/**
 	 * Ustawia widok
 	 * @param \Mmi\View $view
-	 * @return \Mmi\Controller\Front
+	 * @return \Mmi\App\FrontController
 	 */
 	public function setView(\Mmi\View $view) {
 		$this->_view = $view;
@@ -171,7 +171,7 @@ class Front {
 	public function getRouter() {
 		//brak routera
 		if ($this->_router === null) {
-			throw new \Exception('\Mmi\Controller\Front: no router specified');
+			throw new \Exception('\Mmi\App\FrontController: no router specified');
 		}
 		return $this->_router;
 	}
@@ -191,7 +191,7 @@ class Front {
 	public function getView() {
 		//brak widoku
 		if ($this->_view === null) {
-			throw new \Exception('\Mmi\Controller\Front: no view specified');
+			throw new \Exception('\Mmi\App\FrontController: no view specified');
 		}
 		return $this->_view;
 	}
@@ -208,7 +208,7 @@ class Front {
 		}
 		//struktura nieprawidłowa (brak części)
 		if ($part !== null && !isset($this->_structure[$part])) {
-			throw new \Exception('\Mmi\Controller\Front structure invalid');
+			throw new \Exception('\Mmi\App\FrontController structure invalid');
 		}
 		return (null === $part) ? $this->_structure : $this->_structure[$part];
 	}
@@ -265,7 +265,7 @@ class Front {
 		$this->preDispatch();
 		\Mmi\Profiler::event('Front Controller: plugins pre-dispatch');
 		//wybór i uruchomienie kontrolera akcji
-		$content = \Mmi\Controller\Action\Helper\Action::getInstance()->action($this->getRequest()->toArray());
+		$content = \Mmi\Controller\ActionPerformer::getInstance()->action($this->getRequest()->toArray());
 
 		//wpięcie dla pluginów po dispatchu
 		$this->postDispatch();

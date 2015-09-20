@@ -18,8 +18,8 @@ class Builder {
 	 * @return array
 	 */
 	public static function build(array $data = []) {
-		$lang = \Mmi\Controller\Front::getInstance()->getRequest()->lang;
-		$view = \Mmi\Controller\Front::getInstance()->getView();
+		$lang = \Mmi\App\FrontController::getInstance()->getRequest()->lang;
+		$view = \Mmi\App\FrontController::getInstance()->getView();
 		if ($data['disabled'] || ($data['dateStart'] !== null && $data['dateStart'] > date('Y-m-d H:i:s')) || ($data['dateEnd'] !== null && $data['dateEnd'] < date('Y-m-d H:i:s'))) {
 			$data['disabled'] = true;
 		}

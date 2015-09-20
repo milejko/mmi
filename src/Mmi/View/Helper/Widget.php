@@ -25,7 +25,7 @@ class Widget extends HelperAbstract {
 		$params['module'] = $module;
 		$params['controller'] = $controller;
 		$params['action'] = $action;
-		$actionResult = \Mmi\Controller\Action\Helper\Action::getInstance()->action($params);
+		$actionResult = \Mmi\Controller\ActionPerformer::getInstance()->action($params);
 		$this->view->setLayoutDisabled($isLayoutDisabled);
 		return $actionResult;
 	}

@@ -8,18 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\App\Config;
+namespace Mmi\App;
 
 /**
  * Klasa konfiguracji aplikacji
  */
-abstract class App {
-
-	/**
-	 * Podstawowa konfiguracja aplikacji
-	 * @var \Mmi\App\Config\App
-	 */
-	public $application;
+abstract class KernelConfig {
 
 	/**
 	 * Konfiguracja postawowego cache

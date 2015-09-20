@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Tools;
+namespace Mmi\Command;
 
 /**
  * Abstrakcyjna klasa narzędzia linii komend
@@ -26,7 +26,7 @@ abstract class CliAbstract {
 		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli');
 
 		//ustawienie typu odpowiedzi na plain
-		\Mmi\Controller\Front::getInstance()->getResponse()->setTypePlain();
+		\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
 
 		//uruchomienie aplikacji
 		$application->run();

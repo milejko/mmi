@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\Orm;
 
 /**
  * Klasa dostępu do tabel w bazie danych
  */
-class Orm {
+class DbConnector {
 
 	/**
 	 * Przechowuje strukturę bazy danych

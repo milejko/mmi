@@ -23,7 +23,7 @@ class BootstrapCli extends \Mmi\App\Bootstrap {
 	 * Uruchamianie bootstrapa - brak front kontrolera
 	 */
 	public function run() {
-		$front = \Mmi\Controller\Front::getInstance();
+		$front = \Mmi\App\FrontController::getInstance();
 		$request = new \Mmi\Controller\Request();
 		//ustawianie domyślnego języka jeśli istnieje
 		if (isset(\App\Registry::$config->languages[0])) {
@@ -34,7 +34,7 @@ class BootstrapCli extends \Mmi\App\Bootstrap {
 			->setActionName('index');
 		//ustawianie żądania
 		$front->setRequest($request);
-		\Mmi\Controller\Front::getInstance()->getView()->setRequest($request);
+		\Mmi\App\FrontController::getInstance()->getView()->setRequest($request);
 	}
 
 }

@@ -168,7 +168,7 @@ class View extends \Mmi\DataObject {
 	 * @return \Mmi\View\Helper\HelperAbstract
 	 */
 	public function getHelper($name) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('helper');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('helper');
 		//położenie helpera w strukturze
 		foreach ($structure as $namespace => $helpers) {
 			if (!isset($helpers[$name])) {
@@ -194,7 +194,7 @@ class View extends \Mmi\DataObject {
 	 * @return \Mmi\View\Helper\HelperAbstract
 	 */
 	public function getFilter($name) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('filter');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('filter');
 		foreach ($structure as $namespace => $filters) {
 			if (!isset($filters[$name])) {
 				continue;
@@ -348,7 +348,7 @@ class View extends \Mmi\DataObject {
 	 * @throws Exception brak layoutów
 	 */
 	private function _getLayout($module, $controller) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('template');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
 		//layout dla modułu i kontrolera
 		if (isset($structure[$module][$controller]['layout'])) {
 			//pobieranie pierwszego jeśli vendor -> local
@@ -376,7 +376,7 @@ class View extends \Mmi\DataObject {
 	 * @throws Exception brak templatów
 	 */
 	private function _getTemplate($module, $controller, $action) {
-		$structure = \Mmi\Controller\Front::getInstance()->getStructure('template');
+		$structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
 		if (isset($structure[$module][$controller][$action])) {
 			//pobieranie pierwszego jeśli jest i w vendor i src
 			return is_array($structure[$module][$controller][$action]) ? $structure[$module][$controller][$action][0] : $structure[$module][$controller][$action];

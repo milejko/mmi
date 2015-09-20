@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\Db;
 
-class Db {
+class Component {
 
 	/**
 	 * Tworzy obiekty adaptera na podstawie opcji

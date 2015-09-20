@@ -396,17 +396,17 @@ class Query {
 	protected final function _prepareField($fieldName, $forcedTableName = null) {
 		$tableName = ($forcedTableName === null) ? $this->_tableName : $forcedTableName;
 		//tabela
-		$tablePrefix = \Mmi\Orm::getAdapter()->prepareTable($tableName);
+		$tablePrefix = \Mmi\Orm\DbConnector::getAdapter()->prepareTable($tableName);
 		//jeśli pole występuje w tabeli, bądź jest funkcją RAND()
-		if (\Mmi\Orm::fieldInTable($fieldName, $tableName) || $fieldName == 'RAND()') {
-			return $tablePrefix . '.' . \Mmi\Orm::getAdapter()->prepareField($fieldName);
+		if (\Mmi\Orm\DbConnector::fieldInTable($fieldName, $tableName) || $fieldName == 'RAND()') {
+			return $tablePrefix . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($fieldName);
 		}
 		/* @var $db \Mmi\Db\Adapter\Pdo\PdoAbstract */
 		//konwersja camelcase do podkreślników (przechowywanych w bazie)
 		$convertedFieldName = \Mmi\Orm\Convert::camelcaseToUnderscore($fieldName);
 		//jeśli pole podkreślnikowe występuje w bazie
-		if (\Mmi\Orm::fieldInTable($convertedFieldName, $tableName)) {
-			return $tablePrefix . '.' . \Mmi\Orm::getAdapter()->prepareField($convertedFieldName);
+		if (\Mmi\Orm\DbConnector::fieldInTable($convertedFieldName, $tableName)) {
+			return $tablePrefix . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($convertedFieldName);
 		}
 		//w pozostałych wypadkach wyjątek o braku pola
 		throw new Exception(get_called_class() . ': "' . $fieldName . '" not found in ' . $tableName . ' table');

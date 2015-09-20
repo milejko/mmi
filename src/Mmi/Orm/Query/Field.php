@@ -208,7 +208,7 @@ class Field {
 		$this->_initQuery();
 		//przygotowanie wartości null
 		if (null === $value) {
-			$this->_query->getQueryCompile()->where .= \Mmi\Orm::getAdapter()->prepareNullCheck($this->_fieldName, ($condition == '='));
+			$this->_query->getQueryCompile()->where .= \Mmi\Orm\DbConnector::getAdapter()->prepareNullCheck($this->_fieldName, ($condition == '='));
 			return $this->_query;
 		}
 		//przygotowanie pustych tabel (kompatybilne tylko z == i <>)
@@ -232,7 +232,7 @@ class Field {
 		}
 		//ilike
 		if ('ILIKE' == $condition) {
-			$this->_query->getQueryCompile()->where .= \Mmi\Orm::getAdapter()->prepareIlike($this->_fieldName) . ' :' . $bindKey;
+			$this->_query->getQueryCompile()->where .= \Mmi\Orm\DbConnector::getAdapter()->prepareIlike($this->_fieldName) . ' :' . $bindKey;
 			return $this->_query;
 		}
 		//zwykłe porównanie
@@ -250,7 +250,7 @@ class Field {
 		//inicjalizacja zapytania
 		$this->_initQuery();
 		//porównanie z kolumną
-		$this->_query->getQueryCompile()->where .= $this->_fieldName . ' ' . $condition . ' ' . \Mmi\Orm::getAdapter()->prepareTable((null === $tableName) ? $this->_query->getTableName() : $tableName) . '.' . \Mmi\Orm::getAdapter()->prepareField($columnName);
+		$this->_query->getQueryCompile()->where .= $this->_fieldName . ' ' . $condition . ' ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable((null === $tableName) ? $this->_query->getTableName() : $tableName) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($columnName);
 		return $this->_query;
 	}
 

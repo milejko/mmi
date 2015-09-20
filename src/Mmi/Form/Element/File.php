@@ -34,7 +34,7 @@ class File extends ElementAbstract {
 		//nazwa pola
 		$fieldName = $this->getOption('name');
 		//tablica obiektów file
-		$files = \Mmi\Controller\Front::getInstance()->getRequest()->getFiles();
+		$files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles();
 		//brak pliku dla tego elementu formularza
 		if (!$files->{$fieldName}) {
 			return;

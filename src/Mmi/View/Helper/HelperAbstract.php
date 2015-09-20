@@ -29,7 +29,7 @@ class HelperAbstract {
 	 * Konstruktor, ustawia widok
 	 */
 	public function __construct() {
-		$this->view = \Mmi\Controller\Front::getInstance()->getView();
+		$this->view = \Mmi\App\FrontController::getInstance()->getView();
 		$this->init();
 	}
 
