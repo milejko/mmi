@@ -13,7 +13,7 @@ namespace Mmi\Command;
 use Composer\Script\Event;
 
 /**
- * Klasa 
+ * Klasa używana przy instalacji composerem
  */
 class Composer {
 
@@ -22,13 +22,14 @@ class Composer {
 	 * @var array
 	 */
 	protected static $_directories = [
+		'src/App',
 		'var/cache',
 		'var/compile',
 		'var/data',
 		'var/log',
 		'var/session',
 		'web',
-		'src/App',
+		'web/resource',
 	];
 
 	/**

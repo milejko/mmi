@@ -16,6 +16,30 @@ namespace Mmi;
 class FileSystem {
 
 	/**
+	 * Kopiowanie rekursywne
+	 * @param string $src
+	 * @param string $dest
+	 */
+	public static function copyRecursive($src, $dest) {
+		$dir = opendir($src);
+		//brak pliku
+		if (!file_exists($dest)) {
+			mkdir($dest);
+		}
+		while (false !== ($file = readdir($dir))) {
+			if ($file == '.' || $file == '..') {
+				continue;
+			}
+			if (is_dir($src . '/' . $file)) {
+				self::copyRecursive($src . '/' . $file, $dest . '/' . $file);
+			} else {
+				copy($src . '/' . $file, $dest . '/' . $file);
+			}
+		}
+		closedir($dir);
+	}
+
+	/**
 	 * Kasuje pliki rekurencyjnie
 	 * @param string $fileName nazwa pliku
 	 * @param string $rootName katalog główny

@@ -244,8 +244,8 @@ class Auth {
 			return false;
 		}
 		//zła klasa rekordu
-		if (!$record instanceof \Mmi\Security\Auth\Record) {
-			throw new\Exception('Authentication record is not an instance of \Mmi\Security\Auth\Record');
+		if (!$record instanceof \Mmi\Security\AuthRecord) {
+			throw new\Exception('Authentication record is not an instance of \Mmi\Security\AuthRecord');
 		}
 		//ustawia autoryzację
 		return $this->_setAuthentication($record);
@@ -253,10 +253,10 @@ class Auth {
 
 	/**
 	 * Wymuszenie ustawienia autoryzacji
-	 * @param \Mmi\Security\Auth\Record $record
+	 * @param \Mmi\Security\AuthRecord $record
 	 * @return boolean
 	 */
-	protected function _setAuthentication(\Mmi\Security\Auth\Record $record) {
+	protected function _setAuthentication(\Mmi\Security\AuthRecord $record) {
 		$this->_session->id = $record->id;
 		$this->_session->username = $record->username;
 		$this->_session->email = $record->email;
@@ -280,8 +280,8 @@ class Auth {
 			return false;
 		}
 		//błędny obiekt
-		if (!$record instanceof \Mmi\Security\Auth\Record) {
-			throw new \Exception('Authentication result is not an instance of \Mmi\Security\Auth\Record');
+		if (!$record instanceof \Mmi\Security\AuthRecord) {
+			throw new \Exception('Authentication result is not an instance of \Mmi\Security\AuthRecord');
 		}
 		//ustawia autoryzację
 		return $this->_setAuthentication($record);
