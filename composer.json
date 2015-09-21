@@ -28,6 +28,7 @@
 			"Mmi\\": "src/Mmi"
 		}
 	},
+	"minimum-stability": "dev",
 	"extra": {
 		"branch-alias": {
 			"dev-master": "3.0-dev"
