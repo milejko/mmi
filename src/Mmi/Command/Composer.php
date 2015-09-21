@@ -108,8 +108,8 @@ class Composer {
 				continue;
 			}
 			//mmi jest w vendorach
-			if (!file_exists(BASE_PATH . $dest)) {
-				$dest = 'vendor/mmi/mmi/' . $dest;
+			if (!file_exists(BASE_PATH . $src)) {
+				$src = 'vendor/mmi/mmi/' . $src;
 			}
 			copy(BASE_PATH . $src, BASE_PATH . $dest);
 		}
