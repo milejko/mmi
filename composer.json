@@ -34,10 +34,8 @@
 			"dev-master": "3.0-dev"
 		}
 	},
-    "scripts": {
-        "post-update-cmd": "Mmi\\Command\\Composer::postUpdate",
-        "post-package-install": "Mmi\\Command\\Composer::postPackageInstall",
-        "post-install-cmd": "Mmi\\Command\\Composer::postInstall",
-        "post-create-project-cmd": "Mmi\\Command\\Composer::postCreateProject"
-    }
+	"scripts": {
+		"post-update-cmd": "Mmi\\Command\\Composer::postUpdate",
+		"post-install-cmd": "Mmi\\Command\\Composer::postInstall",
+	}
 }
