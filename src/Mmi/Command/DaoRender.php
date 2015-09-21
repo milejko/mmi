@@ -11,12 +11,12 @@
 namespace Mmi\Command;
 
 //nie ma tu jeszcze autoloadera ładowanie CliAbstract
-require_once 'CliAbstract.php';
+require_once 'CommandAbstract.php';
 
 /**
  * Renderer DAO, rekordów, zapytań itd.
  */
-class DaoRenderer extends CliAbstract {
+class DaoRenderer extends CommandAbstract {
 
 	/**
 	 * Metoda uruchamiająca

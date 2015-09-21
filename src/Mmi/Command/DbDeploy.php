@@ -11,12 +11,12 @@
 namespace Mmi\Command;
 
 //nie ma tu jeszcze autoloadera ładowanie CliAbstract
-require_once 'CliAbstract.php';
+require_once 'CommandAbstract.php';
 
 /**
  * Wdrożenie bazy danych
  */
-class DbDeploy extends CliAbstract {
+class DbDeploy extends CommandAbstract {
 	
 	/**
 	 * Uruchomienie deployera

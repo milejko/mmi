@@ -11,12 +11,12 @@
 namespace Mmi\Command;
 
 //nie ma tu jeszcze autoloadera ładowanie CliAbstract
-require_once 'CliAbstract.php';
+require_once 'CommandAbstract.php';
 
 /**
  * Całkowicie usuwa cache
  */
-class FlushCache extends CliAbstract {
+class FlushCache extends CommandAbstract {
 	
 	public function run() {
 		//usuwanie cache

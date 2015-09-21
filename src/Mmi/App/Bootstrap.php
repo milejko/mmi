@@ -53,7 +53,7 @@ class Bootstrap implements BootstrapInterface {
 	 */
 	protected function _setupConfiguration() {
 		//lokalna konfiguracja
-		$config = new \App\LocalConfig();
+		$config = new \App\KernelConfigLocal();
 
 		//konfiguracja profilera aplikacji
 		\Mmi\Profiler::setEnabled($config->debug);

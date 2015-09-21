@@ -13,7 +13,7 @@ namespace App;
 /**
  * Lokalna konfiguracja aplikacji
  */
-class LocalConfig extends KernelConfig {
+class KernelConfigLocal extends KernelConfig {
 
 	public function __construct() {
 		parent::__construct();
