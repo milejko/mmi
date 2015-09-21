@@ -36,6 +36,6 @@
 	},
 	"scripts": {
 		"post-update-cmd": "Mmi\\Command\\Composer::postUpdate",
-		"post-install-cmd": "Mmi\\Command\\Composer::postInstall",
+		"post-install-cmd": "Mmi\\Command\\Composer::postInstall"
 	}
 }
