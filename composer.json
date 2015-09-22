@@ -24,8 +24,8 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"App\\": "src/App",
-			"Mmi\\": "src/Mmi"
+			"Mmi\\": "src/Mmi",
+			"": "src/"
 		}
 	},
 	"minimum-stability": "dev",
@@ -35,7 +35,7 @@
 		}
 	},
 	"scripts": {
-		"post-update-cmd": "Mmi\\Command\\Composer::postUpdate",
-		"post-install-cmd": "Mmi\\Command\\Composer::postInstall"
+		"post-update-cmd": "Mmi\\ComposerInstaller::postUpdate",
+		"post-install-cmd": "Mmi\\ComposerInstaller::postInstall"
 	}
 }
