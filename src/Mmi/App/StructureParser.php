@@ -53,7 +53,7 @@ class StructureParser {
 	public static function getVendorModules() {
 		$modules = [];
 		//iteracja po vendorach
-		foreach (self::_getVendors() as $vendor) {
+		foreach (self::getVendors() as $vendor) {
 			//iteracja po modułach
 			foreach (new \DirectoryIterator($vendor) as $module) {
 				if (!$module->isDir() || $module->isDot() || !self::_moduleValid($module->getPathname())) {
@@ -69,7 +69,7 @@ class StructureParser {
 	 * Zwraca dostępne moduły aplikacyjne w vendorach
 	 * @return array
 	 */
-	protected static function _getVendors() {
+	public static function getVendors() {
 		$vendors = [];
 		//brak vendorów
 		if (!file_exists(BASE_PATH . 'vendor')) {
