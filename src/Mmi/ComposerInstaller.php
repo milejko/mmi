@@ -22,7 +22,7 @@ class ComposerInstaller {
 	 * @var array
 	 */
 	protected static $_distFiles = [
-		'dist-files' => '',
+		'dist' => '',
 	];
 
 	/**
