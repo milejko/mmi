@@ -35,7 +35,7 @@
 		}
 	},
 	"scripts": {
-		"post-update-cmd": "Mmi\\ComposerInstaller::postUpdate",
-		"post-install-cmd": "Mmi\\ComposerInstaller::postInstall"
+		"post-update-cmd": "Mmi\\Command\\ComposerInstaller::postUpdate",
+		"post-install-cmd": "Mmi\\Command\\ComposerInstaller::postInstall"
 	}
 }
