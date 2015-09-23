@@ -60,7 +60,6 @@ class FileSystem {
 			}
 			//szukany plik - usuwanie
 			if ($fileName == $file->getFilename()) {
-				die($file->getPathname());
 				unlink($file->getPathname());
 			}
 		}
