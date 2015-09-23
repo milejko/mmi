@@ -62,7 +62,7 @@ class FileSystem {
 			if ($fileName == $file->getFilename()) {
 				die($file->getPathname());
 				unlink($file->getPathname());
-			} else echo $file->getFilename() . '<br />';
+			}
 		}
 	}
 
