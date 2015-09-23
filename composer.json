@@ -33,9 +33,5 @@
 		"branch-alias": {
 			"dev-master": "3.0-dev"
 		}
-	},
-	"scripts": {
-		"post-update-cmd": "Mmi\\Command\\ComposerInstaller::postUpdate",
-		"post-install-cmd": "Mmi\\Command\\ComposerInstaller::postInstall"
 	}
 }

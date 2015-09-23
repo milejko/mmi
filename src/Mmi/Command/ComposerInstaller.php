@@ -73,39 +73,15 @@ class ComposerInstaller {
 		//iteracja po wymaganych plikach
 		foreach (self::$_distFiles as $src => $dest) {
 			//kalkulacja ścieżki
-			$source = self::_calculateDistPath($src);
+			$source = BASE_PATH . $src;
 			if (!file_exists($source)) {
 				continue;
 			}
-			//kopiowanie pojedynczego pliku
-			if (is_file($source)) {
-				copy($src, BASE_PATH . $dest);
-				continue;
-			}
 			//kopiowanie katalogów
-			if (is_dir($source)) {
-				//kopiowanie rekursywne
-				\Mmi\FileSystem::copyRecursive($source, BASE_PATH . $dest);
-			}
+			\Mmi\FileSystem::copyRecursive($source, BASE_PATH . $dest, false);
+			//usuwanie źródła
+			\Mmi\FileSystem::rmdirRecursive($source);
 		}
 	}
 	
-	/**
-	 * Obliczenie ścieżki
-	 * @param string $src
-	 * @return string
-	 */
-	protected static function _calculateDistPath($src) {
-		//ścieżka z src
-		if (file_exists(BASE_PATH . $src)) {
-			return BASE_PATH . $src;
-		}
-		//ścieżka z vendorów
-		foreach (\Mmi\App\StructureParser::getVendors() as $vendor) {
-			if (file_exists($vendor . '/../' . $src)) {
-				return $vendor . '/../' . $src;
-			}
-		}
-	}
-
 }

@@ -20,7 +20,7 @@ class FileSystem {
 	 * @param string $src
 	 * @param string $dest
 	 */
-	public static function copyRecursive($src, $dest) {
+	public static function copyRecursive($src, $dest, $overwrite = true) {
 		$dir = opendir($src);
 		//brak pliku
 		if (!file_exists($dest)) {
@@ -32,7 +32,7 @@ class FileSystem {
 			}
 			if (is_dir($src . '/' . $file)) {
 				self::copyRecursive($src . '/' . $file, $dest . '/' . $file);
-			} else {
+			} elseif (!file_exists($src . '/' . $file) || $overwrite) {
 				copy($src . '/' . $file, $dest . '/' . $file);
 			}
 		}
