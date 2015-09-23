@@ -48,14 +48,21 @@ class FileSystem {
 		if (!file_exists($rootName)) {
 			return;
 		}
-		foreach (glob($rootName . '/*') as $file) {
-			if ($fileName == basename($file) && is_file($file)) {
-				unlink($file);
+		foreach (new \DirectoryIterator($rootName) as $file) {
+			//katalog .
+			if ($file->isDot()) {
 				continue;
 			}
-			if (is_dir($file)) {
-				self::unlinkRecursive($fileName, $file);
+			//katalog - rekursja
+			if ($file->isDir()) {
+				self::unlinkRecursive($fileName, $file->getPathname());
+				continue;
 			}
+			//szukany plik - usuwanie
+			if ($fileName == $file->getFilename()) {
+				die($file->getPathname());
+				unlink($file->getPathname());
+			} else echo $file->getFilename() . '<br />';
 		}
 	}
 
@@ -73,12 +80,15 @@ class FileSystem {
 			unlink($dirName);
 			return true;
 		}
+		//iteracja po katalogu
 		foreach (new \DirectoryIterator($dirName) as $dir) {
+			//katalog .
 			if ($dir->isDot()) {
 				continue;
 			}
 			self::rmdirRecursive($dir->getPathname());
 		}
+		//usunięcie pustego katalogu
 		rmdir($dirName);
 		return true;
 	}

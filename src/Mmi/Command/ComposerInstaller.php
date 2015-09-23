@@ -81,6 +81,8 @@ class ComposerInstaller {
 			\Mmi\FileSystem::copyRecursive($source, BASE_PATH . $dest, false);
 			//usuwanie źródła
 			\Mmi\FileSystem::rmdirRecursive($source);
+			//usuwanie placeholderów
+			\Mmi\FileSystem::unlinkRecursive('.placeholder', BASE_PATH . $dest);
 		}
 	}
 	
