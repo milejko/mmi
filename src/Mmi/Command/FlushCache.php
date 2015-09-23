@@ -26,4 +26,4 @@ class FlushCache extends CommandAbstract {
 }
 
 //nowy obiekt usuwający cache
-new FlushCache();
+new FlushCache($argv[1]);

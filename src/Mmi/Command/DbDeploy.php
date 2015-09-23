@@ -28,4 +28,4 @@ class DbDeploy extends CommandAbstract {
 	
 }
 
-new DbDeploy();
+new DbDeploy($argv[1]);

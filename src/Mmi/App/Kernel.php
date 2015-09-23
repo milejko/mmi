@@ -21,14 +21,14 @@ namespace Mmi\App {
 		/**
 		 * Konstruktor
 		 */
-		public function __construct($bootstrapName = '\Mmi\App\Bootstrap') {
+		public function __construct($bootstrapName = '\Mmi\App\Bootstrap', $env = 'DEV') {
 			//inicjalizacja aplikacji
 			$this->_initPaths()
 				->_initEncoding()
 				->_initErrorHandler();
 			\Mmi\Profiler::event('App: bootstrap startup');
 			//tworzenie instancji bootstrapa
-			$this->_bootstrap = new $bootstrapName();
+			$this->_bootstrap = new $bootstrapName($env);
 			\Mmi\Profiler::event('App: bootstrap executed');
 			//bootstrap nie implementuje właściwego interfeace'u
 			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {

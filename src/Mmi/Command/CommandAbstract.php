@@ -18,12 +18,12 @@ abstract class CommandAbstract {
 	/**
 	 * Konstruktor konfiguruje środowisko dla linii komend
 	 */
-	public final function __construct() {
+	public final function __construct($env = 'DEV') {
 		//konfiguracja autoloadera
 		$this->_setupAutoload();
 
 		//powołanie aplikacji
-		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli');
+		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', $env);
 
 		//ustawienie typu odpowiedzi na plain
 		\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();

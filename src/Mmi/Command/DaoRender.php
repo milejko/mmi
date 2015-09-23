@@ -37,4 +37,4 @@ class DaoRenderer extends CommandAbstract {
 }
 
 //powołanie obiektu
-new DaoRenderer();
+new DaoRenderer($argv[1]);

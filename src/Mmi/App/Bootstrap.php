@@ -18,9 +18,9 @@ class Bootstrap implements BootstrapInterface {
 	/**
 	 * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
 	 */
-	public function __construct() {
+	public function __construct($env) {
 		//inicjalizacja konfiguracji aplikacji
-		$config = $this->_setupConfiguration();
+		$config = $this->_setupConfiguration($env);
 
 		//ustawienie cache
 		$this->_setupCache($config);
@@ -51,13 +51,13 @@ class Bootstrap implements BootstrapInterface {
 	 * Ładowanie konfiguracji
 	 * @return \Mmi\App\KernelConfig
 	 */
-	protected function _setupConfiguration() {
-		//lokalna konfiguracja
-		$config = new \App\KernelConfigLocal();
-
+	protected function _setupConfiguration($env) {
+		//konwencja nazwy konfiguracji
+		$configClassName = '\App\KernelConfig' . $env;
+		//konfiguracja dla danego środowiska
+		$config = new $configClassName();
 		//konfiguracja profilera aplikacji
 		\Mmi\Profiler::setEnabled($config->debug);
-
 		//ustawienie lokalizacji
 		date_default_timezone_set($config->timeZone);
 		ini_set('default_charset', $config->charset);
