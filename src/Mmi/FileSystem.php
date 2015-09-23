@@ -64,17 +64,20 @@ class FileSystem {
 	 * @param string $dirName nazwa katalogu
 	 */
 	public static function rmdirRecursive($dirName) {
+		//nie istnieje
 		if (!file_exists($dirName)) {
 			return false;
 		}
-		foreach (glob($dirName . '/{,.}*', GLOB_BRACE) as $file) {
-			if (is_file($file)) {
-				unlink($file);
+		//zwykły plik
+		if (is_file($dirName)) {
+			unlink($dirName);
+			return true;
+		}
+		foreach (new \DirectoryIterator($dirName) as $dir) {
+			if ($dir->isDot()) {
 				continue;
 			}
-			if (is_dir($file)) {
-				self::rmdirRecursive($file);
-			}
+			self::rmdirRecursive($dir->getPathname());
 		}
 		rmdir($dirName);
 		return true;
