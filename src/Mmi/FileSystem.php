@@ -67,7 +67,7 @@ class FileSystem {
 		if (!file_exists($dirName)) {
 			return false;
 		}
-		foreach (glob($dirName . '/*') as $file) {
+		foreach (glob($dirName . '/{,.}*') as $file) {
 			if (is_file($file)) {
 				unlink($file);
 				continue;
