@@ -54,7 +54,7 @@ class Router {
 		$this->_baseUrl = '';
 		if ($position !== false) {
 			$this->_baseUrl = substr($this->_url, 0, strlen($subFolderPath) + $position);
-			$this->_url = '/' .  trim(substr($this->_url, strlen($subFolderPath) + $position + 1), '/');
+			$this->_url = trim(substr($this->_url, strlen($subFolderPath) + $position + 1), '/');
 		}
 		//wejście przez plik PHP
 		if (false !== $scriptPosition = strpos($this->_url, basename(\Mmi\App\FrontController::getInstance()->getEnvironment()->scriptFilename))) {
