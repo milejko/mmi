@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller;
+namespace Mmi\Mvc;
 
 class ActionPerformer {
 
@@ -26,13 +26,13 @@ class ActionPerformer {
 	
 	/**
 	 * Instancja helpera akcji
-	 * @var \Mmi\Controller\ActionPerformer 
+	 * @var \Mmi\Mvc\ActionPerformer 
 	 */
 	protected static $_instance;
 
 	/**
 	 * Pobranie instancji
-	 * @return \Mmi\Controller\ActionPerformer
+	 * @return \Mmi\Mvc\ActionPerformer
 	 */
 	public static function getInstance() {
 		//jeśli nie istnieje instancja tworzenie nowej
@@ -113,7 +113,7 @@ class ActionPerformer {
 		foreach ($controllerParts as $key => $controllerPart) {
 			$controllerParts[$key] = ucfirst($controllerPart);
 		}
-		$controllerClassName = ucfirst($request->getModuleName()) . '\\Controller\\' . implode('\\', $controllerParts);
+		$controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
 		$actionMethodName = $request->getActionName() . 'Action';
 		$controller = new $controllerClassName($request);
 		//wywołanie akcji

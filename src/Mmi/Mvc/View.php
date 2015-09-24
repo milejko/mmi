@@ -8,13 +8,13 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\Mvc;
 
 /**
  * Klasa widoku
  * @method string url(array $params = [], $reset = false, $absolute = false, $https = null, array $unset = [])
  * @method string widget($module, $controller = 'index', $action = 'index', array $params = [])
- * @method View\Helper\Navigation navigation()
+ * @method ViewHelper\Navigation navigation()
  */
 class View extends \Mmi\DataObject {
 
@@ -88,7 +88,7 @@ class View extends \Mmi\DataObject {
 	public function __call($name, array $params = []) {
 		$helper = $this->getHelper($name);
 		//poprawny helper
-		if ($helper instanceof \Mmi\View\Helper\HelperAbstract) {
+		if ($helper instanceof \Mmi\Mvc\ViewHelper\HelperAbstract) {
 			return call_user_func_array([$helper, $name], $params);
 		}
 		return $this->getPlaceholder($name);
@@ -97,7 +97,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Ustawia obiekt request
 	 * @param \Mmi\Controller\Request $request
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function setRequest(\Mmi\Controller\Request $request) {
 		$this->request = $request;
@@ -109,7 +109,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Ustawia translator
 	 * @param \Mmi\Translate $translate
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function setTranslate(\Mmi\Translate $translate) {
 		$this->_translate = $translate;
@@ -119,7 +119,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Ustawia obiekt cache
 	 * @param \Mmi\Cache $cache
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function setCache(\Mmi\Cache $cache) {
 		$this->_cache = $cache;
@@ -129,7 +129,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Ustawia opcję zawsze kompiluj szablony
 	 * @param boolean $compile
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function setAlwaysCompile($compile = true) {
 		$this->_alwaysCompile = $compile;
@@ -139,7 +139,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Ustawia bazowy url
 	 * @param string $baseUrl
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function setBaseUrl($baseUrl) {
 		$this->baseUrl = $baseUrl;
@@ -165,7 +165,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Pobiera helper na podstawie nazwy z uwzględnieniem ścieżek do helperów
 	 * @param string $name nazwa
-	 * @return \Mmi\View\Helper\HelperAbstract
+	 * @return \Mmi\Mvc\ViewHelper\HelperAbstract
 	 */
 	public function getHelper($name) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('helper');
@@ -174,7 +174,7 @@ class View extends \Mmi\DataObject {
 			if (!isset($helpers[$name])) {
 				continue;
 			}
-			$className = '\\' . $namespace . '\\View\\Helper\\' . ucfirst($name);
+			$className = '\\' . $namespace . '\\Mvc\\ViewHelper\\' . ucfirst($name);
 		}
 		//brak helpera
 		if (!isset($className)) {
@@ -191,7 +191,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Pobiera filtr na podstawie nazwy z uwzględnieniem ścieżek do filtrów
 	 * @param string $name nazwa
-	 * @return \Mmi\View\Helper\HelperAbstract
+	 * @return \Mmi\Mvc\ViewHelper\HelperAbstract
 	 */
 	public function getFilter($name) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('filter');
@@ -214,7 +214,7 @@ class View extends \Mmi\DataObject {
 	 * Ustawia placeholder
 	 * @param string $name nazwa
 	 * @param string $content zawartość
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function setPlaceholder($name, $content) {
 		$this->_placeholders[$name] = $content;
@@ -288,7 +288,7 @@ class View extends \Mmi\DataObject {
 	/**
 	 * Ustawia wyłączenie layoutu
 	 * @param boolean $disabled wyłączony
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function setLayoutDisabled($disabled = true) {
 		$this->_layoutDisabled = ($disabled === true) ? true : false;

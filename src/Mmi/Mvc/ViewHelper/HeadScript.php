@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 class HeadScript extends HeadAbstract {
 
@@ -23,7 +23,7 @@ class HeadScript extends HeadAbstract {
 	 * @param array $params parametry skryptu
 	 * @param boolean $prepend dodaj na początek stosu
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadScript
+	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function headScript(array $params = [], $prepend = false, $conditional = '') {
 		//jeśli brak parametrów - wyjście
@@ -95,7 +95,7 @@ class HeadScript extends HeadAbstract {
 	 * @param string $type typ
 	 * @param array $params dodatkowe parametry
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadScript
+	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function appendFile($src, $type = 'text/javascript', array $params = [], $conditional = '') {
 		return $this->setFile($src, $type, $params, false, $conditional);
@@ -107,7 +107,7 @@ class HeadScript extends HeadAbstract {
 	 * @param string $type typ
 	 * @param array $params dodatkowe parametry
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadScript
+	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function prependFile($src, $type = 'text/javascript', array $params = [], $conditional = '') {
 		return $this->setFile($src, $type, $params, true, $conditional);
@@ -120,7 +120,7 @@ class HeadScript extends HeadAbstract {
 	 * @param array $params dodatkowe parametry
 	 * @param boolean $prepend dodaj na początek stosu
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadScript
+	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function setFile($src, $type = 'text/javascript', array $params = [], $prepend = false, $conditional = '') {
 		return $this->headScript(array_merge($params, ['type' => $type, 'src' => $src, 'crc' => $this->_getCrc($src)]), $prepend, $conditional);
@@ -132,7 +132,7 @@ class HeadScript extends HeadAbstract {
 	 * @param string $type typ
 	 * @param array $params dodatkowe parametry
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadScript
+	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function appendScript($script, $type = 'text/javascript', array $params = [], $conditional = '') {
 		return $this->setScript($script, $type, $params, false, $conditional);
@@ -144,7 +144,7 @@ class HeadScript extends HeadAbstract {
 	 * @param string $type typ
 	 * @param array $params dodatkowe parametry
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadScript
+	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function prependScript($script, $type = 'text/javascript', array $params = [], $conditional = '') {
 		return $this->setScript($script, $type, $params, true, $conditional);
@@ -157,7 +157,7 @@ class HeadScript extends HeadAbstract {
 	 * @param array $params dodatkowe parametry
 	 * @param boolean $prepend dodaj na początek stosu
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadScript
+	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function setScript($script, $type = 'text/javascript', array $params = [], $prepend = false, $conditional = '') {
 		return $this->headScript(array_merge($params, ['type' => $type, 'script' => $script, 'crc' => 0]), $prepend, $conditional);

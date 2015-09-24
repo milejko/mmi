@@ -41,13 +41,13 @@ class FrontController {
 
 	/**
 	 * Środowisko uruchomieniowe
-	 * @var \Mmi\Controller\Environment
+	 * @var \Mmi\App\Environment
 	 */
 	private $_environment;
 
 	/**
 	 * Widok
-	 * @var \Mmi\View
+	 * @var \Mmi\Mvc\View
 	 */
 	private $_view;
 
@@ -72,7 +72,7 @@ class FrontController {
 		//nowy odpowiedź
 		$this->_response = new \Mmi\Controller\Response();
 		//nowe środowisko
-		$this->_environment = new \Mmi\Controller\Environment();
+		$this->_environment = new \Mmi\App\Environment();
 	}
 
 	/**
@@ -140,10 +140,10 @@ class FrontController {
 
 	/**
 	 * Ustawia widok
-	 * @param \Mmi\View $view
+	 * @param \Mmi\Mvc\View $view
 	 * @return \Mmi\App\FrontController
 	 */
-	public function setView(\Mmi\View $view) {
+	public function setView(\Mmi\Mvc\View $view) {
 		$this->_view = $view;
 		return $this;
 	}
@@ -178,7 +178,7 @@ class FrontController {
 
 	/**
 	 * Pobiera środowisko uruchomieniowe
-	 * @return \Mmi\Controller\Environment
+	 * @return \Mmi\App\Environment
 	 */
 	public function getEnvironment() {
 		return $this->_environment;
@@ -186,7 +186,7 @@ class FrontController {
 
 	/**
 	 * Pobranie widoku
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	public function getView() {
 		//brak widoku
@@ -265,7 +265,7 @@ class FrontController {
 		$this->preDispatch();
 		\Mmi\Profiler::event('Front Controller: plugins pre-dispatch');
 		//wybór i uruchomienie kontrolera akcji
-		$content = \Mmi\Controller\ActionPerformer::getInstance()->action($this->getRequest()->toArray());
+		$content = \Mmi\Mvc\ActionPerformer::getInstance()->action($this->getRequest()->toArray());
 
 		//wpięcie dla pluginów po dispatchu
 		$this->postDispatch();

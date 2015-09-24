@@ -53,7 +53,7 @@ class ErrorHandler {
 			}
 			//błąd z prezentacją HTML
 			$response->setCodeError()
-				->setContent($view->setPlaceholder('content', \Mmi\Controller\ActionPerformer::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
+				->setContent($view->setPlaceholder('content', \Mmi\Mvc\ActionPerformer::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
 					->renderLayout('mmi', 'index'))
 				->send();
 			return true;

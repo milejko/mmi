@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 class HeadLink extends HeadAbstract {
 
@@ -23,7 +23,7 @@ class HeadLink extends HeadAbstract {
 	 * @param array $params parametry linku (jak rel, type, href)
 	 * @param boolean $prepend dodaj na początek stosu
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function headLink(array $params = [], $prepend = false, $conditional = '') {
 		if (!empty($params)) {
@@ -79,7 +79,7 @@ class HeadLink extends HeadAbstract {
 	 * @param string $href adres
 	 * @param string $media media
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function appendStylesheet($href, $media = null, $conditional = '') {
 		return $this->_setStylesheet($href, $media, false, $conditional);
@@ -89,7 +89,7 @@ class HeadLink extends HeadAbstract {
 	 * Dodaje styl CSS na początek stosu
 	 * @param string $href adres
 	 * @param string $media media
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function prependStylesheet($href, $media = null) {
 		return $this->_setStylesheet($href, $media, true);
@@ -102,7 +102,7 @@ class HeadLink extends HeadAbstract {
 	 * @param string $title tytuł
 	 * @param string $media media
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function appendAlternate($href, $type, $title, $media = null, $conditional = '') {
 		return $this->_setAlternate($href, $type, $title, $media = null, true, $conditional);
@@ -115,7 +115,7 @@ class HeadLink extends HeadAbstract {
 	 * @param string $title tytuł
 	 * @param string $media media
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function prependAlternate($href, $type, $title, $media = null, $conditional = '') {
 		return $this->_setAlternate($href, $type, $title, $media = null, false, $conditional);
@@ -124,7 +124,7 @@ class HeadLink extends HeadAbstract {
 	/**
 	 * Dodaje canonical na koniec stosu
 	 * @param string $href adres
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function appendCanonical($href) {
 		return $this->_setCanonical($href, true);
@@ -133,7 +133,7 @@ class HeadLink extends HeadAbstract {
 	/**
 	 * Dodaje canonical na początek stosu
 	 * @param string $href adres
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function prependCanonical($href) {
 		return $this->_setCanonical($href, false);
@@ -145,7 +145,7 @@ class HeadLink extends HeadAbstract {
 	 * @param string $media media
 	 * @param boolean $prepend dodaj na początku stosu
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	protected function _setStylesheet($href, $media = null, $prepend = false, $conditional = '') {
 		$params = ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $href, 'crc' => $this->_getCrc($href)];
@@ -159,7 +159,7 @@ class HeadLink extends HeadAbstract {
 	 * Dodaje canonical do stosu
 	 * @param string $href adres
 	 * @param boolean $prepend dodaj na początku stosu
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	protected function _setCanonical($href, $prepend = false) {
 		return $this->headLink(['rel' => 'canonical', 'href' => $href], $prepend);
@@ -173,7 +173,7 @@ class HeadLink extends HeadAbstract {
 	 * @param string $media media
 	 * @param boolean $prepend dodaj na początku stosu
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadLink
+	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	protected function _setAlternate($href, $type, $title, $media = null, $prepend = false, $conditional = '') {
 		$params = ['rel' => 'alternate', 'type' => $type, 'title' => $title, 'href' => $href, $crc = $this->_getCrc($href)];

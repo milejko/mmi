@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller;
+namespace Mmi;
 
-class Index extends Action {
+class IndexController extends Mvc\ActionController {
 
 	public function indexAction() {
 		

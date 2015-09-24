@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 /**
  * Helper umieszczający styl w kodzie HTML
@@ -26,7 +26,7 @@ class HeadStyle extends HelperAbstract {
 	 * @param array $params
 	 * @param boolean $prepend
 	 * @param string $conditional
-	 * @return \Mmi\View\Helper\HeadStyle
+	 * @return \Mmi\Mvc\ViewHelper\HeadStyle
 	 */
 	public function headStyle(array $params = null, $prepend = false, $conditional = '') {
 		//brak parametrów
@@ -92,7 +92,7 @@ class HeadStyle extends HelperAbstract {
 	 * @param string $style treść skryptu
 	 * @param array $params parametry dodatkowe
 	 * @param boolean $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadStyle
+	 * @return \Mmi\Mvc\ViewHelper\HeadStyle
 	 */
 	public function appendStyle($style, array $params = [], $conditional = '') {
 		return $this->setStyle($style, $params, false, $conditional);
@@ -103,7 +103,7 @@ class HeadStyle extends HelperAbstract {
 	 * @param string $fileName nazwa pliku ze skryptem
 	 * @param array $params parametry dodatkowe
 	 * @param boolean $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadStyle
+	 * @return \Mmi\Mvc\ViewHelper\HeadStyle
 	 */
 	public function appendStyleFile($fileName, array $params = [], $conditional = '') {
 		return $this->appendStyle($this->_getStyleContent($fileName), $params, $conditional);
@@ -114,7 +114,7 @@ class HeadStyle extends HelperAbstract {
 	 * @param string $fileName nazwa pliku ze skryptem
 	 * @param array $params parametry dodatkowe
 	 * @param boolean $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadStyle
+	 * @return \Mmi\Mvc\ViewHelper\HeadStyle
 	 */
 	public function prependStyleFile($fileName, array $params = [], $conditional = '') {
 		return $this->appendStyle($this->_getStyleContent($fileName), $params, $conditional);
@@ -125,7 +125,7 @@ class HeadStyle extends HelperAbstract {
 	 * @param string $style treść skryptu
 	 * @param array $params parametry dodatkowe
 	 * @param boolean $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadStyle
+	 * @return \Mmi\Mvc\ViewHelper\HeadStyle
 	 */
 	public function prependStyle($style, array $params = [], $conditional = '') {
 		return $this->setStyle($style, $params, true, $conditional);
@@ -137,7 +137,7 @@ class HeadStyle extends HelperAbstract {
 	 * @param array $params parametry dodatkowe
 	 * @param boolean $prepend dodaj na początek stosu
 	 * @param boolean $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadStyle
+	 * @return \Mmi\Mvc\ViewHelper\HeadStyle
 	 */
 	public function setstyle($style, array $params = [], $prepend = false, $conditional = '') {
 		return $this->headStyle(array_merge($params, ['type' => 'text/css', 'style' => $style]), $prepend, $conditional);

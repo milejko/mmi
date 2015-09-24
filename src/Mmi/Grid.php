@@ -46,7 +46,7 @@ abstract class Grid {
 
 	/**
 	 * Referencja do widoku
-	 * @var \Mmi\View
+	 * @var \Mmi\Mvc\View
 	 */
 	protected $_view;
 

@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 /**
  * Helper nawigatora
  */
-class Navigation extends Navigation\Base {
+class Navigation extends NavigationBase {
 
 	/**
 	 * Ustawia obiekt nawigatora
@@ -28,7 +28,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia maksymalną głębokość
 	 * @param int $depth maksymalna głębokość
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setMaxDepth($depth = 1000) {
 		$this->_maxDepth = $depth;
@@ -38,7 +38,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia minimalną głębokość
 	 * @param int $depth minimalna głębokość
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setMinDepth($depth = 0) {
 		$this->_minDepth = $depth;
@@ -48,7 +48,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia rendering wyłącznie głównej gałęzi
 	 * @param boolean $active aktywna
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setActiveBranchOnly($active = true) {
 		$this->_activeBranch = $active;
@@ -58,7 +58,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia rendering wyłącznie dozwolonych elementów
 	 * @param boolean $allowed dozwolone
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setAllowedOnly($allowed = true) {
 		$this->_allowedOnly = $allowed;
@@ -68,7 +68,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia węzeł startowy
 	 * @param int $key klucz
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setRoot($key) {
 		$this->setMinDepth();
@@ -80,7 +80,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia tytuł
 	 * @param string $title tytuł
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setTitle($title) {
 		$this->_title = $title;
@@ -90,7 +90,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia opis
 	 * @param string $description opis
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setDescription($description) {
 		$this->_description = $description;
@@ -100,7 +100,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia słowa kluczowe
 	 * @param string $keywords słowa kluczowe
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setKeywords($keywords) {
 		$this->_keywords = $keywords;
@@ -110,7 +110,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia okruchy
 	 * @param string $breadcrumbs okruchy
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setBreadcrumbs($breadcrumbs) {
 		$this->_breadcrumbs = $breadcrumbs;
@@ -169,7 +169,7 @@ class Navigation extends Navigation\Base {
 
 	/**
 	 * Metoda główna, zwraca swoją instancję
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function navigation() {
 		//brak wygenerowanych breadcrumbów
@@ -192,7 +192,7 @@ class Navigation extends Navigation\Base {
 	 * @param string $title tytuł
 	 * @param string $description opis
 	 * @param string $keywords słowa kluczowe
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function modifyBreadcrumb($index, $label, $uri = null, $title = null, $description = null, $keywords = null) {
 		//brak breadcrumbów
@@ -216,7 +216,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia separator breadcrumbs
 	 * @param string $separator separator
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setSeparator($separator) {
 		$this->_separator = $separator;
@@ -228,7 +228,7 @@ class Navigation extends Navigation\Base {
 	/**
 	 * Ustawia seperator w meta
 	 * @param string $separator separator
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function setMetaSeparator($separator) {
 		$this->_metaSeparator = $separator;
@@ -244,7 +244,7 @@ class Navigation extends Navigation\Base {
 	 * @param string $title tytuł
 	 * @param string $description opis
 	 * @param string $keywords słowa kluczowe
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function modifyLastBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null) {
 		return $this->modifyBreadcrumb(count($this->_breadcrumbsData) - 1, $label, $uri, $title, $description, $keywords);
@@ -258,7 +258,7 @@ class Navigation extends Navigation\Base {
 	 * @param string $description opis
 	 * @param string $keywords słowa kluczowe
 	 * @param bool $unshift wstaw na początku
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function createBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null, $unshift = false) {
 		$breadcrumb = [
@@ -286,7 +286,7 @@ class Navigation extends Navigation\Base {
 	 * @param string $title tytuł
 	 * @param string $description opis
 	 * @param string $keywords słowa kluczowe
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function appendBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null) {
 		return $this->createBreadcrumb($label, $uri, $title, $description, $keywords, false);
@@ -299,7 +299,7 @@ class Navigation extends Navigation\Base {
 	 * @param string $title tytuł
 	 * @param string $description opis
 	 * @param string $keywords słowa kluczowe
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function prependBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null) {
 		return $this->createBreadcrumb($label, $uri, $title, $description, $keywords, true);
@@ -307,7 +307,7 @@ class Navigation extends Navigation\Base {
 
 	/**
 	 * Usuwa ostatni breadcrumb
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	public function removeLastBreadcrumb() {
 		$index = count($this->_breadcrumbsData) - 1;
@@ -323,7 +323,7 @@ class Navigation extends Navigation\Base {
 
 	/**
 	 * Alias renderera menu
-	 * @see \Mmi\View\Helper\Navigation::menu()
+	 * @see \Mmi\Mvc\ViewHelper\Navigation::menu()
 	 * @return string
 	 */
 	public function renderMenu() {

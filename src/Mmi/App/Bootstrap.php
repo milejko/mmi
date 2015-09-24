@@ -143,10 +143,10 @@ class Bootstrap implements BootstrapInterface {
 	 * Ustawianie front controllera
 	 * @param \Mmi\App\KernelConfig $config
 	 * @param \Mmi\Controller\Router $router
-	 * @param \Mmi\View $view
+	 * @param \Mmi\Mvc\View $view
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupFrontController(\Mmi\App\KernelConfig $config, \Mmi\Controller\Router $router, \Mmi\View $view) {
+	protected function _setupFrontController(\Mmi\App\KernelConfig $config, \Mmi\Controller\Router $router, \Mmi\Mvc\View $view) {
 		//wczytywanie struktury frontu z cache
 		if (null === ($frontStructure = \App\Registry::$cache->load('Mmi-Structure'))) {
 			\App\Registry::$cache->save($frontStructure = \Mmi\App\Structure::getStructure(), 'Mmi-Structure', 0);
@@ -169,11 +169,11 @@ class Bootstrap implements BootstrapInterface {
 	 * @param \Mmi\App\KernelConfig $config
 	 * @param \Mmi\Translate $translate
 	 * @param \Mmi\Controller\Router $router
-	 * @return \Mmi\View
+	 * @return \Mmi\Mvc\View
 	 */
 	protected function _setupView(\Mmi\App\KernelConfig $config, \Mmi\Translate $translate, \Mmi\Controller\Router $router) {
 		//konfiguracja widoku
-		$view = new \Mmi\View();
+		$view = new \Mmi\Mvc\View();
 		$view->setCache(\App\Registry::$cache)
 			->setAlwaysCompile($config->compile)
 			->setTranslate($translate)

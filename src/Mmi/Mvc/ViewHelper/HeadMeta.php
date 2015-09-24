@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 class HeadMeta extends HeadAbstract {
 
@@ -23,7 +23,7 @@ class HeadMeta extends HeadAbstract {
 	 * @param array $params parametry skryptu
 	 * @param boolean $prepend dodaj na początek stosu
 	 * @param string $conditional warunek np. ie6
-	 * @return \Mmi\View\Helper\HeadMeta
+	 * @return \Mmi\Mvc\ViewHelper\HeadMeta
 	 */
 	public function headMeta(array $params = [], $prepend = false, $conditional = '') {
 		if (!empty($params)) {

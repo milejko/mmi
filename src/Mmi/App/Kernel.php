@@ -71,8 +71,6 @@ namespace Mmi\App {
 			define('PUBLIC_PATH', BASE_PATH . '/web');
 			//dane
 			define('DATA_PATH', BASE_PATH . '/var/data');
-			//domyślna ścieżka ładowania (vendors)
-			set_include_path(BASE_PATH . '/vendor');
 			return $this;
 		}
 

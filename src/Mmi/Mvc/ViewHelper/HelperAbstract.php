@@ -8,13 +8,13 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 class HelperAbstract {
 
 	/**
 	 * Referencja do widoku
-	 * @var \Mmi\View
+	 * @var \Mmi\Mvc\View
 	 */
 	public $view;
 

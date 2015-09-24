@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller;
+namespace Mmi\Mvc;
 
-class Action {
+class ActionController {
 
 	/**
 	 * Żądanie
@@ -26,7 +26,7 @@ class Action {
 
 	/**
 	 * Widok
-	 * @var \Mmi\View
+	 * @var \Mmi\Mvc\View
 	 */
 	public $view;
 
@@ -126,7 +126,7 @@ class Action {
 
 	/**
 	 * Pobiera helper akcji
-	 * @return \Mmi\Controller\ActionPerformer
+	 * @return \Mmi\Mvc\ActionPerformer
 	 */
 	public final function getHelperAction() {
 		return Action\Helper\Action::getInstance();

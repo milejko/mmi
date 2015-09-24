@@ -49,7 +49,7 @@ class Structure {
 		}
 		$module = basename($path);
 		//helpery widoku
-		self::_parseAdditions($components['helper'], $module, $path . '/View/Helper');
+		self::_parseAdditions($components['helper'], $module, $path . '/Mvc/ViewHelper');
 		//filtry
 		self::_parseAdditions($components['filter'], $module, $path . '/Filter');
 		//walidatory
@@ -57,7 +57,7 @@ class Structure {
 		//tłumaczenia
 		self::_parseAdditions($components['translate'], $module, $path . '/Resource/i18n');
 		//kontrolery
-		self::_parseControllers($components['module'], lcfirst($module), $path . '/Controller');
+		self::_parseControllers($components['module'], lcfirst($module), $path);
 		//kontrolery
 		self::_parseTemplates($components['template'], lcfirst($module), $path . '/Resource/template');
 		return $components;
@@ -111,7 +111,11 @@ class Structure {
 			if ($controller->isDot()) {
 				continue;
 			}
-			$controllerName = lcfirst(substr($controller->getFilename(), 0, -4));
+			//plik nie jest kontrolerem
+			if (false === strpos($controller->getFilename(), 'Controller')) {
+				continue;
+			}
+			$controllerName = lcfirst(substr($controller->getFilename(), 0, -14));
 			//parsuje akcje z kontrolera
 			self::_parseActions($components, $controller->getPathname(), $moduleName, $controllerName);
 		}

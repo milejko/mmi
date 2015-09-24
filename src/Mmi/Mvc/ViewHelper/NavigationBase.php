@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper\Navigation;
+namespace Mmi\Mvc\ViewHelper;
 
 /**
  * Helper nawigatora
  */
-class Base extends \Mmi\View\Helper\HelperAbstract {
+class NavigationBase extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 
 	/**
 	 * Maksymalna głębokość menu
@@ -161,7 +161,7 @@ class Base extends \Mmi\View\Helper\HelperAbstract {
 
 	/**
 	 * Buduje breadcrumbs
-	 * @return \Mmi\View\Helper\Navigation
+	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
 	protected function _buildBreadcrumbs() {
 		//obiekt nawigatora niezdefiniowany

@@ -8,13 +8,13 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 class Translate extends HelperAbstract {
 
 	/**
 	 * Metoda główna, zwraca swoją instancję
-	 * @return \Mmi\View\Helper\Translate
+	 * @return \Mmi\Mvc\ViewHelper\Translate
 	 */
 	public function translate() {
 		return $this;

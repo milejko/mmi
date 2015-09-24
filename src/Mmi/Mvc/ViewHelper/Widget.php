@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\View\Helper;
+namespace Mmi\Mvc\ViewHelper;
 
 class Widget extends HelperAbstract {
 
@@ -25,7 +25,7 @@ class Widget extends HelperAbstract {
 		$params['module'] = $module;
 		$params['controller'] = $controller;
 		$params['action'] = $action;
-		$actionResult = \Mmi\Controller\ActionPerformer::getInstance()->action($params);
+		$actionResult = \Mmi\Mvc\ActionPerformer::getInstance()->action($params);
 		$this->view->setLayoutDisabled($isLayoutDisabled);
 		return $actionResult;
 	}
