@@ -7,7 +7,7 @@
  * @copyright  Copyright (c) 2010-2015 Mariusz Miłejko (http://milejko.com)
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
-namespace \Mmi\Convert;
+namespace Mmi\Convert;
 
 /**
  * Klasa liczb podstawy 58
