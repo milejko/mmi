@@ -45,17 +45,21 @@ class Router {
 		$this->_config = $config;
 		$this->_defaultLanguage = $defaultLanguage;
 		$this->_url = urldecode(trim(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri, '/ '));
-		if (!(false === strpos($this->_url, '?'))) {
-			$this->_url = substr($this->_url, 0, strpos($this->_url, '?'));
+		if (false !== $qmarkPosition = strpos($this->_url, '?')) {
+			$this->_url = substr($this->_url, 0, $qmarkPosition);
 		}
 		//obsługa serwisu w podkatalogu
 		$subFolderPath = substr(BASE_PATH, strrpos(BASE_PATH, '/') + 1) . '/web';
 		$position = strpos($this->_url, $subFolderPath);
+		$this->_baseUrl = '';
 		if ($position !== false) {
 			$this->_baseUrl = substr($this->_url, 0, strlen($subFolderPath) + $position);
-			$this->_url = substr($this->_url, strlen($subFolderPath) + $position + 1);
+			$this->_url = '/' .  trim(substr($this->_url, strlen($subFolderPath) + $position + 1), '/');
 		}
-		$this->_baseUrl = isset($this->_baseUrl) ? '/' . trim($this->_baseUrl, '/') : '';
+		//wejście przez plik PHP
+		if (false !== $scriptPosition = strpos($this->_url, basename(\Mmi\App\FrontController::getInstance()->getEnvironment()->scriptFilename))) {
+			$this->_url = substr($this->_url, 0, $scriptPosition);
+		}
 		$this->_url = rtrim($this->_url, '/');
 	}
 

@@ -31,8 +31,6 @@ class ComposerInstaller {
 	 */
 	public static function postUpdate(Event $event) {
 		self::_initApp($event);
-		//wdrożenie bazy danych
-		(new \Mmi\Db\Deployer())->deploy();
 	}
 
 	/**
@@ -41,8 +39,6 @@ class ComposerInstaller {
 	 */
 	public static function postInstall(Event $event) {
 		self::_initApp($event);
-		//wdrożenie bazy danych
-		(new \Mmi\Db\Deployer())->deploy();
 	}
 
 	/**
