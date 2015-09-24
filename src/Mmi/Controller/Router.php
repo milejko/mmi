@@ -53,7 +53,7 @@ class Router {
 		$position = strpos($this->_url, $subFolderPath);
 		$this->_baseUrl = '';
 		if ($position !== false) {
-			$this->_baseUrl = substr($this->_url, 0, strlen($subFolderPath) + $position);
+			$this->_baseUrl = '/' . substr($this->_url, 0, strlen($subFolderPath) + $position);
 			$this->_url = trim(substr($this->_url, strlen($subFolderPath) + $position + 1), '/');
 		}
 		//wejście przez plik PHP
