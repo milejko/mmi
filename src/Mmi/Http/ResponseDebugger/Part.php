@@ -69,7 +69,7 @@ class Part {
 		$percentSum = 0;
 		$html = '';
 		//pętla po profilerze
-		foreach (\Mmi\Profiler::get() as $event) {
+		foreach (\Mmi\App\Profiler::get() as $event) {
 			$percentSum += $event['percent'];
 			$html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; min-width: 320px;">' . $event['name'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
 		}

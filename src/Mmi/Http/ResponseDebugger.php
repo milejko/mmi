@@ -66,7 +66,7 @@ class ResponseDebugger {
 	 * @return string
 	 */
 	protected function _getElapsed() {
-		return round(\Mmi\Profiler::elapsed(), 4) . 's';
+		return round(\Mmi\App\Profiler::elapsed(), 4) . 's';
 	}
 
 	/**

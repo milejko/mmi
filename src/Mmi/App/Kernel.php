@@ -26,10 +26,10 @@ namespace Mmi\App {
 			$this->_initPaths()
 				->_initEncoding()
 				->_initErrorHandler();
-			\Mmi\Profiler::event('App: bootstrap startup');
+			\Mmi\App\Profiler::event('App: bootstrap startup');
 			//tworzenie instancji bootstrapa
 			$this->_bootstrap = new $bootstrapName($env);
-			\Mmi\Profiler::event('App: bootstrap executed');
+			\Mmi\App\Profiler::event('App: bootstrap executed');
 			//bootstrap nie implementuje właściwego interfeace'u
 			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {
 				throw new Exception('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
@@ -66,7 +66,7 @@ namespace Mmi\App {
 		 */
 		protected function _initPaths() {
 			//pierwszy event profilera
-			\Mmi\Profiler::event('App: startup');
+			\Mmi\App\Profiler::event('App: startup');
 			//zasoby publiczne
 			define('PUBLIC_PATH', BASE_PATH . '/web');
 			//dane

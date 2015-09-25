@@ -170,7 +170,7 @@ class Controller {
 		if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
 			$this->view->setTranslate($cachedTranslate);
 			$translate->setLocale($lang);
-			\Mmi\Profiler::event('Init cached translate: [' . $lang . '] ' . $module);
+			\Mmi\App\Profiler::event('Init cached translate: [' . $lang . '] ' . $module);
 			return;
 		}
 
@@ -183,7 +183,7 @@ class Controller {
 			$cache->save($translate, $key);
 		}
 
-		\Mmi\Profiler::event('Init Translate: [' . $lang . '] ' . $module);
+		\Mmi\App\Profiler::event('Init Translate: [' . $lang . '] ' . $module);
 	}
 
 }

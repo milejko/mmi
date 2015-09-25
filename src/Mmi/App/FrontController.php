@@ -249,7 +249,7 @@ class FrontController {
 	public function dispatch() {
 		//wpięcie dla pluginów przed routingiem
 		$this->routeStartup();
-		\Mmi\Profiler::event('Front Controller: plugins route startup');
+		\Mmi\App\Profiler::event('Front Controller: plugins route startup');
 
 		//stosowanie routingu jeśli request jest pusty
 		if (!$this->_request->getModuleName()) {
@@ -259,17 +259,17 @@ class FrontController {
 		//new relic
 		extension_loaded('newrelic') ? newrelic_name_transaction($this->_request->module . '/' . $this->_request->controller . '/' . $this->_request->action) : null;
 
-		\Mmi\Profiler::event('Front Controller: routing applied');
+		\Mmi\App\Profiler::event('Front Controller: routing applied');
 
 		//wpięcie dla pluginów przed dispatchem
 		$this->preDispatch();
-		\Mmi\Profiler::event('Front Controller: plugins pre-dispatch');
+		\Mmi\App\Profiler::event('Front Controller: plugins pre-dispatch');
 		//wybór i uruchomienie kontrolera akcji
 		$content = \Mmi\Mvc\ActionPerformer::getInstance()->action($this->getRequest()->toArray());
 
 		//wpięcie dla pluginów po dispatchu
 		$this->postDispatch();
-		\Mmi\Profiler::event('Front Controller: plugins post-dispatch');
+		\Mmi\App\Profiler::event('Front Controller: plugins post-dispatch');
 
 		//jeśli layout nie jest wyłączony
 		if (!$this->getView()->isLayoutDisabled()) {

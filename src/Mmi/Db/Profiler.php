@@ -10,7 +10,7 @@
 
 namespace Mmi\Db;
 
-class Profiler extends \Mmi\Profiler {
+class Profiler extends \Mmi\App\Profiler {
 
 	/**
 	 * Dane profilera

@@ -57,7 +57,7 @@ class Bootstrap implements BootstrapInterface {
 		//konfiguracja dla danego środowiska
 		$config = new $configClassName();
 		//konfiguracja profilera aplikacji
-		\Mmi\Profiler::setEnabled($config->debug);
+		\Mmi\App\Profiler::setEnabled($config->debug);
 		//ustawienie lokalizacji
 		date_default_timezone_set($config->timeZone);
 		ini_set('default_charset', $config->charset);

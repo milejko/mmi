@@ -73,12 +73,12 @@ class ActionPerformer {
 		$actionLabel = $controllerRequest->getModuleName() . ':' . $controllerRequest->getControllerName() . ':' . $controllerRequest->getActionName();
 		//sprawdzenie ACL
 		if (!$this->_checkAcl($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName())) {
-			\Mmi\Profiler::event('Action blocked: ' . $actionLabel);
+			\Mmi\App\Profiler::event('Action blocked: ' . $actionLabel);
 			return;
 		}
 		//wywołanie akcji
 		$actionContent = $this->_invokeAction($controllerRequest, $actionLabel);
-		\Mmi\Profiler::event('Action executed: ' . $actionLabel);
+		\Mmi\App\Profiler::event('Action executed: ' . $actionLabel);
 		//jeśli akcja zwraca cokolwiek, automatycznie jest to content
 		if ($actionContent !== null) {
 			\Mmi\App\FrontController::getInstance()->getView()

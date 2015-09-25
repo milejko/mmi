@@ -281,7 +281,7 @@ class View extends \Mmi\DataObject {
 		ob_clean();
 		echo $inputBuffer;
 		//zwrot z bufora
-		\Mmi\Profiler::event('View: ' . $hash . ' rendered');
+		\Mmi\App\Profiler::event('View: ' . $hash . ' rendered');
 		return $data;
 	}
 
@@ -336,7 +336,7 @@ class View extends \Mmi\DataObject {
 		//przechwycenie danych
 		$data = ob_get_contents();
 		ob_clean();
-		\Mmi\Profiler::event('View: ' . basename($fileName) . ' rendered');
+		\Mmi\App\Profiler::event('View: ' . basename($fileName) . ' rendered');
 		return $data;
 	}
 
