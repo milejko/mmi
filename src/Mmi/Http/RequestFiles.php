@@ -62,7 +62,7 @@ class RequestFiles extends \Mmi\DataObject {
 			return;
 		}
 		$fileData['type'] = \Mmi\FileSystem::mimeType($fileData['tmp_name']);
-		return new File($fileData);
+		return new RequestFile($fileData);
 	}
 
 	/**
@@ -78,7 +78,7 @@ class RequestFiles extends \Mmi\DataObject {
 				continue;
 			}
 			//tworzenie obiektów plików
-			$files[] = new File([
+			$files[] = new RequestFile([
 				'name' => $fileData['name'][$i],
 				'tmp_name' => $fileData['tmp_name'][$i],
 				'size' => $fileData['size'][$i]
