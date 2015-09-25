@@ -70,7 +70,7 @@ class Response {
 	 */
 	public function setCode($code, $replace = false) {
 		//jeśli znaleziono kod
-		if (null !== ($message = Response\Types::getMessageByCode($code))) {
+		if (null !== ($message = ResponseTypes::getMessageByCode($code))) {
 			//wysłanie nagłówka z kodem
 			return $this->setHeader('HTTP/1.1 ' . $code . ' ' . $message, null, $replace);
 		}
@@ -132,14 +132,14 @@ class Response {
 		//nazwa małymi literami
 		$normalizedType = strtolower($type);
 		//skrócona forma
-		if (null !== ($mimeType = Response\Types::getTypeByExtension($normalizedType))) {
+		if (null !== ($mimeType = ResponseTypes::getTypeByExtension($normalizedType))) {
 			//ustawienie wewnętrznego typu
 			$this->_type = $normalizedType;
 			//wysłanie nagłówka
 			return $this->setHeader('Content-type', $this->_type, $replace);
 		}
 		//forma pełna
-		if (null !== ($extension = Response\Types::getExtensionByType($normalizedType))) {
+		if (null !== ($extension = ResponseTypes::getExtensionByType($normalizedType))) {
 			//ustawienie wewnętrznego typu
 			$this->_type = $normalizedType;
 			//wysłanie nagłówka
