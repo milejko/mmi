@@ -52,7 +52,7 @@ abstract class Grid {
 
 	/**
 	 * Referencja do żądania
-	 * @var \Mmi\Mvc\Controller\Request
+	 * @var \Mmi\Http\Request
 	 */
 	protected $_request;
 
@@ -238,7 +238,7 @@ abstract class Grid {
 	public function render() {
 		//sprawdzanie query
 		if (!($this->_daoQuery instanceof \Mmi\Orm\Query)) {
-			throw new \Exception('\Mmi\Grid: invalid DAO Query object supplied');
+			throw new \Mmi\App\Exception('\Mmi\Grid: invalid DAO Query object supplied');
 		}
 		$html = '<form id="' . $this->_id . '">';
 		if ($this->getOption('sortableAction')) {

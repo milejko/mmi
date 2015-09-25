@@ -69,7 +69,7 @@ class ActionPerformer {
 	 */
 	public function action(array $params = []) {
 		$frontRequest = \Mmi\App\FrontController::getInstance()->getRequest();
-		$controllerRequest = new \Mmi\Mvc\Controller\Request(array_merge($frontRequest->toArray(), $params));
+		$controllerRequest = new \Mmi\Http\Request(array_merge($frontRequest->toArray(), $params));
 		$actionLabel = $controllerRequest->getModuleName() . ':' . $controllerRequest->getControllerName() . ':' . $controllerRequest->getActionName();
 		//sprawdzenie ACL
 		if (!$this->_checkAcl($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName())) {
@@ -95,16 +95,16 @@ class ActionPerformer {
 	
 	/**
 	 * Wykonuje akcję
-	 * @param \Mmi\Mvc\Controller\Request $request
+	 * @param \Mmi\Http\Request $request
 	 * @param string $actionLabel
 	 * @return string
-	 * @throws \Exception
+	 * @throws \Mmi\Mvc\Exception
 	 */
-	protected function _invokeAction(\Mmi\Mvc\Controller\Request $request, $actionLabel) {
+	protected function _invokeAction(\Mmi\Http\Request $request, $actionLabel) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('module');
 		//brak w strukturze
 		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-			throw new \Mmi\Mvc\Controller\NotFoundException('Action not found: ' . $actionLabel);
+			throw new NotFoundException('Action not found: ' . $actionLabel);
 		}
 		//ustawienie requestu w widoku
 		\Mmi\App\FrontController::getInstance()->getView()->setRequest($request);

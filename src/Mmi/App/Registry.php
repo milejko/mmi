@@ -20,7 +20,7 @@ abstract class Registry {
 
 	/**
 	 * Obiekt bufora
-	 * @var \Mmi\Cache\Component
+	 * @var \Mmi\Cache\Cache
 	 */
 	public static $cache;
 

@@ -30,6 +30,7 @@ class Query {
 
 	/**
 	 * Konstruktor tworzy nowe skompilowane zapytanie
+	 * @throws \Mmi\Orm\Exception tabela niewyspecyfikowana
 	 * @param string $tableName nazwa tabeli
 	 */
 	protected final function __construct($tableName = null) {
@@ -389,7 +390,7 @@ class Query {
 	/**
 	 * Przygotowuje nazwę pola do zapytania, konwertuje camelcase na podkreślenia
 	 * @param string $fieldName
-	 * @param string $tableName
+	 * @param string $forcedTableName
 	 * @return string
 	 * @throws \Mmi\Orm\Exception
 	 */

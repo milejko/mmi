@@ -24,7 +24,7 @@ class BootstrapCli extends \Mmi\App\Bootstrap {
 	 */
 	public function run() {
 		$front = \Mmi\App\FrontController::getInstance();
-		$request = new \Mmi\Mvc\Controller\Request();
+		$request = new \Mmi\Http\Request();
 		//ustawianie domyślnego języka jeśli istnieje
 		if (isset(\App\Registry::$config->languages[0])) {
 			$request->lang = \App\Registry::$config->languages[0];

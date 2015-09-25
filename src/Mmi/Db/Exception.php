@@ -10,6 +10,6 @@
 
 namespace Mmi\Db;
 
-class Exception extends \Exception {
+class Exception extends \Mmi\App\Exception {
 	
 }

@@ -15,7 +15,7 @@ class Urlencode extends \Mmi\Filter\FilterAbstract {
 	/**
 	 * Filtr kodujący znaki z urlencode
 	 * @param mixed $value wartość
-	 * @throws Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

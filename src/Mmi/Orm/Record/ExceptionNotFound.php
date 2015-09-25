@@ -10,6 +10,6 @@
 
 namespace Mmi\Orm\Record;
 
-class ExceptionNotFound extends \Exception {
+class ExceptionNotFound extends \Mmi\App\Exception {
 	
 }

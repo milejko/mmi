@@ -32,7 +32,7 @@ namespace Mmi\App {
 			\Mmi\Profiler::event('App: bootstrap executed');
 			//bootstrap nie implementuje właściwego interfeace'u
 			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {
-				throw new \Exception('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
+				throw new Exception('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
 			}
 		}
 

@@ -17,7 +17,7 @@ class Deployer {
 
 	/**
 	 * Metoda uruchamiająca
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function deploy() {
 		//wyłączenie cache

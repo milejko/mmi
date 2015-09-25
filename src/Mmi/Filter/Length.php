@@ -15,7 +15,7 @@ class Length extends \Mmi\Filter\FilterAbstract {
 	/**
 	 * Zliczanie długości
 	 * @param mixed $value wartość
-	 * @throws Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
 	 * @return int
 	 */
 	public function filter($value) {

@@ -39,7 +39,7 @@ class Google extends WeatherAbstract {
 		//pobranie bieżących warunków
 		$current = $xml->weather->current_conditions;
 		if (!isset($xml->weather->current_conditions)) {
-			throw new \Exception('No data');
+			throw new \Mmi\Service\Exception('No data');
 		}
 		//warunki pogodowe
 		$wd->condition = (string) $current->condition->attributes()->data;

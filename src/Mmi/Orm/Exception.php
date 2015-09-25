@@ -13,6 +13,6 @@ namespace Mmi\Orm;
 /**
  * Klasa wyjątku DAO
  */
-class Exception extends \Exception {
+class Exception extends \Mmi\App\Exception {
 	
 }

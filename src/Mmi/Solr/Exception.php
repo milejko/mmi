@@ -10,6 +10,6 @@
 
 namespace Mmi\Solr;
 
-class Exception extends \Exception {
+class Exception extends \Mmi\App\Exception {
 	
 }

@@ -46,13 +46,14 @@ class Yahoo extends WeatherAbstract {
 	/**
 	 * Pobranie pogody po woeid
 	 * @param string $woeid woeid
+	 * @throws \Mmi\Service\Exception
 	 * @return \Mmi\Service\Weather\Data aktualna pogoda
 	 */
 	public function getByWoeid($woeid) {
 		$xml = new SimpleXmlElement(file_get_contents($this->_url . intval($woeid)));
 
 		if (strpos(strtolower($xml->channel->description), 'error')) {
-			throw new\Exception('No data');
+			throw new \Mmi\Service\Exception('No data');
 		}
 
 		$wd = new \Mmi\Service\Weather\Data();

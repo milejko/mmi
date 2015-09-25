@@ -81,9 +81,9 @@ class Router {
 
 	/**
 	 * Pobiera request po ustawieniu parametrów routingu i danych wejściowych
-	 * @return \Mmi\Mvc\Controller\Request
+	 * @return \Mmi\Http\Request
 	 */
-	public function processRequest(\Mmi\Mvc\Controller\Request $request) {
+	public function processRequest(\Mmi\Http\Request $request) {
 		return $request->setParams($this->decodeUrl($this->_url));
 	}
 

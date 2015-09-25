@@ -15,7 +15,7 @@ class Dump extends \Mmi\Filter\FilterAbstract {
 	/**
 	 * Dump zmiennej
 	 * @param mixed $value wartość
-	 * @throws Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

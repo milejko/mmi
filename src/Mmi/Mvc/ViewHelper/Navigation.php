@@ -17,10 +17,10 @@ class Navigation extends NavigationBase {
 
 	/**
 	 * Ustawia obiekt nawigatora
-	 * @param \Mmi\Navigation\Component $navigation
-	 * @return \Mmi\Navigation\Component
+	 * @param \Mmi\Navigation\Navigation $navigation
+	 * @return \Mmi\Navigation\Navigation
 	 */
-	public static function setNavigation(\Mmi\Navigation\Component $navigation) {
+	public static function setNavigation(\Mmi\Navigation\Navigation $navigation) {
 		self::$_navigation = $navigation;
 		return $navigation;
 	}

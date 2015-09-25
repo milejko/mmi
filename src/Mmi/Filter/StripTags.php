@@ -15,7 +15,7 @@ class StripTags extends \Mmi\Filter\FilterAbstract {
 	/**
 	 * Kasuje html'a
 	 * @param mixed $value wartość
-	 * @throws Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

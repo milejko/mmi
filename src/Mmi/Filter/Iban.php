@@ -15,7 +15,7 @@ class Iban extends \Mmi\Filter\FilterAbstract {
 	/**
 	 * Poprawia wygląd numerów IBAN
 	 * @param mixed $value wartość
-	 * @throws Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

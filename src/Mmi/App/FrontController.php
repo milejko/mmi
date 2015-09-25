@@ -23,13 +23,13 @@ class FrontController {
 
 	/**
 	 * Request (żądanie)
-	 * @var \Mmi\Mvc\Controller\Request
+	 * @var \Mmi\Http\Request
 	 */
 	private $_request;
 
 	/**
 	 * Response (odpowiedź)
-	 * @var \Mmi\Mvc\Controller\Response
+	 * @var \Mmi\Http\Response
 	 */
 	private $_response;
 
@@ -68,9 +68,9 @@ class FrontController {
 	 */
 	protected function __construct() {
 		//nowe zapytanie
-		$this->_request = new \Mmi\Mvc\Controller\Request();
+		$this->_request = new \Mmi\Http\Request();
 		//nowy odpowiedź
-		$this->_response = new \Mmi\Mvc\Controller\Response();
+		$this->_response = new \Mmi\Http\Response();
 		//nowe środowisko
 		$this->_environment = new \Mmi\App\Environment();
 	}
@@ -110,20 +110,20 @@ class FrontController {
 
 	/**
 	 * Ustawienie żądania
-	 * @param \Mmi\Mvc\Controller\Request $request
+	 * @param \Mmi\Http\Request $request
 	 * @return \Mmi\App\FrontController
 	 */
-	public function setRequest(\Mmi\Mvc\Controller\Request $request) {
+	public function setRequest(\Mmi\Http\Request $request) {
 		$this->_request = $request;
 		return $this;
 	}
 
 	/**
 	 * Ustawienie odpowiedzi
-	 * @param \Mmi\Mvc\Controller\Response $response
+	 * @param \Mmi\Http\Response $response
 	 * @return \Mmi\App\FrontController
 	 */
-	public function setResponse(\Mmi\Mvc\Controller\Response $response) {
+	public function setResponse(\Mmi\Http\Response $response) {
 		$this->_response = $response;
 		return $this;
 	}
@@ -150,7 +150,7 @@ class FrontController {
 
 	/**
 	 * Pobranie żądania
-	 * @return \Mmi\Mvc\Controller\Request
+	 * @return \Mmi\Http\Request
 	 */
 	public function getRequest() {
 		return $this->_request;
@@ -158,7 +158,7 @@ class FrontController {
 
 	/**
 	 * Pobranie odpowiedzi
-	 * @return \Mmi\Mvc\Controller\Response
+	 * @return \Mmi\Http\Response
 	 */
 	public function getResponse() {
 		return $this->_response;
@@ -171,7 +171,7 @@ class FrontController {
 	public function getRouter() {
 		//brak routera
 		if ($this->_router === null) {
-			throw new \Exception('\Mmi\App\FrontController: no router specified');
+			throw new Exception('\Mmi\Mvc\Router should be specified in \Mmi\App\FrontController');
 		}
 		return $this->_router;
 	}
@@ -191,7 +191,7 @@ class FrontController {
 	public function getView() {
 		//brak widoku
 		if ($this->_view === null) {
-			throw new \Exception('\Mmi\App\FrontController: no view specified');
+			throw new Exception('\Mmi\View should be specified in \Mmi\App\FrontController');
 		}
 		return $this->_view;
 	}
@@ -204,11 +204,11 @@ class FrontController {
 	public function getStructure($part = null) {
 		//brak struktury
 		if ($this->_structure === null) {
-			throw new \Exception('\Mmi\Contoller\Front structure not found');
+			throw new Exception('\Mmi\Contoller\Front structure not found');
 		}
 		//struktura nieprawidłowa (brak części)
 		if ($part !== null && !isset($this->_structure[$part])) {
-			throw new \Exception('\Mmi\App\FrontController structure invalid');
+			throw new Exception('\Mmi\App\FrontController structure invalid');
 		}
 		return (null === $part) ? $this->_structure : $this->_structure[$part];
 	}

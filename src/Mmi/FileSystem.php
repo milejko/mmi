@@ -99,7 +99,7 @@ class FileSystem {
 	 */
 	public static function mimeType($fileAddress) {
 		if (!function_exists('finfo_open')) {
-			throw new\Exception('Fileinfo plugin not installed');
+			throw new \Mmi\App\Exception('Fileinfo plugin not installed');
 		}
 		return finfo_file(finfo_open(FILEINFO_MIME_TYPE), $fileAddress);
 	}
@@ -111,7 +111,7 @@ class FileSystem {
 	 */
 	public static function mimeTypeBinary($binary) {
 		if (!function_exists('finfo_open')) {
-			throw new\Exception('Fileinfo plugin not installed');
+			throw new \Mmi\App\Exception('Fileinfo plugin not installed');
 		}
 		return finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $binary);
 	}

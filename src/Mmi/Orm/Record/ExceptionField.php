@@ -10,6 +10,6 @@
 
 namespace Mmi\Orm\Record;
 
-class ExceptionField extends \Exception {
+class ExceptionField extends \Mmi\App\Exception {
 	
 }

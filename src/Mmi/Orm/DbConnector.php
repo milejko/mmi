@@ -29,7 +29,7 @@ class DbConnector {
 
 	/**
 	 * Obiekt bufora
-	 * @var \Mmi\Cache\Component
+	 * @var \Mmi\Cache\Cache
 	 */
 	protected static $_cache;
 
@@ -47,7 +47,7 @@ class DbConnector {
 	public static final function getAdapter() {
 		//brak lub nieprawidłowy adapter
 		if (!(static::$_adapter instanceof \Mmi\Db\Adapter\Pdo\PdoAbstract)) {
-			throw new \Exception('\Mmi\Orm: Adapter not specified or invalid');
+			throw new \Mmi\Orm\Exception('Adapter not specified or invalid');
 		}
 		//zwrot adaptera
 		return static::$_adapter;
@@ -64,7 +64,7 @@ class DbConnector {
 
 	/**
 	 * Zwraca obiekt cache
-	 * @return \Mmi\Cache\Component
+	 * @return \Mmi\Cache\Cache
 	 */
 	public static final function getCache() {
 		return static::$_cache;
@@ -75,7 +75,7 @@ class DbConnector {
 	 * @param \Mmi\Cache $cache
 	 * @return \Mmi\Cache
 	 */
-	public static final function setCache(\Mmi\Cache\Component $cache) {
+	public static final function setCache(\Mmi\Cache\Cache $cache) {
 		return static::$_cache = $cache;
 	}
 

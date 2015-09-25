@@ -14,13 +14,13 @@ class Controller {
 
 	/**
 	 * Żądanie
-	 * @var \Mmi\Mvc\Controller\Request
+	 * @var \Mmi\Http\Request
 	 */
 	protected $_request;
 
 	/**
 	 * Referencja do odpowiedzi z Front controllera
-	 * @var \Mmi\Mvc\Controller\Response
+	 * @var \Mmi\Http\Response
 	 */
 	protected $_response;
 
@@ -33,7 +33,7 @@ class Controller {
 	/**
 	 * Konstruktor
 	 */
-	public function __construct(\Mmi\Mvc\Controller\Request $request) {
+	public function __construct(\Mmi\Http\Request $request) {
 		//request
 		$this->_request = $request;
 		//response
@@ -87,7 +87,7 @@ class Controller {
 
 	/**
 	 * Pobiera request
-	 * @return \Mmi\Mvc\Controller\Request
+	 * @return \Mmi\Http\Request
 	 */
 	public final function getRequest() {
 		return $this->_request;
@@ -95,7 +95,7 @@ class Controller {
 
 	/**
 	 * Zwraca dane post z requesta
-	 * @return \Mmi\Mvc\Controller\RequestPost
+	 * @return \Mmi\Http\RequestPost
 	 */
 	public final function getPost() {
 		return $this->_request->getPost();
@@ -110,7 +110,7 @@ class Controller {
 
 	/**
 	 * Pobiera response
-	 * @return \Mmi\Mvc\Controller\Response
+	 * @return \Mmi\Http\Response
 	 */
 	public final function getResponse() {
 		return $this->_response;

@@ -15,7 +15,7 @@ abstract class FilterAbstract extends \Mmi\OptionObject {
 	/**
 	 * Zwraca przefiltrowaną wartość
 	 * @param mixed $value
-	 * @throws Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	abstract public function filter($value);

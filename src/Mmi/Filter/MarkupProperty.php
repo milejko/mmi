@@ -15,7 +15,7 @@ class MarkupProperty extends \Mmi\Filter\FilterAbstract {
 	/**
 	 * Zmienia zmienną, tak by mogła być wykorzystana wewnątrz właściwości znacznika HTML
 	 * @param mixed $value wartość
-	 * @throws Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

@@ -70,7 +70,7 @@ class Bootstrap implements BootstrapInterface {
 	 */
 	protected function _setupCache(\Mmi\App\KernelConfig $config) {
 		\App\Registry::$config = $config;
-		\App\Registry::$cache = new \Mmi\Cache\Component($config->cache);
+		\App\Registry::$cache = new \Mmi\Cache\Cache($config->cache);
 		return $this;
 	}
 
@@ -114,8 +114,8 @@ class Bootstrap implements BootstrapInterface {
 			return $this;
 		}
 		//ustawia ID sesji jeśli jawnie podana w żądaniu get
-		(null !== ($sid = filter_input(INPUT_GET, 'sessionId', FILTER_DEFAULT))) ? \Mmi\Session::setId($sid) : null;
-		\Mmi\Session::start($config->session);
+		(null !== ($sid = filter_input(INPUT_GET, 'sessionId', FILTER_DEFAULT))) ? \Mmi\Session\Session::setId($sid) : null;
+		\Mmi\Session\Session::start($config->session);
 		return $this;
 	}
 
@@ -132,7 +132,7 @@ class Bootstrap implements BootstrapInterface {
 		//ustawienie profilera
 		$config->db->profiler = $config->debug;
 		//uzupełnienie rejestru
-		\App\Registry::$db = \Mmi\Db\Component::factory($config->db);
+		\App\Registry::$db = \Mmi\Db\Db::factory($config->db);
 		//wstrzyknięcie do ORM
 		\Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
 		\Mmi\Orm\DbConnector::setCache(\App\Registry::$cache);

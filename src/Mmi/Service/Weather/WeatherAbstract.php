@@ -35,11 +35,11 @@ abstract class WeatherAbstract {
 	 * Pobiera dane prognozowane po wyszukaniu
 	 * przed wyszukaniem wyrzuca wyjątek
 	 * @return []
-	 * @throws Exception 
+	 * @throws \Mmi\Service\Exception
 	 */
 	public function getForecast() {
 		if (empty($this->_forecast)) {
-			throw new\Exception('No data');
+			throw new \Mmi\Service\Exception('No data');
 		}
 		return $this->_forecast;
 	}

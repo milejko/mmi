@@ -26,7 +26,7 @@ abstract class ElementAbstract extends Base\Element {
 
 	/**
 	 * Formularz macierzysty
-	 * @var \Mmi\Form\Component
+	 * @var \Mmi\Form\Form
 	 */
 	protected $_form = null;
 
@@ -48,17 +48,17 @@ abstract class ElementAbstract extends Base\Element {
 
 	/**
 	 * Ustawia form macierzysty
-	 * @param \Mmi\Form\Component $form
+	 * @param \Mmi\Form\Form $form
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
-	public final function setForm(\Mmi\Form\Component $form) {
+	public final function setForm(\Mmi\Form\Form $form) {
 		$this->_form = $form;
 		return $this;
 	}
 
 	/**
 	 * Pobranie formularza macierzystego
-	 * @return \Mmi\Form\Component
+	 * @return \Mmi\Form\Form
 	 */
 	public final function getForm() {
 		return $this->_form;
@@ -160,7 +160,7 @@ abstract class ElementAbstract extends Base\Element {
 			$className = '\\' . $namespace . '\\Filter\\' . ucfirst($name);
 		}
 		if (!isset($className)) {
-			throw new \Exception('Unknown filter: ' . $name);
+			throw new \Mmi\Form\Exception('Unknown filter: ' . $name);
 		}
 		return new $className();
 	}
@@ -179,7 +179,7 @@ abstract class ElementAbstract extends Base\Element {
 			$className = '\\' . $namespace . '\\Validator\\' . ucfirst($name);
 		}
 		if (!isset($className)) {
-			throw new \Exception('Unknown validator: ' . $name);
+			throw new \Mmi\Form\Exception('Unknown validator: ' . $name);
 		}
 		return new $className();
 	}
