@@ -48,10 +48,10 @@ class Request extends \Mmi\DataObject {
 
 	/**
 	 * Zwraca zmienne POST w postaci tabeli
-	 * @return Request\Post
+	 * @return RequestPost
 	 */
 	public function getPost() {
-		return new Request\Post($_POST);
+		return new RequestPost($_POST);
 	}
 
 	/**
