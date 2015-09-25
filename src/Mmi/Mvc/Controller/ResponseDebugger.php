@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Response;
+namespace Mmi\Mvc\Controller;
 
 /**
  * Klasa panelu debugowania aplikacji
  */
-class Debugger {
+class ResponseDebugger {
 
 	//pre z łamaniem linii
 	CONST PRE_OPEN_BREAK = '<pre style="white-space: normal; word-wrap: break-word; margin: 0px 0px 10px 0px; color: #666; background: #eee; padding: 3px; border: 1px solid #666;">';
@@ -108,52 +108,52 @@ class Debugger {
 		//środowisko
 		$html .= '<p style="margin: 0px;">Environment:</p>';
 		$html .= self::PRE_OPEN_BREAK . '<p style="margin: 0; padding: 0;">Time: <b>' . $this->_getElapsed() . ' (' . $this->_getPeakMemory() . ', ' . $cacheInfo . ')</b></p>';
-		$html .= Debugger\Part::getEnvHtml() . '</pre>';
+		$html .= ResponseDebugger\Part::getEnvHtml() . '</pre>';
 
 		//konfiguracja
 		$html .= '<p style="margin: 0px;">Configuration:</p>';
-		$html .= self::PRE_OPEN . Debugger\Part::getConfigHtml() . '</pre>';
+		$html .= self::PRE_OPEN . ResponseDebugger\Part::getConfigHtml() . '</pre>';
 
 		//profiler DB
 		$html .= '<p style="margin: 0px;">SQL queries: <b>' . \Mmi\Db\Profiler::count() . '</b>, elapsed time: <b>' . round(\Mmi\Db\Profiler::elapsed(), 4) . 's </b></p>';
-		$html .= self::PRE_OPEN_BREAK . Debugger\Part::getDbHtml() . '</pre>';
+		$html .= self::PRE_OPEN_BREAK . ResponseDebugger\Part::getDbHtml() . '</pre>';
 
 		//profiler aplikacji
 		$html .= '<p style="margin: 0px;">PHP Profiler: </p>';
-		$html .= self::PRE_OPEN . Debugger\Part::getProfilerHtml() . '</pre>';
+		$html .= self::PRE_OPEN . ResponseDebugger\Part::getProfilerHtml() . '</pre>';
 		
 		//opcache lub APC
 		$html .= '<p style="margin: 0px;">PHP precompiler</p>';
-		$html .= self::PRE_OPEN . Debugger\Opcache::getHtml() . '</pre>';
+		$html .= self::PRE_OPEN . ResponseDebugger\Opcache::getHtml() . '</pre>';
 		
 		//dołączanie rozszerzeń
 		$html .= '<p style="margin: 0px">Loaded extensions:</p>';
-		$html .= self::PRE_OPEN . Debugger\Part::getExtensionHtml() . '</pre>';
+		$html .= self::PRE_OPEN . ResponseDebugger\Part::getExtensionHtml() . '</pre>';
 
 		$html .= '</td><td style="vertical-align: top; padding-left: 5px;">';
 
 		//zmienne requesta
 		$html .= '<p style="margin: 0px;">Request Variables: </p>';
 		$html .= self::PRE_OPEN;
-		$html .= Debugger\Colorify::colorify(print_r(\Mmi\App\FrontController::getInstance()->getRequest()->toArray(), true)) . '</pre>';
+		$html .= ResponseDebugger\Colorify::colorify(print_r(\Mmi\App\FrontController::getInstance()->getRequest()->toArray(), true)) . '</pre>';
 
 		//zmienne widoku
 		if ($view !== null) {
 			$html .= '<p style="margin: 0px;">View Variables: </p>';
 			$html .= self::PRE_OPEN;
-			$html .= Debugger\Colorify::colorify(print_r($this->_simplifyVarArray($view->getAllVariables()), true)) . '</pre>';
+			$html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($view->getAllVariables()), true)) . '</pre>';
 		}
 		//zmienne cookie
 		if (isset($_COOKIE) && count($_COOKIE) > 0) {
 			$html .= '<p style="margin: 0px;">Cookie Variables: </p>';
 			$html .= self::PRE_OPEN;
-			$html .= Debugger\Colorify::colorify(print_r($_COOKIE, true)) . '</pre>';
+			$html .= ResponseDebugger\Colorify::colorify(print_r($_COOKIE, true)) . '</pre>';
 		}
 		//zmienne sesji
 		if (isset($_SESSION) && count($_SESSION) > 0) {
 			$html .= '<p style="margin: 0px;">Session Variables: </p>';
 			$html .= self::PRE_OPEN;
-			$html .= Debugger\Colorify::colorify(print_r($_SESSION, true)) . '</pre>';
+			$html .= ResponseDebugger\Colorify::colorify(print_r($_SESSION, true)) . '</pre>';
 		}
 		$html .= '</pre>';
 		$html .= '</td></tr></table></div>';

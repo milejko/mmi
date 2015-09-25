@@ -10,7 +10,7 @@
 
 namespace Mmi;
 
-class IndexController extends Mvc\ActionController {
+class IndexController extends Mvc\Controller {
 
 	public function indexAction() {
 		

@@ -52,7 +52,7 @@ abstract class Grid {
 
 	/**
 	 * Referencja do żądania
-	 * @var \Mmi\Controller\Request
+	 * @var \Mmi\Mvc\Controller\Request
 	 */
 	protected $_request;
 

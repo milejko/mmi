@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Request;
+namespace Mmi\Mvc\Controller;
 
-class Post extends \Mmi\DataObject {
+class RequestPost extends \Mmi\DataObject {
 	
 	/**
 	 * Konstruktor

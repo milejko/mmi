@@ -8,13 +8,13 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller;
+namespace Mmi\Mvc;
 
 class Router {
 
 	/**
 	 * Konfiguracja
-	 * @var \Mmi\Controller\Router\Config
+	 * @var \Mmi\Mvc\Router\Config
 	 */
 	private $_config;
 
@@ -38,10 +38,10 @@ class Router {
 
 	/**
 	 *
-	 * @param \Mmi\Controller\Router\Config $config
+	 * @param \Mmi\Mvc\Router\Config $config
 	 * @param string $defaultLanguage domyślny język
 	 */
-	public function __construct(\Mmi\Controller\Router\Config $config, $defaultLanguage = null) {
+	public function __construct(\Mmi\Mvc\Router\Config $config, $defaultLanguage = null) {
 		$this->_config = $config;
 		$this->_defaultLanguage = $defaultLanguage;
 		$this->_url = urldecode(trim(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri, '/ '));
@@ -65,7 +65,7 @@ class Router {
 
 	/**
 	 * Pobiera konfigurację routera
-	 * @return \Mmi\Controller\Router\Config
+	 * @return \Mmi\Mvc\Router\Config
 	 */
 	public function getConfig() {
 		return $this->_config;
@@ -81,9 +81,9 @@ class Router {
 
 	/**
 	 * Pobiera request po ustawieniu parametrów routingu i danych wejściowych
-	 * @return \Mmi\Controller\Request
+	 * @return \Mmi\Mvc\Controller\Request
 	 */
-	public function processRequest(\Mmi\Controller\Request $request) {
+	public function processRequest(\Mmi\Mvc\Controller\Request $request) {
 		return $request->setParams($this->decodeUrl($this->_url));
 	}
 
@@ -115,7 +115,7 @@ class Router {
 
 		//próba aplikacji rout
 		foreach ($this->getRoutes() as $route) {
-			/* @var $route \Mmi\Controller\Router\Config\Route */
+			/* @var $route \Mmi\Mvc\Router\Config\Route */
 			$result = Router\Matcher::tryRouteForUrl($route, $filteredUrl);
 			//dopasowano routę
 			if ($result['matched']) {
@@ -145,7 +145,7 @@ class Router {
 
 		//aplikacja rout
 		foreach ($this->getRoutes() as $route) {
-			/* @var $route \Mmi\Controller\Router\Config\Route */
+			/* @var $route \Mmi\Mvc\Router\Config\Route */
 			$result = Router\Matcher::tryRouteForParams($route, array_merge($route->default, $params));
 			//dopasowano routę
 			if ($result['applied']) {

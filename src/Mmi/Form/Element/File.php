@@ -14,7 +14,7 @@ class File extends ElementAbstract {
 
 	/**
 	 * Informacje o zuploadowanym pliku
-	 * @var \Mmi\Controller\Request\File[]
+	 * @var \Mmi\Mvc\Controller\RequestFile[]
 	 */
 	private $_files = [];
 
@@ -41,7 +41,7 @@ class File extends ElementAbstract {
 		}
 		$this->_files = $files->{$fieldName};
 		//opakowanie w array jeśli plik jest jeden
-		if ($this->_files instanceof \Mmi\Controller\Request\File) {
+		if ($this->_files instanceof \Mmi\Mvc\Controller\RequestFile) {
 			$this->_files = [$this->_files];
 		}
 		return $this;
@@ -49,7 +49,7 @@ class File extends ElementAbstract {
 
 	/**
 	 * Pobiera informacje o wgranym pliku (jeśli istnieje)
-	 * @return \Mmi\Controller\Request\File[]
+	 * @return \Mmi\Mvc\Controller\RequestFile[]
 	 */
 	public function getFiles() {
 		return $this->_files;

@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller;
+namespace Mmi\Mvc\Controller;
 
 class Request extends \Mmi\DataObject {
 
@@ -97,7 +97,7 @@ class Request extends \Mmi\DataObject {
 	/**
 	 * Ustawia moduł
 	 * @param string $value
-	 * @return \Mmi\Controller\Request
+	 * @return \Mmi\Mvc\Controller\Request
 	 */
 	public function setModuleName($value) {
 		$this->__set('module', $value);
@@ -107,7 +107,7 @@ class Request extends \Mmi\DataObject {
 	/**
 	 * Ustawia kontroler
 	 * @param string $value
-	 * @return \Mmi\Controller\Request
+	 * @return \Mmi\Mvc\Controller\Request
 	 */
 	public function setControllerName($value) {
 		$this->__set('controller', $value);
@@ -117,7 +117,7 @@ class Request extends \Mmi\DataObject {
 	/**
 	 * Ustawia akcję
 	 * @param string $value
-	 * @return \Mmi\Controller\Request
+	 * @return \Mmi\Mvc\Controller\Request
 	 */
 	public function setActionName($value) {
 		$this->__set('action', $value);

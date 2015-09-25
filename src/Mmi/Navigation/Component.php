@@ -38,10 +38,10 @@ class Component {
 
 	/**
 	 * Określa elementy aktywne, buduje breadcrumbs
-	 * @param \Mmi\Controller\Request $request
+	 * @param \Mmi\Mvc\Controller\Request $request
 	 * @return \Mmi\Translate
 	 */
-	public function setup(\Mmi\Controller\Request $request) {
+	public function setup(\Mmi\Mvc\Controller\Request $request) {
 		//aktywuje liście drzewa
 		$activatedTree = $this->_setupActive($this->_config->build, $request->toArray());
 		//uzupełnia breadcrumbs na podstawie aktywnych

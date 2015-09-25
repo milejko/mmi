@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Response\Debugger;
+namespace Mmi\Mvc\Controller\ResponseDebugger;
 
 /**
  * Klasa danych częściowych panelu deweloperskiego

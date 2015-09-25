@@ -29,7 +29,7 @@ abstract class KernelConfig {
 
 	/**
 	 * Konfiguracja routera
-	 * @var \Mmi\Controller\Router\Config
+	 * @var \Mmi\Mvc\Router\Config
 	 */
 	public $router;
 
@@ -98,7 +98,7 @@ abstract class KernelConfig {
 		//konfiguracja bazy danych
 		$this->db = new \Mmi\Db\Config();
 		//ustawienia routera
-		$this->router = new \Mmi\Controller\Router\Config();
+		$this->router = new \Mmi\Mvc\Router\Config();
 		//konfiguracja sesji
 		$this->session = new \Mmi\Session\Config();
 	}

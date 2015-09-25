@@ -23,19 +23,19 @@ class FrontController {
 
 	/**
 	 * Request (żądanie)
-	 * @var \Mmi\Controller\Request
+	 * @var \Mmi\Mvc\Controller\Request
 	 */
 	private $_request;
 
 	/**
 	 * Response (odpowiedź)
-	 * @var \Mmi\Controller\Response
+	 * @var \Mmi\Mvc\Controller\Response
 	 */
 	private $_response;
 
 	/**
 	 * Router
-	 * @var \Mmi\Controller\Router
+	 * @var \Mmi\Mvc\Router
 	 */
 	private $_router;
 
@@ -68,9 +68,9 @@ class FrontController {
 	 */
 	protected function __construct() {
 		//nowe zapytanie
-		$this->_request = new \Mmi\Controller\Request();
+		$this->_request = new \Mmi\Mvc\Controller\Request();
 		//nowy odpowiedź
-		$this->_response = new \Mmi\Controller\Response();
+		$this->_response = new \Mmi\Mvc\Controller\Response();
 		//nowe środowisko
 		$this->_environment = new \Mmi\App\Environment();
 	}
@@ -110,30 +110,30 @@ class FrontController {
 
 	/**
 	 * Ustawienie żądania
-	 * @param \Mmi\Controller\Request $request
+	 * @param \Mmi\Mvc\Controller\Request $request
 	 * @return \Mmi\App\FrontController
 	 */
-	public function setRequest(\Mmi\Controller\Request $request) {
+	public function setRequest(\Mmi\Mvc\Controller\Request $request) {
 		$this->_request = $request;
 		return $this;
 	}
 
 	/**
 	 * Ustawienie odpowiedzi
-	 * @param \Mmi\Controller\Response $response
+	 * @param \Mmi\Mvc\Controller\Response $response
 	 * @return \Mmi\App\FrontController
 	 */
-	public function setResponse(\Mmi\Controller\Response $response) {
+	public function setResponse(\Mmi\Mvc\Controller\Response $response) {
 		$this->_response = $response;
 		return $this;
 	}
 
 	/**
 	 * Ustawia router
-	 * @param \Mmi\Controller\Router $router
+	 * @param \Mmi\Mvc\Router $router
 	 * @return \Mmi\App\FrontController
 	 */
-	public function setRouter(\Mmi\Controller\Router $router) {
+	public function setRouter(\Mmi\Mvc\Router $router) {
 		$this->_router = $router;
 		return $this;
 	}
@@ -150,7 +150,7 @@ class FrontController {
 
 	/**
 	 * Pobranie żądania
-	 * @return \Mmi\Controller\Request
+	 * @return \Mmi\Mvc\Controller\Request
 	 */
 	public function getRequest() {
 		return $this->_request;
@@ -158,7 +158,7 @@ class FrontController {
 
 	/**
 	 * Pobranie odpowiedzi
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function getResponse() {
 		return $this->_response;
@@ -166,7 +166,7 @@ class FrontController {
 
 	/**
 	 * Pobranie routera
-	 * @return \Mmi\Controller\Router
+	 * @return \Mmi\Mvc\Router
 	 */
 	public function getRouter() {
 		//brak routera

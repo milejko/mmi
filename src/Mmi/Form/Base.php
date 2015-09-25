@@ -197,10 +197,10 @@ abstract class Base extends \Mmi\OptionObject {
 
 	/**
 	 * Ustawia forma na podstawie obiektu POST
-	 * @param \Mmi\Controller\Request\Post $post
+	 * @param \Mmi\Mvc\Controller\RequestPost $post
 	 * @return \Mmi\Form
 	 */
-	public final function setFromPost(\Mmi\Controller\Request\Post $post) {
+	public final function setFromPost(\Mmi\Mvc\Controller\RequestPost $post) {
 		//dane z posta do tablicy
 		$data = $post->toArray();
 		//sprawdzenie wartości dla wszystkich elementów

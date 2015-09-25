@@ -14,25 +14,25 @@ class FrontControllerPluginAbstract {
 
 	/**
 	 * Metoda wykona się przed routingiem
-	 * @param \Mmi\Controller\Request $request 
+	 * @param \Mmi\Mvc\Controller\Request $request 
 	 */
-	public function routeStartup(\Mmi\Controller\Request $request) {
+	public function routeStartup(\Mmi\Mvc\Controller\Request $request) {
 		
 	}
 
 	/**
 	 * Metoda wykona się przed dispatchowaniem
-	 * @param \Mmi\Controller\Request $request
+	 * @param \Mmi\Mvc\Controller\Request $request
 	 */
-	public function preDispatch(\Mmi\Controller\Request $request) {
+	public function preDispatch(\Mmi\Mvc\Controller\Request $request) {
 		
 	}
 
 	/**
 	 * Metoda wykona się po dispatchowaniu
-	 * @param \Mmi\Controller\Request $request
+	 * @param \Mmi\Mvc\Controller\Request $request
 	 */
-	public function postDispatch(\Mmi\Controller\Request $request) {
+	public function postDispatch(\Mmi\Mvc\Controller\Request $request) {
 		
 	}
 

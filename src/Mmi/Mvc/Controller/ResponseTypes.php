@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Response;
+namespace Mmi\Mvc\Controller;
 
-class Types {
+class ResponseTypes {
 
 	/**
 	 * Przechowuje kody HTTP

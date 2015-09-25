@@ -14,7 +14,7 @@ class Url extends HelperAbstract {
 
 	/**
 	 * Generuje link na podstawie parametrów (z użyciem routera)
-	 * @see \Mmi\Controller\Router::encodeUrl()
+	 * @see \Mmi\Mvc\Router::encodeUrl()
 	 * @param array $params parametry
 	 * @param boolean $reset nie łączy z bieżącym requestem
 	 * @param boolean $absolute czy ścieżka bezwzględna

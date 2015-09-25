@@ -10,17 +10,17 @@
 
 namespace Mmi\Mvc;
 
-class ActionController {
+class Controller {
 
 	/**
 	 * Żądanie
-	 * @var \Mmi\Controller\Request
+	 * @var \Mmi\Mvc\Controller\Request
 	 */
 	protected $_request;
 
 	/**
 	 * Referencja do odpowiedzi z Front controllera
-	 * @var \Mmi\Controller\Response
+	 * @var \Mmi\Mvc\Controller\Response
 	 */
 	protected $_response;
 
@@ -33,7 +33,7 @@ class ActionController {
 	/**
 	 * Konstruktor
 	 */
-	public function __construct(\Mmi\Controller\Request $request) {
+	public function __construct(\Mmi\Mvc\Controller\Request $request) {
 		//request
 		$this->_request = $request;
 		//response
@@ -87,7 +87,7 @@ class ActionController {
 
 	/**
 	 * Pobiera request
-	 * @return \Mmi\Controller\Request
+	 * @return \Mmi\Mvc\Controller\Request
 	 */
 	public final function getRequest() {
 		return $this->_request;
@@ -95,7 +95,7 @@ class ActionController {
 
 	/**
 	 * Zwraca dane post z requesta
-	 * @return \Mmi\Controller\Request\Post
+	 * @return \Mmi\Mvc\Controller\RequestPost
 	 */
 	public final function getPost() {
 		return $this->_request->getPost();
@@ -110,7 +110,7 @@ class ActionController {
 
 	/**
 	 * Pobiera response
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public final function getResponse() {
 		return $this->_response;

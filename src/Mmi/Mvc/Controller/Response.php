@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller;
+namespace Mmi\Mvc\Controller;
 
 /**
  * Klasa odpowiedzi aplikacji
@@ -54,7 +54,7 @@ class Response {
 	 * @param string $name nazwa
 	 * @param string $value wartość
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setHeader($name, $value = null, $replace = false) {
 		//wysłanie nagłówka
@@ -66,7 +66,7 @@ class Response {
 	 * Ustawia kod odpowiedzi
 	 * @param int $code kod
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setCode($code, $replace = false) {
 		//jeśli znaleziono kod
@@ -80,7 +80,7 @@ class Response {
 	/**
 	 * Ustawia kod na 404
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setCodeNotFound($replace = false) {
 		return $this->setCode(404, $replace);
@@ -89,7 +89,7 @@ class Response {
 	/**
 	 * Ustawia kod na 200
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setCodeOk($replace = false) {
 		return $this->setCode(200, $replace);
@@ -98,7 +98,7 @@ class Response {
 	/**
 	 * Ustawia kod na 500
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setCodeError($replace = false) {
 		return $this->setCode(500, $replace);
@@ -107,7 +107,7 @@ class Response {
 	/**
 	 * Ustawia kod na 401
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setCodeUnauthorized($replace = false) {
 		return $this->setCode(401, $replace);
@@ -116,7 +116,7 @@ class Response {
 	/**
 	 * Ustawia kod na 403
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setCodeForbidden($replace = false) {
 		return $this->setCode(403, $replace);
@@ -126,7 +126,7 @@ class Response {
 	 * Ustawia typ kontentu odpowiedzi (content-type
 	 * @param string $type nazwa typu np. jpg, gif, html, lub text/html
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setType($type, $replace = false) {
 		//nazwa małymi literami
@@ -146,7 +146,7 @@ class Response {
 			return $this->setHeader('Content-type', $this->_type, $replace);
 		}
 		//typ nieodnaleziony
-		throw new \Exception('\Mmi\Controller\Request: type not found');
+		throw new \Exception('\Mmi\Mvc\Controller\Request: type not found');
 	}
 
 	/**
@@ -160,7 +160,7 @@ class Response {
 	/**
 	 * Ustawia typ na HTML
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypeHtml($replace = false) {
 		return $this->setType('html', $replace);
@@ -169,7 +169,7 @@ class Response {
 	/**
 	 * Ustawia typ na JSON
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypeJson($replace = false) {
 		return $this->setType('json', $replace);
@@ -178,7 +178,7 @@ class Response {
 	/**
 	 * Ustawia typ na JS
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypeJs($replace = false) {
 		return $this->setType('js', $replace);
@@ -187,7 +187,7 @@ class Response {
 	/**
 	 * Ustawia typ na Plain
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypePlain($replace = false) {
 		return $this->setType('txt', $replace);
@@ -196,7 +196,7 @@ class Response {
 	/**
 	 * Ustawia typ na XML
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypeXml($replace = false) {
 		return $this->setType('xml', $replace);
@@ -205,7 +205,7 @@ class Response {
 	/**
 	 * Ustawia typ na obraz PNG
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypePng($replace = false) {
 		return $this->setType('png', $replace);
@@ -214,7 +214,7 @@ class Response {
 	/**
 	 * Ustawia typ na obraz Jpeg
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypeJpeg($replace = false) {
 		return $this->setType('jpeg', $replace);
@@ -223,7 +223,7 @@ class Response {
 	/**
 	 * Ustawia typ na Gzip
 	 * @param boolean $replace zastąpienie
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setTypeGzip($replace = false) {
 		return $this->setType('gz', $replace);
@@ -232,7 +232,7 @@ class Response {
 	/**
 	 * Ustawia content do wysyłki
 	 * @param string $content zawartość
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function setContent($content) {
 		$this->_content = $content;
@@ -250,7 +250,7 @@ class Response {
 	/**
 	 * Dodaje content do istniejącego
 	 * @param string $content zawartość
-	 * @return \Mmi\Controller\Response
+	 * @return \Mmi\Mvc\Controller\Response
 	 */
 	public function appendContent($content) {
 		//doklejenie contentu
@@ -265,7 +265,7 @@ class Response {
 		//opcjonalne uruchomienie panelu deweloperskiego
 		if ($this->_debug) {
 			//debugger wykonuje appendContent()
-			new \Mmi\Controller\Response\Debugger();
+			new \Mmi\Mvc\Controller\ResponseDebugger();
 		}
 		//zwrot contentu
 		echo $this->_content;

@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Router\Config;
+namespace Mmi\Mvc\Router\Config;
 
 class Route {
 

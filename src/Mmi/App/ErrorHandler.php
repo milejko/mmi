@@ -69,7 +69,7 @@ class ErrorHandler {
 	 * @param type $response
 	 * @param Exception $exception
 	 */
-	private static function _sendRawResponse(\Mmi\Controller\Response $response, \Exception $exception) {
+	private static function _sendRawResponse(\Mmi\Mvc\Controller\Response $response, \Exception $exception) {
 		$response->setCodeError()
 			->setContent(self::_rawErrorResponse($response, $exception))
 			->send();
@@ -77,11 +77,11 @@ class ErrorHandler {
 
 	/**
 	 * Zwraca sformatowany błąd dla danego typu odpowiedzi
-	 * @param \Mmi\Controller\Response $response obiekt odpowiedzi
+	 * @param \Mmi\Mvc\Controller\Response $response obiekt odpowiedzi
 	 * @param \Exception $e wyjątek
 	 * @return mixed
 	 */
-	private static function _rawErrorResponse(\Mmi\Controller\Response $response, \Exception $e) {
+	private static function _rawErrorResponse(\Mmi\Mvc\Controller\Response $response, \Exception $e) {
 		switch ($response->getType()) {
 			//typy HTML
 			case 'htm':

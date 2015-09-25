@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Router;
+namespace Mmi\Mvc\Router;
 
 /**
  * Klasa dopasowująca routy
@@ -22,11 +22,11 @@ class Matcher {
 
 	/**
 	 * Stosuje istniejące trasy dla danego url
-	 * @param \Mmi\Controller\Router\Config\Route $route
+	 * @param \Mmi\Mvc\Router\Config\Route $route
 	 * @param string $url URL
 	 * @return array
 	 */
-	public static function tryRouteForUrl(\Mmi\Controller\Router\Config\Route $route, $url) {
+	public static function tryRouteForUrl(\Mmi\Mvc\Router\Config\Route $route, $url) {
 		$params = [];
 		$matches = [];
 		$matched = false;
@@ -47,7 +47,7 @@ class Matcher {
 			$matched = true;
 			foreach ($route->replace as $key => $value) {
 				self::$_tmpKey = $key;
-				$params[$key] = preg_replace_callback('/\$([0-9]+)/', ['\Mmi\Controller\Router\Matcher', '_routeMatch'], $value);
+				$params[$key] = preg_replace_callback('/\$([0-9]+)/', ['\Mmi\Mvc\Router\Matcher', '_routeMatch'], $value);
 				$params[$key] = preg_replace('/\|[a-z]+/', '', $params[$key]);
 			}
 			$url = trim(substr($url, strlen($matches[0])), ' /');
@@ -61,11 +61,11 @@ class Matcher {
 
 	/**
 	 * Stosuje trasę dla tablicy parametrów (np. z żądania)
-	 * @param \Mmi\Controller\Router\Config\Route $route
+	 * @param \Mmi\Mvc\Router\Config\Route $route
 	 * @param array $params parametry
 	 * @return array
 	 */
-	public static function tryRouteForParams(\Mmi\Controller\Router\Config\Route $route, array $params) {
+	public static function tryRouteForParams(\Mmi\Mvc\Router\Config\Route $route, array $params) {
 		$matches = [];
 		$matched = [];
 		$applied = true;

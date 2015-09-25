@@ -68,7 +68,7 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Obiekt requestu
-	 * @var \Mmi\Controller\Request
+	 * @var \Mmi\Mvc\Controller\Request
 	 */
 	public $request;
 
@@ -96,10 +96,10 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Ustawia obiekt request
-	 * @param \Mmi\Controller\Request $request
+	 * @param \Mmi\Mvc\Controller\Request $request
 	 * @return \Mmi\Mvc\View
 	 */
-	public function setRequest(\Mmi\Controller\Request $request) {
+	public function setRequest(\Mmi\Mvc\Controller\Request $request) {
 		$this->request = $request;
 		$this->module = $request->getModuleName();
 		$this->lang = $request->lang;

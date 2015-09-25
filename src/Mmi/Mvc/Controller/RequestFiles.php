@@ -8,13 +8,13 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Controller\Request;
+namespace Mmi\Mvc\Controller;
 
 /**
  * Klasa plików
- * @method File[] toArray() Zwraca tablicę obiektów plików \Mmi\Controller\Request\File
+ * @method File[] toArray() Zwraca tablicę obiektów plików \Mmi\Mvc\Controller\RequestFile
  */
-class Files extends \Mmi\DataObject {
+class RequestFiles extends \Mmi\DataObject {
 
 	/**
 	 * Konstruktor
@@ -50,7 +50,7 @@ class Files extends \Mmi\DataObject {
 	/**
 	 * Obsługa pojedynczego uploadu
 	 * @param array $fileData dane pliku
-	 * @return \Mmi\Controller\Request\File
+	 * @return \Mmi\Mvc\Controller\RequestFile
 	 */
 	protected function _handleSingleUpload(array $fileData) {
 		//jeśli nazwa jest tablicą, oznacza to wielokrotny upload HTML5
@@ -68,7 +68,7 @@ class Files extends \Mmi\DataObject {
 	/**
 	 * Obsługa uploadu wielu plików (HTML5)
 	 * @param array $fileData dane plików
-	 * @return \Mmi\Controller\Request\File[]
+	 * @return \Mmi\Mvc\Controller\RequestFile[]
 	 */
 	protected function _handleMultiUpload(array $fileData) {
 		$files = [];
