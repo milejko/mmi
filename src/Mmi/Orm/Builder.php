@@ -109,7 +109,7 @@ class Builder {
 		}
 		//anotacje dla metod porównujących (equals itp.)
 		$queryCode = '<?php' . "\n\n" .
-			'namespace ' . $classPrefix . '\Query' . ";\n\n" .
+			'namespace ' . $classPrefix . ";\n\n" .
 			'/**' . "\n" .
 			' * @method \\' . $queryClassName . ' equals($value)' . "\n" .
 			' * @method \\' . $queryClassName . ' notEquals($value)' . "\n" .
@@ -139,7 +139,7 @@ class Builder {
 		$queryClassName = $classPrefix . '\Query';
 		//anotacja dla metody on()
 		$queryCode = '<?php' . "\n\n" .
-			'namespace ' . $classPrefix . '\Query' . ";\n\n" .
+			'namespace ' . $classPrefix . ";\n\n" .
 			'/**' . "\n" .
 			' * @method \\' . $queryClassName . ' on($localKeyName, $joinedKeyName = \'id\')' . "\n" .
 			' */' . "\n" .
