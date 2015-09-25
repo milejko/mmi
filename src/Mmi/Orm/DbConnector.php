@@ -29,7 +29,7 @@ class DbConnector {
 
 	/**
 	 * Obiekt bufora
-	 * @var \Mmi\Cache
+	 * @var \Mmi\Cache\Component
 	 */
 	protected static $_cache;
 
@@ -64,7 +64,7 @@ class DbConnector {
 
 	/**
 	 * Zwraca obiekt cache
-	 * @return \Mmi\Cache
+	 * @return \Mmi\Cache\Component
 	 */
 	public static final function getCache() {
 		return static::$_cache;
@@ -75,7 +75,7 @@ class DbConnector {
 	 * @param \Mmi\Cache $cache
 	 * @return \Mmi\Cache
 	 */
-	public static final function setCache(\Mmi\Cache $cache) {
+	public static final function setCache(\Mmi\Cache\Component $cache) {
 		return static::$_cache = $cache;
 	}
 

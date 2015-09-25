@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class RecordUnique extends ValidateAbstract {
+class RecordUnique extends ValidatorAbstract {
 
 	/**
 	 * Komunikat istnienia pola

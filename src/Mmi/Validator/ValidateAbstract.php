@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-abstract class ValidateAbstract extends \Mmi\OptionObject {
+abstract class ValidatorAbstract extends \Mmi\OptionObject {
 
 	/**
 	 * Wiadomość

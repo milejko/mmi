@@ -56,7 +56,7 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Obiekt buforujący
-	 * @var \Mmi\Cache
+	 * @var \Mmi\Cache\Component
 	 */
 	private $_cache;
 
@@ -118,10 +118,10 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Ustawia obiekt cache
-	 * @param \Mmi\Cache $cache
+	 * @param \Mmi\Cache\Component $cache
 	 * @return \Mmi\Mvc\View
 	 */
-	public function setCache(\Mmi\Cache $cache) {
+	public function setCache(\Mmi\Cache\Component $cache) {
 		$this->_cache = $cache;
 		return $this;
 	}

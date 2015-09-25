@@ -8,26 +8,29 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class NumberBetween extends ValidateAbstract {
+class Ip4 extends ValidatorAbstract {
 
 	/**
-	 * Treść błędu 
+	 * Treść wiadomości
 	 */
-	const INVALID = 'Wprowadzona wartość nie mieści się w wymaganym przedziale';
+	const INVALID = 'Niepoprawny adres IP';
 
 	/**
-	 * Walidacja liczb od-do
+	 * Walidacja IPv4
 	 * @param mixed $value wartość
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		$from = isset($this->_options[0]) ? $this->_options[0] : 0;
-		$to = isset($this->_options[1]) ? $this->_options[1] : 1000000000;
-		if (($value < $from) || ($value > $to)) {
+		if (!preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $value)) {
 			$this->_error(self::INVALID);
 			return false;
+		}
+		foreach (explode('.', $value) as $num) {
+			if ($num > 255 || $num < 0) {
+				return false;
+			}
 		}
 		return true;
 	}

@@ -70,7 +70,7 @@ class Bootstrap implements BootstrapInterface {
 	 */
 	protected function _setupCache(\Mmi\App\KernelConfig $config) {
 		\App\Registry::$config = $config;
-		\App\Registry::$cache = new \Mmi\Cache($config->cache);
+		\App\Registry::$cache = new \Mmi\Cache\Component($config->cache);
 		return $this;
 	}
 

@@ -8,14 +8,14 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class EmailAddress extends ValidateAbstract {
+class Postal extends ValidatorAbstract {
 
 	/**
-	 * Komunikat niedostatecznej długości
+	 * Komunikat błędnego kodu
 	 */
-	const ERROR = 'Niepoprawny adres e-mail';
+	const ERROR = 'Wprowadzono niepoprawny kod pocztowy';
 
 	/**
 	 * Sprawdza czy tekst jest e-mailem
@@ -23,7 +23,7 @@ class EmailAddress extends ValidateAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		if (preg_match('/^([*+!.&#$¦\'\\%\/0-9a-z^_`{}=?~:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,4})$/i', $value)) {
+		if (preg_match('/^[0-9]{2}-[0-9]{3}$/', $value)) {
 			return true;
 		}
 		$this->_error(self::ERROR);

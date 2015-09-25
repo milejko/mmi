@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class EmailAddressList extends ValidateAbstract {
+class EmailAddressList extends ValidatorAbstract {
 
 	/**
 	 * Komunikat niedostatecznej długości

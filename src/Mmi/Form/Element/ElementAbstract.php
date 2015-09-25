@@ -168,7 +168,7 @@ abstract class ElementAbstract extends Base\Element {
 	/**
 	 * Pobiera nazwę walidatora
 	 * @param string $name nazwa walidatora
-	 * @return \Mmi\Validate\ValidateAbstract
+	 * @return \Mmi\Validator\ValidatorAbstract
 	 */
 	protected final function _getValidator($name) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('validator');
@@ -176,7 +176,7 @@ abstract class ElementAbstract extends Base\Element {
 			if (!isset($validators[$name])) {
 				continue;
 			}
-			$className = '\\' . $namespace . '\\Validate\\' . ucfirst($name);
+			$className = '\\' . $namespace . '\\Validator\\' . ucfirst($name);
 		}
 		if (!isset($className)) {
 			throw new \Exception('Unknown validator: ' . $name);

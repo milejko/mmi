@@ -8,14 +8,11 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class Antirobot extends ValidateAbstract {
+class Captcha extends ValidatorAbstract {
 
-	/**
-	 * Komunikat błędnego kodu zabezpieczającego
-	 */
-	const INVALID = 'Kod zabezpieczenia niepoprawny';
+	const INVALID = 'Przepisany kod jest niepoprawny';
 
 	/**
 	 * Waliduje poprawność captcha
@@ -24,15 +21,9 @@ class Antirobot extends ValidateAbstract {
 	 */
 	public function isValid($value) {
 		$this->_error(self::INVALID);
-		return (('js-' . self::generateCrc() . '-js') == $value);
-	}
-
-	/**
-	 * Generowanie unikalnego CRC na dany dzień
-	 * @return integer
-	 */
-	public static function generateCrc() {
-		return crc32(date('Y-m-d') . 'antirobot-crc');
+		$session = new \Mmi\Session\Space('\Mmi\Form');
+		$name = 'captcha-' . $this->_options['name'];
+		return ($session->$name == strtoupper($value));
 	}
 
 }

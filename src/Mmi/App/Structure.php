@@ -53,7 +53,7 @@ class Structure {
 		//filtry
 		self::_parseAdditions($components['filter'], $module, $path . '/Filter');
 		//walidatory
-		self::_parseAdditions($components['validator'], $module, $path . '/Validate');
+		self::_parseAdditions($components['validator'], $module, $path . '/Validator');
 		//tłumaczenia
 		self::_parseAdditions($components['translate'], $module, $path . '/Resource/i18n');
 		//kontrolery

@@ -8,30 +8,24 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class Alnum extends ValidateAbstract {
+class NumberBetween extends ValidatorAbstract {
 
 	/**
-	 * Treść wiadomości
+	 * Treść błędu 
 	 */
-	const INVALID = 'Ciąg zawiera znaki inne niż litery i cyfry';
+	const INVALID = 'Wprowadzona wartość nie mieści się w wymaganym przedziale';
 
 	/**
-	 * Walidacja znaków alfanumerycznych
+	 * Walidacja liczb od-do
 	 * @param mixed $value wartość
 	 * @return boolean
 	 */
 	public function isValid($value) {
-
-		if (!is_string($value) && !is_int($value) && !is_float($value)) {
-			$this->_error(self::INVALID);
-			return false;
-		}
-
-		$filter = new \Mmi\Filter\Alnum();
-
-		if ($filter->filter($value) != $value) {
+		$from = isset($this->_options[0]) ? $this->_options[0] : 0;
+		$to = isset($this->_options[1]) ? $this->_options[1] : 1000000000;
+		if (($value < $from) || ($value > $to)) {
 			$this->_error(self::INVALID);
 			return false;
 		}

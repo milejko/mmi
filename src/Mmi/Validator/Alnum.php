@@ -8,29 +8,32 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class Ip4 extends ValidateAbstract {
+class Alnum extends ValidatorAbstract {
 
 	/**
 	 * Treść wiadomości
 	 */
-	const INVALID = 'Niepoprawny adres IP';
+	const INVALID = 'Ciąg zawiera znaki inne niż litery i cyfry';
 
 	/**
-	 * Walidacja IPv4
+	 * Walidacja znaków alfanumerycznych
 	 * @param mixed $value wartość
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		if (!preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $value)) {
+
+		if (!is_string($value) && !is_int($value) && !is_float($value)) {
 			$this->_error(self::INVALID);
 			return false;
 		}
-		foreach (explode('.', $value) as $num) {
-			if ($num > 255 || $num < 0) {
-				return false;
-			}
+
+		$filter = new \Mmi\Filter\Alnum();
+
+		if ($filter->filter($value) != $value) {
+			$this->_error(self::INVALID);
+			return false;
 		}
 		return true;
 	}

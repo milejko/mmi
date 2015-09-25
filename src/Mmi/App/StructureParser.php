@@ -19,7 +19,7 @@ class StructureParser {
 	protected static $_moduleRequirements = ['Controller',
 		'Filter',
 		'Resource',
-		'Validate',
+		'Validator',
 		'View'
 	];
 

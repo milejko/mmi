@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class Integer extends ValidateAbstract {
+class Integer extends ValidatorAbstract {
 
 	/**
 	 * Treść wiadomości

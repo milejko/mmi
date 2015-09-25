@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Validate;
+namespace Mmi\Validator;
 
-class LargeSmall extends ValidateAbstract {
+class LargeSmall extends ValidatorAbstract {
 
 	/**
 	 * Komunikat o zbyt dużej ilości wielkich liter

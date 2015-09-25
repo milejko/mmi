@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\Cache;
 
 /**
  * Obiekt bufora danych
  */
-class Cache {
+class Component {
 
 	/**
 	 * Konfiguracja bufora
