@@ -8,9 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm\Query;
+namespace Mmi\Orm;
 
-class Data {
+/**
+ * Klasa danych zapytania
+ */
+class QueryData {
 
 	/**
 	 * Obiekt zapytania
@@ -47,7 +50,7 @@ class Data {
 
 	/**
 	 * Pobiera wszystkie rekordy i zwraca ich kolekcję
-	 * @return \Mmi\Orm\Record\Collection
+	 * @return \Mmi\Orm\RecordCollection
 	 */
 	public final function find() {
 		//odpytanie adaptera o rekordy
@@ -72,7 +75,7 @@ class Data {
 	 * Pobiera obiekt pierwszy ze zbioru
 	 * null jeśli brak danych
 	 * @param \Mmi\Orm\Query $q Obiekt zapytania
-	 * @return \Mmi\Orm\Record\Ro
+	 * @return \Mmi\Orm\RecordRo
 	 */
 	public final function findFirst() {
 		//odpytanie adaptera o rekordy
@@ -83,7 +86,7 @@ class Data {
 		}
 		//ustalenie klasy rekordu
 		$recordName = $this->_query->getRecordName();
-		/* @var $record \Mmi\Orm\Record\Ro */
+		/* @var $record \Mmi\Orm\RecordRo */
 		$record = new $recordName;
 		return $record->setFromArray($result[0])->clearModified();
 	}

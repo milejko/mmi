@@ -121,11 +121,11 @@ class Builder {
 			' * @method \\' . $queryClassName . ' ilike($value)' . "\n" .
 			$methods . 
 			' */' . "\n" .
-			'class Field extends \Mmi\Orm\Query\Field {' .
+			'class Field extends \Mmi\Orm\QueryField {' .
 			"\n\n" .
 			'}' . "\n";
 		//zapis pliku
-		file_put_contents(self::_mkdirRecursive($pathPrefix . '/Query/Field.php'), $queryCode);
+		file_put_contents(self::_mkdirRecursive($pathPrefix . '/QueryField.php'), $queryCode);
 	}
 
 	/**
@@ -143,11 +143,11 @@ class Builder {
 			'/**' . "\n" .
 			' * @method \\' . $queryClassName . ' on($localKeyName, $joinedKeyName = \'id\')' . "\n" .
 			' */' . "\n" .
-			'class Join extends \Mmi\Orm\Query\Join {' .
+			'class Join extends \Mmi\Orm\QueryJoin {' .
 			"\n\n" .
 			'}' . "\n";
 		//zapis pliku
-		file_put_contents(self::_mkdirRecursive($pathPrefix . '/Query/Join.php'), $queryCode);
+		file_put_contents(self::_mkdirRecursive($pathPrefix . '/QueryJoin.php'), $queryCode);
 	}
 
 	/**
@@ -161,9 +161,9 @@ class Builder {
 		//nazwa klasy
 		$className = $classPrefix . '\Query';
 		//nazwa klasy pola
-		$fieldClassName = $classPrefix . '\Query\Field';
+		$fieldClassName = $classPrefix . '\QueryField';
 		//nazwa klasy złączenia
-		$joinClassName = $classPrefix . '\Query\Join';
+		$joinClassName = $classPrefix . '\QueryJoin';
 		//nazwa rekordu
 		$recordClassName = $classPrefix . '\Record';
 

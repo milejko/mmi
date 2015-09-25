@@ -8,9 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm\Record;
+namespace Mmi\Orm;
 
-class Ro {
+/**
+ * Klasa rekordu tylko do odczytu
+ */
+class RecordRo {
 
 	/**
 	 * Przechowuje ekstra opcje rekordu
@@ -49,7 +52,7 @@ class Ro {
 		}
 		$query = $this->_queryClass;
 		if (null === ($record = $query::factory()->findPk($id))) {
-			throw new ExceptionNotFound('Record not found: ' . $id);
+			throw new RecordNotFoundException('Record not found: ' . $id);
 		}
 		//ustawianie z tablicy i zapis stanu
 		$this->setFromArray($record->toArray())
@@ -73,7 +76,7 @@ class Ro {
 	 * @return mixed
 	 */
 	public final function __get($name) {
-		throw new ExceptionField('Field not found: ' . $name);
+		throw new RecordFieldException('Field not found: ' . $name);
 	}
 
 	/**
@@ -82,7 +85,7 @@ class Ro {
 	 * @param mixed $value wartość
 	 */
 	public final function __set($name, $value) {
-		throw new ExceptionField('Field not found: ' . $name);
+		throw new RecordFieldException('Field not found: ' . $name);
 	}
 
 	/**
@@ -98,7 +101,7 @@ class Ro {
 	 * Ustawia opcję w rekordzie
 	 * @param string $name
 	 * @param mixed $value
-	 * @return \Mmi\Orm\Record\Ro
+	 * @return \Mmi\Orm\RecordRo
 	 */
 	public final function setOption($name, $value) {
 		$this->_options[$name] = $value;
@@ -108,7 +111,7 @@ class Ro {
 	/**
 	 * Pobiera dołączony rekord (JOIN)
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Record\Ro
+	 * @return \Mmi\Orm\RecordRo
 	 */
 	public final function getJoined($tableName) {
 		return isset($this->_joined[$tableName]) ? $this->_joined[$tableName] : null;
@@ -147,7 +150,7 @@ class Ro {
 
 	/**
 	 * Usuwa flagę modyfikacji na polu, lub wszyskich polach
-	 * @return \Mmi\Orm\Record\Ro
+	 * @return \Mmi\Orm\RecordRo
 	 */
 	public final function clearModified() {
 		foreach ($this as $name => $value) {
@@ -174,7 +177,7 @@ class Ro {
 		$array = $this->_options;
 		//dołącza joinowane tabele
 		foreach ($this->_joined as $name => $value) {
-			if ($value instanceof \Mmi\Orm\Record\Ro) {
+			if ($value instanceof \Mmi\Orm\RecordRo) {
 				$value = $value->toArray();
 			}
 			$array[$name] = $value;

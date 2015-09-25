@@ -18,7 +18,7 @@ class Query {
 
 	/**
 	 * Kompilant zapytania
-	 * @var \Mmi\Orm\Query\Compile
+	 * @var \Mmi\Orm\QueryCompile
 	 */
 	protected $_compile;
 
@@ -35,7 +35,7 @@ class Query {
 	 */
 	protected final function __construct($tableName = null) {
 		//nowa kompilacja
-		$this->_compile = new \Mmi\Orm\Query\Compile();
+		$this->_compile = new \Mmi\Orm\QueryCompile();
 		//klasa DAO na podstawie parametru konstruktora
 		if ($tableName !== null) {
 			$this->_tableName = $tableName;
@@ -155,17 +155,17 @@ class Query {
 	 * Dodaje warunek na pole AND
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\Query\Field
+	 * @return \Mmi\Orm\QueryField
 	 */
 	public final function andField($fieldName, $tableName = null) {
-		return new \Mmi\Orm\Query\Field($this, $this->_prepareField($fieldName, $tableName), 'AND');
+		return new \Mmi\Orm\QueryField($this, $this->_prepareField($fieldName, $tableName), 'AND');
 	}
 
 	/**
 	 * Pierwszy warunek w zapytaniu (domyślnie AND)
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\Query\Field
+	 * @return \Mmi\Orm\QueryField
 	 */
 	public final function where($fieldName, $tableName = null) {
 		return $this->andField($fieldName, $tableName);
@@ -175,35 +175,35 @@ class Query {
 	 * Dodaje warunek na pole OR
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\Query\Field
+	 * @return \Mmi\Orm\QueryField
 	 */
 	public final function orField($fieldName, $tableName = null) {
-		return new \Mmi\Orm\Query\Field($this, $this->_prepareField($fieldName, $tableName), 'OR');
+		return new \Mmi\Orm\QueryField($this, $this->_prepareField($fieldName, $tableName), 'OR');
 	}
 
 	/**
 	 * Dołącza tabelę tabelę
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
-	 * @return \Mmi\Orm\Query\Join
+	 * @return \Mmi\Orm\QueryJoin
 	 */
 	public final function join($tableName, $targetTableName = null) {
-		return new \Mmi\Orm\Query\Join($this, $tableName, 'JOIN', $targetTableName);
+		return new \Mmi\Orm\QueryJoin($this, $tableName, 'JOIN', $targetTableName);
 	}
 
 	/**
 	 * Dołącza tabelę złączeniem lewym
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
-	 * @return \Mmi\Orm\Query\Join
+	 * @return \Mmi\Orm\QueryJoin
 	 */
 	public final function joinLeft($tableName, $targetTableName = null) {
-		return new \Mmi\Orm\Query\Join($this, $tableName, 'LEFT JOIN', $targetTableName);
+		return new \Mmi\Orm\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName);
 	}
 
 	/**
 	 * Zwraca skompilowane zapytanie
-	 * @return \Mmi\Orm\Query\Compile
+	 * @return \Mmi\Orm\QueryCompile
 	 */
 	public final function getQueryCompile() {
 		return $this->_compile;
@@ -239,7 +239,7 @@ class Query {
 	 * @return string
 	 */
 	public static final function getCollectionName() {
-		return '\Mmi\Orm\Record\Collection';
+		return '\Mmi\Orm\RecordCollection';
 		//konwencja nazwy na kolekcję
 		//return self::_classPrefix() . 'Record\Collection';
 	}
@@ -279,7 +279,7 @@ class Query {
 	 * @return int
 	 */
 	public final function count($column = '*') {
-		return Query\Data::factory($this)
+		return QueryData::factory($this)
 				->count($column);
 	}
 
@@ -297,10 +297,10 @@ class Query {
 
 	/**
 	 * Pobiera wszystkie rekordy i zwraca ich kolekcję
-	 * @return \Mmi\Orm\Record\Collection
+	 * @return \Mmi\Orm\RecordCollection
 	 */
 	public final function find() {
-		return Query\Data::factory($this)
+		return QueryData::factory($this)
 				->find();
 	}
 
@@ -308,10 +308,10 @@ class Query {
 	 * Pobiera obiekt pierwszy ze zbioru
 	 * null jeśli brak danych
 	 * @param \Mmi\Orm\Query $q Obiekt zapytania
-	 * @return \Mmi\Orm\Record\Ro
+	 * @return \Mmi\Orm\RecordRo
 	 */
 	public final function findFirst() {
-		return Query\Data::factory($this)
+		return QueryData::factory($this)
 				->findFirst();
 	}
 
@@ -322,7 +322,7 @@ class Query {
 	 * @return array
 	 */
 	public final function findPairs($keyName, $valueName) {
-		return Query\Data::factory($this)
+		return QueryData::factory($this)
 				->findPairs($keyName, $valueName);
 	}
 
@@ -332,7 +332,7 @@ class Query {
 	 * @return string wartość maksymalna
 	 */
 	public final function findMax($keyName) {
-		return Query\Data::factory($this)
+		return QueryData::factory($this)
 				->findMax($keyName);
 	}
 
@@ -342,7 +342,7 @@ class Query {
 	 * @return string wartość minimalna
 	 */
 	public final function findMin($keyName) {
-		return Query\Data::factory($this)
+		return QueryData::factory($this)
 				->findMin($keyName);
 	}
 
@@ -352,7 +352,7 @@ class Query {
 	 * @return array mixed wartości unikalne
 	 */
 	public final function findUnique($keyName) {
-		return Query\Data::factory($this)
+		return QueryData::factory($this)
 				->findUnique($keyName);
 	}
 

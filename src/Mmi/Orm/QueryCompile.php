@@ -8,9 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm\Query;
+namespace Mmi\Orm;
 
-class Compile {
+/**
+ * Skompilowane zapytanie
+ */
+class QueryCompile {
 
 	/**
 	 * Część FROM zapytania

@@ -10,7 +10,7 @@
 
 namespace Mmi\Orm;
 
-class Record extends \Mmi\Orm\Record\Ro {
+class Record extends \Mmi\Orm\RecordRo {
 
 	/**
 	 * Zapis danych do obiektu

@@ -8,9 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm\Record;
+namespace Mmi\Orm;
 
-class Collection extends \ArrayObject {
+/**
+ * Klasa kolekcji rekordów
+ */
+class RecordCollection extends \ArrayObject {
 
 	/**
 	 * Kasuje całą kolekcję obiektów
@@ -39,7 +42,7 @@ class Collection extends \ArrayObject {
 
 	/**
 	 * Zwraca kolekcję w postaci tablicy obiektów
-	 * @return \Mmi\Orm\Record\Collection
+	 * @return \Mmi\Orm\RecordCollection
 	 */
 	public function toObjectArray() {
 		$array = [];

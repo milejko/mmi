@@ -8,8 +8,8 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm\Record;
+namespace Mmi\Orm;
 
-class ExceptionField extends \Mmi\App\Exception {
+class RecordFieldException extends \Mmi\App\Exception {
 	
 }
