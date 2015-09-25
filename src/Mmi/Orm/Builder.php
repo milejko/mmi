@@ -121,7 +121,7 @@ class Builder {
 			' * @method \\' . $queryClassName . ' ilike($value)' . "\n" .
 			$methods . 
 			' */' . "\n" .
-			'class Field extends \Mmi\Orm\QueryField {' .
+			'class QueryField extends \Mmi\Orm\QueryField {' .
 			"\n\n" .
 			'}' . "\n";
 		//zapis pliku
@@ -143,7 +143,7 @@ class Builder {
 			'/**' . "\n" .
 			' * @method \\' . $queryClassName . ' on($localKeyName, $joinedKeyName = \'id\')' . "\n" .
 			' */' . "\n" .
-			'class Join extends \Mmi\Orm\QueryJoin {' .
+			'class QueryJoin extends \Mmi\Orm\QueryJoin {' .
 			"\n\n" .
 			'}' . "\n";
 		//zapis pliku
