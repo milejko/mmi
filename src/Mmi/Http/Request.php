@@ -56,10 +56,10 @@ class Request extends \Mmi\DataObject {
 
 	/**
 	 * Pobiera informacje o zuploadowanych plikach FILES
-	 * @return Request\Files
+	 * @return RequestFiles
 	 */
 	public function getFiles() {
-		return new Request\Files($_FILES);
+		return new RequestFiles($_FILES);
 	}
 
 	/**
