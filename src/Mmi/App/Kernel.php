@@ -56,7 +56,7 @@ namespace Mmi\App {
 		 * @param string $env
 		 * @return \Mmi\App\Kernel
 		 */
-		protected function _initConfig($env) {
+		private function _initConfig($env) {
 			//konwencja nazwy konfiguracji
 			$configClassName = '\App\KernelConfig' . $env;
 			//konfiguracja dla danego środowiska
@@ -70,7 +70,7 @@ namespace Mmi\App {
 		 * Ustawia kodowanie na UTF-8
 		 * @return \Mmi\App\Kernel
 		 */
-		protected function _initEncoding() {
+		private function _initEncoding() {
 			//wewnętrzne kodowanie znaków
 			mb_internal_encoding('utf-8');
 			//domyślne kodowanie znaków PHP
@@ -89,7 +89,7 @@ namespace Mmi\App {
 		 * @param string $systemPath
 		 * @return \Mmi\App\Kernel
 		 */
-		protected function _initPaths() {
+		private function _initPaths() {
 			//zasoby publiczne
 			define('PUBLIC_PATH', BASE_PATH . '/web');
 			//dane
@@ -101,7 +101,7 @@ namespace Mmi\App {
 		 * Ustawianie bufora
 		 * @return \Mmi\App\Bootstrap
 		 */
-		protected function _initCache() {
+		private function _initCache() {
 			\App\Registry::$cache = new \Mmi\Cache\Cache(\App\Registry::$config->cache);
 			return $this;
 		}
@@ -110,7 +110,7 @@ namespace Mmi\App {
 		 * Ustawia handler zdarzeń PHP
 		 * @return \Mmi\App\Kernel
 		 */
-		protected function _initEventHandler() {
+		private function _initEventHandler() {
 			//funkcja  zamknięcia aplikacji
 			register_shutdown_function(['\Mmi\App\EventHandler', 'shutdownHandler']);
 			//domyślne przechwycenie wyjątków

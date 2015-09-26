@@ -26,7 +26,7 @@ class Config {
 	 * Poziom logowania
 	 * @var integer
 	 */
-	public $level = Logger::DEBUG;
+	public $level = Logger::WARNING;
 	
 	/**
 	 * Ścieżka logowania

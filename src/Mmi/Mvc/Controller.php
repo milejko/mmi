@@ -10,6 +10,9 @@
 
 namespace Mmi\Mvc;
 
+/**
+ * Klasa kontrolera akcji
+ */
 class Controller {
 
 	/**
@@ -137,7 +140,7 @@ class Controller {
 	 * @return \Mmi\Logger\LoggerHelper
 	 */
 	public final function getHelperLogger() {
-		return \Mmi\Logger\LoggerHelper::getInstance();
+		return \Mmi\Logger\LoggerHelper::getLogger();
 	}
 
 	/**

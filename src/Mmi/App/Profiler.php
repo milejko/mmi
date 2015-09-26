@@ -31,6 +31,12 @@ class Profiler {
 	 * @var int
 	 */
 	protected static $_elapsed = 0;
+	
+	/**
+	 * Odcisk wywołania
+	 * @var string
+	 */
+	protected static $_runtimeStamp;
 
 	/**
 	 * Dodaje zdarzenie
@@ -43,6 +49,9 @@ class Profiler {
 			return;
 		}
 		$time = microtime(true);
+		if (!self::$_runtimeStamp) {
+			self::$_runtimeStamp = substr(md5($time . rand(0, 10000)), 6, 6);
+		}
 		if ($elapsed === null && static::$_counter > 0) {
 			$elapsed = $time - static::$_data[static::$_counter - 1]['time'];
 		} elseif ($elapsed === null) {
@@ -53,7 +62,7 @@ class Profiler {
 			'time' => $time,
 			'elapsed' => $elapsed,
 		];
-		LoggerHelper::getLogger()->addDebug('[' . round($elapsed, 5) . '] Event: ' . $name);
+		LoggerHelper::getLogger()->addDebug('{' . self::$_runtimeStamp . '} [' . number_format($elapsed, 6) . 's] ' . $name);
 		static::$_elapsed += $elapsed;
 		static::$_counter++;
 	}
