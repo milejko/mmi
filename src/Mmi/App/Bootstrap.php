@@ -94,7 +94,7 @@ class Bootstrap implements BootstrapInterface {
 			return $this;
 		}
 		//ustawienie profilera
-		$config->db->profiler = \App\Registry::$config->debug;
+		\App\Registry::$config->db->profiler = \App\Registry::$config->debug;
 		//uzupełnienie rejestru
 		\App\Registry::$db = \Mmi\Db\Db::factory(\App\Registry::$config->db);
 		//wstrzyknięcie do ORM
