@@ -9,11 +9,14 @@
  */
 
 namespace Mmi\App;
-use Mmi\Logger\LoggerHelper;
-use Monolog\Logger;
 
+use Mmi\Logger\LoggerHelper;
+
+/**
+ * Klasa obsługi zdażeń PHP
+ */
 class EventHandler {
-	
+
 	/**
 	 * Obsługuje błędy, ostrzeżenia
 	 * @param string $errno numer błędu
@@ -26,7 +29,7 @@ class EventHandler {
 	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
 		throw new Exception($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
 	}
-	
+
 	/**
 	 * Handler zamknięcia aplikacji
 	 */
@@ -92,7 +95,7 @@ class EventHandler {
 			->setContent(self::_rawErrorResponse($response, $exception->getMessage(), $exception->getTraceAsString()))
 			->send();
 	}
-	
+
 	/**
 	 * Zwraca sformatowany błąd dla danego typu odpowiedzi
 	 * @param \Mmi\Http\Response $response obiekt odpowiedzi
@@ -119,7 +122,7 @@ class EventHandler {
 				]);
 		}
 	}
-	
+
 	/**
 	 * Logowanie wyjątków
 	 * @param \Exception $exception
@@ -127,9 +130,10 @@ class EventHandler {
 	private static function _logException(\Exception $exception) {
 		if ($exception instanceof \Mmi\App\Exception) {
 			LoggerHelper::getLogger()->addRecord($exception->getCode(), $exception->getMessage() . ' ' . $exception->getTraceAsString());
+			return;
 		}
 		//logowanie błędu
 		LoggerHelper::getLogger()->addError($exception->getMessage() . ' ' . $exception->getTraceAsString());
 	}
-	
+
 }
