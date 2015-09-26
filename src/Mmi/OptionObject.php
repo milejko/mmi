@@ -97,7 +97,7 @@ abstract class OptionObject {
 	 */
 	public function __call($name, $params) {
 		$matches = [];
-		//obsługa getteróœ
+		//obsługa getterów
 		if (preg_match('/get([a-zA-Z0-9]+)/', $name, $matches)) {
 			return $this->getOption(lcfirst($matches[1]));
 		}

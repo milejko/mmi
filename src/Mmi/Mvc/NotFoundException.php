@@ -10,9 +10,17 @@
 
 namespace Mmi\Mvc;
 
+use Monolog\Logger;
+
 /**
  * Klasa wyjątku nieodnalezionego kontrolera
  */
 class NotFoundException extends Exception {
-	
+
+	/**
+	 * Poziom logowania
+	 * @var integer
+	 */
+	protected $code = Logger::INFO;
+
 }

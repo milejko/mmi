@@ -22,14 +22,16 @@ namespace Mmi\App {
 		 * Konstruktor
 		 */
 		public function __construct($bootstrapName = '\Mmi\App\Bootstrap', $env = 'DEV') {
+			//pierwszy event profilera
+			\Mmi\App\Profiler::event('App\Kernel: application startup');
 			//inicjalizacja aplikacji
-			$this->_initPaths()
-				->_initEncoding()
-				->_initErrorHandler();
-			\Mmi\App\Profiler::event('App: bootstrap startup');
+			$this->_initErrorHandler()
+				->_initPaths()
+				->_initEncoding();
+			\Mmi\App\Profiler::event('App\Kernel: bootstrap startup');
 			//tworzenie instancji bootstrapa
 			$this->_bootstrap = new $bootstrapName($env);
-			\Mmi\App\Profiler::event('App: bootstrap executed');
+			\Mmi\App\Profiler::event('App\Kernel: bootstrap done');
 			//bootstrap nie implementuje właściwego interfeace'u
 			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {
 				throw new Exception('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
@@ -65,8 +67,6 @@ namespace Mmi\App {
 		 * @return \Mmi\App\Kernel
 		 */
 		protected function _initPaths() {
-			//pierwszy event profilera
-			\Mmi\App\Profiler::event('App: startup');
 			//zasoby publiczne
 			define('PUBLIC_PATH', BASE_PATH . '/web');
 			//dane
@@ -79,6 +79,8 @@ namespace Mmi\App {
 		 * @return \Mmi\App\Kernel
 		 */
 		protected function _initErrorHandler() {
+			//funkcja  zamknięcia aplikacji
+			register_shutdown_function(['\Mmi\App\ErrorHandler', 'shutdownHandler']);
 			//domyślne przechwycenie wyjątków
 			set_exception_handler(['\Mmi\App\ErrorHandler', 'exceptionHandler']);
 			//domyślne przechwycenie błędów

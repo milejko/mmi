@@ -10,7 +10,7 @@
 
 namespace Mmi\Mvc;
 
-class ActionPerformer {
+class ActionHelper {
 
 	/**
 	 * Obiekt ACL
@@ -26,13 +26,13 @@ class ActionPerformer {
 	
 	/**
 	 * Instancja helpera akcji
-	 * @var \Mmi\Mvc\ActionPerformer 
+	 * @var \Mmi\Mvc\ActionHelper 
 	 */
 	protected static $_instance;
 
 	/**
 	 * Pobranie instancji
-	 * @return \Mmi\Mvc\ActionPerformer
+	 * @return \Mmi\Mvc\ActionHelper
 	 */
 	public static function getInstance() {
 		//jeśli nie istnieje instancja tworzenie nowej
@@ -73,12 +73,12 @@ class ActionPerformer {
 		$actionLabel = $controllerRequest->getModuleName() . ':' . $controllerRequest->getControllerName() . ':' . $controllerRequest->getActionName();
 		//sprawdzenie ACL
 		if (!$this->_checkAcl($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName())) {
-			\Mmi\App\Profiler::event('Action blocked: ' . $actionLabel);
+			\Mmi\App\Profiler::event('Mvc\ActionExecuter: ' . $actionLabel . ' blocked');
 			return;
 		}
 		//wywołanie akcji
 		$actionContent = $this->_invokeAction($controllerRequest, $actionLabel);
-		\Mmi\App\Profiler::event('Action executed: ' . $actionLabel);
+		\Mmi\App\Profiler::event('Mvc\ActionExecuter: ' . $actionLabel . ' done');
 		//jeśli akcja zwraca cokolwiek, automatycznie jest to content
 		if ($actionContent !== null) {
 			\Mmi\App\FrontController::getInstance()->getView()
@@ -104,7 +104,7 @@ class ActionPerformer {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('module');
 		//brak w strukturze
 		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-			throw new NotFoundException('Action not found: ' . $actionLabel);
+			throw new NotFoundException('Component not found: ' . $actionLabel);
 		}
 		//ustawienie requestu w widoku
 		\Mmi\App\FrontController::getInstance()->getView()->setRequest($request);

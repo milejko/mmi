@@ -11,7 +11,7 @@
 namespace Mmi\App;
 
 class ErrorHandler {
-
+	
 	/**
 	 * Obsługuje błędy, ostrzeżenia
 	 * @param string $errno numer błędu
@@ -23,6 +23,26 @@ class ErrorHandler {
 	 */
 	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
 		throw new Exception($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
+	}
+	
+	/**
+	 * Handler zamknięcia aplikacji
+	 */
+	public static function shutdownHandler() {
+		//bez błędów
+		if (null === $error = error_get_last()) {
+			//logowanie długości wykonania
+			LoggerHelper::getLogger()->addDebug('[' . round(\Mmi\App\Profiler::elapsed(), 4) . '] ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri, ['\Mmi\App\ErrorHandler\ShutdownHandler']);
+			return;
+		}
+		//pobranie odpowiedzi z front kontrolera
+		$response = \Mmi\App\FrontController::getInstance()->getResponse();
+		//wysłanie błędu
+		$response->setCodeError()
+			->setContent(self::_rawErrorResponse($response, $error['message'], $error['file'] . ' [' . $error['line'] . ']'))
+			->send();
+		//logowanie emergency
+		LoggerHelper::getLogger()->addEmergency($error['message']);
 	}
 
 	/**
@@ -38,8 +58,7 @@ class ErrorHandler {
 			//brak bufora - tworzenie
 			ob_start();
 		}
-		//logowanie błędu
-		\Mmi\App\ExceptionLogger::log($exception);
+		self::_logException($exception);
 		$response = \Mmi\App\FrontController::getInstance()->getResponse();
 		try {
 			//widok
@@ -53,9 +72,8 @@ class ErrorHandler {
 			}
 			//błąd z prezentacją HTML
 			$response->setCodeError()
-				->setContent($view->setPlaceholder('content', \Mmi\Mvc\ActionPerformer::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
-					->renderLayout('mmi', 'index'))
-				->send();
+				->setContent($view->setPlaceholder('content', \Mmi\Mvc\ActionHelper::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
+					->renderLayout('mmi', 'index'))->send();
 			return true;
 		} catch (\Exception $e) {
 			//domyślna prezentacja błędów
@@ -71,34 +89,43 @@ class ErrorHandler {
 	 */
 	private static function _sendRawResponse(\Mmi\Http\Response $response, \Exception $exception) {
 		$response->setCodeError()
-			->setContent(self::_rawErrorResponse($response, $exception))
+			->setContent(self::_rawErrorResponse($response, $exception->getMessage(), $exception->getTraceAsString()))
 			->send();
 	}
-
+	
 	/**
 	 * Zwraca sformatowany błąd dla danego typu odpowiedzi
 	 * @param \Mmi\Http\Response $response obiekt odpowiedzi
-	 * @param \Exception $e wyjątek
+	 * @param string $title
+	 * @param string $body
 	 * @return mixed
 	 */
-	private static function _rawErrorResponse(\Mmi\Http\Response $response, \Exception $e) {
+	private static function _rawErrorResponse(\Mmi\Http\Response $response, $title, $body) {
 		switch ($response->getType()) {
 			//typy HTML
 			case 'htm':
 			case 'html':
 			case 'shtml':
-				return '<html><body><h1>' . $e->getMessage() . '</h1>' . nl2br($e->getTraceAsString()) . '</body></html>';
+				return '<html><body><h1>' . $title . '</h1>' . nl2br($body) . '</body></html>';
 			//plaintext
 			case 'txt':
-				return $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+				return $title . "\n" . $body . "\n";
 			//json
 			case 'json':
 				return json_encode([
 					'status' => 500,
-					'error' => $e->getMessage(),
-					'exception' => $e->getTraceAsString(),
+					'error' => $title,
+					'exception' => $body,
 				]);
 		}
+	}
+	
+	private static function _logException(\Exception $exception) {
+		if ($exception instanceof \Mmi\App\Exception) {
+			LoggerHelper::getLogger()->addRecord($exception->getCode(), $exception->getExtendedMessage());
+		}
+		//logowanie błędu
+		LoggerHelper::getLogger()->addError($exception->getMessage());
 	}
 
 }

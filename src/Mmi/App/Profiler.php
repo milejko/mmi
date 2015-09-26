@@ -83,7 +83,7 @@ class Profiler {
 		}
 		return static::$_data;
 	}
-
+	
 	/**
 	 * Zwraca ilość zdarzeń w profilerze
 	 * @return int

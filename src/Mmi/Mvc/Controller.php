@@ -126,10 +126,18 @@ class Controller {
 
 	/**
 	 * Pobiera helper akcji
-	 * @return \Mmi\Mvc\ActionPerformer
+	 * @return \Mmi\Mvc\ActionHelper
 	 */
 	public final function getHelperAction() {
-		return Action\Helper\Action::getInstance();
+		return ActionHelper::getInstance();
+	}
+	
+	/**
+	 * Pobiera helper logowania
+	 * @return \Mmi\App\LoggerHelper
+	 */
+	public final function getHelperLogger() {
+		return \Mmi\App\LoggerHelper::getInstance();
 	}
 
 	/**
@@ -170,7 +178,7 @@ class Controller {
 		if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
 			$this->view->setTranslate($cachedTranslate);
 			$translate->setLocale($lang);
-			\Mmi\App\Profiler::event('Init cached translate: [' . $lang . '] ' . $module);
+			\Mmi\App\Profiler::event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
 			return;
 		}
 
@@ -183,7 +191,7 @@ class Controller {
 			$cache->save($translate, $key);
 		}
 
-		\Mmi\App\Profiler::event('Init Translate: [' . $lang . '] ' . $module);
+		\Mmi\App\Profiler::event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
 	}
 
 }
