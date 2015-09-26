@@ -9,7 +9,8 @@
  */
 
 namespace Mmi\App;
-use Monolog\Logger;
+use \Mmi\Logger\LoggerHelper;
+use \Monolog\Logger;
 
 class Profiler {
 
@@ -52,6 +53,7 @@ class Profiler {
 			'time' => $time,
 			'elapsed' => $elapsed,
 		];
+		LoggerHelper::getLogger()->addDebug('[' . round($elapsed, 5) . '] Event: ' . $name);
 		static::$_elapsed += $elapsed;
 		static::$_counter++;
 	}

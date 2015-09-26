@@ -18,26 +18,20 @@ class Bootstrap implements BootstrapInterface {
 	/**
 	 * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
 	 */
-	public function __construct($env) {
-		//inicjalizacja konfiguracji aplikacji
-		$config = $this->_setupConfiguration($env);
-
-		//ustawienie cache
-		$this->_setupCache($config);
-
+	public function __construct() {
 		//inicjalizacja tłumaczeń
-		$translate = $this->_setupTranslate($config);
+		$translate = $this->_setupTranslate();
 
 		//inicjalizacja routera
-		$router = $this->_setupRouter($config, $translate->getLocale());
+		$router = $this->_setupRouter($translate->getLocale());
 
 		//inicjalizacja widoku
-		$view = $this->_setupView($config, $translate, $router);
+		$view = $this->_setupView($translate, $router);
 
 		//ustawienie front controllera, sesji i bazy danych
-		$this->_setupFrontController($config, $router, $view)
-			->_setupSession($config)
-			->_setupDatabase($config);
+		$this->_setupFrontController($router, $view)
+			->_setupSession()
+			->_setupDatabase();
 	}
 
 	/**
@@ -48,56 +42,27 @@ class Bootstrap implements BootstrapInterface {
 	}
 
 	/**
-	 * Ładowanie konfiguracji
-	 * @return \Mmi\App\KernelConfig
-	 */
-	protected function _setupConfiguration($env) {
-		//konwencja nazwy konfiguracji
-		$configClassName = '\App\KernelConfig' . $env;
-		//konfiguracja dla danego środowiska
-		$config = new $configClassName();
-		//konfiguracja profilera aplikacji
-		//\Mmi\App\Profiler::setEnabled($config->debug);
-		//ustawienie lokalizacji
-		date_default_timezone_set($config->timeZone);
-		ini_set('default_charset', $config->charset);
-		return $config;
-	}
-
-	/**
-	 * Ustawianie bufora
-	 * @return \Mmi\App\Bootstrap
-	 */
-	protected function _setupCache(\Mmi\App\KernelConfig $config) {
-		\App\Registry::$config = $config;
-		\App\Registry::$cache = new \Mmi\Cache\Cache($config->cache);
-		return $this;
-	}
-
-	/**
 	 * Inicjalizacja routera
-	 * @param \Mmi\App\KernelConfig $config
 	 * @param string $language
 	 * @return \Mmi\Mvc\Router
 	 */
-	protected function _setupRouter(\Mmi\App\KernelConfig $config, $language) {
-		return new \Mmi\Mvc\Router($config->router, $language);
+	protected function _setupRouter($language) {
+		return new \Mmi\Mvc\Router(\App\Registry::$config->router, $language);
 	}
 
 	/**
 	 * Inicjalizacja tłumaczeń
-	 * @param \Mmi\App\KernelConfig $config
 	 * @return \Mmi\Translate
 	 */
-	protected function _setupTranslate(\Mmi\App\KernelConfig $config) {
-		$defaultLanguage = isset($config->languages[0]) ? $config->languages[0] : null;
+	protected function _setupTranslate() {
+		$defaultLanguage = isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null;
 		$translate = new \Mmi\Translate();
 		$translate->setDefaultLocale($defaultLanguage);
 		$envLang = \Mmi\App\FrontController::getInstance()->getEnvironment()->applicationLanguage;
 		if (null === $envLang) {
 			return $translate;
 		}
-		if (!in_array($envLang, $config->languages)) {
+		if (!in_array($envLang, \App\Registry::$config->languages)) {
 			return $translate;
 		}
 		$translate->setLocale($envLang);
@@ -108,31 +73,30 @@ class Bootstrap implements BootstrapInterface {
 	 * Inicjalizacja sesji
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupSession(\Mmi\App\KernelConfig $config) {
+	protected function _setupSession() {
 		//ustawianie sesji
-		if (!$config->session->name) {
+		if (!\App\Registry::$config->session->name) {
 			return $this;
 		}
 		//ustawia ID sesji jeśli jawnie podana w żądaniu get
 		(null !== ($sid = filter_input(INPUT_GET, 'sessionId', FILTER_DEFAULT))) ? \Mmi\Session\Session::setId($sid) : null;
-		\Mmi\Session\Session::start($config->session);
+		\Mmi\Session\Session::start(\App\Registry::$config->session);
 		return $this;
 	}
 
 	/**
 	 * Ustawianie bazy danych
-	 * @param \Mmi\App\KernelConfig $config
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupDatabase(\Mmi\App\KernelConfig $config) {
+	protected function _setupDatabase() {
 		//połączenie do bazy danych i konfiguracja DAO
-		if ($config->db->driver === null) {
+		if (\App\Registry::$config->db->driver === null) {
 			return $this;
 		}
 		//ustawienie profilera
-		$config->db->profiler = $config->debug;
+		$config->db->profiler = \App\Registry::$config->debug;
 		//uzupełnienie rejestru
-		\App\Registry::$db = \Mmi\Db\Db::factory($config->db);
+		\App\Registry::$db = \Mmi\Db\Db::factory(\App\Registry::$config->db);
 		//wstrzyknięcie do ORM
 		\Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
 		\Mmi\Orm\DbConnector::setCache(\App\Registry::$cache);
@@ -141,12 +105,11 @@ class Bootstrap implements BootstrapInterface {
 
 	/**
 	 * Ustawianie front controllera
-	 * @param \Mmi\App\KernelConfig $config
 	 * @param \Mmi\Mvc\Router $router
 	 * @param \Mmi\Mvc\View $view
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupFrontController(\Mmi\App\KernelConfig $config, \Mmi\Mvc\Router $router, \Mmi\Mvc\View $view) {
+	protected function _setupFrontController(\Mmi\Mvc\Router $router, \Mmi\Mvc\View $view) {
 		//wczytywanie struktury frontu z cache
 		if (null === ($frontStructure = \App\Registry::$cache->load('Mmi-Structure'))) {
 			\App\Registry::$cache->save($frontStructure = \Mmi\App\Structure::getStructure(), 'Mmi-Structure', 0);
@@ -156,9 +119,9 @@ class Bootstrap implements BootstrapInterface {
 		$frontController->setStructure($frontStructure)
 			->setRouter($router)
 			->setView($view)
-			->getResponse()->setDebug($config->debug);
+			->getResponse()->setDebug(\App\Registry::$config->debug);
 		//rejestracja pluginów
-		foreach ($config->plugins as $plugin) {
+		foreach (\App\Registry::$config->plugins as $plugin) {
 			$frontController->registerPlugin(new $plugin());
 		}
 		return $this;
@@ -166,16 +129,15 @@ class Bootstrap implements BootstrapInterface {
 
 	/**
 	 * Inicjalizacja widoku
-	 * @param \Mmi\App\KernelConfig $config
 	 * @param \Mmi\Translate $translate
 	 * @param \Mmi\Mvc\Router $router
 	 * @return \Mmi\Mvc\View
 	 */
-	protected function _setupView(\Mmi\App\KernelConfig $config, \Mmi\Translate $translate, \Mmi\Mvc\Router $router) {
+	protected function _setupView(\Mmi\Translate $translate, \Mmi\Mvc\Router $router) {
 		//konfiguracja widoku
 		$view = new \Mmi\Mvc\View();
 		$view->setCache(\App\Registry::$cache)
-			->setAlwaysCompile($config->compile)
+			->setAlwaysCompile(\App\Registry::$config->compile)
 			->setTranslate($translate)
 			->setBaseUrl($router->getBaseUrl());
 		return $view;

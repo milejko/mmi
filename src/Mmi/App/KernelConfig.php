@@ -14,7 +14,7 @@ namespace Mmi\App;
  * Klasa konfiguracji aplikacji
  */
 abstract class KernelConfig {
-
+	
 	/**
 	 * Konfiguracja postawowego cache
 	 * @var \Mmi\Cache\Config
@@ -26,6 +26,12 @@ abstract class KernelConfig {
 	 * @var \Mmi\Db\Config
 	 */
 	public $db;
+
+	/**
+	 * Konfiguracja loggera
+	 * @var \Mmi\Logger\Config
+	 */
+	public $logger;
 
 	/**
 	 * Konfiguracja routera
@@ -97,6 +103,8 @@ abstract class KernelConfig {
 		$this->cache = new \Mmi\Cache\Config();
 		//konfiguracja bazy danych
 		$this->db = new \Mmi\Db\Config();
+		//ustawienia loggera
+		$this->logger = new \Mmi\Logger\Config();
 		//ustawienia routera
 		$this->router = new \Mmi\Mvc\Router\Config();
 		//konfiguracja sesji

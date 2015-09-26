@@ -134,10 +134,10 @@ class Controller {
 	
 	/**
 	 * Pobiera helper logowania
-	 * @return \Mmi\App\LoggerHelper
+	 * @return \Mmi\Logger\LoggerHelper
 	 */
 	public final function getHelperLogger() {
-		return \Mmi\App\LoggerHelper::getInstance();
+		return \Mmi\Logger\LoggerHelper::getInstance();
 	}
 
 	/**

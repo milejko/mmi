@@ -16,7 +16,7 @@ interface BootstrapInterface {
 	 * Parametryzowanie bootstrapa
 	 * @param string $env nazwa środowiska
 	 */
-	public function __construct($env);
+	public function __construct();
 
 	/**
 	 * Uruchomienie bootstrapa

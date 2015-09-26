@@ -14,7 +14,7 @@ abstract class Registry {
 
 	/**
 	 * Konfiguracja aplikacji
-	 * @var \App\Config\App
+	 * @var \App\KernelConfig
 	 */
 	public static $config;
 

@@ -15,10 +15,6 @@ namespace Mmi\App;
  */
 class BootstrapCli extends \Mmi\App\Bootstrap {
 
-	public function __construct($env) {
-		parent::__construct($env);
-	}
-
 	/**
 	 * Uruchamianie bootstrapa - brak front kontrolera
 	 */

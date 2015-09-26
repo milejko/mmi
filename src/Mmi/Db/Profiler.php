@@ -39,7 +39,7 @@ class Profiler extends \Mmi\App\Profiler {
 	 */
 	public static function eventQuery(\PDOStatement $statement, array $bind, $elapsed = null) {
 		//profiler wyłączony
-		if (\Mmi\App\LoggerHelper::getLevel() > Logger::DEBUG) {
+		if (\Mmi\Logger\LoggerHelper::getLevel() > Logger::DEBUG) {
 			return;
 		}
 		//zapytanie SQL bez bindów

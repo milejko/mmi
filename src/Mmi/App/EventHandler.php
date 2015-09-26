@@ -9,6 +9,7 @@
  */
 
 namespace Mmi\App;
+use Mmi\Logger\LoggerHelper;
 use Monolog\Logger;
 
 class EventHandler {
@@ -31,9 +32,8 @@ class EventHandler {
 	 */
 	public static function shutdownHandler() {
 		//bez błędów
-		if (null === $error = error_get_last()) {
-			//logowanie danych debuggerów
-			return self::_logDebugData();
+		if (null == $error = error_get_last()) {
+			return;
 		}
 		//pobranie odpowiedzi z front kontrolera
 		$response = \Mmi\App\FrontController::getInstance()->getResponse();
@@ -132,15 +132,4 @@ class EventHandler {
 		LoggerHelper::getLogger()->addError($exception->getMessage() . ' ' . $exception->getTraceAsString());
 	}
 	
-	/**
-	 * Loguje dane z debuggera
-	 */
-	private static function _logDebugData() {
-		if (LoggerHelper::getLevel() > Logger::DEBUG) {
-			return;
-		}
-		LoggerHelper::getLogger()->addDebug('[' . round(Profiler::elapsed(), 5) . '] all events - ' . FrontController::getInstance()->getEnvironment()->requestUri);
-		LoggerHelper::getLogger()->addDebug('[' . round(\Mmi\Db\Profiler::elapsed(), 5) . '] sql queries - ' . FrontController::getInstance()->getEnvironment()->requestUri);
-	}
-
 }

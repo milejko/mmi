@@ -10,6 +10,9 @@
 
 namespace Mmi\App {
 
+	/**
+	 * Klasa jądra aplikacji
+	 */
 	class Kernel {
 
 		/**
@@ -22,12 +25,14 @@ namespace Mmi\App {
 		 * Konstruktor
 		 */
 		public function __construct($bootstrapName = '\Mmi\App\Bootstrap', $env = 'DEV') {
-			//pierwszy event profilera
+			//ładownie konfiguracji
+			$this->_initConfig($env);
 			\Mmi\App\Profiler::event('App\Kernel: application startup');
 			//inicjalizacja aplikacji
 			$this->_initEventHandler()
 				->_initPaths()
-				->_initEncoding();
+				->_initEncoding()
+				->_initCache();
 			\Mmi\App\Profiler::event('App\Kernel: bootstrap startup');
 			//tworzenie instancji bootstrapa
 			$this->_bootstrap = new $bootstrapName($env);
@@ -47,6 +52,21 @@ namespace Mmi\App {
 		}
 
 		/**
+		 * Ustawia konfigurację
+		 * @param string $env
+		 * @return \Mmi\App\Kernel
+		 */
+		protected function _initConfig($env) {
+			//konwencja nazwy konfiguracji
+			$configClassName = '\App\KernelConfig' . $env;
+			//konfiguracja dla danego środowiska
+			\App\Registry::$config = new $configClassName();
+			//ustawianie konfiguracji loggera
+			\Mmi\Logger\LoggerHelper::setConfig(\App\Registry::$config->logger);
+			return $this;
+		}
+
+		/**
 		 * Ustawia kodowanie na UTF-8
 		 * @return \Mmi\App\Kernel
 		 */
@@ -58,6 +78,9 @@ namespace Mmi\App {
 			//locale
 			setlocale(LC_ALL, 'pl_PL.utf-8');
 			setlocale(LC_NUMERIC, 'en_US.UTF-8');
+			//ustawienie lokalizacji
+			date_default_timezone_set(\App\Registry::$config->timeZone);
+			ini_set('default_charset', \App\Registry::$config->charset);
 			return $this;
 		}
 
@@ -71,6 +94,15 @@ namespace Mmi\App {
 			define('PUBLIC_PATH', BASE_PATH . '/web');
 			//dane
 			define('DATA_PATH', BASE_PATH . '/var/data');
+			return $this;
+		}
+
+		/**
+		 * Ustawianie bufora
+		 * @return \Mmi\App\Bootstrap
+		 */
+		protected function _initCache() {
+			\App\Registry::$cache = new \Mmi\Cache\Cache(\App\Registry::$config->cache);
 			return $this;
 		}
 
