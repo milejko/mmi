@@ -9,6 +9,7 @@
  */
 
 namespace Mmi\Db;
+use Monolog\Logger;
 
 class Profiler extends \Mmi\App\Profiler {
 
