@@ -50,7 +50,7 @@ abstract class KernelConfig {
 	 * @var boolean
 	 */
 	public $debug = false;
-
+	
 	/**
 	 * Bezwarunkowa kompilacja
 	 * @var boolean

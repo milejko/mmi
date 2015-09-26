@@ -9,8 +9,9 @@
  */
 
 namespace Mmi\App;
+use Monolog\Logger;
 
-class ErrorHandler {
+class EventHandler {
 	
 	/**
 	 * Obsługuje błędy, ostrzeżenia
@@ -31,9 +32,8 @@ class ErrorHandler {
 	public static function shutdownHandler() {
 		//bez błędów
 		if (null === $error = error_get_last()) {
-			//logowanie długości wykonania
-			LoggerHelper::getLogger()->addDebug('[' . round(\Mmi\App\Profiler::elapsed(), 4) . '] ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri, ['\Mmi\App\ErrorHandler\ShutdownHandler']);
-			return;
+			//logowanie danych debuggerów
+			return self::_logDebugData();
 		}
 		//pobranie odpowiedzi z front kontrolera
 		$response = \Mmi\App\FrontController::getInstance()->getResponse();
@@ -120,12 +120,27 @@ class ErrorHandler {
 		}
 	}
 	
+	/**
+	 * Logowanie wyjątków
+	 * @param \Exception $exception
+	 */
 	private static function _logException(\Exception $exception) {
 		if ($exception instanceof \Mmi\App\Exception) {
-			LoggerHelper::getLogger()->addRecord($exception->getCode(), $exception->getExtendedMessage());
+			LoggerHelper::getLogger()->addRecord($exception->getCode(), $exception->getMessage() . ' ' . $exception->getTraceAsString());
 		}
 		//logowanie błędu
-		LoggerHelper::getLogger()->addError($exception->getMessage());
+		LoggerHelper::getLogger()->addError($exception->getMessage() . ' ' . $exception->getTraceAsString());
+	}
+	
+	/**
+	 * Loguje dane z debuggera
+	 */
+	private static function _logDebugData() {
+		if (LoggerHelper::getLevel() > Logger::DEBUG) {
+			return;
+		}
+		LoggerHelper::getLogger()->addDebug('[' . round(Profiler::elapsed(), 5) . '] all events - ' . FrontController::getInstance()->getEnvironment()->requestUri);
+		LoggerHelper::getLogger()->addDebug('[' . round(\Mmi\Db\Profiler::elapsed(), 5) . '] sql queries - ' . FrontController::getInstance()->getEnvironment()->requestUri);
 	}
 
 }

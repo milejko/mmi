@@ -37,7 +37,7 @@ class LoggerHelper {
 	 * Ścieżka logowania
 	 * @var type 
 	 */
-	protected static $_path = \BASE_PATH . '/var/log/application.log';
+	protected static $_path = \BASE_PATH . '/var/log/app.log';
 	
 	/**
 	 * Handler logowania
@@ -55,7 +55,7 @@ class LoggerHelper {
 	 * Ustawia poziom logowania
 	 * @param integer $level
 	 */
-	public static function setLoglevel($level) {
+	public static function setLevel($level) {
 		self::$_level = Logger::DEBUG;
 		switch ($level) {
 			case Logger::DEBUG:
@@ -69,6 +69,14 @@ class LoggerHelper {
 				self::$_level = $level;
 			break;
 		}
+	}
+	
+	/**
+	 * Zwraca poziom logowania
+	 * @return integer
+	 */
+	public static function getLevel() {
+		return self::$_level;
 	}
 	
 	/**
@@ -113,7 +121,7 @@ class LoggerHelper {
 			return self::$_loggerInstance;
 		}
 		//konfiguruje loggera
-		return self::_configureLogger();
+		return self::$_loggerInstance = self::_configureLogger();
 	}
 	
 	/**
@@ -121,21 +129,23 @@ class LoggerHelper {
 	 * @return \Mmi\App\LoggerHelper
 	 */
 	private static function _configureLogger() {
-		self::$_loggerInstance = new Logger(self::$_name);
+		//nowy obiekt loggera
+		$logger = new Logger(self::$_name);
+		//wybór handlera
 		switch (self::$_handler) {
 			case 'stream':
-				self::$_loggerInstance->pushHandler(new Handler\StreamHandler(self::$_path, self::$_level));
+				$logger->pushHandler(new Handler\StreamHandler(self::$_path, self::$_level));
 				break;
 			case 'gelf':
-				self::$_loggerInstance->pushHandler(new Handler\GelfHandler(new \Gelf\Publisher(self::$_path)));
+				$logger->pushHandler(new Handler\GelfHandler(new \Gelf\Publisher(self::$_path)));
 				break;
 			case 'slack':
-				self::$_loggerInstance->pushHandler(new Handler\SlackHandler(self::$_token, self::$_path, self::$_name, false, '😂', self::$_level));
+				$logger->pushHandler(new Handler\SlackHandler(self::$_token, self::$_path, self::$_name, false, '😂', self::$_level));
 				break;
 			default:
 				throw new Exception('Unknown logger handler');
 		}
-		return self::$_loggerInstance;
+		return $logger;
 	}
 
 }

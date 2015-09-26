@@ -266,7 +266,6 @@ class FrontController {
 		\Mmi\App\Profiler::event('App\FrontController: plugins pre-dispatch');
 		//wybór i uruchomienie kontrolera akcji
 		$content = \Mmi\Mvc\ActionHelper::getInstance()->action($this->getRequest()->toArray());
-
 		//wpięcie dla pluginów po dispatchu
 		$this->postDispatch();
 		\Mmi\App\Profiler::event('App\FrontController: plugins post-dispatch');

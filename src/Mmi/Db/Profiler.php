@@ -31,12 +31,6 @@ class Profiler extends \Mmi\App\Profiler {
 	protected static $_elapsed = 0;
 
 	/**
-	 * Profiler włączony
-	 * @var boolean
-	 */
-	protected static $_enabled = true;
-
-	/**
 	 * Event query
 	 * @param PDOStatement $statement
 	 * @param array $bind
@@ -44,7 +38,7 @@ class Profiler extends \Mmi\App\Profiler {
 	 */
 	public static function eventQuery(\PDOStatement $statement, array $bind, $elapsed = null) {
 		//profiler wyłączony
-		if (!static::$_enabled) {
+		if (LoggerHelper::getLevel() > Logger::DEBUG) {
 			return;
 		}
 		//zapytanie SQL bez bindów

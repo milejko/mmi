@@ -25,7 +25,7 @@ namespace Mmi\App {
 			//pierwszy event profilera
 			\Mmi\App\Profiler::event('App\Kernel: application startup');
 			//inicjalizacja aplikacji
-			$this->_initErrorHandler()
+			$this->_initEventHandler()
 				->_initPaths()
 				->_initEncoding();
 			\Mmi\App\Profiler::event('App\Kernel: bootstrap startup');
@@ -75,16 +75,16 @@ namespace Mmi\App {
 		}
 
 		/**
-		 * Ustawia handler błędów
+		 * Ustawia handler zdarzeń PHP
 		 * @return \Mmi\App\Kernel
 		 */
-		protected function _initErrorHandler() {
+		protected function _initEventHandler() {
 			//funkcja  zamknięcia aplikacji
-			register_shutdown_function(['\Mmi\App\ErrorHandler', 'shutdownHandler']);
+			register_shutdown_function(['\Mmi\App\EventHandler', 'shutdownHandler']);
 			//domyślne przechwycenie wyjątków
-			set_exception_handler(['\Mmi\App\ErrorHandler', 'exceptionHandler']);
+			set_exception_handler(['\Mmi\App\EventHandler', 'exceptionHandler']);
 			//domyślne przechwycenie błędów
-			set_error_handler(['\Mmi\App\ErrorHandler', 'errorHandler']);
+			set_error_handler(['\Mmi\App\EventHandler', 'errorHandler']);
 			return $this;
 		}
 

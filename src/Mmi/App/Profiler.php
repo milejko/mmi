@@ -9,6 +9,7 @@
  */
 
 namespace Mmi\App;
+use Monolog\Logger;
 
 class Profiler {
 
@@ -31,18 +32,13 @@ class Profiler {
 	protected static $_elapsed = 0;
 
 	/**
-	 * Profiler włączony
-	 * @var boolean
-	 */
-	protected static $_enabled = true;
-
-	/**
 	 * Dodaje zdarzenie
 	 * @param string $name nazwa
 	 * @param string $elapsed opcjonalnie czas operacji
 	 */
 	public static function event($name, $elapsed = null) {
-		if (!static::$_enabled) {
+		//profiler wyłączony
+		if (LoggerHelper::getLevel() > Logger::DEBUG) {
 			return;
 		}
 		$time = microtime(true);
@@ -58,15 +54,6 @@ class Profiler {
 		];
 		static::$_elapsed += $elapsed;
 		static::$_counter++;
-	}
-
-	/**
-	 * Włącza profiler
-	 * @param boolean $enabled
-	 * @return boolean
-	 */
-	public static final function setEnabled($enabled = true) {
-		return (static::$_enabled = $enabled);
 	}
 
 	/**
