@@ -23,6 +23,9 @@
 		"monolog/monolog": "~1.11",
 		"graylog2/gelf-php": "~1.0"
 	},
+	"require-dev": {
+		"php-console/php-console"
+	},
 	"autoload": {
 		"psr-4": {
 			"Mmi\\": "src/Mmi",
