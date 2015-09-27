@@ -29,9 +29,9 @@ abstract class KernelConfig {
 
 	/**
 	 * Konfiguracja loggera
-	 * @var \Mmi\Logger\Config
+	 * @var \Mmi\Log\Config
 	 */
-	public $logger;
+	public $log;
 
 	/**
 	 * Konfiguracja routera
@@ -104,7 +104,7 @@ abstract class KernelConfig {
 		//konfiguracja bazy danych
 		$this->db = new \Mmi\Db\Config();
 		//ustawienia loggera
-		$this->logger = new \Mmi\Logger\Config();
+		$this->log = new \Mmi\Log\Config();
 		//ustawienia routera
 		$this->router = new \Mmi\Mvc\Router\Config();
 		//konfiguracja sesji

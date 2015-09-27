@@ -62,7 +62,7 @@ namespace Mmi\App {
 			//konfiguracja dla danego środowiska
 			\App\Registry::$config = new $configClassName();
 			//ustawianie konfiguracji loggera
-			\Mmi\Logger\LoggerHelper::setConfig(\App\Registry::$config->logger);
+			\Mmi\Log\LoggerHelper::setConfig(\App\Registry::$config->log);
 			return $this;
 		}
 

@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-use Mmi\Logger\LoggerHelper;
+use Mmi\Log\LoggerHelper;
 
 /**
  * Klasa obsługi zdażeń PHP
@@ -40,12 +40,10 @@ class EventHandler {
 		}
 		//pobranie odpowiedzi z front kontrolera
 		$response = \Mmi\App\FrontController::getInstance()->getResponse();
-		//wysłanie błędu
-		$response->setCodeError()
-			->setContent(self::_rawErrorResponse($response, $error['message'], $error['file'] . ' [' . $error['line'] . ']'))
-			->send();
-		//logowanie emergency
+		//logowanie błędu Emergency
 		LoggerHelper::getLogger()->addEmergency($error['message']);
+		//wysyłanie odpowiedzi
+		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $error['message'], $error['file'] . ' [' . $error['line'] . ']')));
 	}
 
 	/**
@@ -61,6 +59,7 @@ class EventHandler {
 			//brak bufora - tworzenie
 			ob_start();
 		}
+		//logowanie wyjątku
 		self::_logException($exception);
 		$response = \Mmi\App\FrontController::getInstance()->getResponse();
 		try {
@@ -70,30 +69,34 @@ class EventHandler {
 			//błąd bez layoutu lub nie HTML
 			if ($view->isLayoutDisabled() || $response->getType() != 'html') {
 				//domyślna prezentacja błędów
-				self::_sendRawResponse($response, $exception);
-				return true;
+				return self::_sendRawResponse($response, $exception);
 			}
 			//błąd z prezentacją HTML
-			$response->setCodeError()
-				->setContent($view->setPlaceholder('content', \Mmi\Mvc\ActionHelper::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
-					->renderLayout('mmi', 'index'))->send();
-			return true;
+			return self::_sendResponse($response->setContent($view->setPlaceholder('content', \Mmi\Mvc\ActionHelper::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
+						->renderLayout('mmi', 'index')));
 		} catch (\Exception $e) {
 			//domyślna prezentacja błędów
-			self::_sendRawResponse($response, $exception);
+			return self::_sendRawResponse($response, $exception);
 		}
+	}
+
+	/**
+	 * Wysyłanie contentu
+	 * @param \Mmi\Http\Response $response
+	 */
+	private static function _sendResponse(\Mmi\Http\Response $response) {
+		$response->setCodeError()
+			->send();
 		return true;
 	}
 
 	/**
-	 * 
+	 * Wysyła surowy content
 	 * @param type $response
 	 * @param Exception $exception
 	 */
 	private static function _sendRawResponse(\Mmi\Http\Response $response, \Exception $exception) {
-		$response->setCodeError()
-			->setContent(self::_rawErrorResponse($response, $exception->getMessage(), $exception->getTraceAsString()))
-			->send();
+		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), $exception->getTraceAsString())));
 	}
 
 	/**
@@ -128,12 +131,13 @@ class EventHandler {
 	 * @param \Exception $exception
 	 */
 	private static function _logException(\Exception $exception) {
+		//logowanie wyjątku aplikacyjnego
 		if ($exception instanceof \Mmi\App\Exception) {
 			LoggerHelper::getLogger()->addRecord($exception->getCode(), $exception->getMessage() . ' ' . $exception->getTraceAsString());
 			return;
 		}
-		//logowanie błędu
-		LoggerHelper::getLogger()->addError($exception->getMessage() . ' ' . $exception->getTraceAsString());
+		//logowanie pozostałych wyjątków
+		LoggerHelper::getLogger()->addAlert($exception->getMessage() . ' ' . $exception->getTraceAsString());
 	}
 
 }

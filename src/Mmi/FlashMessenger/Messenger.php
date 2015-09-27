@@ -8,9 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi;
+namespace Mmi\FlashMessenger;
 
-class FlashMessenger {
+/**
+ * Klasa wiadomości
+ */
+class Messenger {
 
 	/**
 	 * Przestrzeń w sesji zarezerwowana dla wiadomości
@@ -37,7 +40,7 @@ class FlashMessenger {
 	 * @param string $message wiadomość
 	 * @param bool $type true - pozytywna, false - negatywna, brak - neutralna
 	 * @param array $vars zmienne
-	 * @return \Mmi\FlashMessenger
+	 * @return \Mmi\FlashMessenger\Messenger
 	 */
 	public function addMessage($message, $type = null, array $vars = []) {
 		if ($type) {
@@ -80,7 +83,7 @@ class FlashMessenger {
 
 	/**
 	 * Czyści wiadomości
-	 * @return \Mmi\FlashMessenger
+	 * @return \Mmi\FlashMessenger\Messenger
 	 */
 	public function clearMessages() {
 		self::$_session->unsetAll();

@@ -8,8 +8,11 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\App;
+namespace Mmi\Mvc;
 
+/**
+ * Klasa struktury MVC
+ */
 class Structure {
 
 	/**
@@ -24,7 +27,7 @@ class Structure {
 			'filter' => [],
 			'validator' => []
 		];
-		foreach (\Mmi\App\StructureParser::getModules() as $module) {
+		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			$components = array_merge_recursive(self::_parseModule($module), $components);
 		}
 		return $components;

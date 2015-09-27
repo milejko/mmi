@@ -23,7 +23,7 @@ class Deployer {
 		//wyłączenie cache
 		\App\Registry::$config->cache->active = false;
 		//iteracja po modułach aplikacji
-		foreach (\Mmi\App\StructureParser::getModules() as $module) {
+		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			//moduł nie zawiera incrementali
 			if (!file_exists($module . '/Resource/incremental/' . \App\Registry::$config->db->driver)) {
 				continue;

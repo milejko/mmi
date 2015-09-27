@@ -121,17 +121,17 @@ class Controller {
 
 	/**
 	 * Pobiera helper messengera
-	 * @return \Mmi\FlashMessenger
+	 * @return \Mmi\FlashMessenger\Messenger
 	 */
-	public final function getHelperMessenger() {
-		return new \Mmi\FlashMessenger();
+	public final function getMessengerHelper() {
+		return new \Mmi\Messenger\FlashMessenger();
 	}
 
 	/**
 	 * Pobiera helper akcji
 	 * @return \Mmi\Mvc\ActionHelper
 	 */
-	public final function getHelperAction() {
+	public final function getActionHelper() {
 		return ActionHelper::getInstance();
 	}
 	
@@ -139,8 +139,8 @@ class Controller {
 	 * Pobiera helper logowania
 	 * @return \Mmi\Logger\LoggerHelper
 	 */
-	public final function getHelperLogger() {
-		return \Mmi\Logger\LoggerHelper::getLogger();
+	public final function getLogger() {
+		return \Mmi\Log\LoggerHelper::getLogger();
 	}
 
 	/**

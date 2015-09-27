@@ -112,7 +112,7 @@ class Bootstrap implements BootstrapInterface {
 	protected function _setupFrontController(\Mmi\Mvc\Router $router, \Mmi\Mvc\View $view) {
 		//wczytywanie struktury frontu z cache
 		if (null === ($frontStructure = \App\Registry::$cache->load('Mmi-Structure'))) {
-			\App\Registry::$cache->save($frontStructure = \Mmi\App\Structure::getStructure(), 'Mmi-Structure', 0);
+			\App\Registry::$cache->save($frontStructure = \Mmi\Mvc\Structure::getStructure(), 'Mmi-Structure', 0);
 		}
 		//inicjalizacja frontu
 		$frontController = \Mmi\App\FrontController::getInstance();

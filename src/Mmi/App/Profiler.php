@@ -9,7 +9,7 @@
  */
 
 namespace Mmi\App;
-use \Mmi\Logger\LoggerHelper;
+use \Mmi\Log\LoggerHelper;
 use \Monolog\Logger;
 
 class Profiler {

@@ -8,8 +8,11 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\App;
+namespace Mmi\Mvc;
 
+/**
+ * Klasa parsera struktury MVC
+ */
 class StructureParser {
 
 	/**

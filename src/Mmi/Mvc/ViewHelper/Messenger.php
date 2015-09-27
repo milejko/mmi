@@ -17,7 +17,7 @@ class Messenger extends HelperAbstract {
 	 * @return string
 	 */
 	public function messenger() {
-		$messenger = new \Mmi\FlashMessenger();
+		$messenger = new \Mmi\FlashMessenger\Messenger();
 		if (!$messenger->hasMessages()) {
 			return;
 		}

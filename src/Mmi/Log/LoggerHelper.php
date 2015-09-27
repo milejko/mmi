@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Logger;
+namespace Mmi\Log;
 
 use Monolog\Logger;
 use Monolog\Handler;
