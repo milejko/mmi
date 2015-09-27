@@ -24,7 +24,7 @@
 		"graylog2/gelf-php": "~1.0"
 	},
 	"require-dev": {
-		"php-console/php-console": "~1.0"
+		"php-console/php-console": "~3.1"
 	},
 	"autoload": {
 		"psr-4": {
