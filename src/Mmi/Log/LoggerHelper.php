@@ -82,6 +82,9 @@ class LoggerHelper {
 			case 'slack':
 				$logger->pushHandler(new Handler\SlackHandler(self::$_config->token, self::$_config->path, self::$_config->name, false, '😂', self::$_config->level));
 				break;
+			case 'console':
+				$logger->pushHandler(new Handler\PHPConsoleHandler([], null, self::$_config->level));
+				break;
 			default:
 				throw new Exception('Unknown handler');
 		}
