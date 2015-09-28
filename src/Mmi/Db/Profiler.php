@@ -10,6 +10,7 @@
 
 namespace Mmi\Db;
 use Monolog\Logger;
+use Mmi\Log\LoggerHelper;
 
 class Profiler extends \Mmi\App\Profiler {
 
@@ -39,7 +40,7 @@ class Profiler extends \Mmi\App\Profiler {
 	 */
 	public static function eventQuery(\PDOStatement $statement, array $bind, $elapsed = null) {
 		//profiler wyłączony
-		if (\Mmi\Logger\LoggerHelper::getLevel() > Logger::DEBUG) {
+		if (LoggerHelper::getLevel() > Logger::DEBUG) {
 			return;
 		}
 		//zapytanie SQL bez bindów
