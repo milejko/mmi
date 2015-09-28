@@ -123,7 +123,7 @@ class Controller {
 	 * Pobiera helper messengera
 	 * @return \Mmi\FlashMessenger\Messenger
 	 */
-	public final function getMessengerHelper() {
+	public final function getMessenger() {
 		return new \Mmi\Messenger\FlashMessenger();
 	}
 
