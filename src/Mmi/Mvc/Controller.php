@@ -124,7 +124,7 @@ class Controller {
 	 * @return \Mmi\FlashMessenger\Messenger
 	 */
 	public final function getMessenger() {
-		return new \Mmi\Messenger\FlashMessenger();
+		return new \Mmi\FlashMessenger\Messenger();
 	}
 
 	/**
