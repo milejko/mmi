@@ -10,6 +10,9 @@
 
 namespace Mmi\Cache\Backend;
 
+/**
+ * Backend Apc
+ */
 class Apc implements BackendInterface {
 
 	/**
@@ -20,7 +23,7 @@ class Apc implements BackendInterface {
 
 	/**
 	 * Kostruktor
-	 * @param array $params parametry
+	 * @param \Mmi\Cache\Config $config konfiguracja
 	 */
 	public function __construct(\Mmi\Cache\Config $config) {
 		$this->_namespace = crc32(BASE_PATH);

@@ -10,6 +10,9 @@
 
 namespace Mmi\Session;
 
+/**
+ * Klasa konfiguracji sesji
+ */
 class Config {
 
 	/**
