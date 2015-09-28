@@ -35,8 +35,8 @@ class Config {
 
 	/**
 	 * Dodaje element nawigatora
-	 * @param int $id klucz
-	 * @return \Mmi\Navigation\Config\Element
+	 * @param \Mmi\Navigation\Config\Element $element
+	 * @return \Mmi\Navigation\Config
 	 */
 	public function addElement(\Mmi\Navigation\Config\Element $element) {
 		$this->_data[$element->getId()] = $element;

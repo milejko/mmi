@@ -77,24 +77,6 @@ class Part {
 	}
 
 	/**
-	 * Rozszerzenia PHP
-	 * @return string
-	 */
-	public static function getExtensionHtml() {
-		$html = '';
-		$extensions = get_loaded_extensions();
-		//sortowanie rozszerzeń
-		asort($extensions);
-		$i = 0;
-		//pętla po rozszerzeniach PHP
-		foreach ($extensions as $ext) {
-			$i++;
-			$html .= $i . '. ' . $ext . '<br />';
-		}
-		return $html;
-	}
-	
-	/**
 	 * Kolorowanie wartości procentowej (0-100) w odcieniach czerwieni
 	 * @param integer $percent
 	 * @return string hex koloru

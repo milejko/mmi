@@ -46,7 +46,14 @@ class LoggerHelper {
 		if (!self::$_config) {
 			throw new Exception('Configuration not loaded');
 		}
-		return self::$_config->level;
+		$minLevel = Logger::EMERGENCY;
+		//iteracja po configach
+		foreach (self::$_config as $config) {
+			if ($config->getLevel() < $minLevel) {
+				$minLevel = $config->getLevel();
+			}
+		}
+		return $minLevel;
 	}
 	
 	/**
@@ -66,29 +73,37 @@ class LoggerHelper {
 	 * @return \Mmi\Logger\LoggerHelper
 	 */
 	private static function _configureLogger() {
+		//brak konfiguracji
 		if (!self::$_config) {
 			throw new Exception('Configuration not loaded');
 		}
 		//nowy obiekt loggera
-		$logger = new Logger(self::$_config->name);
+		$logger = new Logger(self::$_config->getName());
+		//iteracja po konfiguracjach instancji
+		foreach (self::$_config as $config) {
+			self::_configureInstance($config, $logger);
+		}
+		return $logger;
+	}
+	
+	private static function _configureInstance(ConfigInstance $config, Logger $logger) {
 		//wybór handlera
-		switch (self::$_config->handler) {
+		switch ($config->getHandler()) {
 			case 'stream':
-				$logger->pushHandler(new Handler\StreamHandler(self::$_config->path, self::$_config->level));
+				$logger->pushHandler(new Handler\StreamHandler($config->getPath(), $config->getLevel()));
 				break;
 			case 'gelf':
-				$logger->pushHandler(new Handler\GelfHandler(new \Gelf\Publisher(self::$_config->path)));
+				$logger->pushHandler(new Handler\GelfHandler(new \Gelf\Publisher($config->getPath())));
 				break;
 			case 'slack':
-				$logger->pushHandler(new Handler\SlackHandler(self::$_config->token, self::$_config->path, self::$_config->name, false, '😂', self::$_config->level));
+				$logger->pushHandler(new Handler\SlackHandler($config->getToken(), $config->getPath(), $logger->getName(), true, null, $config->getLevel()));
 				break;
 			case 'console':
-				$logger->pushHandler(new Handler\PHPConsoleHandler([], null, self::$_config->level));
+				$logger->pushHandler(new Handler\PHPConsoleHandler([], null, $config->getLevel()));
 				break;
 			default:
 				throw new Exception('Unknown handler');
 		}
-		return $logger;
 	}
 
 }

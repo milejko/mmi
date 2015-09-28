@@ -126,10 +126,6 @@ class ResponseDebugger {
 		$html .= '<p style="margin: 0px;">PHP precompiler</p>';
 		$html .= self::PRE_OPEN . ResponseDebugger\Opcache::getHtml() . '</pre>';
 		
-		//dołączanie rozszerzeń
-		$html .= '<p style="margin: 0px">Loaded extensions:</p>';
-		$html .= self::PRE_OPEN . ResponseDebugger\Part::getExtensionHtml() . '</pre>';
-
 		$html .= '</td><td style="vertical-align: top; padding-left: 5px;">';
 
 		//zmienne requesta

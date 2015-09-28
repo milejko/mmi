@@ -9,42 +9,64 @@
  */
 
 namespace Mmi\Log;
-use Monolog\Logger;
 
 /**
  * Klasa konfiguracji loggera
+ * 
+ * @method ConfigInstance next()
+ * @method ConfigInstance current()
+ * @method ConfigInstance rewind()
  */
-class Config {
+class Config extends \Mmi\DataObject {
+
+	/**
+	 * Indeks elementów
+	 * @var integer
+	 */
+	public $_index = 0;
 
 	/**
 	 * Nazwa loggera
 	 * @var string
 	 */
-	public $name = 'App';
-	
+	public $_name = 'App';
+
 	/**
-	 * Poziom logowania
-	 * @var integer
+	 * Dodaje element nawigatora
+	 * @param ConfigElement $element
+	 * @return \Mmi\Log\Config
 	 */
-	public $level = Logger::WARNING;
-	
+	public function addInstance(ConfigInstance $element) {
+		$this->_data[$this->_index++] = $element;
+		return $this;
+	}
+
 	/**
-	 * Ścieżka logowania
-	 * @var string
+	 * Zablokowany setter
+	 * @param string $key
+	 * @param mixed $value
+	 * @throws Exception
 	 */
-	public $path = \BASE_PATH . '/var/log/app.log';
-	
+	public function __set($key, $value) {
+		throw new Exception('Unable to set: {' . $key . '} to value = ' . $value);
+	}
+
 	/**
-	 * Handler logowania
-	 * @var type 
+	 * Nazwa loggera
+	 * @param string $name
+	 * @return \Mmi\Log\Config
 	 */
-	public $handler = 'stream';
-	
+	public function setName($name) {
+		$this->_name = $name;
+		return $this;
+	}
+
 	/**
-	 * Token usługi
-	 * wymagany tylko w handlerze
-	 * @var string
+	 * Pobiera nazwę loggera
+	 * @return string
 	 */
-	public $token;
-	
+	public function getName() {
+		return $this->_name;
+	}
+
 }
