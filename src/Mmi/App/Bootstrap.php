@@ -25,11 +25,8 @@ class Bootstrap implements BootstrapInterface {
 		//inicjalizacja routera
 		$router = $this->_setupRouter($translate->getLocale());
 
-		//inicjalizacja widoku
-		$view = $this->_setupView($translate, $router);
-
 		//ustawienie front controllera, sesji i bazy danych
-		$this->_setupFrontController($router, $view)
+		$this->_setupFrontController($router, $this->_setupView($translate, $router))
 			->_setupSession()
 			->_setupDatabase();
 	}
@@ -55,18 +52,21 @@ class Bootstrap implements BootstrapInterface {
 	 * @return \Mmi\Translate
 	 */
 	protected function _setupTranslate() {
-		$defaultLanguage = isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null;
 		$translate = new \Mmi\Translate();
-		$translate->setDefaultLocale($defaultLanguage);
+		//domyślny język
+		$translate->setDefaultLocale(isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null);
+		//język ze zmiennej środowiskowej
 		$envLang = \Mmi\App\FrontController::getInstance()->getEnvironment()->applicationLanguage;
 		if (null === $envLang) {
+			//zwrot translate z domyślnym locale
 			return $translate;
 		}
+		//brak języka ze zmiennej środowiskowej
 		if (!in_array($envLang, \App\Registry::$config->languages)) {
 			return $translate;
 		}
-		$translate->setLocale($envLang);
-		return $translate;
+		//zwrot translate z ustawieniem locale
+		return $translate->setLocale($envLang);
 	}
 
 	/**
@@ -74,12 +74,13 @@ class Bootstrap implements BootstrapInterface {
 	 * @return \Mmi\App\Bootstrap
 	 */
 	protected function _setupSession() {
-		//ustawianie sesji
+		//brak sesji
 		if (!\App\Registry::$config->session->name) {
 			return $this;
 		}
 		//ustawia ID sesji jeśli jawnie podana w żądaniu get
 		(null !== ($sid = filter_input(INPUT_GET, 'sessionId', FILTER_DEFAULT))) ? \Mmi\Session\Session::setId($sid) : null;
+		//uruchomienie sesji
 		\Mmi\Session\Session::start(\App\Registry::$config->session);
 		return $this;
 	}
@@ -99,6 +100,7 @@ class Bootstrap implements BootstrapInterface {
 		\App\Registry::$db = \Mmi\Db\Db::factory(\App\Registry::$config->db);
 		//wstrzyknięcie do ORM
 		\Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
+		//wstrzyknięcie cache do ORM
 		\Mmi\Orm\DbConnector::setCache(\App\Registry::$cache);
 		return $this;
 	}
@@ -116,6 +118,7 @@ class Bootstrap implements BootstrapInterface {
 		}
 		//inicjalizacja frontu
 		$frontController = \Mmi\App\FrontController::getInstance();
+		//konfiguracja frontu
 		$frontController->setStructure($frontStructure)
 			->setRouter($router)
 			->setView($view)
@@ -134,13 +137,13 @@ class Bootstrap implements BootstrapInterface {
 	 * @return \Mmi\Mvc\View
 	 */
 	protected function _setupView(\Mmi\Translate $translate, \Mmi\Mvc\Router $router) {
-		//konfiguracja widoku
+		//powołanie widoku
 		$view = new \Mmi\Mvc\View();
-		$view->setCache(\App\Registry::$cache)
+		//ustawienie widoku
+		return $view->setCache(\App\Registry::$cache)
 			->setAlwaysCompile(\App\Registry::$config->compile)
 			->setTranslate($translate)
 			->setBaseUrl($router->getBaseUrl());
-		return $view;
 	}
 
 }
