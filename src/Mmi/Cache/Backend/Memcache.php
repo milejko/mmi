@@ -10,6 +10,9 @@
 
 namespace Mmi\Cache\Backend;
 
+/**
+ * Backend memcache
+ */
 class Memcache implements BackendInterface {
 
 	/**
@@ -32,7 +35,7 @@ class Memcache implements BackendInterface {
 
 	/**
 	 * Ustawia obiekt Memcache
-	 * @param array $params parametry
+	 * @param \Mmi\Cache\Config $config konfiguracja
 	 */
 	public function __construct(\Mmi\Cache\Config $config) {
 		//@TODO: przenieść namespace do konfiguracji
