@@ -73,7 +73,7 @@ class EventHandler {
 			}
 			//błąd z prezentacją HTML
 			return self::_sendResponse($response->setContent($view->setPlaceholder('content', \Mmi\Mvc\ActionHelper::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
-						->renderLayout('mmi', 'index')));
+							->renderLayout('mmi', 'index')));
 		} catch (\Exception $e) {
 			//domyślna prezentacja błędów
 			return self::_sendRawResponse($response, $exception);
@@ -133,11 +133,22 @@ class EventHandler {
 	private static function _logException(\Exception $exception) {
 		//logowanie wyjątku aplikacyjnego
 		if ($exception instanceof \Mmi\App\Exception) {
-			LoggerHelper::getLogger()->addRecord($exception->getCode(), $exception->getMessage() . ' ' . $exception->getTraceAsString());
+			LoggerHelper::getLogger()->addRecord($exception->getCode(), self::_formatException($exception));
 			return;
 		}
 		//logowanie pozostałych wyjątków
-		LoggerHelper::getLogger()->addAlert($exception->getMessage() . ' ' . $exception->getTraceAsString());
+		LoggerHelper::getLogger()->addAlert(self::_exceptionToMessage($exception));
+	}
+
+	/**
+	 * Formatuje obiekt wyjątku do pojedynczej wiadomości
+	 * @param \Exception $exception
+	 * @return string
+	 */
+	private static function _formatException(\Exception $exception) {
+		return str_replace(realpath(BASE_PATH), '', \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' (' . $exception->getMessage() . ') @' .
+			$exception->getFile() . '(' . $exception->getLine() . ') ' .
+			$exception->getTraceAsString());
 	}
 
 }

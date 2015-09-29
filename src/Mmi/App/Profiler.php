@@ -12,6 +12,9 @@ namespace Mmi\App;
 use \Mmi\Log\LoggerHelper;
 use \Monolog\Logger;
 
+/**
+ * Klasa profilera aplikacji
+ */
 class Profiler {
 
 	/**
@@ -45,13 +48,13 @@ class Profiler {
 	 */
 	public static function event($name, $elapsed = null) {
 		//profiler wyłączony
-		if (LoggerHelper::getLevel() > Logger::DEBUG) {
+		if (LoggerHelper::getLevel() != Logger::DEBUG) {
 			return;
 		}
+		//znacznik czasu
 		$time = microtime(true);
-		if (!self::$_runtimeStamp) {
-			self::$_runtimeStamp = substr(md5($time . rand(0, 10000)), 6, 6);
-		}
+		//obliczanie timestampu uruchomienia
+		self::$_runtimeStamp = !self::$_runtimeStamp ? substr(md5($time . rand(0, 10000)), 6, 6) : self::$_runtimeStamp;
 		if ($elapsed === null && static::$_counter > 0) {
 			$elapsed = $time - static::$_data[static::$_counter - 1]['time'];
 		} elseif ($elapsed === null) {
@@ -62,7 +65,7 @@ class Profiler {
 			'time' => $time,
 			'elapsed' => $elapsed,
 		];
-		LoggerHelper::getLogger()->addDebug('{' . self::$_runtimeStamp . '} [' . number_format($elapsed, 6) . 's] ' . $name);
+		LoggerHelper::getLogger()->addDebug('{' . self::$_runtimeStamp . '} (' . number_format($elapsed, 6) . 's) ' . $name);
 		static::$_elapsed += $elapsed;
 		static::$_counter++;
 	}
@@ -72,6 +75,7 @@ class Profiler {
 	 * @return array
 	 */
 	public static final function get() {
+		//iteracja po danych
 		foreach (static::$_data as $key => $item) {
 			if (static::$_elapsed == 0) {
 				static::$_data[$key]['percent'] = 0;
