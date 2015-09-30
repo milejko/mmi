@@ -145,9 +145,7 @@ abstract class PdoAbstract {
 	 */
 	public function connect() {
 		//jeśli profiler włączony
-		if ($this->_config->profiler) {
-			\Mmi\App\FrontController::getInstance()->getProfiler()->event('CONNECT WITH: ' . get_called_class(), 0);
-		}
+		\Mmi\App\FrontController::getInstance()->getProfiler()->event(get_called_class() . ': connect', 0);
 
 		//nowy obiekt PDO do odczytu danych
 		$this->_downstreamPdo = new \PDO(
@@ -243,9 +241,7 @@ abstract class PdoAbstract {
 			throw new \Mmi\Db\Exception(get_called_class() . ': ' . $error . ' --- ' . $sql);
 		}
 		//jeśli profiler włączony, dodanie eventu
-		if ($this->_config->profiler) {
-			\Mmi\App\FrontController::getInstance()->getProfiler()->eventQuery($statement, $bind, microtime(true) - $start);
-		}
+		\Mmi\App\FrontController::getInstance()->getProfiler()->eventQuery($statement, $bind, microtime(true) - $start);
 		return $statement;
 	}
 
