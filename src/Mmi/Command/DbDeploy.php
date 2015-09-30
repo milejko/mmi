@@ -22,10 +22,9 @@ class DbDeploy extends CommandAbstract {
 	 * Uruchomienie deployera
 	 */
 	public function run() {
-		ob_end_flush();
 		(new \Mmi\Db\Deployer())->deploy();
 	}
 	
 }
 
-new DbDeploy($argv[1]);
+new DbDeploy(isset($argv[1]) ? $argv[1] : null);
