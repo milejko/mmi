@@ -9,7 +9,11 @@
  */
 
 namespace Mmi\Mvc;
+use Mmi\App\FrontController;
 
+/**
+ * Helper akcji
+ */
 class ActionHelper {
 
 	/**
@@ -73,15 +77,15 @@ class ActionHelper {
 		$actionLabel = $controllerRequest->getModuleName() . ':' . $controllerRequest->getControllerName() . ':' . $controllerRequest->getActionName();
 		//sprawdzenie ACL
 		if (!$this->_checkAcl($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName())) {
-			\Mmi\App\Profiler::event('Mvc\ActionExecuter: ' . $actionLabel . ' blocked');
+			FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' blocked');
 			return;
 		}
 		//wywołanie akcji
 		$actionContent = $this->_invokeAction($controllerRequest, $actionLabel);
-		\Mmi\App\Profiler::event('Mvc\ActionExecuter: ' . $actionLabel . ' done');
+		FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' done');
 		//jeśli akcja zwraca cokolwiek, automatycznie jest to content
 		if ($actionContent !== null) {
-			\Mmi\App\FrontController::getInstance()->getView()
+			FrontController::getInstance()->getView()
 				->setLayoutDisabled()
 				->setRequest($frontRequest);
 			return $actionContent;

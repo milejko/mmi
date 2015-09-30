@@ -10,6 +10,8 @@
 
 namespace Mmi\Http\ResponseDebugger;
 
+use Mmi\App\FrontController;
+
 /**
  * Klasa danych częściowych panelu deweloperskiego
  */
@@ -44,24 +46,6 @@ class Part {
 	}
 
 	/**
-	 * Profiler DB
-	 * @return string
-	 */
-	public static function getDbHtml() {
-		if (\Mmi\Db\Profiler::count() == 0) {
-			return 'No SQL queries.';
-		}
-		$html = '';
-		$i = 0;
-		//pętla po profilerze DB
-		foreach (\Mmi\Db\Profiler::get() as $query) {
-			$i++;
-			$html .= $i . '. (<strong style="color: #' . self::_colorifyPercent($query['percent']) . '!important;">' . round($query['elapsed'], 4) . 's</strong>) - ' . Colorify::colorify($query['name']) . '<br />';
-		}
-		return $html;
-	}
-
-	/**
 	 * Profiler
 	 * @return string
 	 */
@@ -69,7 +53,7 @@ class Part {
 		$percentSum = 0;
 		$html = '';
 		//pętla po profilerze
-		foreach (\Mmi\App\Profiler::get() as $event) {
+		foreach (FrontController::getInstance()->getProfiler()->get() as $event) {
 			$percentSum += $event['percent'];
 			$html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; min-width: 320px;">' . $event['name'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
 		}

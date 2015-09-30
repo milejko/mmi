@@ -47,7 +47,7 @@ class Pgsql extends PdoAbstract {
 	public function connect() {
 		//jeśli profiler włączony
 		if ($this->_config->profiler) {
-			\Mmi\Db\Profiler::event('CONNECT WITH: ' . get_called_class(), 0);
+			\Mmi\App\FrontController::getInstance()->getProfiler()->event('CONNECT WITH: ' . get_called_class(), 0);
 		}
 
 		//domyślny port

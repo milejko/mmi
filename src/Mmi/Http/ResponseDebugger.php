@@ -10,6 +10,8 @@
 
 namespace Mmi\Http;
 
+use Mmi\App\FrontController;
+
 /**
  * Klasa panelu debugowania aplikacji
  */
@@ -24,7 +26,7 @@ class ResponseDebugger {
 	 * Konstruktor - modyfikuje response o dane debbugera
 	 */
 	public function __construct() {
-		$response = \Mmi\App\FrontController::getInstance()->getResponse();
+		$response = FrontController::getInstance()->getResponse();
 		//odpowiedź nie jest znakowa
 		if (!is_string($response->getContent())) {
 			return;
@@ -66,7 +68,7 @@ class ResponseDebugger {
 	 * @return string
 	 */
 	protected function _getElapsed() {
-		return round(\Mmi\App\Profiler::elapsed(), 4) . 's';
+		return round(FrontController::getInstance()->getProfiler()->elapsed(), 4) . 's';
 	}
 
 	/**
@@ -114,18 +116,14 @@ class ResponseDebugger {
 		$html .= '<p style="margin: 0px;">Configuration:</p>';
 		$html .= self::PRE_OPEN . ResponseDebugger\Part::getConfigHtml() . '</pre>';
 
-		//profiler DB
-		$html .= '<p style="margin: 0px;">SQL queries: <b>' . \Mmi\Db\Profiler::count() . '</b>, elapsed time: <b>' . round(\Mmi\Db\Profiler::elapsed(), 4) . 's </b></p>';
-		$html .= self::PRE_OPEN_BREAK . ResponseDebugger\Part::getDbHtml() . '</pre>';
-
 		//profiler aplikacji
 		$html .= '<p style="margin: 0px;">PHP Profiler: </p>';
 		$html .= self::PRE_OPEN . ResponseDebugger\Part::getProfilerHtml() . '</pre>';
-		
+
 		//opcache lub APC
 		$html .= '<p style="margin: 0px;">PHP precompiler</p>';
 		$html .= self::PRE_OPEN . ResponseDebugger\Opcache::getHtml() . '</pre>';
-		
+
 		$html .= '</td><td style="vertical-align: top; padding-left: 5px;">';
 
 		//zmienne requesta

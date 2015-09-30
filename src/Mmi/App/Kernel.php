@@ -27,22 +27,23 @@ namespace Mmi\App {
 		public function __construct($bootstrapName = '\Mmi\App\Bootstrap', $env = 'DEV') {
 			//ładownie konfiguracji
 			$this->_initConfig($env);
-			\Mmi\App\Profiler::event('App\Kernel: application startup');
+			$profiler = FrontController::getInstance()->getProfiler();
+			$profiler->event('App\Kernel: application startup');
 			//inicjalizacja aplikacji
 			$this->_initEventHandler()
 				->_initPaths()
 				->_initEncoding()
 				->_initCache();
-			\Mmi\App\Profiler::event('App\Kernel: bootstrap startup');
+			$profiler->event('App\Kernel: bootstrap startup');
 			//tworzenie instancji bootstrapa
 			$this->_bootstrap = new $bootstrapName($env);
-			\Mmi\App\Profiler::event('App\Kernel: bootstrap done');
+			$profiler->event('App\Kernel: bootstrap done');
 			//bootstrap nie implementuje właściwego interfeace'u
 			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {
 				throw new Exception('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
 			}
 		}
-
+		
 		/**
 		 * Uruchomienie aplikacji
 		 * @param \Mmi\Bootstrap $bootstrap

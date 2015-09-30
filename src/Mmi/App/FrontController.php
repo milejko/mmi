@@ -38,12 +38,18 @@ class FrontController {
 	 * @var \Mmi\Mvc\Router
 	 */
 	private $_router;
-
+	
 	/**
 	 * Środowisko uruchomieniowe
 	 * @var \Mmi\App\Environment
 	 */
 	private $_environment;
+	
+	/**
+	 * Profiler
+	 * @var \Mmi\App\Profiler 
+	 */
+	private $_profiler;
 
 	/**
 	 * Widok
@@ -73,6 +79,8 @@ class FrontController {
 		$this->_response = new \Mmi\Http\Response();
 		//nowe środowisko
 		$this->_environment = new \Mmi\App\Environment();
+		//profiler aplikacji
+		$this->_profiler = new \Mmi\App\Profiler();
 	}
 
 	/**
@@ -89,22 +97,22 @@ class FrontController {
 	}
 
 	/**
-	 * Ustawia strukturę frontu
-	 * @param array $structure
-	 * @return \Mmi\App\FrontController
-	 */
-	public function setStructure(array $structure = []) {
-		$this->_structure = $structure;
-		return $this;
-	}
-
-	/**
 	 * Dodanie pluginu
 	 * @param \Mmi\App\FrontControllerPluginAbstract $plugin
 	 * @return \Mmi\App\FrontController
 	 */
 	public function registerPlugin(\Mmi\App\FrontControllerPluginAbstract $plugin) {
 		$this->_plugins[] = $plugin;
+		return $this;
+	}
+
+	/**
+	 * Ustawia strukturę frontu
+	 * @param array $structure
+	 * @return \Mmi\App\FrontController
+	 */
+	public function setStructure(array $structure = []) {
+		$this->_structure = $structure;
 		return $this;
 	}
 
@@ -185,6 +193,22 @@ class FrontController {
 	}
 
 	/**
+	 * Zwraca zarejestrowane pluginy
+	 * @return array
+	 */
+	public function getPlugins() {
+		return $this->_plugins;
+	}
+	
+	/**
+	 * Zwraca profiler
+	 * @return \Mmi\App\Profiler
+	 */
+	public function getProfiler() {
+		return $this->_profiler;
+	}
+
+	/**
 	 * Pobranie widoku
 	 * @return \Mmi\Mvc\View
 	 */
@@ -214,71 +238,19 @@ class FrontController {
 	}
 
 	/**
-	 * Uruchamianie metody routeStartup na zarejestrowanych pluginach
+	 * Uruchamianie
 	 */
-	public function routeStartup() {
-		foreach ($this->_plugins as $plugin) {
-			//wykonywanie routeStartup() na kolejnych pluginach
-			$plugin->routeStartup($this->_request);
-		}
-	}
-
-	/**
-	 * Uruchamianie metody preDispatch na zarejestrowanych pluginach
-	 */
-	public function preDispatch() {
-		foreach ($this->_plugins as $plugin) {
-			//wykonywanie preDispatch() na kolejnych pluginach
-			$plugin->preDispatch($this->_request);
-		}
-	}
-
-	/**
-	 * Uruchamianie metody postDispatch na zarejestrowanych pluginach
-	 */
-	public function postDispatch() {
-		foreach ($this->_plugins as $plugin) {
-			//wykonywanie postDispatch() na kolejnych pluginach
-			$plugin->postDispatch($this->_request);
-		}
-	}
-
-	/**
-	 * Dispatcher
-	 */
-	public function dispatch() {
-		//wpięcie dla pluginów przed routingiem
-		$this->routeStartup();
-		\Mmi\App\Profiler::event('App\FrontController: plugins route startup');
-
-		//stosowanie routingu jeśli request jest pusty
-		if (!$this->_request->getModuleName()) {
-			$this->getRouter()->processRequest($this->_request);
-		}
-
-		//new relic
-		extension_loaded('newrelic') ? newrelic_name_transaction($this->_request->module . '/' . $this->_request->controller . '/' . $this->_request->action) : null;
-
-		\Mmi\App\Profiler::event('App\FrontController: routing applied');
-
-		//wpięcie dla pluginów przed dispatchem
-		$this->preDispatch();
-		\Mmi\App\Profiler::event('App\FrontController: plugins pre-dispatch');
-		//wybór i uruchomienie kontrolera akcji
-		$content = \Mmi\Mvc\ActionHelper::getInstance()->action($this->getRequest()->toArray());
-		//wpięcie dla pluginów po dispatchu
-		$this->postDispatch();
-		\Mmi\App\Profiler::event('App\FrontController: plugins post-dispatch');
-
+	public function run() {
+		//dispatcher
+		$content = (new \Mmi\Mvc\Dispatcher())->dispatch();
 		//jeśli layout nie jest wyłączony
 		if (!$this->getView()->isLayoutDisabled()) {
 			//renderowanie layoutu
 			$content = $this->getView()
-				->setRequest($this->_request)
+				->setRequest($this->getRequest())
 				->setPlaceholder('content', $content)
-				->renderLayout($this->_request->__get('module'), $this->_request->__get('controller'));
+				->renderLayout($this->getRequest()->__get('module'), $this->getRequest()->__get('controller'));
 		}
-
 		//wysłanie odpowiedzi
 		$this->getResponse()
 			->setContent($content)

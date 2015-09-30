@@ -42,7 +42,7 @@ class Sqlite extends PdoAbstract {
 	 */
 	public function connect() {
 		if ($this->_config->profiler) {
-			\Mmi\Db\Profiler::event('CONNECT WITH: ' . get_class($this), 0);
+			\Mmi\App\FrontController::getInstance()->getProfiler()->event('CONNECT WITH: ' . get_class($this), 0);
 		}
 		//pdo do zapisu
 		$this->_upstreamPdo = new \PDO(

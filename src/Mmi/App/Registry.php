@@ -17,7 +17,7 @@ abstract class Registry {
 	 * @var \App\KernelConfig
 	 */
 	public static $config;
-
+	
 	/**
 	 * Obiekt bufora
 	 * @var \Mmi\Cache\Cache

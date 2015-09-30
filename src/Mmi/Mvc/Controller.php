@@ -10,6 +10,8 @@
 
 namespace Mmi\Mvc;
 
+use Mmi\App\FrontController;
+
 /**
  * Klasa kontrolera akcji
  */
@@ -134,7 +136,7 @@ class Controller {
 	public final function getActionHelper() {
 		return ActionHelper::getInstance();
 	}
-	
+
 	/**
 	 * Pobiera helper logowania
 	 * @return \Mmi\Logger\LoggerHelper
@@ -142,13 +144,21 @@ class Controller {
 	public final function getLogger() {
 		return \Mmi\Log\LoggerHelper::getLogger();
 	}
+	
+	/**
+	 * Pobiera profiler
+	 * @return type
+	 */
+	public final function getProfiler() {
+		return FrontController::getInstance()->getProfiler();
+	}
 
 	/**
 	 * Konfiguruje kontroler akcji
 	 */
 	private function _init() {
 		//przypięcie widoku
-		$this->view = \Mmi\App\FrontController::getInstance()->getView();
+		$this->view = FrontController::getInstance()->getView();
 
 		//inicjalizacja tłumaczeń
 		$this->_initTranslaction($this->_request->__get('module'), $this->_request->__get('lang'));
@@ -162,7 +172,7 @@ class Controller {
 	 */
 	private function _initTranslaction($module, $lang) {
 		//pobranie struktury translatora
-		$structure = \Mmi\App\FrontController::getInstance()->getStructure('translate');
+		$structure = FrontController::getInstance()->getStructure('translate');
 		//brak tłumaczenia w strukturze
 		if (!isset($structure[$module][$lang])) {
 			return;
@@ -181,7 +191,7 @@ class Controller {
 		if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
 			$this->view->setTranslate($cachedTranslate);
 			$translate->setLocale($lang);
-			\Mmi\App\Profiler::event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
+			FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
 			return;
 		}
 
@@ -194,7 +204,7 @@ class Controller {
 			$cache->save($translate, $key);
 		}
 
-		\Mmi\App\Profiler::event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
+		FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
 	}
 
 }

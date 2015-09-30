@@ -10,6 +10,9 @@
 
 namespace Mmi\Db\Adapter\Pdo;
 
+/**
+ * Abstrakcyjna klasa adaptera PDO
+ */
 abstract class PdoAbstract {
 	
 	private static $_bindIndex = 100000;
@@ -143,7 +146,7 @@ abstract class PdoAbstract {
 	public function connect() {
 		//jeśli profiler włączony
 		if ($this->_config->profiler) {
-			\Mmi\Db\Profiler::event('CONNECT WITH: ' . get_called_class(), 0);
+			\Mmi\App\FrontController::getInstance()->getProfiler()->event('CONNECT WITH: ' . get_called_class(), 0);
 		}
 
 		//nowy obiekt PDO do odczytu danych
@@ -241,7 +244,7 @@ abstract class PdoAbstract {
 		}
 		//jeśli profiler włączony, dodanie eventu
 		if ($this->_config->profiler) {
-			\Mmi\Db\Profiler::eventQuery($statement, $bind, microtime(true) - $start);
+			\Mmi\App\FrontController::getInstance()->getProfiler()->eventQuery($statement, $bind, microtime(true) - $start);
 		}
 		return $statement;
 	}

@@ -9,6 +9,7 @@
  */
 
 namespace Mmi\App;
+
 use \Mmi\Log\LoggerHelper;
 use \Monolog\Logger;
 
@@ -21,32 +22,32 @@ class Profiler {
 	 * Dane profilera
 	 * @var array
 	 */
-	protected static $_data = [];
+	protected $_data = [];
 
 	/**
 	 * Licznik
 	 * @var int
 	 */
-	protected static $_counter = 0;
+	protected $_counter = 0;
 
 	/**
 	 * Licznik czasu
 	 * @var int
 	 */
-	protected static $_elapsed = 0;
-	
+	protected $_elapsed = 0;
+
 	/**
 	 * Odcisk wywołania
 	 * @var string
 	 */
-	protected static $_runtimeStamp;
+	protected $_runtimeStamp;
 
 	/**
 	 * Dodaje zdarzenie
 	 * @param string $name nazwa
 	 * @param string $elapsed opcjonalnie czas operacji
 	 */
-	public static function event($name, $elapsed = null) {
+	public function event($name, $elapsed = null) {
 		//profiler wyłączony
 		if (LoggerHelper::getLevel() != Logger::DEBUG) {
 			return;
@@ -54,52 +55,84 @@ class Profiler {
 		//znacznik czasu
 		$time = microtime(true);
 		//obliczanie timestampu uruchomienia
-		self::$_runtimeStamp = !self::$_runtimeStamp ? substr(md5($time . rand(0, 10000)), 6, 6) : self::$_runtimeStamp;
-		if ($elapsed === null && static::$_counter > 0) {
-			$elapsed = $time - static::$_data[static::$_counter - 1]['time'];
+		$this->_runtimeStamp = !$this->_runtimeStamp ? substr(md5($time . rand(0, 10000)), 6, 6) : $this->_runtimeStamp;
+		if ($elapsed === null && $this->_counter > 0) {
+			$elapsed = $time - $this->_data[$this->_counter - 1]['time'];
 		} elseif ($elapsed === null) {
 			$elapsed = 0;
 		}
-		static::$_data[static::$_counter] = [
+		$this->_data[$this->_counter] = [
 			'name' => $name,
 			'time' => $time,
 			'elapsed' => $elapsed,
 		];
-		LoggerHelper::getLogger()->addDebug('{' . self::$_runtimeStamp . '} (' . number_format($elapsed, 6) . 's) ' . $name);
-		static::$_elapsed += $elapsed;
-		static::$_counter++;
+		LoggerHelper::getLogger()->addDebug('{' . $this->_runtimeStamp . '} (' . number_format($elapsed, 6) . 's) ' . $name);
+		$this->_elapsed += $elapsed;
+		$this->_counter++;
+	}
+
+	/**
+	 * Event query
+	 * @param PDOStatement $statement
+	 * @param array $bind
+	 * @param float $elapsed
+	 */
+	public function eventQuery(\PDOStatement $statement, array $bind, $elapsed = null) {
+		//profiler wyłączony
+		if (LoggerHelper::getLevel() > Logger::DEBUG) {
+			return;
+		}
+		//zapytanie SQL bez bindów
+		$sql = $statement->queryString;
+
+		//ustalanie kluczy i wartości
+		$keys = array_keys($bind);
+		$values = array_values($bind);
+		array_walk($values, function (&$v) {
+			$v = '\'' . $v . '\'';
+		});
+		//iteracja po kluczach
+		foreach ($keys as $key => $value) {
+			//zamiana kluczy 
+			if (is_int($value)) {
+				$sql = preg_replace('/\?/', $values[$key], $sql, 1);
+				continue;
+			}
+			$sql = str_replace(':' . trim($value, ':'), $values[$key], $sql);
+		}
+		return $this->event('SQL: ' . $sql, $elapsed);
 	}
 
 	/**
 	 * Pobiera dane z profilera
 	 * @return array
 	 */
-	public static final function get() {
+	public function get() {
 		//iteracja po danych
-		foreach (static::$_data as $key => $item) {
-			if (static::$_elapsed == 0) {
-				static::$_data[$key]['percent'] = 0;
+		foreach ($this->_data as $key => $item) {
+			if ($this->_elapsed == 0) {
+				$this->_data[$key]['percent'] = 0;
 				continue;
 			}
-			static::$_data[$key]['percent'] = 100 * $item['elapsed'] / static::$_elapsed;
+			$this->_data[$key]['percent'] = 100 * $item['elapsed'] / $this->_elapsed;
 		}
-		return static::$_data;
+		return $this->_data;
 	}
-	
+
 	/**
 	 * Zwraca ilość zdarzeń w profilerze
 	 * @return int
 	 */
-	public static final function count() {
-		return static::$_counter;
+	public function count() {
+		return $this->_counter;
 	}
 
 	/**
 	 * Pobiera sumaryczny czas wszystkich zdarzeń
 	 * @return int
 	 */
-	public static final function elapsed() {
-		return static::$_elapsed;
+	public function elapsed() {
+		return $this->_elapsed;
 	}
 
 }

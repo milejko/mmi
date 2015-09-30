@@ -10,6 +10,8 @@
 
 namespace Mmi\Mvc;
 
+use Mmi\App\FrontController;
+
 /**
  * Klasa widoku
  * @method string url(array $params = [], $reset = false, $absolute = false, $https = null, array $unset = [])
@@ -281,7 +283,7 @@ class View extends \Mmi\DataObject {
 		ob_clean();
 		echo $inputBuffer;
 		//zwrot z bufora
-		\Mmi\App\Profiler::event('Mvc\View: ' . $hash . ' rendered');
+		FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $hash . ' rendered');
 		return $data;
 	}
 
@@ -336,7 +338,7 @@ class View extends \Mmi\DataObject {
 		//przechwycenie danych
 		$data = ob_get_contents();
 		ob_clean();
-		\Mmi\App\Profiler::event('Mvc\View: ' . basename($fileName) . ' rendered');
+		FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . basename($fileName) . ' rendered');
 		return $data;
 	}
 

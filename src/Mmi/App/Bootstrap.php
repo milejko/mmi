@@ -38,7 +38,7 @@ class Bootstrap implements BootstrapInterface {
 	 * Uruchomienie bootstrapa skutkuje uruchomieniem front controllera
 	 */
 	public function run() {
-		\Mmi\App\FrontController::getInstance()->dispatch();
+		\Mmi\App\FrontController::getInstance()->run();
 	}
 
 	/**
