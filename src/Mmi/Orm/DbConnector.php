@@ -23,7 +23,7 @@ class DbConnector {
 
 	/**
 	 * Adapter DB
-	 * @var \Mmi\Db\Adapter\Pdo\PdoAbstract
+	 * @var \Mmi\Db\Adapter\PdoAbstract
 	 */
 	protected static $_adapter;
 
@@ -42,12 +42,12 @@ class DbConnector {
 
 	/**
 	 * Pobiera adapter bazodanowy
-	 * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
+	 * @return \Mmi\Db\Adapter\PdoAbstract
 	 */
 	public static final function getAdapter() {
 		//brak lub nieprawidłowy adapter
-		if (!(static::$_adapter instanceof \Mmi\Db\Adapter\Pdo\PdoAbstract)) {
-			throw new \Mmi\Orm\OrmException('Adapter not specified or invalid');
+		if (!(static::$_adapter instanceof \Mmi\Db\Adapter\PdoAbstract)) {
+			throw new OrmException('Adapter not specified or invalid');
 		}
 		//zwrot adaptera
 		return static::$_adapter;
@@ -55,10 +55,10 @@ class DbConnector {
 
 	/**
 	 * Ustawia adapter bazodanowy
-	 * @param \Mmi\Db\Adapter\Pdo\PdoAbstract $adapter
-	 * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
+	 * @param \Mmi\Db\Adapter\PdoAbstract $adapter
+	 * @return \Mmi\Db\Adapter\PdoAbstract
 	 */
-	public static final function setAdapter(\Mmi\Db\Adapter\Pdo\PdoAbstract $adapter) {
+	public static final function setAdapter(\Mmi\Db\Adapter\PdoAbstract $adapter) {
 		return static::$_adapter = $adapter;
 	}
 
