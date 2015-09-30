@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Db\Adapter\Pdo;
+namespace Mmi\Db\Adapter;
 
 class PdoPgsql extends PdoAbstract {
 
