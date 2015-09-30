@@ -9,12 +9,13 @@
  */
 
 namespace Mmi\Orm;
+use Mmi\Db\Adapter\PdoBindHelper;
 
 /**
  * Klasa pola zapytania
  */
 class QueryField {
-
+	
 	/**
 	 * Nazwa pola
 	 * @var string
@@ -29,17 +30,17 @@ class QueryField {
 
 	/**
 	 * Referencja do nadrzędnego zapytania
-	 * @var \Mmi\Orm\Query
+	 * @var Query
 	 */
 	protected $_query;
 
 	/**
 	 * Ustawia parametry pola
-	 * @param \Mmi\Orm\Query $query zapytanie nadrzędne
+	 * @param Query $query zapytanie nadrzędne
 	 * @param string $fieldName nazwa pola
 	 * @param string $logic kwantyfikator łączenia AND lub OR
 	 */
-	public function __construct(\Mmi\Orm\Query $query, $fieldName, $logic = 'AND') {
+	public function __construct(Query $query, $fieldName, $logic = 'AND') {
 		$this->_fieldName = $fieldName;
 		$this->_logic = ($logic == 'OR') ? 'OR' : 'AND';
 		$this->_query = $query;
@@ -49,14 +50,14 @@ class QueryField {
 	 * Magiczne wywołanie metod equalsColumn, greaterThanColumn itp.
 	 * @param string $name
 	 * @param array $params
-	 * @return \Mmi\Orm\Query
-	 * @throws \Mmi\Orm\OrmException
+	 * @return Query
+	 * @throws OrmException
 	 */
 	public final function __call($name, $params) {
 		//znajdowanie 2 podciągów: 1 - nazwa metody, 2 - wartość pola
 		if (!preg_match('/(equalsColumn|notEqualsColumn|greaterThanColumn|lessThanColumn|greaterOrEqualsColumn|lessOrEqualsColumn)([a-zA-Z0-9]+)/', $name, $matches) || !empty($params)) {
 			//brak metody pasującej do wzorca
-			throw new \Mmi\Orm\OrmException('Method not found ' . $name);
+			throw new OrmException('Method not found ' . $name);
 		}
 		//wywołanie metody
 		return $this->{$matches[1]}(lcfirst($matches[2]));
@@ -65,7 +66,7 @@ class QueryField {
 	/**
 	 * Równość
 	 * @param mixed $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function equals($value) {
 		return $this->_prepareQuery($value, '=');
@@ -75,7 +76,7 @@ class QueryField {
 	 * Równość kolumn
 	 * @param string $columnName
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function equalsColumn($columnName, $tableName = null) {
 		return $this->_prepareColumnQuery($columnName, $tableName, '=');
@@ -84,7 +85,7 @@ class QueryField {
 	/**
 	 * Negacja równości
 	 * @param mixed $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function notEquals($value) {
 		return $this->_prepareQuery($value, '<>');
@@ -94,7 +95,7 @@ class QueryField {
 	 * Negacja równości kolumn
 	 * @param string $columnName
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function notEqualsColumn($columnName, $tableName = null) {
 		return $this->_prepareColumnQuery($columnName, $tableName, '<>');
@@ -103,7 +104,7 @@ class QueryField {
 	/**
 	 * Relacja większości
 	 * @param mixed $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function greater($value) {
 		return $this->_prepareQuery($value, '>');
@@ -113,7 +114,7 @@ class QueryField {
 	 * Relacja większości kolumny nad inną
 	 * @param string $columnName
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function greaterThanColumn($columnName, $tableName = null) {
 		return $this->_prepareColumnQuery($columnName, $tableName, '>');
@@ -122,7 +123,7 @@ class QueryField {
 	/**
 	 * Relacja mniejszości
 	 * @param mixed $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function less($value) {
 		return $this->_prepareQuery($value, '<');
@@ -132,7 +133,7 @@ class QueryField {
 	 * Relacja mniejszości kolumny do innej
 	 * @param string $columnName
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function lessThanColumn($columnName, $tableName = null) {
 		return $this->_prepareColumnQuery($columnName, $tableName, '<');
@@ -141,7 +142,7 @@ class QueryField {
 	/**
 	 * Relacja większe-równe
 	 * @param mixed $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function greaterOrEquals($value) {
 		return $this->_prepareQuery($value, '>=');
@@ -151,7 +152,7 @@ class QueryField {
 	 * Relacja większości lub równości kolumny z inną
 	 * @param string $columnName
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function greaterOrEqualsColumn($columnName, $tableName = null) {
 		return $this->_prepareColumnQuery($columnName, $tableName, '>=');
@@ -160,7 +161,7 @@ class QueryField {
 	/**
 	 * Relacja mniejsze-równe
 	 * @param type $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function lessOrEquals($value) {
 		return $this->_prepareQuery($value, '<=');
@@ -170,7 +171,7 @@ class QueryField {
 	 * Relacja mniejszości lub równości kolumny z inną
 	 * @param string $columnName
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function lessOrEqualsColumn($columnName, $tableName = null) {
 		return $this->_prepareColumnQuery($columnName, $tableName, '<=');
@@ -179,7 +180,7 @@ class QueryField {
 	/**
 	 * Porównanie podobieństwa
 	 * @param string $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function like($value) {
 		return $this->_prepareQuery($value, 'LIKE');
@@ -188,7 +189,7 @@ class QueryField {
 	/**
 	 * Porównanie podobieństwa bez wielkości liter
 	 * @param string $value
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function ilike($value) {
 		return $this->_prepareQuery($value, 'ILIKE');
@@ -198,11 +199,11 @@ class QueryField {
 	 * Przygotowuje zapytanie
 	 * @param mixed $value
 	 * @param string $condition
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	protected function _prepareQuery($value, $condition = '=') {
 		//tworzenie binda
-		$bindKey = \Mmi\Db\Adapter\Pdo\PdoAbstract::generateBindKey();
+		$bindKey = PdoBindHelper::generateBindKey();
 		//wartość nie null i nie tabelaryczna
 		if (!is_array($value) && null !== $value) {
 			$this->_query->getQueryCompile()->bind[$bindKey] = $value;
@@ -211,7 +212,7 @@ class QueryField {
 		$this->_initQuery();
 		//przygotowanie wartości null
 		if (null === $value) {
-			$this->_query->getQueryCompile()->where .= \Mmi\Orm\DbConnector::getAdapter()->prepareNullCheck($this->_fieldName, ($condition == '='));
+			$this->_query->getQueryCompile()->where .= DbConnector::getAdapter()->prepareNullCheck($this->_fieldName, ($condition == '='));
 			return $this->_query;
 		}
 		//przygotowanie pustych tabel (kompatybilne tylko z == i <>)
@@ -225,7 +226,7 @@ class QueryField {
 			$fields = '';
 			//bindowanie parametrów
 			foreach ($value as $arg) {
-				$bk = \Mmi\Db\Adapter\Pdo\PdoAbstract::generateBindKey();
+				$bk = PdoBindHelper::generateBindKey();
 				$this->_query->getQueryCompile()->bind[$bk] = $arg;
 				$fields .= ':' . $bk . ', ';
 			}
@@ -235,7 +236,7 @@ class QueryField {
 		}
 		//ilike
 		if ('ILIKE' == $condition) {
-			$this->_query->getQueryCompile()->where .= \Mmi\Orm\DbConnector::getAdapter()->prepareIlike($this->_fieldName) . ' :' . $bindKey;
+			$this->_query->getQueryCompile()->where .= DbConnector::getAdapter()->prepareIlike($this->_fieldName) . ' :' . $bindKey;
 			return $this->_query;
 		}
 		//zwykłe porównanie
@@ -253,7 +254,7 @@ class QueryField {
 		//inicjalizacja zapytania
 		$this->_initQuery();
 		//porównanie z kolumną
-		$this->_query->getQueryCompile()->where .= $this->_fieldName . ' ' . $condition . ' ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable((null === $tableName) ? $this->_query->getTableName() : $tableName) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($columnName);
+		$this->_query->getQueryCompile()->where .= $this->_fieldName . ' ' . $condition . ' ' . DbConnector::getAdapter()->prepareTable((null === $tableName) ? $this->_query->getTableName() : $tableName) . '.' . DbConnector::getAdapter()->prepareField($columnName);
 		return $this->_query;
 	}
 

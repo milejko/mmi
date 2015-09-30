@@ -17,8 +17,6 @@ use Mmi\Db\DbException;
  */
 abstract class PdoAbstract {
 
-	private static $_bindIndex = 100000;
-
 	/**
 	 * Obiekt \PDO do pobierania danych
 	 * @var \PDO
@@ -358,7 +356,7 @@ abstract class PdoAbstract {
 		}
 		//wiązanie parametrów
 		foreach ($data as $key => $value) {
-			$bindKey = self::generateBindKey();
+			$bindKey = PdoBindHelper::generateBindKey();
 			$fields .= $this->prepareField($key) . ' = :' . $bindKey . ', ';
 			$bind[$bindKey] = $value;
 		}
@@ -476,16 +474,6 @@ abstract class PdoAbstract {
 			];
 		}
 		return $associativeMeta;
-	}
-
-	/**
-	 * Zwraca losowy klucz do binda
-	 * @return string
-	 */
-	public static function generateBindKey() {
-		//generowanie kolejnego klucza bind
-		return str_replace([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], self::$_bindIndex++
-		);
 	}
 
 }
