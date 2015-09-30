@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Zrzut zmiennej
+ */
 class Dump extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Dump zmiennej
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

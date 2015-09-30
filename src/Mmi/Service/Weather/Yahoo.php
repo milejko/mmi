@@ -53,7 +53,7 @@ class Yahoo extends WeatherAbstract {
 		$xml = new SimpleXmlElement(file_get_contents($this->_url . intval($woeid)));
 
 		if (strpos(strtolower($xml->channel->description), 'error')) {
-			throw new \Mmi\Service\Exception('No data');
+			throw new \Mmi\Service\ServiceException('No data');
 		}
 
 		$wd = new \Mmi\Service\Weather\Data();

@@ -10,6 +10,6 @@
 
 namespace Mmi\Orm;
 
-class RecordNotFoundException extends \Mmi\App\Exception {
+class RecordNotFoundException extends \Mmi\App\KernelException {
 	
 }

@@ -71,11 +71,11 @@ class Auth {
 	/**
 	 * Zwraca sól
 	 * @return string
-	 * @throws Exception
+	 * @throws SecurityException
 	 */
 	public function getSalt() {
 		if ($this->_salt === null) {
-			throw new Exception('Salt not set, set the proper salt.');
+			throw new SecurityException('Salt not set, set the proper salt.');
 		}
 		return $this->_salt;
 	}
@@ -245,7 +245,7 @@ class Auth {
 		}
 		//zła klasa rekordu
 		if (!$record instanceof \Mmi\Security\AuthRecord) {
-			throw new Exception('Authentication record is not an instance of \Mmi\Security\AuthRecord');
+			throw new SecurityException('Authentication record is not an instance of \Mmi\Security\AuthRecord');
 		}
 		//ustawia autoryzację
 		return $this->_setAuthentication($record);
@@ -281,7 +281,7 @@ class Auth {
 		}
 		//błędny obiekt
 		if (!$record instanceof \Mmi\Security\AuthRecord) {
-			throw new Exception('Authentication result is not an instance of \Mmi\Security\AuthRecord');
+			throw new SecurityException('Authentication result is not an instance of \Mmi\Security\AuthRecord');
 		}
 		//ustawia autoryzację
 		return $this->_setAuthentication($record);

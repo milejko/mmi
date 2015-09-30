@@ -36,7 +36,7 @@ abstract class CommandAbstract {
 	/**
 	 * Obliczanie ścieżki
 	 * @return string
-	 * @throws \Mmi\App\Exception
+	 * @throws \Mmi\App\KernelException
 	 */
 	protected function _setupAutoload() {
 		//dopuszczalne ścieżki /bin ; /src/Module/Tools ; /vendor/name/subname/src/Module/Tools
@@ -51,7 +51,7 @@ abstract class CommandAbstract {
 			return;
 		}
 		//brak autoloadera
-		throw new \Mmi\App\Exception('Autoloader not found');
+		throw new \Mmi\App\KernelException('Autoloader not found');
 	}
 
 	/**

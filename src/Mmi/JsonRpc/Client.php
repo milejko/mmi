@@ -50,12 +50,12 @@ class Client {
 
 		//sprawdzenie nazwy metody
 		if (!is_scalar($method)) {
-			throw new Exception('Incorrect method name');
+			throw new JsonException('Incorrect method name');
 		}
 
 		//walidacja nazwy metody
 		if (!preg_match('/(get|post|put|delete)([a-z0-9\-\_]+)/i', $method, $matches)) {
-			throw new Exception('Method name must start with get, post, put or delete.');
+			throw new JsonException('Method name must start with get, post, put or delete.');
 		}
 
 		//określenie typu żądania i nazwy metody
@@ -84,19 +84,19 @@ class Client {
 		} catch (\Exception $e) {
 			$message = substr($e->getMessage(), 30 + strpos($e->getMessage(), 'HTTP request failed! '));
 			$message = substr($message, 0, strpos($message, '[') - 2);
-			throw new Exception('Service error: ' . $message . '.');
+			throw new JsonException('Service error: ' . $message . '.');
 		}
 		if (!is_object($response)) {
-			throw new Exception('Service response is not a valid JSON-RPC response, RAW response: ' . $rawResponse);
+			throw new JsonException('Service response is not a valid JSON-RPC response, RAW response: ' . $rawResponse);
 		}
 		if (!property_exists($response, 'result')) {
-			throw new Exception('Service response missing field: "result".');
+			throw new JsonException('Service response missing field: "result".');
 		}
 		if (!property_exists($response, 'id')) {
-			throw new Exception('Service response missing field: "id".');
+			throw new JsonException('Service response missing field: "id".');
 		}
 		if ((string) $id != (string) $response->id) {
-			throw new Exception('Invalid response "id".');
+			throw new JsonException('Invalid response "id".');
 		}
 		//błędy zdefiniowane przez serwer
 		if (isset($response->error) && is_object($response->error)) {
@@ -105,12 +105,12 @@ class Client {
 				$errorMessage .= ' ' . $response->error->data->details;
 			}
 			if (isset($response->error->code) && $response->error->code == -10) {
-				throw new DataException($errorMessage);
+				throw new JsonDataException($errorMessage);
 			}
 			if (isset($response->error->code) && $response->error->code == -500) {
-				throw new GeneralException($errorMessage);
+				throw new JsonGeneralException($errorMessage);
 			}
-			throw new Exception($errorMessage);
+			throw new JsonException($errorMessage);
 		}
 		return $response->result;
 	}
@@ -121,7 +121,7 @@ class Client {
 	 */
 	public function getDebugData() {
 		if (!$this->_debug) {
-			throw new Exception('Debugger not enabled');
+			throw new JsonException('Debugger not enabled');
 		}
 		return $this->_debugData;
 	}

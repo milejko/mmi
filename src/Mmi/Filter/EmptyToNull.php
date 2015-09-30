@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Filtr puste do null
+ */
 class EmptyToNull extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zamienia pusty ciąg znaków na null
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

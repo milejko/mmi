@@ -44,7 +44,7 @@ class LoggerHelper {
 	 */
 	public static function getLevel() {
 		if (!self::$_config) {
-			throw new Exception('Configuration not loaded');
+			throw new LoggerException('Configuration not loaded');
 		}
 		$minLevel = Logger::EMERGENCY;
 		//iteracja po configach
@@ -75,7 +75,7 @@ class LoggerHelper {
 	private static function _configureLogger() {
 		//brak konfiguracji
 		if (!self::$_config) {
-			throw new Exception('Configuration not loaded');
+			throw new LoggerException('Configuration not loaded');
 		}
 		//nowy obiekt loggera
 		$logger = new Logger(self::$_config->getName());
@@ -102,7 +102,7 @@ class LoggerHelper {
 				$logger->pushHandler(new Handler\PHPConsoleHandler([], null, $config->getLevel()));
 				break;
 			default:
-				throw new Exception('Unknown handler');
+				throw new LoggerException('Unknown handler');
 		}
 	}
 

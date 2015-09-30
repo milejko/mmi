@@ -17,7 +17,7 @@ class Deployer {
 
 	/**
 	 * Metoda uruchamiająca
-	 * @throws Exception
+	 * @throws DbException
 	 */
 	public function deploy() {
 		//wyłączenie cache
@@ -113,7 +113,7 @@ class Deployer {
 		try {
 			\App\Registry::$db->query($query);
 			\App\Registry::$db->commit();
-		} catch (\Mmi\Db\Exception $e) {
+		} catch (\Mmi\Db\DbException $e) {
 			\App\Registry::$db->rollBack();
 			die($e->getMessage() . "\n");
 		}

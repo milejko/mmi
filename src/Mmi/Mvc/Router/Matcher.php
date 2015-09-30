@@ -131,11 +131,11 @@ class Matcher {
 	 * Callback dla zmieniania rout
 	 * @param array $matches dopasowania
 	 * @return mixed
-	 * @throws \Mmi\Mvc\Exception
+	 * @throws \Mmi\Mvc\MvcException
 	 */
 	protected static function _routeMatch($matches) {
 		if (!isset($matches[1])) {
-			throw new \Mmi\Mvc\Exception('Router failed due to invalid route definition');
+			throw new \Mmi\Mvc\MvcException('Router failed due to invalid route definition');
 		}
 		if (isset(self::$_tmpMatches[$matches[1]])) {
 			return self::$_tmpMatches[$matches[1]];
@@ -143,7 +143,7 @@ class Matcher {
 		if (isset(self::$_tmpDefault[self::$_tmpKey])) {
 			return self::$_tmpDefault[self::$_tmpKey];
 		}
-		throw new \Mmi\Mvc\Exception('Router failed due to invalid route definition - no default param for key: ' . self::$_tmpKey);
+		throw new \Mmi\Mvc\MvcException('Router failed due to invalid route definition - no default param for key: ' . self::$_tmpKey);
 	}
 
 }

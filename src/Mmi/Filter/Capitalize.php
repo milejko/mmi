@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Filtr powiększający litery
+ */
 class Capitalize extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zwiększa wszystkie litery w każdym wyrazie ciągu
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

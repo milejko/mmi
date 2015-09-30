@@ -10,6 +10,9 @@
 
 namespace Mmi\App;
 
+/**
+ * Klasa środowiska uruchomieniowego aplikacji
+ */
 class Environment {
 
 	/**
@@ -126,6 +129,9 @@ class Environment {
 	 */
 	public $serverSoftware;
 
+	/**
+	 * Konstruktor
+	 */
 	public function __construct() {
 
 		$this->applicationLanguage = filter_input(INPUT_SERVER, 'APPLICATION_LANGUAGE');

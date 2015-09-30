@@ -102,13 +102,13 @@ class ActionHelper {
 	 * @param \Mmi\Http\Request $request
 	 * @param string $actionLabel
 	 * @return string
-	 * @throws \Mmi\Mvc\Exception
+	 * @throws \Mmi\Mvc\MvcException
 	 */
 	protected function _invokeAction(\Mmi\Http\Request $request, $actionLabel) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('module');
 		//brak w strukturze
 		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-			throw new NotFoundException('Component not found: ' . $actionLabel);
+			throw new MvcNotFoundException('Component not found: ' . $actionLabel);
 		}
 		//ustawienie requestu w widoku
 		\Mmi\App\FrontController::getInstance()->getView()->setRequest($request);

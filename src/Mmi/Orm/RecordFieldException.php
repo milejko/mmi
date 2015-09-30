@@ -10,6 +10,6 @@
 
 namespace Mmi\Orm;
 
-class RecordFieldException extends \Mmi\App\Exception {
+class RecordFieldException extends \Mmi\App\KernelException {
 	
 }

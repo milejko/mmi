@@ -45,10 +45,10 @@ class Config extends \Mmi\DataObject {
 	 * Zablokowany setter
 	 * @param string $key
 	 * @param mixed $value
-	 * @throws Exception
+	 * @throws LoggerException
 	 */
 	public function __set($key, $value) {
-		throw new Exception('Unable to set: {' . $key . '} to value = ' . $value);
+		throw new LoggerException('Unable to set: {' . $key . '} to value = ' . $value);
 	}
 
 	/**

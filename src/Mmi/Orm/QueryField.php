@@ -50,13 +50,13 @@ class QueryField {
 	 * @param string $name
 	 * @param array $params
 	 * @return \Mmi\Orm\Query
-	 * @throws \Mmi\Orm\Exception
+	 * @throws \Mmi\Orm\OrmException
 	 */
 	public final function __call($name, $params) {
 		//znajdowanie 2 podciągów: 1 - nazwa metody, 2 - wartość pola
 		if (!preg_match('/(equalsColumn|notEqualsColumn|greaterThanColumn|lessThanColumn|greaterOrEqualsColumn|lessOrEqualsColumn)([a-zA-Z0-9]+)/', $name, $matches) || !empty($params)) {
 			//brak metody pasującej do wzorca
-			throw new \Mmi\Orm\Exception('Method not found ' . $name);
+			throw new \Mmi\Orm\OrmException('Method not found ' . $name);
 		}
 		//wywołanie metody
 		return $this->{$matches[1]}(lcfirst($matches[2]));

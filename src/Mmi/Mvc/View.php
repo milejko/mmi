@@ -204,7 +204,7 @@ class View extends \Mmi\DataObject {
 			$className = '\\' . $namespace . '\\Filter\\' . ucfirst($name);
 		}
 		if (!isset($className)) {
-			throw new \Mmi\Mvc\Exception('Filter not found: ' . $name);
+			throw new \Mmi\Mvc\MvcException('Filter not found: ' . $name);
 		}
 		if (isset($this->_filters[$className])) {
 			return $this->_filters[$className];
@@ -347,7 +347,7 @@ class View extends \Mmi\DataObject {
 	 * @param string $module moduł
 	 * @param string $controller kontroler
 	 * @return string
-	 * @throws \Mmi\Mvc\Exception brak layoutów
+	 * @throws \Mmi\Mvc\MvcException brak layoutów
 	 */
 	private function _getLayout($module, $controller) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
@@ -366,7 +366,7 @@ class View extends \Mmi\DataObject {
 			return $structure['app']['layout'];
 		}
 		//brak layoutu
-		throw new \Mmi\Mvc\Exception('Layout not found.');
+		throw new \Mmi\Mvc\MvcException('Layout not found.');
 	}
 
 	/**
@@ -375,7 +375,7 @@ class View extends \Mmi\DataObject {
 	 * @param string $controller kontroler
 	 * @param string $action akcja
 	 * @return string
-	 * @throws \Mmi\Mvc\Exception brak templatów
+	 * @throws \Mmi\Mvc\MvcException brak templatów
 	 */
 	private function _getTemplate($module, $controller, $action) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
@@ -384,7 +384,7 @@ class View extends \Mmi\DataObject {
 			return is_array($structure[$module][$controller][$action]) ? $structure[$module][$controller][$action][0] : $structure[$module][$controller][$action];
 		}
 		//brak template
-		throw new \Mmi\Mvc\Exception('Template not found.');
+		throw new \Mmi\Mvc\MvcException('Template not found.');
 	}
 
 }

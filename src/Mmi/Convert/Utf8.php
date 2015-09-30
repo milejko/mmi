@@ -9,6 +9,9 @@
  */
 namespace Mmi\Convert;
 
+/**
+ * Klasa konwersji UTF-8
+ */
 class Utf8 {
 
 	/**

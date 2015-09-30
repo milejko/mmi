@@ -10,8 +10,6 @@
 
 namespace Mmi\App;
 
-use Mmi\Log\LoggerHelper;
-
 /**
  * Klasa obsługi zdażeń PHP
  */
@@ -27,7 +25,7 @@ class EventHandler {
 	 * @return boolean
 	 */
 	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
-		throw new Exception($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
+		throw new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
 	}
 
 	/**
@@ -41,14 +39,14 @@ class EventHandler {
 		//pobranie odpowiedzi z front kontrolera
 		$response = \Mmi\App\FrontController::getInstance()->getResponse();
 		//logowanie błędu Emergency
-		LoggerHelper::getLogger()->addEmergency($error['message']);
+		FrontController::getInstance()->getLogger()->addEmergency($error['message']);
 		//wysyłanie odpowiedzi
 		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $error['message'], $error['file'] . ' [' . $error['line'] . ']')));
 	}
 
 	/**
 	 * Obsługuje wyjątki
-	 * @param Exception $exception wyjątek
+	 * @param \Exception $exception wyjątek
 	 * @return boolean
 	 */
 	public static function exceptionHandler(\Exception $exception) {
@@ -93,7 +91,7 @@ class EventHandler {
 	/**
 	 * Wysyła surowy content
 	 * @param type $response
-	 * @param Exception $exception
+	 * @param \Exception $exception
 	 */
 	private static function _sendRawResponse(\Mmi\Http\Response $response, \Exception $exception) {
 		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), $exception->getTraceAsString())));
@@ -132,12 +130,12 @@ class EventHandler {
 	 */
 	private static function _logException(\Exception $exception) {
 		//logowanie wyjątku aplikacyjnego
-		if ($exception instanceof \Mmi\App\Exception) {
-			LoggerHelper::getLogger()->addRecord($exception->getCode(), self::_formatException($exception));
+		if ($exception instanceof \Mmi\App\KernelException) {
+			FrontController::getInstance()->getLogger()->addRecord($exception->getCode(), self::_formatException($exception));
 			return;
 		}
 		//logowanie pozostałych wyjątków
-		LoggerHelper::getLogger()->addAlert(self::_exceptionToMessage($exception));
+		FrontController::getInstance()->getLogger()->addAlert(self::_exceptionToMessage($exception));
 	}
 
 	/**

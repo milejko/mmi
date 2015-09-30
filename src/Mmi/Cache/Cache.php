@@ -17,13 +17,13 @@ class Cache {
 
 	/**
 	 * Konfiguracja bufora
-	 * @var \Mmi\Cache\Config
+	 * @var Config
 	 */
 	protected $_config;
 
 	/**
 	 * Backend bufora
-	 * @var \Mmi\Cache\Backend\Interface
+	 * @var BackendInterface
 	 */
 	protected $_backend;
 
@@ -36,18 +36,18 @@ class Cache {
 	/**
 	 * Konstruktor, wczytuje konfigurację i ustawia backend
 	 */
-	public function __construct(\Mmi\Cache\Config $config) {
+	public function __construct(Config $config) {
 		$this->_config = $config;
 		$saveHandler = $config->handler;
 		//określanie klasy backendu
-		$backendClassName = '\\Mmi\\Cache\\Backend\\' . ucfirst($saveHandler);
+		$backendClassName = '\\Mmi\\Cache\\' . ucfirst($saveHandler) . 'Backend';
 		//powoływanie obiektu backendu
 		$this->_backend = new $backendClassName($config);
 		//namespace w rejestrze
 		$this->_registryNamespace = 'Cache-' . crc32($config->path . $config->handler) . '-';
 		//niepoprawny backend
-		if (!($this->_backend instanceof \Mmi\Cache\Backend\BackendInterface)) {
-			throw new Exception('Backend invalid');
+		if (!($this->_backend instanceof CacheBackendInterface)) {
+			throw new CacheException('Backend invalid');
 		}
 	}
 
@@ -145,12 +145,15 @@ class Cache {
 	 * @return mixed
 	 */
 	protected function _getValidCacheData($data) {
+		//brak danych
 		if (!($data = unserialize($data))) {
 			return;
 		}
+		//dane niepoprawne
 		if (!isset($data['expire']) || !isset($data['data'])) {
 			return;
 		}
+		//dane wygasłe
 		if ($data['expire'] > time()) {
 			return $data['data'];
 		}

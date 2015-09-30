@@ -160,7 +160,7 @@ abstract class ElementAbstract extends Base\Element {
 			$className = '\\' . $namespace . '\\Filter\\' . ucfirst($name);
 		}
 		if (!isset($className)) {
-			throw new \Mmi\Form\Exception('Unknown filter: ' . $name);
+			throw new \Mmi\Form\FormException('Unknown filter: ' . $name);
 		}
 		return new $className();
 	}
@@ -179,7 +179,7 @@ abstract class ElementAbstract extends Base\Element {
 			$className = '\\' . $namespace . '\\Validator\\' . ucfirst($name);
 		}
 		if (!isset($className)) {
-			throw new \Mmi\Form\Exception('Unknown validator: ' . $name);
+			throw new \Mmi\Form\FormException('Unknown validator: ' . $name);
 		}
 		return new $className();
 	}

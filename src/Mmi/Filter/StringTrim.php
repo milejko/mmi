@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Obcięcie
+ */
 class StringTrim extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Usuwa spacę z końców ciągu znaków
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

@@ -10,6 +10,9 @@
 
 namespace Mmi\App;
 
+/**
+ * Abstrakcyjna klasa rejestru aplikacji
+ */
 abstract class Registry {
 
 	/**

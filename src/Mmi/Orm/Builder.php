@@ -18,7 +18,7 @@ class Builder {
 	/**
 	 * Renderuje DAO, Record i Query dla podanej nazwy tabeli
 	 * @param string $tableName
-	 * @throws \Mmi\Orm\Exception
+	 * @throws \Mmi\Orm\OrmException
 	 */
 	public static function buildFromTableName($tableName) {
 		//aktualizacja QUERY-FIELD
@@ -54,7 +54,7 @@ class Builder {
 		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
 		//błędna struktrura lub brak
 		if (empty($structure)) {
-			throw new \Mmi\Orm\Exception('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
+			throw new \Mmi\Orm\OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
 		}
 		$variableString = "\n";
 		//generowanie pól rekordu
@@ -70,7 +70,7 @@ class Builder {
 			$diffDb = array_diff($variables, $codeVariables[1]);
 			//pola się nie zgadzają
 			if (!empty($diffRecord) || !empty($diffDb)) {
-				throw new \Mmi\Orm\Exception('RECORD for: "' . $tableName . '" has invalid fields: ' . implode(', ', $diffRecord) . ', and missing: ' . implode(',', $diffDb));
+				throw new \Mmi\Orm\OrmException('RECORD for: "' . $tableName . '" has invalid fields: ' . implode(', ', $diffRecord) . ', and missing: ' . implode(',', $diffDb));
 			}
 			return;
 		}
@@ -190,7 +190,7 @@ class Builder {
 		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
 		//pusta, lub błędna struktura
 		if (empty($structure)) {
-			throw new \Mmi\Orm\Exception('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
+			throw new \Mmi\Orm\OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
 		}
 
 		$methods = '';
@@ -241,7 +241,7 @@ class Builder {
 	 * Pobiera prefix ścieżki po nazwie tabeli
 	 * @param string $tableName
 	 * @return string
-	 * @throws \Mmi\Orm\Exception
+	 * @throws \Mmi\Orm\OrmException
 	 */
 	protected static function _getPathPrefixByTableName($tableName) {
 		$table = explode('_', $tableName);
@@ -259,7 +259,7 @@ class Builder {
 	 * Pobiera prefix klasy obiektu
 	 * @param string $tableName
 	 * @return string
-	 * @throws \Mmi\Orm\Exception
+	 * @throws \Mmi\Orm\OrmException
 	 */
 	protected static function _getClassNamePrefixByTableName($tableName) {
 		$table = explode('_', $tableName);

@@ -126,7 +126,7 @@ class Controller {
 	 * @return \Mmi\FlashMessenger\Messenger
 	 */
 	public final function getMessenger() {
-		return new \Mmi\FlashMessenger\Messenger();
+		return \Mmi\Message\FlashMessengerHelper::getMessenger();
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Controller {
 	 * @return \Mmi\Logger\LoggerHelper
 	 */
 	public final function getLogger() {
-		return \Mmi\Log\LoggerHelper::getLogger();
+		return FrontController::getInstance()->getLogger();
 	}
 	
 	/**

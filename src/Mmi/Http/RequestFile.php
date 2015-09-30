@@ -22,21 +22,21 @@ class RequestFile {
 	
 	/**
 	 * Konstruktor
-	 * @throws \Mmi\Http\Exception
+	 * @throws \Mmi\Http\HttpException
 	 * @param array $data
 	 */
 	public function __construct(array $data) {
 		//brak nazwy
 		if (!isset($data['name'])) {
-			throw new Exception('RequestFile: name not specified');
+			throw new HttpException('RequestFile: name not specified');
 		}
 		//brak tmp_name
 		if (!isset($data['tmp_name'])) {
-			throw new Exception('RequestFile: tmp_name not specified');
+			throw new HttpException('RequestFile: tmp_name not specified');
 		}
 		//brak rozmiaru
 		if (!isset($data['size'])) {
-			throw new Exception('RequestFile: size not specified');
+			throw new HttpException('RequestFile: size not specified');
 		}
 		$this->name = $data['name'];
 		$this->type = \Mmi\FileSystem::mimeType($data['tmp_name']);

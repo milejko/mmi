@@ -24,10 +24,10 @@ class RecordUnique extends ValidatorAbstract {
 	 */
 	public function isValid($value) {
 		if (!isset($this->_options[0]) || !($this->_options[0] instanceof \Mmi\Orm\Query)) {
-			throw new Exception('No query class supplied.');
+			throw new ValidatorException('No query class supplied.');
 		}
 		if (!isset($this->_options[1])) {
-			throw new Exception('No field name supplied.');
+			throw new ValidatorException('No field name supplied.');
 		}
 		$q = $this->_options[0];
 		/* @var $q \Mmi\Orm\Query */

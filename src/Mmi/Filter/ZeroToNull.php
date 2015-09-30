@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * 0 na null
+ */
 class ZeroToNull extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zamienia wartość zero na null
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

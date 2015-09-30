@@ -66,7 +66,7 @@ class Profiler {
 			'time' => $time,
 			'elapsed' => $elapsed,
 		];
-		LoggerHelper::getLogger()->addDebug('{' . $this->_runtimeStamp . '} (' . number_format($elapsed, 6) . 's) ' . $name);
+		FrontController::getInstance()->getLogger()->addDebug('{' . $this->_runtimeStamp . '} (' . number_format($elapsed, 6) . 's) ' . $name);
 		$this->_elapsed += $elapsed;
 		$this->_counter++;
 	}

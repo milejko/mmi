@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Br zamiast nowej linii
+ */
 class Nl2br extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zwraca ciąg z <br /> zamiast \n i \r\n
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

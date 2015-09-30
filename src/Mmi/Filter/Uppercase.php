@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Wielkie litery
+ */
 class Uppercase extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zwiększa wszystkie litery w ciągu
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

@@ -146,7 +146,7 @@ class Response {
 			return $this->setHeader('Content-type', $this->_type, $replace);
 		}
 		//typ nieodnaleziony
-		throw new Exception('Type not found');
+		throw new HttpException('Type not found');
 	}
 
 	/**

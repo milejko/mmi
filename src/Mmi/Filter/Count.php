@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Filtr zliczający
+ */
 class Count extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zlicza elementy
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

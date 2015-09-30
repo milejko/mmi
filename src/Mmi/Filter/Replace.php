@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Zamiana znaków
+ */
 class Replace extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zamienia znaki
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

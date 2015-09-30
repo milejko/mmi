@@ -30,7 +30,7 @@ class Query {
 
 	/**
 	 * Konstruktor tworzy nowe skompilowane zapytanie
-	 * @throws \Mmi\Orm\Exception tabela niewyspecyfikowana
+	 * @throws \Mmi\Orm\OrmException tabela niewyspecyfikowana
 	 * @param string $tableName nazwa tabeli
 	 */
 	protected final function __construct($tableName = null) {
@@ -43,7 +43,7 @@ class Query {
 		}
 		//jeśli ustalona klasa - wyjście
 		if ($this->_tableName === null) {
-			throw new Exception('Table name not specified');
+			throw new OrmException('Table name not specified');
 		}
 	}
 
@@ -52,13 +52,13 @@ class Query {
 	 * @param string $name
 	 * @param array $params
 	 * @return \Mmi\Orm\Query
-	 * @throws \Mmi\Orm\Exception
+	 * @throws \Mmi\Orm\OrmException
 	 */
 	public final function __call($name, $params) {
 		//znajdowanie 2 podciągów: 1 - nazwa metody, 2 - wartość pola
 		if (!preg_match('/(where|andField|orField|orderAsc|orderDesc|groupBy)([a-zA-Z0-9]+)/', $name, $matches) || !empty($params)) {
 			//brak metody pasującej do wzorca
-			throw new Exception('Method not found ' . $name);
+			throw new OrmException('Method not found ' . $name);
 		}
 		//wywołanie metody
 		return $this->{$matches[1]}(lcfirst($matches[2]));
@@ -392,7 +392,7 @@ class Query {
 	 * @param string $fieldName
 	 * @param string $forcedTableName
 	 * @return string
-	 * @throws \Mmi\Orm\Exception
+	 * @throws \Mmi\Orm\OrmException
 	 */
 	protected final function _prepareField($fieldName, $forcedTableName = null) {
 		$tableName = ($forcedTableName === null) ? $this->_tableName : $forcedTableName;
@@ -410,7 +410,7 @@ class Query {
 			return $tablePrefix . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($convertedFieldName);
 		}
 		//w pozostałych wypadkach wyjątek o braku pola
-		throw new Exception(get_called_class() . ': "' . $fieldName . '" not found in ' . $tableName . ' table');
+		throw new OrmException(get_called_class() . ': "' . $fieldName . '" not found in ' . $tableName . ' table');
 	}
 
 	/**

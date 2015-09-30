@@ -49,7 +49,7 @@ abstract class ElementRenderer extends ElementCore {
 	public final function setRenderingOrder(array $renderingOrder = []) {
 		foreach ($renderingOrder as $method) {
 			if (!method_exists($this, $method)) {
-				throw new \Mmi\Form\Exception('Unknown rendering method');
+				throw new \Mmi\Form\FormException('Unknown rendering method');
 			}
 		}
 		$this->_renderingOrder = $renderingOrder;

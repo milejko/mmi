@@ -46,10 +46,16 @@ class FrontController {
 	private $_environment;
 	
 	/**
-	 * Profiler
+	 * Profiler aplikacji
 	 * @var \Mmi\App\Profiler 
 	 */
 	private $_profiler;
+	
+	/**
+	 * Logger - monolog
+	 * @var \Monolog\Logger
+	 */
+	private $_logger;
 
 	/**
 	 * Widok
@@ -81,6 +87,8 @@ class FrontController {
 		$this->_environment = new \Mmi\App\Environment();
 		//profiler aplikacji
 		$this->_profiler = new \Mmi\App\Profiler();
+		//logger - monolog
+		$this->_logger = \Mmi\Log\LoggerHelper::getLogger();
 	}
 
 	/**
@@ -179,7 +187,7 @@ class FrontController {
 	public function getRouter() {
 		//brak routera
 		if ($this->_router === null) {
-			throw new Exception('\Mmi\Mvc\Router should be specified in \Mmi\App\FrontController');
+			throw new KernelException('\Mmi\Mvc\Router should be specified in \Mmi\App\FrontController');
 		}
 		return $this->_router;
 	}
@@ -207,6 +215,14 @@ class FrontController {
 	public function getProfiler() {
 		return $this->_profiler;
 	}
+	
+	/**
+	 * Zwraca logger
+	 * @return \Monolog\Logger
+	 */
+	public function getLogger() {
+		return $this->_logger;
+	}
 
 	/**
 	 * Pobranie widoku
@@ -215,7 +231,7 @@ class FrontController {
 	public function getView() {
 		//brak widoku
 		if ($this->_view === null) {
-			throw new Exception('\Mmi\View should be specified in \Mmi\App\FrontController');
+			throw new KernelException('\Mmi\View should be specified in \Mmi\App\FrontController');
 		}
 		return $this->_view;
 	}
@@ -228,11 +244,11 @@ class FrontController {
 	public function getStructure($part = null) {
 		//brak struktury
 		if ($this->_structure === null) {
-			throw new Exception('\Mmi\Contoller\Front structure not found');
+			throw new KernelException('\Mmi\Contoller\Front structure not found');
 		}
 		//struktura nieprawidłowa (brak części)
 		if ($part !== null && !isset($this->_structure[$part])) {
-			throw new Exception('\Mmi\App\FrontController structure invalid');
+			throw new KernelException('\Mmi\App\FrontController structure invalid');
 		}
 		return (null === $part) ? $this->_structure : $this->_structure[$part];
 	}

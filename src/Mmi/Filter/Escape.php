@@ -10,16 +10,18 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Usuwa znaki niedozwolone
+ */
 class Escape extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Filtracja pola ze znaków specjalnych
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {
-
 		return htmlspecialchars(strip_tags($value));
 	}
 

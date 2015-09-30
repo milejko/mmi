@@ -10,16 +10,18 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Bada długość ciągu lub tabeli
+ */
 class Length extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Zliczanie długości
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return int
 	 */
 	public function filter($value) {
-
 		if (is_string($value) || is_numeric($value)) {
 			return mb_strlen((string) $value);
 		}

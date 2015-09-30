@@ -10,12 +10,15 @@
 
 namespace Mmi\Filter;
 
+/**
+ * Filtruje znaki niedozwolone w IBAN
+ */
 class Iban extends \Mmi\Filter\FilterAbstract {
 
 	/**
 	 * Poprawia wygląd numerów IBAN
 	 * @param mixed $value wartość
-	 * @throws \Mmi\App\Exception jeśli filtrowanie $value nie jest możliwe
+	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
 	 * @return mixed
 	 */
 	public function filter($value) {

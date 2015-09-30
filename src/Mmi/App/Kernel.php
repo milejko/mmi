@@ -40,7 +40,7 @@ namespace Mmi\App {
 			$profiler->event('App\Kernel: bootstrap done');
 			//bootstrap nie implementuje właściwego interfeace'u
 			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {
-				throw new Exception('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
+				throw new KernelException('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
 			}
 		}
 		

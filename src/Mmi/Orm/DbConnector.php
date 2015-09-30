@@ -47,7 +47,7 @@ class DbConnector {
 	public static final function getAdapter() {
 		//brak lub nieprawidłowy adapter
 		if (!(static::$_adapter instanceof \Mmi\Db\Adapter\Pdo\PdoAbstract)) {
-			throw new \Mmi\Orm\Exception('Adapter not specified or invalid');
+			throw new \Mmi\Orm\OrmException('Adapter not specified or invalid');
 		}
 		//zwrot adaptera
 		return static::$_adapter;
