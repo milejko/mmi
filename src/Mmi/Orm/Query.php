@@ -155,17 +155,17 @@ class Query {
 	 * Dodaje warunek na pole AND
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\QueryField
+	 * @return QueryHelper\QueryField
 	 */
 	public final function andField($fieldName, $tableName = null) {
-		return new \Mmi\Orm\QueryField($this, $this->_prepareField($fieldName, $tableName), 'AND');
+		return new QueryHelper\QueryField($this, $this->_prepareField($fieldName, $tableName), 'AND');
 	}
 
 	/**
 	 * Pierwszy warunek w zapytaniu (domyślnie AND)
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\QueryField
+	 * @return QueryHelper\QueryField
 	 */
 	public final function where($fieldName, $tableName = null) {
 		return $this->andField($fieldName, $tableName);
@@ -175,30 +175,30 @@ class Query {
 	 * Dodaje warunek na pole OR
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\QueryField
+	 * @return QueryHelper\QueryField
 	 */
 	public final function orField($fieldName, $tableName = null) {
-		return new \Mmi\Orm\QueryField($this, $this->_prepareField($fieldName, $tableName), 'OR');
+		return new QueryHelper\QueryField($this, $this->_prepareField($fieldName, $tableName), 'OR');
 	}
 
 	/**
 	 * Dołącza tabelę tabelę
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
-	 * @return \Mmi\Orm\QueryJoin
+	 * @return \Mmi\Orm\QueryHelper\QueryJoin
 	 */
 	public final function join($tableName, $targetTableName = null) {
-		return new \Mmi\Orm\QueryJoin($this, $tableName, 'JOIN', $targetTableName);
+		return new \Mmi\Orm\QueryHelper\QueryJoin($this, $tableName, 'JOIN', $targetTableName);
 	}
 
 	/**
 	 * Dołącza tabelę złączeniem lewym
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
-	 * @return \Mmi\Orm\QueryJoin
+	 * @return \Mmi\Orm\QueryHelper\QueryJoin
 	 */
 	public final function joinLeft($tableName, $targetTableName = null) {
-		return new \Mmi\Orm\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName);
+		return new \Mmi\Orm\QueryHelper\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName);
 	}
 
 	/**

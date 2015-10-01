@@ -36,31 +36,29 @@ class Builder {
 	 * @param string $tableName
 	 */
 	protected static function _updateRecord($tableName) {
-		//prefixy nazw
-		$pathPrefix = self::_getPathPrefixByTableName($tableName);
-		$classPrefix = self::_getClassNamePrefixByTableName($tableName);
+		//kod rekordu
 		$recordCode = '<?php' . "\n\n" .
-			'namespace ' . $classPrefix . ";\n\n" .
-			'class Record extends \Mmi\Orm\Record {' .
+			'namespace ' . self::_getNamespace($tableName) . ";\n\n" .
+			'class ' . ($className = self::_getNamePrefix($tableName) . 'Record') . ' extends \Mmi\Orm\Record {' .
 			"\n\n" .
 			'}' . "\n";
 		//ścieżka do pliku
-		$path = self::_mkdirRecursive($pathPrefix . '/Record.php');
+		$path = self::_mkdirRecursive(self::_getPathPrefix($tableName)) . '/' . $className . '.php';
 		//wczytanie istniejącego rekordu
 		if (file_exists($path)) {
 			$recordCode = file_get_contents($path);
 		}
 		//odczyt struktury tabeli
-		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
+		$structure = DbConnector::getTableStructure($tableName);
 		//błędna struktrura lub brak
 		if (empty($structure)) {
-			throw new \Mmi\Orm\OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
+			throw new rmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
 		}
 		$variableString = "\n";
 		//generowanie pól rekordu
 		foreach ($structure as $fieldName => $fieldDetails) {
-			$variables[] = \Mmi\Orm\Convert::underscoreToCamelcase($fieldName);
-			$variableString .= "\t" . 'public $' . \Mmi\Orm\Convert::underscoreToCamelcase($fieldName) . ";\n";
+			$variables[] = Convert::underscoreToCamelcase($fieldName);
+			$variableString .= "\t" . 'public $' . Convert::underscoreToCamelcase($fieldName) . ";\n";
 		}
 		//sprawdzanie istnienia pól rekordu
 		if (preg_match_all('/\tpublic \$([a-zA-Z0-9\_]+)[\;|\s\=]/', $recordCode, $codeVariables) && isset($codeVariables[1])) {
@@ -70,11 +68,11 @@ class Builder {
 			$diffDb = array_diff($variables, $codeVariables[1]);
 			//pola się nie zgadzają
 			if (!empty($diffRecord) || !empty($diffDb)) {
-				throw new \Mmi\Orm\OrmException('RECORD for: "' . $tableName . '" has invalid fields: ' . implode(', ', $diffRecord) . ', and missing: ' . implode(',', $diffDb));
+				throw new OrmException('RECORD for: "' . $tableName . '" has invalid fields: ' . implode(', ', $diffRecord) . ', and missing: ' . implode(',', $diffDb));
 			}
 			return;
 		}
-		$recordCode = preg_replace('/(class Record extends [\\a-zA-Z0-9]+\s\{?\r?\n?)/', '$1' . $variableString, $recordCode);
+		$recordCode = preg_replace('/(class ' . $className . ' extends [\\a-zA-Z0-9]+\s\{?\r?\n?)/', '$1' . $variableString, $recordCode);
 		//zapis pliku
 		file_put_contents($path, $recordCode);
 	}
@@ -85,15 +83,13 @@ class Builder {
 	 */
 	protected static function _updateQueryField($tableName) {
 		//prefixy nazw
-		$pathPrefix = self::_getPathPrefixByTableName($tableName);
-		$classPrefix = self::_getClassNamePrefixByTableName($tableName);
-		$queryClassName = $classPrefix . '\Query';
+		$queryClassName = self::_getNamespace($tableName) . '\\' . self::_getNamePrefix($tableName) . 'Query';
 		//odczyt struktury
-		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
+		$structure = DbConnector::getTableStructure($tableName);
 		$methods = '';
 		//budowanie komentarzy do metod
 		foreach ($structure as $fieldName => $fieldDetails) {
-			$fieldName = ucfirst(\Mmi\Orm\Convert::underscoreToCamelcase($fieldName));
+			$fieldName = ucfirst(Convert::underscoreToCamelcase($fieldName));
 			//metody equalsColumn... np. equalsColumnActive()
 			$methods .= ' * @method \\' . $queryClassName . ' equalsColumn' . $fieldName . '()' . "\n";
 			//notEqualsColumn
@@ -109,7 +105,7 @@ class Builder {
 		}
 		//anotacje dla metod porównujących (equals itp.)
 		$queryCode = '<?php' . "\n\n" .
-			'namespace ' . $classPrefix . ";\n\n" .
+			'namespace ' . self::_getNamespace($tableName) . '\QueryHelper' . ";\n\n" .
 			'/**' . "\n" .
 			' * @method \\' . $queryClassName . ' equals($value)' . "\n" .
 			' * @method \\' . $queryClassName . ' notEquals($value)' . "\n" .
@@ -121,11 +117,11 @@ class Builder {
 			' * @method \\' . $queryClassName . ' ilike($value)' . "\n" .
 			$methods . 
 			' */' . "\n" .
-			'class QueryField extends \Mmi\Orm\QueryField {' .
+			'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryField') . ' extends \Mmi\Orm\QueryHelper\QueryField {' .
 			"\n\n" .
 			'}' . "\n";
 		//zapis pliku
-		file_put_contents(self::_mkdirRecursive($pathPrefix . '/QueryField.php'), $queryCode);
+		file_put_contents(self::_mkdirRecursive(self::_getPathPrefix($tableName) . '/QueryHelper') .  '/' . $className . '.php', $queryCode);
 	}
 
 	/**
@@ -134,20 +130,18 @@ class Builder {
 	 */
 	protected static function _updateQueryJoin($tableName) {
 		//prefixy nazw
-		$pathPrefix = self::_getPathPrefixByTableName($tableName);
-		$classPrefix = self::_getClassNamePrefixByTableName($tableName);
-		$queryClassName = $classPrefix . '\Query';
+		$queryClassName = self::_getNamespace($tableName) . '\\' . self::_getNamePrefix($tableName) . 'Query';
 		//anotacja dla metody on()
 		$queryCode = '<?php' . "\n\n" .
-			'namespace ' . $classPrefix . ";\n\n" .
+			'namespace ' . self::_getNamespace($tableName) . '\QueryHelper' . ";\n\n" .
 			'/**' . "\n" .
 			' * @method \\' . $queryClassName . ' on($localKeyName, $joinedKeyName = \'id\')' . "\n" .
 			' */' . "\n" .
-			'class QueryJoin extends \Mmi\Orm\QueryJoin {' .
+			'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryJoin') . ' extends \Mmi\Orm\QueryHelper\QueryJoin {' .
 			"\n\n" .
 			'}' . "\n";
 		//zapis pliku
-		file_put_contents(self::_mkdirRecursive($pathPrefix . '/QueryJoin.php'), $queryCode);
+		file_put_contents(self::_mkdirRecursive(self::_getPathPrefix($tableName) . '/QueryHelper') . '/' . $className . '.php', $queryCode);
 	}
 
 	/**
@@ -156,20 +150,17 @@ class Builder {
 	 */
 	protected static function _updateQuery($tableName) {
 		//prefixy nazw
-		$pathPrefix = self::_getPathPrefixByTableName($tableName);
-		$classPrefix = self::_getClassNamePrefixByTableName($tableName);
+		$namePrefix = self::_getNamePrefix($tableName);
 		//nazwa klasy
-		$className = $classPrefix . '\Query';
+		$className = $namePrefix . 'Query';
 		//nazwa klasy pola
-		$fieldClassName = $classPrefix . '\QueryField';
+		$fieldClassName = $namePrefix . 'QueryField';
 		//nazwa klasy złączenia
-		$joinClassName = $classPrefix . '\QueryJoin';
+		$joinClassName = $namePrefix . 'QueryJoin';
 		//nazwa rekordu
-		$recordClassName = $classPrefix . '\Record';
-
+		$recordClassName = $namePrefix . 'Record';
 		//ścieżka
-		$path = $pathPrefix . '/Query.php';
-		self::_mkdirRecursive($path);
+		$path = self::_mkdirRecursive(self::_getPathPrefix($tableName)) . '/' . $className . '.php';
 		//kod zapytania
 		$queryCode = '{'
 			. "\n\n\t"
@@ -177,7 +168,7 @@ class Builder {
 			. $tableName . '\';'
 			. "\n\n" 
 			. "\t" . '/**' . "\n"
-			. "\t" . ' * @return \\' . $className . "\n"
+			. "\t" . ' * @return ' . $className . "\n"
 			. "\t" . ' */' . "\n"
 			. "\t" . 'public static function factory($tableName = null)' . " {\n"
 			. "\t\t" . 'return new self($tableName);' . "\n"
@@ -187,52 +178,52 @@ class Builder {
 			$queryCode = file_get_contents($path);
 		}
 		//odczyt struktury
-		$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
+		$structure = DbConnector::getTableStructure($tableName);
 		//pusta, lub błędna struktura
 		if (empty($structure)) {
-			throw new \Mmi\Orm\OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
+			throw new OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
 		}
 
 		$methods = '';
 		//budowanie komentarzy do metod
 		foreach ($structure as $fieldName => $fieldDetails) {
-			$fieldName = ucfirst(\Mmi\Orm\Convert::underscoreToCamelcase($fieldName));
+			$fieldName = ucfirst(Convert::underscoreToCamelcase($fieldName));
 			//metody where... np. whereActive()
-			$methods .= ' * @method \\' . $fieldClassName . ' where' . $fieldName . '()' . "\n";
+			$methods .= ' * @method QueryHelper\\' . $fieldClassName . ' where' . $fieldName . '()' . "\n";
 			//metody andField... np. andFieldActive()
-			$methods .= ' * @method \\' . $fieldClassName . ' andField' . $fieldName . '()' . "\n";
+			$methods .= ' * @method QueryHelper\\' . $fieldClassName . ' andField' . $fieldName . '()' . "\n";
 			//orField
-			$methods .= ' * @method \\' . $fieldClassName . ' orField' . $fieldName . '()' . "\n";
+			$methods .= ' * @method QueryHelper\\' . $fieldClassName . ' orField' . $fieldName . '()' . "\n";
 			//orderAsc
-			$methods .= ' * @method \\' . $className . ' orderAsc' . $fieldName . '()' . "\n";
+			$methods .= ' * @method ' . $className . ' orderAsc' . $fieldName . '()' . "\n";
 			//orderDesc
-			$methods .= ' * @method \\' . $className . ' orderDesc' . $fieldName . '()' . "\n";
+			$methods .= ' * @method ' . $className . ' orderDesc' . $fieldName . '()' . "\n";
 			//groupBy
-			$methods .= ' * @method \\' . $className . ' groupBy' . $fieldName . '()' . "\n";
+			$methods .= ' * @method ' . $className . ' groupBy' . $fieldName . '()' . "\n";
 		}
 		$queryHead = '<?php' . "\n\n" .
-			'namespace ' . $classPrefix . ";\n\n" .
-			'//<editor-fold defaultstate="collapsed" desc="' . $tableName . ' Query">' . "\n" .
+			'namespace ' . self::_getNamespace($tableName) . ";\n\n" .
+			'//<editor-fold defaultstate="collapsed" desc="' . $className . '">' . "\n" .
 			'/**' . "\n" .
-			' * @method \\' . $className . ' limit($limit = null)' . "\n" .
-			' * @method \\' . $className . ' offset($offset = null)' . "\n" .
-			' * @method \\' . $className . ' orderAsc($fieldName, $tableName = null)' . "\n" .
-			' * @method \\' . $className . ' orderDesc($fieldName, $tableName = null)' . "\n" .
-			' * @method \\' . $className . ' andQuery(\Mmi\Orm\Query $query)' . "\n" .
-			' * @method \\' . $className . ' whereQuery(\Mmi\Orm\Query $query)' . "\n" .
-			' * @method \\' . $className . ' orQuery(\Mmi\Orm\Query $query)' . "\n" .
-			' * @method \\' . $className . ' resetOrder()' . "\n" .
-			' * @method \\' . $className . ' resetWhere()' . "\n" .
+			' * @method ' . $className . ' limit($limit = null)' . "\n" .
+			' * @method ' . $className . ' offset($offset = null)' . "\n" .
+			' * @method ' . $className . ' orderAsc($fieldName, $tableName = null)' . "\n" .
+			' * @method ' . $className . ' orderDesc($fieldName, $tableName = null)' . "\n" .
+			' * @method ' . $className . ' andQuery(\Mmi\Orm\Query $query)' . "\n" .
+			' * @method ' . $className . ' whereQuery(\Mmi\Orm\Query $query)' . "\n" .
+			' * @method ' . $className . ' orQuery(\Mmi\Orm\Query $query)' . "\n" .
+			' * @method ' . $className . ' resetOrder()' . "\n" .
+			' * @method ' . $className . ' resetWhere()' . "\n" .
 			$methods .
-			' * @method \\' . $fieldClassName . ' andField($fieldName, $tableName = null)' . "\n" .
-			' * @method \\' . $fieldClassName . ' where($fieldName, $tableName = null)' . "\n" .
-			' * @method \\' . $fieldClassName . ' orField($fieldName, $tableName = null)' . "\n" .
-			' * @method \\' . $joinClassName . ' join($tableName, $targetTableName = null)' . "\n" .
-			' * @method \\' . $joinClassName . ' joinLeft($tableName, $targetTableName = null)' . "\n" .
-			' * @method \\' . $recordClassName . '[] find()' . "\n" .
-			' * @method \\' . $recordClassName . ' findFirst()' . "\n" .
-			' * @method \\' . $recordClassName . ' findPk($value)' . "\n" .
-			' */' . "\n" . '//</editor-fold>' . "\n" . 'class Query extends \Mmi\Orm\Query ';
+			' * @method QueryHelper\\' . $fieldClassName . ' andField($fieldName, $tableName = null)' . "\n" .
+			' * @method QueryHelper\\' . $fieldClassName . ' where($fieldName, $tableName = null)' . "\n" .
+			' * @method QueryHelper\\' . $fieldClassName . ' orField($fieldName, $tableName = null)' . "\n" .
+			' * @method QueryHelper\\' . $joinClassName . ' join($tableName, $targetTableName = null)' . "\n" .
+			' * @method QueryHelper\\' . $joinClassName . ' joinLeft($tableName, $targetTableName = null)' . "\n" .
+			' * @method ' . $recordClassName . '[] find()' . "\n" .
+			' * @method ' . $recordClassName . ' findFirst()' . "\n" .
+			' * @method ' . $recordClassName . ' findPk($value)' . "\n" .
+			' */' . "\n" . '//</editor-fold>' . "\n" . 'class ' . $className . ' extends \Mmi\Orm\Query ';
 		$queryCode = $queryHead . substr($queryCode, strpos($queryCode, '{'));
 		file_put_contents($path, $queryCode);
 	}
@@ -243,16 +234,22 @@ class Builder {
 	 * @return string
 	 * @throws \Mmi\Orm\OrmException
 	 */
-	protected static function _getPathPrefixByTableName($tableName) {
+	protected static function _getPathPrefix($tableName) {
 		$table = explode('_', $tableName);
 		//klasy leżą w plikach w /Orm/
-		$baseDir = BASE_PATH . '/src/' . ucfirst($table[0]) . '/Orm/';
-		/*unset($table[0]);
-		//dodawanie kolejnych zagłębień
-		foreach ($table as $subFolder) {
-			$baseDir .= ucfirst($subFolder) . '/';
-		}*/
-		return rtrim($baseDir, '/');
+		$baseDir = BASE_PATH . '/src/' . ucfirst($table[0]) . '/Orm';
+		return $baseDir;
+	}
+	
+	/**
+	 * Generuje namespace klasy
+	 * @param string $tableName
+	 * @return string
+	 */
+	protected static function _getNamespace($tableName) {
+		$table = explode('_', $tableName);
+		//klasy leżą w namespace'ach Orm w modułach
+		return ucfirst($table[0]) . '\\Orm';
 	}
 
 	/**
@@ -261,15 +258,14 @@ class Builder {
 	 * @return string
 	 * @throws \Mmi\Orm\OrmException
 	 */
-	protected static function _getClassNamePrefixByTableName($tableName) {
+	protected static function _getNamePrefix($tableName) {
 		$table = explode('_', $tableName);
-		//klasy leżą w namespace'ach Orm w modułach
-		$className = ucfirst($table[0]) . '\\Orm\\';
+		$className = '';
 		//dodawanie kolejnych zagłębień
-		foreach ($table as $subFolder) {
-			$className .= ucfirst($subFolder);
+		foreach ($table as $section) {
+			$className .= ucfirst($section);
 		}
-		return rtrim($className, '\\');
+		return $className;
 	}
 
 	/**
@@ -278,9 +274,7 @@ class Builder {
 	 * @return string ścieżka wejściowa
 	 */
 	protected static function _mkdirRecursive($path) {
-		//ekstrakcja nazwy katalogu
-		$dirPath = dirname($path);
-		$dirs = explode('/', $dirPath);
+		$dirs = explode('/', $path);
 		$currentDir = '';
 		//tworzenie katalogów po kolei
 		foreach ($dirs as $dir) {

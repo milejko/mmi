@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm;
+namespace Mmi\Orm\QueryHelper;
 
 /**
  * Klasa połączenia w zapytaniu
