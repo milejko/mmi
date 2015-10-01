@@ -9,8 +9,10 @@
  */
 
 namespace Mmi\Orm\QueryHelper;
+
 use Mmi\Db\Adapter\PdoBindHelper;
 use Mmi\Orm\OrmException;
+use Mmi\Orm\Query;
 
 /**
  * Klasa pola zapytania

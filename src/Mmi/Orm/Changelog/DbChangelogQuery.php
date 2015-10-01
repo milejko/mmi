@@ -13,7 +13,7 @@ namespace Mmi\Orm\Changelog;
 /**
  * QUERY dla loga używanego przy wdrożeniach incrementali bazy danych
  */
-class Query extends \Mmi\Orm\Query {
+class DbChangelogQuery extends \Mmi\Orm\Query {
 
 	protected $_tableName = 'DB_CHANGELOG';
 

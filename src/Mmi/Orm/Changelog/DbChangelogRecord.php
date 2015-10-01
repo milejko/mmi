@@ -13,7 +13,7 @@ namespace Mmi\Orm\Changelog;
 /**
  * Rekord incrementala bazy danych
  */
-class Record extends \Mmi\Orm\Record {
+class DbChangelogRecord extends \Mmi\Orm\Record {
 
 	public $filename;
 	public $md5;

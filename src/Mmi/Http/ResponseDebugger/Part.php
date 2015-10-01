@@ -55,7 +55,11 @@ class Part {
 		//pętla po profilerze
 		foreach (FrontController::getInstance()->getProfiler()->get() as $event) {
 			$percentSum += $event['percent'];
-			$html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="overflow: auto; float: left; width: 480px;">' . $event['name'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
+			$tag = 'div';
+			if (strlen($event['name']) > 80) {
+				$tag = 'textarea';
+			}
+			$html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><' . $tag . ' style="float: left; ' . ($tag == 'div' ? '' : 'height: 100px;') . ' width: 450px; margin-right: 20px; font-size: 10px;">' . $event['name'] . '</' . $tag . '><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
 		}
 		return $html;
 	}

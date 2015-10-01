@@ -66,7 +66,7 @@ class FlashMessenger {
 	public function getMessages($clear = true) {
 		$messages = [];
 		if (is_array($this->_session->messages)) {
-			$messages = self::$_session->messages;
+			$messages = $this->_session->messages;
 		}
 		//czyszczenie
 		if ($clear) {

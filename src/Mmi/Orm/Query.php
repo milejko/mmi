@@ -18,7 +18,7 @@ class Query {
 
 	/**
 	 * Kompilant zapytania
-	 * @var \Mmi\Orm\QueryCompile
+	 * @var QueryCompile
 	 */
 	protected $_compile;
 
@@ -35,7 +35,7 @@ class Query {
 	 */
 	protected final function __construct($tableName = null) {
 		//nowa kompilacja
-		$this->_compile = new \Mmi\Orm\QueryCompile();
+		$this->_compile = new QueryCompile();
 		//klasa DAO na podstawie parametru konstruktora
 		if ($tableName !== null) {
 			$this->_tableName = $tableName;
@@ -51,8 +51,8 @@ class Query {
 	 * Magiczne wywołanie metod where, order itd.
 	 * @param string $name
 	 * @param array $params
-	 * @return \Mmi\Orm\Query
-	 * @throws \Mmi\Orm\OrmException
+	 * @return Query
+	 * @throws OrmException
 	 */
 	public final function __call($name, $params) {
 		//znajdowanie 2 podciągów: 1 - nazwa metody, 2 - wartość pola
@@ -66,7 +66,7 @@ class Query {
 
 	/**
 	 * Zwraca instancję siebie
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public static function factory($tableName = null) {
 		//nowy obiekt swojej klasy
@@ -76,7 +76,7 @@ class Query {
 	/**
 	 * Ustawia limit
 	 * @param int $limit
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function limit($limit = null) {
 		$this->_compile->limit = $limit;
@@ -86,7 +86,7 @@ class Query {
 	/**
 	 * Ustawia ofset
 	 * @param int $offset
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function offset($offset = null) {
 		$this->_compile->offset = $offset;
@@ -97,7 +97,7 @@ class Query {
 	 * Sortowanie rosnące
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function orderAsc($fieldName, $tableName = null) {
 		return $this->_prepareOrder($fieldName, $tableName);
@@ -107,7 +107,7 @@ class Query {
 	 * Sortowanie malejące
 	 * @param string $fieldName nazwa pola
 	 * @param string $tableName opcjonalna nazwa tabeli źródłowej
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function orderDesc($fieldName, $tableName = null) {
 		return $this->_prepareOrder($fieldName, $tableName, false);
@@ -117,7 +117,7 @@ class Query {
 	 * Grupowanie
 	 * @param string $fieldName
 	 * @param string $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function groupBy($fieldName, $tableName = null) {
 		return $this->_prepareGroup($fieldName, $tableName);
@@ -125,29 +125,29 @@ class Query {
 
 	/**
 	 * Dodaje podsekcję AND
-	 * @param \Mmi\Orm\Query $query
-	 * @return \Mmi\Orm\Query
+	 * @param Query $query
+	 * @return Query
 	 */
-	public final function andQuery(\Mmi\Orm\Query $query) {
+	public final function andQuery(Query $query) {
 		return $this->_mergeQueries($query, true);
 	}
 
 	/**
 	 * Dodaje podsekcję WHERE (jak AND)
-	 * @param \Mmi\Orm\Query $query
-	 * @return \Mmi\Orm\Query
+	 * @param Query $query
+	 * @return Query
 	 */
-	public final function whereQuery(\Mmi\Orm\Query $query) {
+	public final function whereQuery(Query $query) {
 		//jest aliasem na metodę andQuery()
 		return $this->andQuery($query);
 	}
 
 	/**
 	 * Dodaje podsekcję OR
-	 * @param \Mmi\Orm\Query $query
-	 * @return \Mmi\Orm\Query
+	 * @param Query $query
+	 * @return Query
 	 */
-	public final function orQuery(\Mmi\Orm\Query $query) {
+	public final function orQuery(Query $query) {
 		return $this->_mergeQueries($query, false);
 	}
 
@@ -185,25 +185,25 @@ class Query {
 	 * Dołącza tabelę tabelę
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
-	 * @return \Mmi\Orm\QueryHelper\QueryJoin
+	 * @return QueryHelper\QueryJoin
 	 */
 	public final function join($tableName, $targetTableName = null) {
-		return new \Mmi\Orm\QueryHelper\QueryJoin($this, $tableName, 'JOIN', $targetTableName);
+		return new QueryHelper\QueryJoin($this, $tableName, 'JOIN', $targetTableName);
 	}
 
 	/**
 	 * Dołącza tabelę złączeniem lewym
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
-	 * @return \Mmi\Orm\QueryHelper\QueryJoin
+	 * @return QueryHelper\QueryJoin
 	 */
 	public final function joinLeft($tableName, $targetTableName = null) {
-		return new \Mmi\Orm\QueryHelper\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName);
+		return new QueryHelper\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName);
 	}
 
 	/**
 	 * Zwraca skompilowane zapytanie
-	 * @return \Mmi\Orm\QueryCompile
+	 * @return QueryCompile
 	 */
 	public final function getQueryCompile() {
 		return $this->_compile;
@@ -241,12 +241,12 @@ class Query {
 	public static final function getCollectionName() {
 		return '\Mmi\Orm\RecordCollection';
 		//konwencja nazwy na kolekcję
-		//return self::_classPrefix() . 'Record\Collection';
+		//return self::_classPrefix() . 'RecordCollection';
 	}
 
 	/**
 	 * Resetuje sortowanie w zapytaniu
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function resetOrder() {
 		$this->_compile->order = '';
@@ -255,7 +255,7 @@ class Query {
 
 	/**
 	 * Resetuje grupowanie
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function resetGroupBy() {
 		$this->_compile->groupBy = '';
@@ -264,7 +264,7 @@ class Query {
 
 	/**
 	 * Resetuje warunki w zapytaniu
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public final function resetWhere() {
 		//czyszczenie zapytania
@@ -287,7 +287,7 @@ class Query {
 	 * Pobiera pierwszy rekord po kluczu głównym ID
 	 * null jeśli brak danych
 	 * @param int $id
-	 * @return \Mmi\Orm\Record
+	 * @return Record
 	 */
 	public final function findPk($id) {
 		//zwróci null jeśli brak danych
@@ -297,7 +297,7 @@ class Query {
 
 	/**
 	 * Pobiera wszystkie rekordy i zwraca ich kolekcję
-	 * @return \Mmi\Orm\RecordCollection
+	 * @return RecordCollection
 	 */
 	public final function find() {
 		return QueryData::factory($this)
@@ -307,8 +307,8 @@ class Query {
 	/**
 	 * Pobiera obiekt pierwszy ze zbioru
 	 * null jeśli brak danych
-	 * @param \Mmi\Orm\Query $q Obiekt zapytania
-	 * @return \Mmi\Orm\RecordRo
+	 * @param Query $q Obiekt zapytania
+	 * @return RecordRo
 	 */
 	public final function findFirst() {
 		return QueryData::factory($this)
@@ -359,9 +359,9 @@ class Query {
 	/**
 	 * Łączy query
 	 * @param boolean $type
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
-	protected final function _mergeQueries(\Mmi\Orm\Query $query, $and = true) {
+	protected final function _mergeQueries(Query $query, $and = true) {
 		$compilation = $query->getQueryCompile();
 		//łączenie where
 		if ($compilation->where) {
@@ -392,22 +392,22 @@ class Query {
 	 * @param string $fieldName
 	 * @param string $forcedTableName
 	 * @return string
-	 * @throws \Mmi\Orm\OrmException
+	 * @throws OrmException
 	 */
 	protected final function _prepareField($fieldName, $forcedTableName = null) {
 		$tableName = ($forcedTableName === null) ? $this->_tableName : $forcedTableName;
 		//tabela
-		$tablePrefix = \Mmi\Orm\DbConnector::getAdapter()->prepareTable($tableName);
+		$tablePrefix = DbConnector::getAdapter()->prepareTable($tableName);
 		//jeśli pole występuje w tabeli, bądź jest funkcją RAND()
-		if (\Mmi\Orm\DbConnector::fieldInTable($fieldName, $tableName) || $fieldName == 'RAND()') {
-			return $tablePrefix . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($fieldName);
+		if (DbConnector::fieldInTable($fieldName, $tableName) || $fieldName == 'RAND()') {
+			return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField($fieldName);
 		}
 		/* @var $db \Mmi\Db\Adapter\Pdo\PdoAbstract */
 		//konwersja camelcase do podkreślników (przechowywanych w bazie)
-		$convertedFieldName = \Mmi\Orm\Convert::camelcaseToUnderscore($fieldName);
+		$convertedFieldName = Convert::camelcaseToUnderscore($fieldName);
 		//jeśli pole podkreślnikowe występuje w bazie
-		if (\Mmi\Orm\DbConnector::fieldInTable($convertedFieldName, $tableName)) {
-			return $tablePrefix . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($convertedFieldName);
+		if (DbConnector::fieldInTable($convertedFieldName, $tableName)) {
+			return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField($convertedFieldName);
 		}
 		//w pozostałych wypadkach wyjątek o braku pola
 		throw new OrmException(get_called_class() . ': "' . $fieldName . '" not found in ' . $tableName . ' table');
@@ -418,7 +418,7 @@ class Query {
 	 * @param string $fieldName
 	 * @param string $tableName
 	 * @param boolean $asc
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	protected final function _prepareOrder($fieldName, $tableName = null, $asc = true) {
 		//jeśli pusty order - dodawanie ORDER BY na początku
@@ -435,7 +435,7 @@ class Query {
 	 * Przygotowanie grupowanie
 	 * @param type $fieldName
 	 * @param type $tableName
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	protected final function _prepareGroup($fieldName, $tableName = null) {
 		//jeśli pusty groupby - dodawanie GROUP BY na początku

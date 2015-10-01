@@ -84,7 +84,6 @@ class Profiler {
 		}
 		//zapytanie SQL bez bindów
 		$sql = $statement->queryString;
-
 		//ustalanie kluczy i wartości
 		$keys = array_keys($bind);
 		$values = array_values($bind);
@@ -100,7 +99,7 @@ class Profiler {
 			}
 			$sql = str_replace(':' . trim($value, ':'), $values[$key], $sql);
 		}
-		return $this->event('SQL: ' . $sql, $elapsed);
+		return $this->event($sql, $elapsed);
 	}
 
 	/**

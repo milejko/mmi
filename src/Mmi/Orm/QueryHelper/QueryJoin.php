@@ -10,6 +10,8 @@
 
 namespace Mmi\Orm\QueryHelper;
 
+use Mmi\Orm\Query;
+
 /**
  * Klasa połączenia w zapytaniu
  */
@@ -17,7 +19,7 @@ class QueryJoin {
 
 	/**
 	 * Referencja do nadrzędnego zapytania
-	 * @var \Mmi\Orm\Query
+	 * @var Query
 	 */
 	protected $_query;
 
@@ -41,12 +43,12 @@ class QueryJoin {
 
 	/**
 	 * Ustawia parametry połączenia
-	 * @param \Mmi\Orm\Query $query
+	 * @param Query $query
 	 * @param string $tableName nazwa tabeli
 	 * @param string $type typ złączenia: 'JOIN', 'LEFT JOIN', 'INNER JOIN', 'RIGHT JOIN'
 	 * @param string $targetTableName opcjonalna tabela do której złączyć
 	 */
-	public function __construct(\Mmi\Orm\Query $query, $tableName, $type = 'JOIN', $targetTableName = null) {
+	public function __construct(Query $query, $tableName, $type = 'JOIN', $targetTableName = null) {
 		$this->_query = $query;
 		$this->_tableName = $tableName;
 		$this->_targetTableName = $targetTableName;
@@ -57,7 +59,7 @@ class QueryJoin {
 	 * Warunek złączenia
 	 * @param string $localKeyName nazwa lokalnego klucza
 	 * @param string $joinedKeyName nazwa klucza w łączonej tabeli
-	 * @return \Mmi\Orm\Query
+	 * @return Query
 	 */
 	public function on($localKeyName, $joinedKeyName = 'id') {
 		$this->_query->getQueryCompile()->joinSchema[$this->_tableName] = [$joinedKeyName, $localKeyName, $this->_targetTableName, $this->_type];
