@@ -13,15 +13,6 @@ namespace Mmi\Session;
 class Session {
 
 	/**
-	 * Zwraca czy ustawiona jest przestrzeń nazw
-	 * @param  string $name nazwa przestrzeni
-	 * @return boolean
-	 */
-	public static function namespaceIsset($name) {
-		return isset($_SESSION[$name]);
-	}
-
-	/**
 	 * Rozpoczęcie sesji
 	 * @param \Mmi\Session\Config $config
 	 */

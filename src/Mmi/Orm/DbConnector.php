@@ -135,16 +135,14 @@ class DbConnector {
 	public static final function getRecordNameByTable($tableName) {
 		//rozdzielenie po podkreślniku
 		$tableArray = explode('_', $tableName);
-		$firstElement = $tableArray[0];
-		array_shift($tableArray);
-		array_unshift($tableArray, $firstElement, 'Orm');
+		$namespace = ucfirst($tableArray[0]) . '\\Orm\\';
 		$tableArray[] = 'Record';
 		//dołączenie pozostałych parametrów
 		foreach ($tableArray as $key => $element) {
 			$tableArray[$key] = ucfirst($element);
 		}
-		//łączenie z \
-		return implode('\\', $tableArray);
+		//łączenie z namespace
+		return $namespace . implode('', $tableArray);
 	}
 
 }
