@@ -9,7 +9,7 @@
  */
 
 namespace Mmi\Mvc\ViewHelper;
-use Mmi\Message\FlashMessengerHelper;
+use Mmi\Message\MessengerHelper;
 
 class Messenger extends HelperAbstract {
 
@@ -18,7 +18,7 @@ class Messenger extends HelperAbstract {
 	 * @return string
 	 */
 	public function messenger() {
-		$messenger = FlashMessengerHelper::getMessenger();
+		$messenger = MessengerHelper::getMessenger();
 		if (!$messenger->hasMessages()) {
 			return;
 		}

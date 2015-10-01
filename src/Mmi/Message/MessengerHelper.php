@@ -13,21 +13,21 @@ namespace Mmi\Message;
 /**
  * Klasa wiadomości
  */
-class FlashMessengerHelper {
+class MessengerHelper {
 	
 	/**
 	 * Obiekt messengera
-	 * @var \Mmi\Message\FlashMessenger
+	 * @var \Mmi\Message\Messenger
 	 */
 	public static $_messenger;
 	
 	/**
 	 * Pobiera messengera
-	 * @return \Mmi\Message\FlashMessenger
+	 * @return \Mmi\Message\Messenger
 	 */
 	public static function getMessenger() {
 		if (null === self::$_messenger) {
-			return self::$_messenger = new FlashMessenger('flash-messenger');
+			return self::$_messenger = new Messenger('messenger');
 		}
 		return self::$_messenger;
 	}

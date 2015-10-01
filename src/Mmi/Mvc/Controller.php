@@ -123,10 +123,10 @@ class Controller {
 
 	/**
 	 * Pobiera helper messengera
-	 * @return \Mmi\FlashMessenger\Messenger
+	 * @return \Mmi\Messenger\Messenger
 	 */
 	public final function getMessenger() {
-		return \Mmi\Message\FlashMessengerHelper::getMessenger();
+		return \Mmi\Message\MessengerHelper::getMessenger();
 	}
 
 	/**

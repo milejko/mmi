@@ -116,11 +116,11 @@ class ResponseDebugger {
 		$html .= self::PRE_OPEN . ResponseDebugger\Part::getConfigHtml() . '</pre>';
 
 		//profiler aplikacji
-		$html .= '<p style="margin: 0px;">PHP Profiler: </p>';
+		$html .= '<p style="margin: 0px;">Kernel Profiler: </p>';
 		$html .= self::PRE_OPEN . ResponseDebugger\Part::getProfilerHtml() . '</pre>';
 
 		//opcache lub APC
-		$html .= '<p style="margin: 0px;">PHP precompiler</p>';
+		$html .= '<p style="margin: 0px;">Precompiler</p>';
 		$html .= self::PRE_OPEN . ResponseDebugger\Opcache::getHtml() . '</pre>';
 
 		$html .= '</td><td style="vertical-align: top; padding-left: 5px;">';

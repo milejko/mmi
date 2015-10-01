@@ -55,7 +55,7 @@ class Part {
 		//pętla po profilerze
 		foreach (FrontController::getInstance()->getProfiler()->get() as $event) {
 			$percentSum += $event['percent'];
-			$html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; width: 450px; margin-right: 20px; font-size: 10px;">' . $event['name'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
+			$html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; width: 450px; margin-right: 20px; font-size: 10px; word-wrap: break-word; white-space: pre-wrap;">' . $event['name'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
 		}
 		return $html;
 	}

@@ -13,7 +13,7 @@ namespace Mmi\Message;
 /**
  * Klasa wiadomości
  */
-class FlashMessenger {
+class Messenger {
 
 	/**
 	 * Przestrzeń w sesji zarezerwowana dla wiadomości
@@ -34,7 +34,7 @@ class FlashMessenger {
 	 * @param string $message wiadomość
 	 * @param bool $type true - pozytywna, false - negatywna, brak - neutralna
 	 * @param array $vars zmienne
-	 * @return \Mmi\Message\FlashMessenger
+	 * @return \Mmi\Message\Messenger
 	 */
 	public function addMessage($message, $type = null, array $vars = []) {
 		if ($type) {
@@ -77,7 +77,7 @@ class FlashMessenger {
 
 	/**
 	 * Czyści wiadomości
-	 * @return \Mmi\Message\FlashMessenger
+	 * @return \Mmi\Message\Messenger
 	 */
 	public function clearMessages() {
 		$this->_session->unsetAll();
