@@ -247,11 +247,11 @@ class Builder {
 		$table = explode('_', $tableName);
 		//klasy leżą w plikach w /Orm/
 		$baseDir = BASE_PATH . '/src/' . ucfirst($table[0]) . '/Orm/';
-		unset($table[0]);
+		/*unset($table[0]);
 		//dodawanie kolejnych zagłębień
 		foreach ($table as $subFolder) {
 			$baseDir .= ucfirst($subFolder) . '/';
-		}
+		}*/
 		return rtrim($baseDir, '/');
 	}
 
@@ -265,10 +265,9 @@ class Builder {
 		$table = explode('_', $tableName);
 		//klasy leżą w namespace'ach Orm w modułach
 		$className = ucfirst($table[0]) . '\\Orm\\';
-		unset($table[0]);
 		//dodawanie kolejnych zagłębień
 		foreach ($table as $subFolder) {
-			$className .= ucfirst($subFolder) . '\\';
+			$className .= ucfirst($subFolder);
 		}
 		return rtrim($className, '\\');
 	}
