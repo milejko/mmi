@@ -12,12 +12,13 @@ namespace Mmi\App;
 
 /**
  * Abstrakcyjna klasa rejestru aplikacji
+ * powinna być rozszerzona przez \App\Registry
  */
-abstract class Registry {
+abstract class KernelRegistry {
 
 	/**
 	 * Konfiguracja aplikacji
-	 * @var \App\KernelConfig
+	 * @var \App\Config
 	 */
 	public static $config;
 	
@@ -73,14 +74,6 @@ abstract class Registry {
 	 */
 	public static final function issetVar($key) {
 		return array_key_exists($key, static::$_userData);
-	}
-
-	/**
-	 * Zwraca wszystkie zmienne użytkownika w tablicy
-	 * @return array
-	 */
-	public static final function getAllVars() {
-		return static::$_userData;
 	}
 
 }

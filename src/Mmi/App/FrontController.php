@@ -41,13 +41,13 @@ class FrontController {
 	
 	/**
 	 * Środowisko uruchomieniowe
-	 * @var \Mmi\App\Environment
+	 * @var \Mmi\Http\HttpServerEnv
 	 */
 	private $_environment;
 	
 	/**
 	 * Profiler aplikacji
-	 * @var \Mmi\App\Profiler 
+	 * @var \Mmi\App\KernelProfiler 
 	 */
 	private $_profiler;
 	
@@ -84,9 +84,9 @@ class FrontController {
 		//nowy odpowiedź
 		$this->_response = new \Mmi\Http\Response();
 		//nowe środowisko
-		$this->_environment = new \Mmi\App\Environment();
+		$this->_environment = new \Mmi\Http\HttpServerEnv();
 		//profiler aplikacji
-		$this->_profiler = new \Mmi\App\Profiler();
+		$this->_profiler = new \Mmi\App\KernelProfiler();
 		//logger - monolog
 		$this->_logger = \Mmi\Log\LoggerHelper::getLogger();
 	}
@@ -194,7 +194,7 @@ class FrontController {
 
 	/**
 	 * Pobiera środowisko uruchomieniowe
-	 * @return \Mmi\App\Environment
+	 * @return \Mmi\Http\HttpServerEnv
 	 */
 	public function getEnvironment() {
 		return $this->_environment;
@@ -210,7 +210,7 @@ class FrontController {
 	
 	/**
 	 * Zwraca profiler
-	 * @return \Mmi\App\Profiler
+	 * @return \Mmi\App\KernelProfiler
 	 */
 	public function getProfiler() {
 		return $this->_profiler;

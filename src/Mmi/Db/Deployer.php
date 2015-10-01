@@ -51,7 +51,7 @@ class Deployer {
 
 		//pobranie rekordu
 		try {
-			$dc = \Mmi\Orm\Changelog\Query::byFilename(basename($file))->findFirst();
+			$dc = \Mmi\Orm\Changelog\DbChangelogQuery::byFilename(basename($file))->findFirst();
 		} catch (\Exception $e) {
 			echo 'INITIAL IMPORT.' . "\n";
 			$dc = null;
@@ -75,7 +75,7 @@ class Deployer {
 		\Mmi\Orm\DbConnector::resetTableStructures();
 
 		//brak restore - zakłada nowy rekord
-		$newDc = new \Mmi\Orm\Changelog\Record();
+		$newDc = new \Mmi\Orm\Changelog\DbChangelogRecord();
 		//zapis informacji o incrementalu
 		$newDc->filename = $baseFileName;
 		$newDc->md5 = $md5file;

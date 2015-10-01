@@ -27,17 +27,19 @@ namespace Mmi\App {
 		public function __construct($bootstrapName = '\Mmi\App\Bootstrap', $env = 'DEV') {
 			//ładownie konfiguracji
 			$this->_initConfig($env);
-			$profiler = FrontController::getInstance()->getProfiler();
-			$profiler->event('App\Kernel: application startup');
+			//start aplikacji
+			FrontController::getInstance()->getProfiler()->event('App\Kernel: application startup');
 			//inicjalizacja aplikacji
 			$this->_initEventHandler()
 				->_initPaths()
 				->_initEncoding()
 				->_initCache();
-			$profiler->event('App\Kernel: bootstrap startup');
+			//bootstrap start
+			FrontController::getInstance()->getProfiler()->event('App\Kernel: bootstrap startup');
 			//tworzenie instancji bootstrapa
 			$this->_bootstrap = new $bootstrapName($env);
-			$profiler->event('App\Kernel: bootstrap done');
+			//bootstrap end
+			FrontController::getInstance()->getProfiler()->event('App\Kernel: bootstrap done');
 			//bootstrap nie implementuje właściwego interfeace'u
 			if (!($this->_bootstrap instanceof \Mmi\App\BootstrapInterface)) {
 				throw new KernelException('\Mmi\App bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
@@ -59,7 +61,7 @@ namespace Mmi\App {
 		 */
 		private function _initConfig($env) {
 			//konwencja nazwy konfiguracji
-			$configClassName = '\App\KernelConfig' . $env;
+			$configClassName = '\App\Config' . $env;
 			//konfiguracja dla danego środowiska
 			\App\Registry::$config = new $configClassName();
 			//ustawianie konfiguracji loggera
@@ -112,12 +114,7 @@ namespace Mmi\App {
 		 * @return \Mmi\App\Kernel
 		 */
 		private function _initEventHandler() {
-			//funkcja  zamknięcia aplikacji
-			register_shutdown_function(['\Mmi\App\EventHandler', 'shutdownHandler']);
-			//domyślne przechwycenie wyjątków
-			set_exception_handler(['\Mmi\App\EventHandler', 'exceptionHandler']);
-			//domyślne przechwycenie błędów
-			set_error_handler(['\Mmi\App\EventHandler', 'errorHandler']);
+			new KernelEventHandler();
 			return $this;
 		}
 

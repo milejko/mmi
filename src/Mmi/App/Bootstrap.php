@@ -94,8 +94,6 @@ class Bootstrap implements BootstrapInterface {
 		if (\App\Registry::$config->db->driver === null) {
 			return $this;
 		}
-		//ustawienie profilera
-		\App\Registry::$config->db->profiler = \App\Registry::$config->debug;
 		//uzupełnienie rejestru
 		\App\Registry::$db = \Mmi\Db\DbHelper::getAdapter(\App\Registry::$config->db);
 		//wstrzyknięcie do ORM

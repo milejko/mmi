@@ -144,7 +144,7 @@ abstract class PdoAbstract {
 	 * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
 	 */
 	public function connect() {
-		//jeśli profiler włączony
+		//event łączenia
 		\Mmi\App\FrontController::getInstance()->getProfiler()->event(get_called_class() . ': connect', 0);
 
 		//nowy obiekt PDO do odczytu danych

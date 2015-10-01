@@ -16,7 +16,7 @@ use \Monolog\Logger;
 /**
  * Klasa profilera aplikacji
  */
-class Profiler {
+class KernelProfiler {
 
 	/**
 	 * Dane profilera

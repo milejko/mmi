@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\App;
+namespace Mmi\Http;
 
 /**
- * Klasa środowiska uruchomieniowego aplikacji
+ * Klasa środowiska serwera HTTP
  */
-class Environment {
+class HttpServerEnv {
 
 	/**
 	 * Do ustawienia przez administratora aplikacji, dla stron wielojęzycznych

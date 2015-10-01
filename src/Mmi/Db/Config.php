@@ -79,10 +79,4 @@ class Config {
 	 */
 	public $persistent = false;
 
-	/**
-	 * Profiler włączony
-	 * @var boolean
-	 */
-	public $profiler = false;
-
 }

@@ -13,7 +13,19 @@ namespace Mmi\App;
 /**
  * Klasa obsługi zdażeń PHP
  */
-class EventHandler {
+class KernelEventHandler {
+
+	/**
+	 * Konstruktor podpinający eventy
+	 */
+	public function __construct() {
+		//funkcja  zamknięcia aplikacji
+		register_shutdown_function(['\\Mmi\\App\\KernelEventHandler', 'shutdownHandler']);
+		//domyślne przechwycenie wyjątków
+		set_exception_handler(['\\Mmi\\App\\KernelEventHandler', 'exceptionHandler']);
+		//domyślne przechwycenie błędów
+		set_error_handler(['\\Mmi\\App\\KernelEventHandler', 'errorHandler']);
+	}
 
 	/**
 	 * Obsługuje błędy, ostrzeżenia
