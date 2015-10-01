@@ -11,6 +11,7 @@
 namespace Mmi\Orm\QueryHelper;
 
 use Mmi\Db\Adapter\PdoBindHelper;
+use Mmi\Orm\DbConnector;
 use Mmi\Orm\OrmException;
 use Mmi\Orm\Query;
 
