@@ -422,10 +422,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 			$this->addClass('validate');
 		}
 		$html = '';
-		//ustawienie nazwy po nazwie forma
-		if ($this->_form) {
-			$this->setName($this->_form->getBaseName() . '[' . rtrim($this->getName(), '[]') . ']' . (substr($this->getName(), -2) == '[]' ? '[]' : ''));
-		}
 		//iteracja po opcjach do HTML
 		foreach ($this->getOptions() as $key => $value) {
 			if (is_array($value)) {
@@ -600,6 +596,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	public function __toString() {
 		try {
 			$html = '';
+			//ustawienie nazwy po nazwie forma
+			if ($this->_form) {
+				$this->setName($this->_form->getBaseName() . '[' . rtrim($this->getName(), '[]') . ']' . (substr($this->getName(), -2) == '[]' ? '[]' : ''));
+			}
 			foreach ($this->_renderingOrder as $method) {
 				if (!method_exists($this, $method)) {
 					continue;
@@ -706,17 +706,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		}
 		$html .= '<div class="clear"></div></div>';
 		return $html;
-	}
-
-	/**
-	 * Buduje wstrzyknięty kod użytkownika
-	 * @return string
-	 */
-	public final function fetchCustomHtml() {
-		if (!$this->getOption('customHtml')) {
-			return;
-		}
-		return $this->getOption('customHtml');
 	}
 
 }

@@ -18,37 +18,32 @@ class Radio extends ElementAbstract {
 	 */
 	public function fetchField() {
 		$baseId = $this->getId();
+		$value = $this->getValue();
 		$html = '<ul id="' . $this->getId() . '-list">';
+		$f = new \Mmi\Filter\Url();
 		foreach ($this->getMultiOptions() as $key => $caption) {
-			$this->unserOption('checked');
-			if ($this->getValue() !== null && $this->getValue() == $key) {
+			//konfiguracja pola
+			$this->setValue($key)
+				->unsetOption('checked')
+				->setId($baseId . '-' . $f->filter($key));
+			//ustalenie zaznaczenia
+			if ($value !== null && $value == $key) {
 				$this->setOption('checked', '');
 			}
-			$liClass = '';
 			//wartość wyłączona
 			if (strpos($key, ':disabled') !== false) {
 				$this->setDisabled();
 			}
-			if (mb_stripos($key, ':disabled')) {
-				$key = mb_strstr($key, ':disabled', true, 'utf-8');
-				$this->_options['disabled'] = '';
-				$this->_options['value'] = '';
-				$liClass = 'disabled';
-			} else {
-				unset($this->_options['disabled']);
-				$this->_options['value'] = $key;
-			}
-			$f = new \Mmi\Filter\Url();
-			$currentId = $this->getId() . '-' . $f->filter($key);
-			$html .= '<li id="' . $currentId . '-item" class="' . $liClass . '">
-				<input type="radio" value="' . $key . '" />
-				<label for="' . $currentId . '">' . $caption . '</label>
-			</li>';
+			$html .= '<li id="' . $this->getId() . '-item">
+				<input type="radio" ' . $this->_getHtmlOptions() . ' />
+				<label for="' . $this->getId() . '">' . $caption . '</label></li>';
 		}
-		$html .= '</ul>';
-		return $html;
+		//reset całego pola
+		$this->setId($baseId)
+			->setValue($value);
+		return $html . '</ul>';
 	}
-	
+
 	/**
 	 * Buduje etykietę pola
 	 * @return string
