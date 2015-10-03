@@ -12,6 +12,14 @@ namespace Mmi\Form\Element;
 
 /**
  * Abstrakcyjna klasa elementu formularza
+ * @method ElementAbstract setName($name) ustawia nazwę
+ * @method string getName() pobiera nazwę
+ * @method mixed getValue() pobiera wartość pola
+ * @method ElementAbstract setId($id) ustawia identyfikator
+ * @method string getId() pobiera nazwę
+ * @method ElementAbstract setPlaceholder($placeholder) ustawia placeholder pola
+ * @method string getPlaceholder() pobiera placeholder
+
  */
 abstract class ElementAbstract extends \Mmi\OptionObject {
 
@@ -28,15 +36,17 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	protected $_form = null;
 
 	/**
-	 * Konstruktor, ustawia nazwę pola i opcje
+	 * Konstruktor
 	 * @param string $name nazwa
 	 */
 	public function __construct($name) {
+		//ustawia nazwę i opcje domyślne
 		$this->setName($name)
 			->setRequired(false)
 			->setRequiredAsterisk('*')
 			->setLabelPostfix(':')
 			->setIgnore(false)
+			//dodaje klasę HTML (field)
 			->addClass('field');
 	}
 
@@ -50,40 +60,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Ustawia ID
-	 * @param integer $id
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setId($id) {
-		return $this->setOption('id', $id);
-	}
-
-	/**
-	 * Pobiera ID
-	 * @return type
-	 */
-	public final function getId() {
-		return $this->getOption('id');
-	}
-
-	/**
-	 * Ustawia nazwę pola formularza
-	 * @param mixed $name wartość
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setName($name) {
-		return $this->setOption('name', $name);
-	}
-
-	/**
-	 * Pobiera nazwę pola formularza
-	 * @return string
-	 */
-	public final function getName() {
-		return $this->getOption('name');
-	}
-
-	/**
 	 * Ustawia wartość pola formularza
 	 * @param mixed $value wartość
 	 * @return \Mmi\Form\Element\ElementAbstract
@@ -91,14 +67,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	public final function setValue($value) {
 		//ustawia filtrowaną wartość
 		return $this->setOption('value', $this->_applyFilters($value));
-	}
-
-	/**
-	 * Pobiera wartość pola formularza
-	 * @return mixed
-	 */
-	public final function getValue() {
-		return $this->getOption('value');
 	}
 
 	/**
@@ -116,15 +84,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 */
 	public final function getDescription() {
 		return $this->getOption('data-description');
-	}
-
-	/**
-	 * Ustawia placeholder (HTML5)
-	 * @param string $placeholder
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setPlaceholder($placeholder) {
-		return $this->setOption('placeholder', $placeholder);
 	}
 
 	/**
@@ -292,7 +251,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	public final function addFilter($name, array $options = []) {
 		$filters = $this->getFilters();
 		$filters[] = ['filter' => $name, 'options' => $options];
-		return $this->setOption('data-filters', $filters);
+		return $this->setOption('filters', $filters);
 	}
 
 	/**
@@ -300,7 +259,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return array
 	 */
 	public final function getFilters() {
-		return is_array($this->getOption('data-filters')) ? $this->getOption('data-filters') : [];
+		return is_array($this->getOption('filters')) ? $this->getOption('filters') : [];
 	}
 
 	/**
@@ -418,13 +377,15 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	protected final function _getHtmlOptions() {
+		//jeśli istnieją validatory dodajemy klasę validate
 		if (!empty($this->getValidators())) {
 			$this->addClass('validate');
 		}
 		$html = '';
 		//iteracja po opcjach do HTML
 		foreach ($this->getOptions() as $key => $value) {
-			if (is_array($value)) {
+			//ignorowanie niemożliwych do wypisania
+			if (!is_string($value) && !is_numeric($value)) {
 				continue;
 			}
 			$html .= $key . '="' . str_replace('"', '&quot;', $value) . '" ';
