@@ -10,18 +10,18 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Element textarea
+ */
 class Textarea extends ElementAbstract {
 
 	/**
-	 * Funkcja użytkownika, jest wykonywana na końcu konstruktora
+	 * Ustawia domyślne rows i cols
 	 */
-	public function init() {
-		if (!isset($this->_options['rows'])) {
-			$this->_options['rows'] = 10;
-		}
-		if (!isset($this->_options['cols'])) {
-			$this->_options['cols'] = 60;
-		}
+	public function __construct($name) {
+		parent::__construct($name);
+		$this->setOption('rows', $this->getOption('rows') ? : 10);
+		$this->setOption('cols', $this->getOption('cols') ? : 20);
 	}
 
 	/**
@@ -29,12 +29,10 @@ class Textarea extends ElementAbstract {
 	 * @return string
 	 */
 	public function fetchField() {
-		$value = isset($this->_options['value']) ? $this->_options['value'] : null;
 		$filter = $this->_getFilter('input');
-		$value = $filter->filter($value);
-		unset($this->_options['value']);
-		$html = '<textarea ' . $this->_getHtmlOptions() . '>' . $value . '</textarea>';
-		return $html;
+		$value = $filter->filter($this->getValue());
+		$this->unsetOption('value');
+		return '<textarea ' . $this->_getHtmlOptions() . '>' . $value . '</textarea>';
 	}
 
 }

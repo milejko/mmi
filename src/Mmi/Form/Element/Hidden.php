@@ -10,10 +10,18 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Element ukrytego pola formularza
+ */
 class Hidden extends ElementAbstract {
 
-	public function init() {
-		$this->setRenderingOrder(['fetchField', 'fetchErrors']);
+	/**
+	 * Konstruktor zmienia kolejność renderowania
+	 * @param string $name
+	 */
+	public function __construct($name) {
+		parent::__construct($name);
+		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
 	}
 
 	/**
@@ -21,12 +29,7 @@ class Hidden extends ElementAbstract {
 	 * @return string
 	 */
 	public function fetchField() {
-		if (isset($this->_options['value'])) {
-			$this->_options['value'] = str_replace('"', '&quot;', $this->_options['value']);
-		}
-		$html = '<input ';
-		$html .= 'type="hidden" ' . $this->_getHtmlOptions() . '/>';
-		return $html;
+		return '<input type="hidden" ' . $this->_getHtmlOptions() . '/>';
 	}
 
 }

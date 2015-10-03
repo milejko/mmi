@@ -10,6 +10,9 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Pole plikowe
+ */
 class File extends ElementAbstract {
 
 	/**
@@ -30,7 +33,8 @@ class File extends ElementAbstract {
 	 * Zbiera pliki z tabeli $_FILES jeśli istnieją jakieś pliki dla tego pola
 	 * @return \Mmi\Form\Element\File
 	 */
-	public function init() {
+	public function __construct($name) {
+		parent::__construct($name);
 		//nazwa pola
 		$fieldName = $this->getOption('name');
 		//tablica obiektów file

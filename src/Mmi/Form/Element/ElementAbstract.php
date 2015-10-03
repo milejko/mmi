@@ -10,13 +10,10 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Abstrakcyjna klasa elementu formularza
+ */
 abstract class ElementAbstract extends \Mmi\OptionObject {
-
-	/**
-	 * Automatyczne tłumaczenie opisów i etykiet pól
-	 * @var boolean
-	 */
-	protected $_translatorEnabled = true;
 
 	/**
 	 * Błędy pola
@@ -33,31 +30,14 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	/**
 	 * Konstruktor, ustawia nazwę pola i opcje
 	 * @param string $name nazwa
-	 * @param array $options opcje
 	 */
 	public function __construct($name) {
 		$this->setName($name)
 			->setRequired(false)
 			->setRequiredAsterisk('*')
-			->setMarkRequired()
 			->setLabelPostfix(':')
 			->setIgnore(false)
-			->setDisableTranslator()
-			->init();
-	}
-
-	/**
-	 * Funkcja użytkownika, jest wykonywana na końcu konstruktora
-	 */
-	public function init() {
-		
-	}
-
-	/**
-	 * Funkcja użytkownika, jest wykonywana przed renderingiem
-	 */
-	public function preRender() {
-		
+			->addClass('field');
 	}
 
 	/**
@@ -67,6 +47,23 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 */
 	public final function addClass($className) {
 		return $this->setOption('class', trim($this->getOption('class') . ' ' . $className));
+	}
+
+	/**
+	 * Ustawia ID
+	 * @param integer $id
+	 * @return \Mmi\Form\Element\ElementAbstract
+	 */
+	public final function setId($id) {
+		return $this->setOption('id', $id);
+	}
+
+	/**
+	 * Pobiera ID
+	 * @return type
+	 */
+	public final function getId() {
+		return $this->getOption('id');
 	}
 
 	/**
@@ -87,6 +84,16 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	}
 
 	/**
+	 * Ustawia wartość pola formularza
+	 * @param mixed $value wartość
+	 * @return \Mmi\Form\Element\ElementAbstract
+	 */
+	public final function setValue($value) {
+		//ustawia filtrowaną wartość
+		return $this->setOption('value', $this->_applyFilters($value));
+	}
+
+	/**
 	 * Pobiera wartość pola formularza
 	 * @return mixed
 	 */
@@ -95,21 +102,20 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Wyłącza ajax dla formularza
-	 * @param bool $disable default: true
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setAjaxDisable($disable = true) {
-		return $this->setOption('noAjax', (bool) $disable);
-	}
-
-	/**
 	 * Ustawia opis
 	 * @param string $description
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function setDescription($description) {
-		return $this->setOption('description', $description);
+		return $this->setOption('data-description', $description);
+	}
+
+	/**
+	 * Pobiera opis
+	 * @return string
+	 */
+	public final function getDescription() {
+		return $this->getOption('data-description');
 	}
 
 	/**
@@ -127,15 +133,15 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function setIgnore($ignore = true) {
-		return $this->setOption('ignore', (bool) $ignore);
+		return $this->setOption('data-ignore', (bool) $ignore);
 	}
 
 	/**
 	 * Zwraca czy pole jest ignorowane
 	 * @return boolean
 	 */
-	public final function isIgnored() {
-		return (bool) $this->getOption('ignore');
+	public final function getIgnore() {
+		return (bool) $this->getOption('data-ignore');
 	}
 
 	/**
@@ -144,30 +150,24 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function setDisabled($disabled = true) {
-		if ($disabled) {
-			return $this->setOption('disabled', '');
-		}
-		return $this;
+		return $disabled ? $this->setOption('disabled', '') : $this;
 	}
 
 	/**
 	 * Zwraca czy pole jest wyłączone
 	 * @return boolean
 	 */
-	public final function isDisabled() {
-		return $this->getOption('disabled') !== null;
+	public final function getDisabled() {
+		return null !== $this->getOption('disabled');
 	}
 
 	/**
 	 * Ustawia pole do odczytu
-	 * @param readOnly $disable
+	 * @param boolean $readOnly
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function setReadOnly($readOnly = true) {
-		if ($readOnly) {
-			return $this->setOption('readonly', '');
-		}
-		return $this;
+		return $readOnly ? $this->setOption('readonly', '') : $this;
 	}
 
 	/**
@@ -176,7 +176,15 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function setLabel($label) {
-		return $this->setOption('label', $label);
+		return $this->setOption('data-label', $label);
+	}
+
+	/**
+	 * Pobiera label
+	 * @return string
+	 */
+	public final function getLabel() {
+		return $this->getOption('data-label');
 	}
 
 	/**
@@ -185,16 +193,15 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function setLabelPostfix($labelPostfix) {
-		return $this->setOption('labelPostfix', $labelPostfix);
+		return $this->setOption('data-labelPostfix', $labelPostfix);
 	}
 
 	/**
-	 * Ustawia wymagalność pola
-	 * @param bool $markRequired oznacz wymagane
-	 * @return \Mmi\Form\Element\ElementAbstract
+	 * Pobiera postfix labelki
+	 * @return string
 	 */
-	public final function setMarkRequired($markRequired = true) {
-		return $this->setOption('markRequired', (bool) $markRequired);
+	public final function getLabelPostfix() {
+		return $this->getOption('data-labelPostfix');
 	}
 
 	/**
@@ -203,24 +210,24 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function setRequired($required = true) {
-		return $this->setOption('required', (bool) $required);
+		return $this->setOption('data-required', (bool) $required);
 	}
 
 	/**
 	 * Zwraca czy pole jest wymagane
 	 * @return boolean
 	 */
-	public final function isRequired() {
-		return (bool) $this->getOption('required');
+	public final function getRequired() {
+		return (bool) $this->getOption('data-required');
 	}
 
 	/**
 	 * Ustawia symbol gwiazdki pól wymaganych
-	 * @param string $symbol
+	 * @param string $asterisk
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
-	public final function setRequiredAsterisk($symbol = '*') {
-		return $this->setOption('requiredAsterisk', $symbol);
+	public final function setRequiredAsterisk($asterisk = '*') {
+		return $this->setOption('data-requiredAsterisk', $asterisk);
 	}
 
 	/**
@@ -285,7 +292,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	public final function addFilter($name, array $options = []) {
 		$filters = $this->getFilters();
 		$filters[] = ['filter' => $name, 'options' => $options];
-		return $this->setOption('filters', $filters);
+		return $this->setOption('data-filters', $filters);
 	}
 
 	/**
@@ -293,16 +300,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return array
 	 */
 	public final function getFilters() {
-		return is_array($this->getOption('filters')) ? $this->getOption('filters') : [];
-	}
-
-	/**
-	 * Ustawia html użytkownika
-	 * @param string $html
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setCustomHtml($html) {
-		return $this->setOption('customHtml', $html);
+		return is_array($this->getOption('data-filters')) ? $this->getOption('data-filters') : [];
 	}
 
 	/**
@@ -312,43 +310,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 */
 	public final function setForm(\Mmi\Form\Form $form) {
 		$this->_form = $form;
+		//ustawianie ID
+		$this->setId($form->getBaseName() . '-' . $this->getName());
 		return $this;
-	}
-
-	/**
-	 * Pobranie formularza macierzystego
-	 * @return \Mmi\Form\Form
-	 */
-	public final function getForm() {
-		return $this->_form;
-	}
-
-	/**
-	 * Wyłącza translator
-	 * @param boolean $disable
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setDisableTranslator($disable = true) {
-		$this->_translatorEnabled = !$disable;
-		return $this;
-	}
-
-	/**
-	 * Pobiera translator
-	 * @return \Mmi\Translate
-	 */
-	public final function getTranslate() {
-		$translate = \Mmi\App\FrontController::getInstance()->getView()->getTranslate();
-		return (null === $translate) ? new \Mmi\Translate() : $translate;
-	}
-
-	/**
-	 * Ustawia wartość pola formularza
-	 * @param mixed $value wartość
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setValue($value) {
-		return $this->setOption('value', $this->_applyFilters($value));
 	}
 
 	/**
@@ -358,7 +322,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	public final function isValid() {
 		$result = true;
 		//waliduje poprawnie jeśli niewymagane, ale tylko gdy niepuste
-		if (!($this->isRequired() || $this->getValue() != '')) {
+		if (!($this->getRequired() || $this->getValue() != '')) {
 			return true;
 		}
 		foreach ($this->getValidators() as $validator) {
@@ -373,7 +337,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 			$v->setOptions($options);
 			if (!$v->isValid($this->getValue())) {
 				$result = false;
-				$this->_errors[] = ($message !== null) ? $message : $v->getError();
+				$this->addError(($message !== null) ? $message : $v->getError());
 			}
 		}
 		return $result;
@@ -411,17 +375,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return \Mmi\Filter\FilterAbstract
 	 */
 	protected final function _getFilter($name) {
-		$structure = \Mmi\App\FrontController::getInstance()->getStructure('filter');
-		foreach ($structure as $namespace => $filters) {
-			if (!isset($filters[$name])) {
-				continue;
-			}
-			$className = '\\' . $namespace . '\\Filter\\' . ucfirst($name);
-		}
-		if (!isset($className)) {
-			throw new \Mmi\Form\FormException('Unknown filter: ' . $name);
-		}
-		return new $className();
+		return \Mmi\App\FrontController::getInstance()->getView()->getFilter($name);
 	}
 
 	/**
@@ -464,32 +418,22 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	protected final function _getHtmlOptions() {
-		$options = $this->getOptions();
-		if (isset($options['validators']) && !isset($options['noAjax'])) {
-			$options['class'] = trim((isset($options['class']) ? $options['class'] . ' validate' : 'validate'));
-		}
-		unset($options['description']);
-		unset($options['filters']);
-		unset($options['ignore']);
-		unset($options['label']);
-		unset($options['labelPostfix']);
-		unset($options['labelAsterisk']);
-		unset($options['markRequired']);
-		unset($options['multiOptions']);
-		unset($options['labelClass']);
-		unset($options['required']);
-		unset($options['requiredAsterisk']);
-		unset($options['translatorDisabled']);
-		unset($options['validators']);
-		unset($options['customHtml']);
-		unset($options['count']);
-		if (isset($options['disabled']) && is_array($options['disabled']) && empty($options['disabled'])) {
-			unset($options['disabled']);
+		if (!empty($this->getValidators())) {
+			$this->addClass('validate');
 		}
 		$html = '';
-		foreach ($options as $key => $value) {
+		//ustawienie nazwy po nazwie forma
+		if ($this->_form) {
+			$this->setName($this->_form->getBaseName() . '[' . rtrim($this->getName(), '[]') . ']' . (substr($this->getName(), -2) == '[]' ? '[]' : ''));
+		}
+		//iteracja po opcjach do HTML
+		foreach ($this->getOptions() as $key => $value) {
+			if (is_array($value)) {
+				continue;
+			}
 			$html .= $key . '="' . str_replace('"', '&quot;', $value) . '" ';
 		}
+		//zwrot html
 		return $html;
 	}
 
@@ -647,9 +591,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * Kolejność renderowania pola
 	 * @var array
 	 */
-	protected $_renderingOrder = [
-		'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchCustomHtml'
-	];
+	protected $_renderingOrder = ['fetchBegin', 'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchEnd'];
 
 	/**
 	 * Renderer pola
@@ -657,19 +599,17 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 */
 	public function __toString() {
 		try {
-			$this->preRender();
-			$html = $this->fetchBegin();
+			$html = '';
 			foreach ($this->_renderingOrder as $method) {
 				if (!method_exists($this, $method)) {
 					continue;
 				}
 				$html .= $this->{$method}();
 			}
-			$html .= $this->fetchEnd();
+			return $html;
 		} catch (\Exception $e) {
-			$html = $e->getMessage();
+			return $e->getMessage();
 		}
-		return $html;
 	}
 
 	/**
@@ -697,7 +637,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		if ($this->hasErrors()) {
 			$this->addClass('error');
 		}
-		return '<div id ="' . $this->getOption('id') . '-container" class="' . $this->getOption('class') . '">';
+		return '<div id ="' . $this->getId() . '-container" class="' . $this->getOption('class') . '">';
 	}
 
 	/**
@@ -713,27 +653,18 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	public function fetchLabel() {
-		if (!isset($this->_options['label'])) {
+		if (!$this->getLabel()) {
 			return;
 		}
-		if (isset($this->_options['id'])) {
-			$forHtml = ' for="' . $this->_options['id'] . '" id="' . $this->_options['id'] . '-label"';
-		} else {
-			$forHtml = '';
-		}
-		if (isset($this->_options['required']) && $this->_options['required'] && isset($this->_options['markRequired']) && $this->_options['markRequired']) {
+		$forHtml = $this->getId() ? ' for="' . $this->getId() . '" id="' . $this->getId() . '-label"' : '';
+		$requiredClass = '';
+		$required = '';
+		if ($this->getRequired()) {
 			$requiredClass = ' class="required"';
-			$required = '<span class="required">' . $this->_options['requiredAsterisk'] . '</span>';
-		} else {
-			$requiredClass = '';
-			$required = '';
+			$required = '<span class="required">' . $this->getOption('data-requiredAsterisk') . '</span>';
 		}
-		if ($this->_translatorEnabled && ($this->getTranslate() !== null)) {
-			$label = $this->getTranslate()->_($this->_options['label']);
-		} else {
-			$label = $this->_options['label'];
-		}
-		return '<label' . $forHtml . $requiredClass . '>' . $label . $this->_options['labelPostfix'] . $required . '</label>';
+		//zwrot html
+		return '<label' . $forHtml . $requiredClass . '>' . $this->getLabel() . $this->getOption('data-labelPostfix') . $required . '</label>';
 	}
 
 	/**
@@ -747,19 +678,12 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	public final function fetchDescription() {
-		if (!isset($this->_options['description'])) {
+		//brak opisu
+		if (!$this->getDescription()) {
 			return;
 		}
-		if (isset($this->_options['id'])) {
-			$id = ' id="' . $this->_options['id'] . '_description"';
-		} else {
-			$id = '';
-		}
-		if ($this->_translatorEnabled && ($this->getTranslate() !== null)) {
-			$description = $this->getTranslate()->_($this->_options['description']);
-		} else {
-			$description = $this->_options['description'];
-		}
+		$id = $this->getId() ? ' id="' . $this->getId() . '_description"' : '';
+		$description = $this->getDescription();
 		return '<div' . $id . ' class="description">' . $description . '</div>';
 	}
 
@@ -768,23 +692,14 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	public final function fetchErrors() {
-		if (isset($this->_options['id'])) {
-			$idHtml = ' id="' . $this->_options['id'] . '-errors"';
-		} else {
-			$idHtml = '';
-		}
+		$idHtml = $this->getId() ? ' id="' . $this->getId() . '-errors"' : '';
 		$html = '<div class="errors"' . $idHtml . '>';
 		if ($this->hasErrors()) {
 			$html .= '<span class="marker"></span>'
 				. '<ul>'
 				. '<li class="point first"></li>';
 			foreach ($this->_errors as $error) {
-				if ($this->_translatorEnabled && ($this->getTranslate() !== null)) {
-					$err = $this->getTranslate()->_($error);
-				} else {
-					$err = $error;
-				}
-				$html .= '<li class="notice error"><i class="icon-remove-sign icon-large"></i>' . $err . '</li>';
+				$html .= '<li class="notice error"><i class="icon-remove-sign icon-large"></i>' . $error . '</li>';
 			}
 			$html .= '<li class="close last"></li>'
 				. '</ul>';
@@ -798,10 +713,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	public final function fetchCustomHtml() {
-		if (!isset($this->_options['customHtml'])) {
+		if (!$this->getOption('customHtml')) {
 			return;
 		}
-		return $this->_options['customHtml'];
+		return $this->getOption('customHtml');
 	}
 
 }

@@ -30,12 +30,6 @@ abstract class Form extends \Mmi\OptionObject {
 	protected $_formBaseName;
 
 	/**
-	 * CTRL pochodzący z POST
-	 * @var string
-	 */
-	protected $_ctrl;
-
-	/**
 	 * Obiekt rekordu
 	 * @var \Mmi\Orm\Record
 	 */
@@ -76,10 +70,6 @@ abstract class Form extends \Mmi\OptionObject {
 		//inicjalizacja formularza
 		$this->init();
 
-		//dodawanie CTRL
-		$this->addElementHidden($this->_formBaseName . '__ctrl')
-			->setIgnore();
-
 		//dane z rekordu
 		$this->hasNotEmptyRecord() && $this->setFromRecord($this->_record);
 
@@ -113,25 +103,21 @@ abstract class Form extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Ustawia zabezpieczenie CSRF
-	 * @param boolean $secured
-	 * @return \Mmi\Form
-	 */
-	public final function setSecured($secured = true) {
-		return $this->setOption('secured', (bool) $secured);
-	}
-
-	/**
 	 * Dodawanie elementu formularza z gotowego obiektu
 	 * @param \Mmi\Form\Element\ElementAbstract $element obiekt elementu formularza
 	 * @return \Mmi\Form\Element\ElementAbstract
 	 */
 	public final function addElement(\Mmi\Form\Element\ElementAbstract $element) {
 		//ustawianie opcji na elemencie
-		return $this->_elements[$element->getName()] = $element
-			->setForm($this)
-			->setOption('id', $this->_formBaseName . '-' . $element->getName())
-			->setOption('class', trim('field ' . $element->getOption('class')));
+		return $this->_elements[$element->getName()] = $element->setForm($this);
+	}
+	
+	/**
+	 * Zwraca nazwę bazową
+	 * @return string
+	 */
+	public final function getBaseName() {
+		return $this->_formBaseName;
 	}
 
 	/**
@@ -156,11 +142,11 @@ abstract class Form extends \Mmi\OptionObject {
 	 * @return boolean
 	 */
 	public final function isMine() {
-		//sprawdzenie istnienia w POST prawidłowo nazwanej zmiennej CTRL
+		//sprawdzenie istnienia w POST przestrzeni formularza
 		return \Mmi\App\FrontController::getInstance()
 				->getRequest()
 				->getPost()
-				->__isset($this->_formBaseName . '__ctrl');
+				->__isset($this->_formBaseName);
 	}
 
 	/**
@@ -174,18 +160,6 @@ abstract class Form extends \Mmi\OptionObject {
 		}
 		//dane nie od danego formularza
 		if (!$this->isMine()) {
-			return $this->_valid = false;
-		}
-
-		//odczytywanie danych CTRL
-		$options = \Mmi\Convert\Table::fromString($this->_ctrl);
-
-		//sprawdzenie zgodności klas z CTRL z bieżącą klasą
-		if ($options['class'] != get_class($this)) {
-			return $this->_valid = false;
-		}
-		//jeśli form zabezpieczony przed CSRF, sprawdzenie hash
-		if ($this->getOption('secured') && $options['hash'] != \Mmi\Session\Space::factory('\Mmi\Form')->{$this->_formBaseName}) {
 			return $this->_valid = false;
 		}
 		$validationResult = true;
@@ -207,11 +181,11 @@ abstract class Form extends \Mmi\OptionObject {
 	 */
 	public final function setFromPost(\Mmi\Http\RequestPost $post) {
 		//dane z posta do tablicy
-		$data = $post->toArray();
+		$data = $post->toArray()[$this->_formBaseName];
 		//sprawdzenie wartości dla wszystkich elementów
 		foreach ($this->getElements() as $element) {
 			//wyłączone nie są zapisywane z POST
-			if ($element->isDisabled()) {
+			if ($element->getDisabled()) {
 				continue;
 			}
 			$keyExists = array_key_exists($element->getName(), $data);
@@ -232,10 +206,6 @@ abstract class Form extends \Mmi\OptionObject {
 			}
 			//ustawianie wartości
 			$element->setValue($data[$element->getName()]);
-			//ustawianie CTRL
-			if ($element->getName() == $this->_formBaseName . '__ctrl') {
-				$this->_ctrl = $element->getValue();
-			}
 		}
 		return $this;
 	}
@@ -251,6 +221,11 @@ abstract class Form extends \Mmi\OptionObject {
 		//sprawdzenie wartości dla wszystkich elementów
 		foreach ($this->getElements() as $element) {
 			if (!array_key_exists($element->getName(), $data)) {
+				continue;
+			}
+			//checkbox
+			if ($element instanceof \Mmi\Form\Element\Checkbox) {
+				$element->getValue() == $data[$element->getName()] ? $element->setChecked() : null;
 				continue;
 			}
 			//ustawianie wartości
@@ -368,10 +343,6 @@ abstract class Form extends \Mmi\OptionObject {
 		$data = [];
 		//pobieranie danych z elementów
 		foreach ($this->getElements() as $element) {
-			//ignorowanie CTRL
-			if ($element->getName() == $this->_formBaseName . '__ctrl') {
-				continue;
-			}
 			//dodawanie wartości do tabeli
 			$data[$element->getName()] = $element->getValue();
 		}
@@ -389,13 +360,6 @@ abstract class Form extends \Mmi\OptionObject {
 		$hash = '';
 		//pobranie nazwy klasy
 		$class = get_class($this);
-		//jeśli zabezpieczony - generowanie hasha
-		if ($this->getOption('secured')) {
-			\Mmi\Session\Space::factory('\Mmi\Form')->{$this->_formBaseName} = ($hash = md5($class . microtime(true)));
-		}
-		//ustawianie nowego ctrl
-		$this->getElement($this->_formBaseName . '__ctrl')
-			->setValue(\Mmi\Convert\Table::toString(['hash' => $hash, 'class' => $class, 'recordClass' => $this->getRecordClass(), 'id' => $this->getRecordClass() ? $this->getRecord()->id : null, 'options' => $this->getOptions()]));
 		//zwrot HTML
 		return '<form action="' . ($this->getOption('action') ? $this->getOption('action') : '#') .
 			'" method="' . $this->getOption('method') .

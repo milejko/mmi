@@ -10,29 +10,36 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Element checkbox
+ */
 class Checkbox extends ElementAbstract {
 
 	/**
-	 * Kolejność renderowania pola
-	 * @var array
+	 * Konstruktor ustawia kolejność i opcje
+	 * @param string $name
 	 */
-	protected $_renderingOrder = [
-		'fetchField', 'fetchLabel', 'fetchDescription', 'fetchErrors'
-	];
-
-	public function fetchLabel() {
-		$this->_options['labelPostfix'] = '';
-		return parent::fetchLabel();
+	public function __construct($name) {
+		parent::__construct($name);
+		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchLabel', 'fetchDescription', 'fetchErrors', 'fetchEnd'])
+			->setLabelPostfix('')
+			->setValue('1');
 	}
 
+	/**
+	 * Render pola
+	 * @return string
+	 */
 	public function fetchField() {
-		if (isset($this->_options['value']) && $this->_options['value'] == 1) {
-			$this->_options['checked'] = 'checked';
-		} else {
-			unset($this->_options['checked']);
-		}
-		$this->_options['value'] = '1';
 		return '<input type="checkbox" ' . $this->_getHtmlOptions() . '/>';
+	}
+	
+	/**
+	 * Ustawia zaznaczenie
+	 * @return \Mmi\Form\Element\Checkbox
+	 */
+	public function setChecked() {
+		return $this->setOption('checked', '');
 	}
 
 }

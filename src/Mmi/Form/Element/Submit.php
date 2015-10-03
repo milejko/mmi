@@ -10,19 +10,19 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Element submit
+ */
 class Submit extends ElementAbstract {
 
 	/**
 	 * Konstruktor, ustawia nazwę pola i opcje
 	 * @param string $name nazwa
-	 * @param array $options opcje
 	 */
-	public function __construct($name, array $options = []) {
-		if (!isset($options['ignore'])) {
-			$options['ignore'] = true;
-		}
-		$this->setRenderingOrder(['fetchField', 'fetchErrors', 'fetchCustomHtml']);
-		parent::__construct($name, $options);
+	public function __construct($name) {
+		parent::__construct($name);
+		$this->setIgnore();
+		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
 	}
 
 	/**
@@ -30,16 +30,11 @@ class Submit extends ElementAbstract {
 	 * @return string
 	 */
 	public function fetchField() {
-		$html = '<input ';
-		if (isset($this->_options['label'])) {
-			if ($this->_translatorEnabled) {
-				$this->_options['value'] = $this->getTranslate()->_($this->_options['label']);
-			} else {
-				$this->_options['value'] = $this->_options['label'];
-			}
+		//labelka jako value
+		if ($this->getLabel()) {
+			$this->setValue($this->getLabel());
 		}
-		$html .= 'type="submit" ' . $this->_getHtmlOptions() . '/>';
-		return $html;
+		return '<input type="submit" ' . $this->_getHtmlOptions() . '/>';
 	}
 
 }

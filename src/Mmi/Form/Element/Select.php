@@ -10,6 +10,9 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Element lista
+ */
 class Select extends ElementAbstract {
 
 	/**
@@ -17,16 +20,15 @@ class Select extends ElementAbstract {
 	 * @return \Mmi\Form\Element\Select
 	 */
 	public function setMultiple() {
-		$this->_options['multiple'] = 'multiple';
-		return $this;
+		return $this->setOption('multiple', '');
 	}
 
 	/**
 	 * Zwraca czy pole jest multiple
 	 * @return boolean
 	 */
-	public final function isMultiple() {
-		return (isset($this->_options['multiple']) && $this->_options['multiple'] === 'multiple') ? true : false;
+	public final function getMultiple() {
+		return null !== $this->getOption('multiple');
 	}
 
 	/**
@@ -36,8 +38,8 @@ class Select extends ElementAbstract {
 	public function fetchField() {
 		$multiOptions = is_array($this->getOption('multiOptions')) ? $this->getOption('multiOptions') : [];
 		$value = $this->getValue();
-		if ($this->getOption('multiple')) {
-			$this->setOption('name', $this->getOption('name') . '[]');
+		if ($this->issetOption('multiple')) {
+			$this->setName($this->getName() . '[]');
 		}
 		unset($this->_options['value']);
 		//nagłówek selecta
@@ -49,11 +51,6 @@ class Select extends ElementAbstract {
 			if (strpos($key, ':disabled') !== false && !is_array($caption)) {
 				$key = '';
 				$disabled = ' disabled="disabled"';
-			}
-			//divide
-			if (strpos($key, ':divide') !== false && !is_array($caption)) {
-				$html .= '<option disabled="disabled" class="divide">' . $caption . '</option>';
-				continue;
 			}
 			//jeśli wystąpi zagnieżdżenie - generowanie grupy opcji
 			if (is_array($caption)) {
@@ -78,13 +75,13 @@ class Select extends ElementAbstract {
 	 * @return string
 	 */
 	protected function _calculateSelected($key, $value) {
-		$selected = ' selected="selected"';
+		$selected = ' selected';
 		//typ tablicowy
 		if (is_array($value)) {
 			return in_array($key, $value) ? $selected : '';
 		}
 		//typ skalarny
-		if ((string)$value == (string)$key && !is_null($value)) {
+		if ((string) $value == (string) $key && !is_null($value)) {
 			return $selected;
 		}
 		return '';

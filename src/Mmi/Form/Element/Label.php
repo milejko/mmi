@@ -10,13 +10,18 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Element label
+ */
 class Label extends ElementAbstract {
 
 	/**
-	 * Funkcja użytkownika, jest wykonywana na końcu konstruktora
+	 * Konstruktor usuwa labelpostfix
+	 * @param string $name
 	 */
-	public function init() {
-		$this->_options['labelPostfix'] = '';
+	public function __construct($name) {
+		parent::__construct($name);
+		$this->setLabelPostfix('');
 	}
 
 	/**

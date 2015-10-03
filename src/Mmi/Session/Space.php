@@ -79,5 +79,23 @@ class Space {
 	public function unsetAll() {
 		unset($_SESSION[$this->_namespace]);
 	}
+	
+	/**
+	 * Ustawia namespace z tabeli
+	 * @param array $data
+	 * @return \Mmi\Session\Space
+	 */
+	public function setFromArray(array $data) {
+		$_SESSION[$this->_namespace] = $data;
+		return $this;
+	}
+	
+	/**
+	 * Zrzuca namespace do tabeli
+	 * @return string
+	 */
+	public function toArray() {
+		return (isset($_SESSION[$this->_namespace]) && is_array($_SESSION[$this->_namespace])) ? $_SESSION[$this->_namespace] : [];
+	}
 
 }

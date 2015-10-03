@@ -10,6 +10,9 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Pole hasło
+ */
 class Password extends ElementAbstract {
 
 	/**
@@ -17,9 +20,7 @@ class Password extends ElementAbstract {
 	 * @return string
 	 */
 	public function fetchField() {
-		$html = '<input ';
-		$html .= 'type="password" ' . $this->_getHtmlOptions() . '/>';
-		return $html;
+		return '<input type="password" ' . $this->_getHtmlOptions() . '/>';
 	}
 
 }

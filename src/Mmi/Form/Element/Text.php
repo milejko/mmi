@@ -10,20 +10,19 @@
 
 namespace Mmi\Form\Element;
 
+/**
+ * Element pole tekstowe
+ */
 class Text extends ElementAbstract {
 
+	/**
+	 * Rendering pola tekstowego
+	 * @return string
+	 */
 	public function fetchField() {
-		$this->addFilter('Input');
-		if (isset($this->_options['value'])) {
-			$filter = $this->_getFilter('input');
-			$this->_options['value'] = $filter->filter($this->_options['value']);
-		}
-		if (isset($this->_options['placeholder']) && $this->_translatorEnabled && ($this->getTranslate() !== null)) {
-			$this->_options['placeholder'] = $this->getTranslate()->_($this->_options['placeholder']);
-		}
-		$html = '<input ';
-		$html .= 'type="text" ' . $this->_getHtmlOptions() . '/>';
-		return $html;
+		$filter = $this->_getFilter('input');
+		$this->setValue($filter->filter($this->getValue()));
+		return '<input type="text" ' . $this->_getHtmlOptions() . '/>';
 	}
 
 }

@@ -13,32 +13,22 @@ namespace Mmi\Form\Element;
 class Radio extends ElementAbstract {
 
 	/**
-	 * Ustawia klasy dla poszczególnych labelek
-	 * @param array $class - tablica $key => $class
-	 * @return \Mmi\Form\Element\Radio
-	 */
-	public function setLabelClass(array $class) {
-		$this->_options['labelClass'] = $class;
-		return $this;
-	}
-
-	/**
 	 * Buduje pole
 	 * @return string
 	 */
 	public function fetchField() {
-		$baseId = $this->getOption('id');
-		$labelClass = isset($this->_options['labelClass']) ? $this->_options['labelClass'] : [];
-		$value = $this->getValue();
-		$this->unsetOption('value');
-		$html = '<ul id="' . $this->id . '_list">';
-		
+		$baseId = $this->getId();
+		$html = '<ul id="' . $this->getId() . '-list">';
 		foreach ($this->getMultiOptions() as $key => $caption) {
-			unset($this->_options['checked']);
-			if ($value == $key && !is_null($value)) {
-				$this->_options['checked'] = 'checked';
+			$this->unserOption('checked');
+			if ($this->getValue() !== null && $this->getValue() == $key) {
+				$this->setOption('checked', '');
 			}
 			$liClass = '';
+			//wartość wyłączona
+			if (strpos($key, ':disabled') !== false) {
+				$this->setDisabled();
+			}
 			if (mb_stripos($key, ':disabled')) {
 				$key = mb_strstr($key, ':disabled', true, 'utf-8');
 				$this->_options['disabled'] = '';
@@ -49,21 +39,13 @@ class Radio extends ElementAbstract {
 				$this->_options['value'] = $key;
 			}
 			$f = new \Mmi\Filter\Url();
-			$this->_options['id'] = $baseId . '_' . $f->filter($key);
-			$classTag = "";
-			foreach ($labelClass as $labelId => $className) {
-				if ($labelId == $key) {
-					$classTag .= 'class="' . $className . '" ';
-				}
-			}
-			$html .= '<li id="' . $this->_options['id'] . '_item" class="' . $liClass . '">
-				<input type="radio" ' . $this->_getHtmlOptions() . '/>
-				<label ' . $classTag . 'for="' . $this->_options['id'] . '">' . $caption . '</label>
+			$currentId = $this->getId() . '-' . $f->filter($key);
+			$html .= '<li id="' . $currentId . '-item" class="' . $liClass . '">
+				<input type="radio" value="' . $key . '" />
+				<label for="' . $currentId . '">' . $caption . '</label>
 			</li>';
 		}
 		$html .= '</ul>';
-		$this->_options['id'] = $baseId;
-		$this->setValue($value);
 		return $html;
 	}
 	
@@ -76,13 +58,12 @@ class Radio extends ElementAbstract {
 		if (!isset($this->_options['label'])) {
 			return;
 		}
+		$requiredClass = '';
+		$required = '';
 		//html znaku wymagania
-		if (isset($this->_options['required']) && $this->_options['required'] && isset($this->_options['markRequired']) && $this->_options['markRequired']) {
+		if ($this->getRequired()) {
 			$requiredClass = ' class="required"';
-			$required = '<span class="required">' . $this->_requiredAsterisk . '</span>';
-		} else {
-			$requiredClass = '';
-			$required = '';
+			$required = '<span class="required">' . $this->getOption('data-requiredAsterisk') . '</span>';
 		}
 		//tłumaczenie labelki
 		$label = $this->_options['label'];
