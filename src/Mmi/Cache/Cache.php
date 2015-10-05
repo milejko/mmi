@@ -62,11 +62,11 @@ class Cache {
 			return;
 		}
 		//pobranie z rejestru aplikacji jeśli istnieje
-		if (\Mmi\App\Registry::issetVar($this->_registryNamespace . $key)) {
-			return \Mmi\App\Registry::getVar($this->_registryNamespace . $key);
+		if (\App\Registry::issetVar($this->_registryNamespace . $key)) {
+			return \App\Registry::getVar($this->_registryNamespace . $key);
 		}
 		//pobranie z backendu i zapis do rejestru
-		return \Mmi\App\Registry::setVar($this->_registryNamespace . $key, $this->_getValidCacheData($this->_backend->load($key)));
+		return \App\Registry::setVar($this->_registryNamespace . $key, $this->_getValidCacheData($this->_backend->load($key)));
 	}
 
 	/**
@@ -89,7 +89,7 @@ class Cache {
 		//dodanie losowej wartości do długości bufora
 		$lifetime += rand(0, 15);
 		//zapis w rejestrze
-		\Mmi\App\Registry::setVar($this->_registryNamespace . $key, $data);
+		\App\Registry::setVar($this->_registryNamespace . $key, $data);
 		//zapis w backendzie
 		return $this->_backend->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
 	}
@@ -104,7 +104,7 @@ class Cache {
 			return;
 		}
 		//usunięcie z rejestru
-		\Mmi\App\Registry::unsetVar($key);
+		\App\Registry::unsetVar($key);
 		//usunięcie z backendu
 		return $this->_backend->delete($key);
 	}
