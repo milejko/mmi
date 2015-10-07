@@ -16,14 +16,13 @@ class Paginator extends \Mmi\OptionObject {
 	 * Konstruktor, przyjmuje opcje, ustawia wartości domyślne
 	 * @param array $options opcje
 	 */
-	public function __construct(array $options = []) {
+	public function __construct() {
 		$this->setRowsPerPage(10)
 			->setShowPages(10)
 			->setPreviousLabel('&#171;')
 			->setNextLabel('&#187;')
 			->setHashHref('')
-			->setPageVariable('p')
-			->setOptions($options);
+			->setPageVariable('p');
 	}
 
 	/**
@@ -59,7 +58,7 @@ class Paginator extends \Mmi\OptionObject {
 	/**
 	 * Ustawia ilość danych do stronnicowania
 	 * @param integer $count
-	 * @return \Mmi\Paginator
+	 * @return \Mmi\Paginator\Paginator
 	 */
 	public function setRowsCount($count) {
 		return $this->setOption('rowsCount', intval($count));
@@ -68,7 +67,7 @@ class Paginator extends \Mmi\OptionObject {
 	/**
 	 * Ustawia ilość wierszy na stronę
 	 * @param integer $count
-	 * @return \Mmi\Paginator
+	 * @return \Mmi\Paginator\Paginator
 	 */
 	public function setRowsPerPage($count) {
 		return $this->setOption('rowsPerPage', intval($count));
@@ -77,7 +76,7 @@ class Paginator extends \Mmi\OptionObject {
 	/**
 	 * Ustawia nazwę zmiennej sterującej paginatorem
 	 * @param string $name
-	 * @return \Mmi\Paginator
+	 * @return \Mmi\Paginator\Paginator
 	 */
 	public function setPageVariable($name) {
 		return $this->setOption('pageVariable', $name);
@@ -86,7 +85,7 @@ class Paginator extends \Mmi\OptionObject {
 	/**
 	 * Ustawia ilość pokazywanych zakładek skoku (stron)
 	 * @param int $pages
-	 * @return \Mmi\Paginator
+	 * @return \Mmi\Paginator\Paginator
 	 */
 	public function setShowPages($pages) {
 		return $this->setOption('showPages', intval($pages));
@@ -95,7 +94,7 @@ class Paginator extends \Mmi\OptionObject {
 	/**
 	 * Ustawia tekst pod linkiem poprzedniej strony
 	 * @param string $label
-	 * @return \Mmi\Paginator
+	 * @return \Mmi\Paginator\Paginator
 	 */
 	public function setPreviousLabel($label) {
 		return $this->setOption('previousLabel', $label);
@@ -104,7 +103,7 @@ class Paginator extends \Mmi\OptionObject {
 	/**
 	 * Ustawia tekst pod linkiem następnej strony
 	 * @param string $label
-	 * @return \Mmi\Paginator
+	 * @return \Mmi\Paginator\Paginator
 	 */
 	public function setNextLabel($label) {
 		return $this->setOption('nextLabel', $label);
@@ -113,7 +112,7 @@ class Paginator extends \Mmi\OptionObject {
 	/**
 	 * Ustawia dla każdego linku label
 	 * @param string $label
-	 * @return \Mmi\Paginator
+	 * @return \Mmi\Paginator\Paginator
 	 */
 	public function setHashHref($label) {
 		return $this->setOption('hashHref', '#' . $label);

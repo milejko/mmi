@@ -12,6 +12,7 @@ namespace Mmi\Form\Element;
 
 /**
  * Element checkbox
+ * @method Checkbox setValue($value) ustawia wartość
  */
 class Checkbox extends ElementAbstract {
 
@@ -38,8 +39,8 @@ class Checkbox extends ElementAbstract {
 	 * Ustawia zaznaczenie
 	 * @return \Mmi\Form\Element\Checkbox
 	 */
-	public function setChecked() {
-		return $this->setOption('checked', '');
+	public function setChecked($checked = true) {
+		return $checked ? $this->setOption('checked', '') : $this->unsetOption('checked');
 	}
 
 }
