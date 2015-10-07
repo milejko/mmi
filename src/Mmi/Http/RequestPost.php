@@ -10,6 +10,9 @@
 
 namespace Mmi\Http;
 
+/**
+ * Klasa zapytania post
+ */
 class RequestPost extends \Mmi\DataObject {
 	
 	/**
@@ -18,6 +21,14 @@ class RequestPost extends \Mmi\DataObject {
 	 */
 	public function __construct(array $post = []) {
 		$this->_data = $post;
+	}
+	
+	/**
+	 * Sprawdza pustość post
+	 * @return boolean
+	 */
+	public function isEmpty() {
+		return empty($this->_data);
 	}
 	
 }

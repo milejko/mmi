@@ -598,7 +598,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		if ($this->hasErrors()) {
 			$this->addClass('error');
 		}
-		return '<div id ="' . $this->getId() . '-container" class="' . $this->getOption('class') . '">';
+		return '<div' . ($this->getId() ? ' id="' . $this->getId() . '-container"' : '') . ' class="' . $this->getOption('class') . '">';
 	}
 
 	/**
@@ -643,7 +643,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		if (!$this->getDescription()) {
 			return;
 		}
-		$id = $this->getId() ? ' id="' . $this->getId() . '_description"' : '';
+		$id = $this->getId() ? ' id="' . $this->getId() . '-description"' : '';
 		$description = $this->getDescription();
 		return '<div' . $id . ' class="description">' . $description . '</div>';
 	}
