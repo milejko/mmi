@@ -11,7 +11,7 @@
 namespace Mmi\App;
 
 /**
- * Klasa obsługi zdażeń PHP
+ * Klasa obsługi zdarzeń PHP
  */
 class KernelEventHandler {
 
