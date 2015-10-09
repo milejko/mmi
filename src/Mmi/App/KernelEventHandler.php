@@ -11,7 +11,7 @@
 namespace Mmi\App;
 
 /**
- * Klasa obsługi zdażeń PHP
+ * Klasa obsługi zdarzeń PHP
  */
 class KernelEventHandler {
 
@@ -147,7 +147,7 @@ class KernelEventHandler {
 			return;
 		}
 		//logowanie pozostałych wyjątków
-		FrontController::getInstance()->getLogger()->addAlert(self::_exceptionToMessage($exception));
+		FrontController::getInstance()->getLogger()->addAlert(self::_formatException($exception));
 	}
 
 	/**
