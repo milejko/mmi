@@ -9,11 +9,28 @@
  */
 
 namespace Mmi\Form;
+use Mmi\Form\Element;
 
 /**
  * Abstrakcyjna klasa komponentu formularza
  * wymaga zdefiniowania metody init()
  * w metodzie init należy skonfigurować pola formularza
+ * @method Form setClass($class) ustawia nazwę klasy
+ * @method Form setMethod($method) ustawia nazwę metody
+ * @method Form setAction($action) ustawia akcję
+ * 
+ * @method Element\Button addElementButton($name) dodaje element button
+ * @method Element\Checkbox addElementCheckbox($name) dodaje element checkbox
+ * @method Element\File addElementFile($name) dodaje element file
+ * @method Element\Hidden addElementHidden($name) dodaje element hidden
+ * @method Element\Label addElementLabel($name) dodaje element label
+ * @method Element\MultiCheckbox addElementMultiCheckbox($name) dodaje element multicheckbox
+ * @method Element\Password addElementPassword($name) dodaje element password
+ * @method Element\Radio addElementRadio($name) dodaje element radio
+ * @method Element\Select addElementSelect($name) dodaje element select
+ * @method Element\Submit addElementSubmit($name) dodaje element submit
+ * @method Element\Text addElementText($name) dodaje element text
+ * @method Element\Textarea addElementTextarea($name) dodaje element textarea
  */
 abstract class Form extends \Mmi\OptionObject {
 
@@ -52,9 +69,7 @@ abstract class Form extends \Mmi\OptionObject {
 	 * @param \Mmi\Orm\Record $record obiekt recordu
 	 * @param array $options opcje
 	 */
-	public function __construct(\Mmi\Orm\Record $record = null, array $options = []) {
-		//ustawienia opcji
-		$this->setOptions($options);
+	public function __construct(\Mmi\Orm\Record $record = null) {
 		//podłączenie rekordu
 		$this->_record = $record;
 
@@ -62,9 +77,9 @@ abstract class Form extends \Mmi\OptionObject {
 		$this->_formBaseName = strtolower(str_replace('\\', '-', get_class($this)));
 
 		//domyślne opcje
-		$this->setOption('class', $this->_formBaseName . ' vertical')
+		$this->setClass($this->_formBaseName . ' vertical')
 			->setOption('accept-charset', 'utf-8')
-			->setOption('method', 'post')
+			->setMethod('post')
 			->setOption('enctype', 'multipart/form-data');
 
 		//inicjalizacja formularza
@@ -94,15 +109,6 @@ abstract class Form extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Ustawia akcję formularza
-	 * @param string $value akcja
-	 * @return \Mmi\Form
-	 */
-	public final function setAction($value) {
-		return $this->setOption('action', $value);
-	}
-
-	/**
 	 * Dodawanie elementu formularza z gotowego obiektu
 	 * @param \Mmi\Form\Element\ElementAbstract $element obiekt elementu formularza
 	 * @return \Mmi\Form\Element\ElementAbstract
@@ -111,7 +117,7 @@ abstract class Form extends \Mmi\OptionObject {
 		//ustawianie opcji na elemencie
 		return $this->_elements[$element->getName()] = $element->setForm($this);
 	}
-	
+
 	/**
 	 * Zwraca nazwę bazową
 	 * @return string
@@ -356,15 +362,14 @@ abstract class Form extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	public final function start() {
-		//nowy hash
-		$hash = '';
-		//pobranie nazwy klasy
-		$class = get_class($this);
 		//zwrot HTML
 		return '<form action="' . ($this->getOption('action') ? $this->getOption('action') : '#') .
 			'" method="' . $this->getOption('method') .
 			'" enctype="' . $this->getOption('enctype') .
 			'" class="' . $this->getOption('class') .
+			'" data-class="' . get_class($this) .
+			'" data-record-class="' . $this->getRecordClass() .
+			'" data-record-id="' . ($this->hasNotEmptyRecord() ? $this->getRecord()->getPk() : '') .
 			'" accept-charset="' . $this->getOption('accept-charset') .
 			'">';
 	}
@@ -402,111 +407,20 @@ abstract class Form extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Button
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Button
+	 * Magicznie wywoływanie metod
+	 * @param string $name
+	 * @param array $params
+	 * @return mixed
 	 */
-	public function addElementButton($name) {
-		return $this->addElement(new \Mmi\Form\Element\Button($name));
-	}
-
-	/**
-	 * Checkbox
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Checkbox
-	 */
-	public function addElementCheckbox($name) {
-		return $this->addElement(new \Mmi\Form\Element\Checkbox($name));
-	}
-
-	/**
-	 * File
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\File
-	 */
-	public function addElementFile($name) {
-		return $this->addElement(new \Mmi\Form\Element\File($name));
-	}
-
-	/**
-	 * Hidden
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Hidden
-	 */
-	public function addElementHidden($name) {
-		return $this->addElement(new \Mmi\Form\Element\Hidden($name));
-	}
-
-	/**
-	 * Label
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Label
-	 */
-	public function addElementLabel($name) {
-		return $this->addElement(new \Mmi\Form\Element\Label($name));
-	}
-
-	/**
-	 * Multi-checkbox
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\MultiCheckbox
-	 */
-	public function addElementMultiCheckbox($name) {
-		return $this->addElement(new \Mmi\Form\Element\MultiCheckbox($name));
-	}
-
-	/**
-	 * Password
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Password
-	 */
-	public function addElementPassword($name) {
-		return $this->addElement(new \Mmi\Form\Element\Password($name));
-	}
-
-	/**
-	 * Radio
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Radio
-	 */
-	public function addElementRadio($name) {
-		return $this->addElement(new \Mmi\Form\Element\Radio($name));
-	}
-
-	/**
-	 * Select
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Select
-	 */
-	public function addElementSelect($name) {
-		return $this->addElement(new \Mmi\Form\Element\Select($name));
-	}
-
-	/**
-	 * Submit
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Submit
-	 */
-	public function addElementSubmit($name) {
-		return $this->addElement(new \Mmi\Form\Element\Submit($name));
-	}
-
-	/**
-	 * Text
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Text
-	 */
-	public function addElementText($name) {
-		return $this->addElement(new \Mmi\Form\Element\Text($name));
-	}
-
-	/**
-	 * Textarea
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\Textarea
-	 */
-	public function addElementTextarea($name) {
-		return $this->addElement(new \Mmi\Form\Element\Textarea($name));
+	public function __call($name, $params) {
+		$matches = [];
+		//obsługa addElement
+		if (preg_match('/addElement([a-zA-Z0-9]+)/', $name, $matches) && isset($params[0])) {
+			$elementClass = '\\Mmi\\Form\\Element\\' . $matches[1];
+			return $this->addElement(new $elementClass($params[0]));
+		}
+		//obsługa nadrzędnych
+		return parent::__call($name, $params);
 	}
 
 }

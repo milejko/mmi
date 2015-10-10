@@ -103,14 +103,14 @@ class Controller {
 	 * @return \Mmi\Http\RequestPost
 	 */
 	public final function getPost() {
-		return $this->_request->getPost();
+		return $this->getRequest()->getPost();
 	}
 
 	/**
 	 * Zwraca pliki z requesta
 	 */
 	public final function getFiles() {
-		return $this->_request->getFiles();
+		return $this->getRequest()->getFiles();
 	}
 
 	/**

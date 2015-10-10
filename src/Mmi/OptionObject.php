@@ -105,6 +105,14 @@ abstract class OptionObject {
 		if (preg_match('/set([a-zA-Z0-9]+)/', $name, $matches)) {
 			return $this->setOption(lcfirst($matches[1]), isset($params[0]) ? $params[0] : null);
 		}
+		//obsługa unsetów
+		if (preg_match('/unset([a-zA-Z0-9]+)/', $name, $matches)) {
+			return $this->unsetOption(lcfirst($matches[1]));
+		}
+		//obsługa issetów
+		if (preg_match('/isset([a-zA-Z0-9]+)/', $name, $matches)) {
+			return $this->issetOption(lcfirst($matches[1]));
+		}
 	}
 
 }
