@@ -415,9 +415,9 @@ abstract class Form extends \Mmi\OptionObject {
 	public function __call($name, $params) {
 		$matches = [];
 		//obsługa addElement
-		if (preg_match('/addElement([a-zA-Z0-9]+)/', $name, $matches) && isset($params[0])) {
+		if (preg_match('/addElement([a-zA-Z0-9]+)/', $name, $matches)) {
 			$elementClass = '\\Mmi\\Form\\Element\\' . $matches[1];
-			return $this->addElement(new $elementClass($params[0]));
+			return $this->addElement(new $elementClass(isset($params[0]) ? $params[0] : null));
 		}
 		//obsługa nadrzędnych
 		return parent::__call($name, $params);

@@ -19,7 +19,6 @@ namespace Mmi\Form\Element;
  * @method string getId() pobiera nazwę
  * @method ElementAbstract setPlaceholder($placeholder) ustawia placeholder pola
  * @method string getPlaceholder() pobiera placeholder
-
  */
 abstract class ElementAbstract extends \Mmi\OptionObject {
 

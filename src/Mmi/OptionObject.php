@@ -113,6 +113,7 @@ abstract class OptionObject {
 		if (preg_match('/isset([a-zA-Z0-9]+)/', $name, $matches)) {
 			return $this->issetOption(lcfirst($matches[1]));
 		}
+		throw new App\KernelException('Method not found: ' . $name);
 	}
 
 }
