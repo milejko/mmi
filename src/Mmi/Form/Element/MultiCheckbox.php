@@ -12,8 +12,19 @@ namespace Mmi\Form\Element;
 
 /**
  * Pole wielokrotny checkbox
+ * @method MultiCheckbox setBaseName($name) ustawia nazwę bazową
+ * @method string getBaseName() pobiera nazwę bazową
  */
 class MultiCheckbox extends ElementAbstract {
+	
+	/**
+	 * Konstruktor ustawia nazwę bazową formularza
+	 * @param string $name
+	 */
+	public function __construct($name) {
+		parent::__construct($name);
+		$this->setBaseName($name);
+	}
 	
 	/**
 	 * Buduje pole
@@ -27,7 +38,7 @@ class MultiCheckbox extends ElementAbstract {
 		$f = new \Mmi\Filter\Url();
 		foreach ($this->getMultiOptions() as $key => $caption) {
 			//nowy checkbox
-			$checkbox = new Checkbox($this->getName() . '[]');
+			$checkbox = new Checkbox($this->getBaseName() . '[]');
 			//konfiguracja checkboxa
 			$checkbox->setLabel($caption)
 				->setForm($this->_form)
