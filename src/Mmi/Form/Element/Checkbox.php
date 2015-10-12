@@ -24,7 +24,7 @@ class Checkbox extends ElementAbstract {
 		parent::__construct($name);
 		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchLabel', 'fetchDescription', 'fetchErrors', 'fetchEnd'])
 			->setLabelPostfix('')
-			->setValue('1');
+			->setValue(1);
 	}
 
 	/**
@@ -42,5 +42,5 @@ class Checkbox extends ElementAbstract {
 	public function setChecked($checked = true) {
 		return $checked ? $this->setOption('checked', '') : $this->unsetOption('checked');
 	}
-
+	
 }

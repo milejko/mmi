@@ -197,13 +197,13 @@ abstract class Form extends \Mmi\OptionObject {
 			$keyExists = array_key_exists($element->getName(), $data);
 			//selecty multiple i serie checkboxów dostają pusty array jeśli:
 			//brak wartości oraz dane z POST
-			if (($element instanceof \Mmi\Form\Element\MultiCheckbox || ($element instanceof \Mmi\Form\Element\Select && $element->getOption('multiple'))) && !$keyExists) {
+			if (($element instanceof Element\MultiCheckbox || ($element instanceof Element\Select && $element->getOption('multiple'))) && !$keyExists) {
 				$element->setValue([]);
 				continue;
 			}
 			//checkboxy na 0 jeśli dane z post i brak wartości
-			if ($element instanceof \Mmi\Form\Element\Checkbox && !$keyExists) {
-				$element->setValue(0);
+			if ($element instanceof Element\Checkbox) {
+				$element->setChecked($keyExists);
 				continue;
 			}
 			//jeśli klucz nie istnieje nie ustawiamy wartości
@@ -230,8 +230,8 @@ abstract class Form extends \Mmi\OptionObject {
 				continue;
 			}
 			//checkbox
-			if ($element instanceof \Mmi\Form\Element\Checkbox) {
-				$element->getValue() == $data[$element->getName()] ? $element->setChecked() : null;
+			if ($element instanceof Element\Checkbox) {
+				$element->getValue() == $data[$element->getName()] ? $element->setChecked() : $element->setChecked(false);
 				continue;
 			}
 			//ustawianie wartości
@@ -349,6 +349,11 @@ abstract class Form extends \Mmi\OptionObject {
 		$data = [];
 		//pobieranie danych z elementów
 		foreach ($this->getElements() as $element) {
+			//niezaznaczony checkbox
+			if ($element instanceof Element\Checkbox && !$element->issetChecked()) {
+				$data[$element->getName()] = 0;
+				continue;
+			}
 			//dodawanie wartości do tabeli
 			$data[$element->getName()] = $element->getValue();
 		}
