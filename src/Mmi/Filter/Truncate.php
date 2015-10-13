@@ -12,8 +12,26 @@ namespace Mmi\Filter;
 
 /**
  * Przycięcie ciągu znaków
+ * 
+ * @method self setLength($length)
+ * @method getLength()
+ * @method self setEnding($ending) końce linii
+ * @method string getEnding()
+ * @method self setBoundary($boundary) czy kończyć na pełnym wyrazie
+ * @method boolean getBoundary()
  */
 class Truncate extends \Mmi\Filter\FilterAbstract {
+
+	/**
+	 * Ustawia opcje
+	 * @param array $options
+	 * @return self
+	 */
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setLength(current($options) ? (int) current($options) : 80)
+				->setEnding(next($options) ? current($options) : '...')
+				->setBoundary(next($options) ? (bool)current($options) : false);
+	}
 
 	/**
 	 * Obcina ciąg do zadanej długości
@@ -22,17 +40,14 @@ class Truncate extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		$length = isset($this->_options[0]) ? (int) $this->_options[0] : 80;
-
-		if (strlen($value) < $length) {
+		$length = $this->getLength();
+		//dostateczna długość
+		if (mb_strlen($value, mb_detect_encoding($value)) < $length) {
 			return $value;
 		}
-
-		$end = isset($this->_options[1]) ? $this->_options[1] : '...';
-		$boundary = isset($this->_options[2]) ? (bool) $this->_options[2] : false;
 		$encoding = mb_detect_encoding($value);
-		if ($boundary) {
-			$value = mb_substr($value, 0, $length, $encoding) . $end;
+		if ($this->getBoundary()) {
+			$value = mb_substr($value, 0, $length, $encoding) . $this->getEnding();
 		} else {
 			$value = mb_substr($value, 0, $length + 1, $encoding);
 			if (strrpos($value, ' ') !== false) {

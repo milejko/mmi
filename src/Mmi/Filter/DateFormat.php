@@ -12,8 +12,20 @@ namespace Mmi\Filter;
 
 /**
  * Formater dat
+ * 
+ * @method self setFormat($format) ustawia format
+ * @method string getFormat()
  */
 class DateFormat extends \Mmi\Filter\FilterAbstract {
+	
+	/**
+	 * Ustawia opcje
+	 * @param array $options
+	 * @return self
+	 */
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setFormat(current($options));
+	}
 
 	/**
 	 * Filtracja dat
@@ -22,12 +34,13 @@ class DateFormat extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		$format = isset($this->_options[0]) ? $this->_options[0] : 'd.m.Y H:i:s';
+		!$this->getFormat() ? null : $this->setFormat('d.m.Y H:i:s');
 		$timestamp = $value;
+		//nienumeryczna
 		if (!is_numeric($value)) {
 			$timestamp = strtotime($value);
 		}
-		return date($format, $timestamp);
+		return date($this->getFormat(), $timestamp);
 	}
 
 }

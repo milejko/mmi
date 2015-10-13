@@ -28,11 +28,12 @@ class RecordUnique extends ValidatorAbstract {
 	const EXISTS = 'Pole o takiej wartości już istnieje';
 
 	/**
-	 * Konstruktor tworzy opcje
+	 * Ustawia opcje
 	 * @param array $options
+	 * @return self
 	 */
-	public function __construct(array $options) {
-		$this->setQuery(current($options))
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setQuery(current($options))
 			->setField(next($options))
 			->setId(next($options));
 	}

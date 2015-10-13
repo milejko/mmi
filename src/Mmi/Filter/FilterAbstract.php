@@ -14,6 +14,14 @@ namespace Mmi\Filter;
  * Abstrakcyjna klasa filtra
  */
 abstract class FilterAbstract extends \Mmi\OptionObject {
+	
+	/**
+	 * Konstruktor ustawia opcje
+	 * @param array $options
+	 */
+	public function __construct(array $options = []) {
+		$this->setOptions($options);
+	}
 
 	/**
 	 * Zwraca przefiltrowaną wartość

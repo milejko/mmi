@@ -12,8 +12,22 @@ namespace Mmi\Filter;
 
 /**
  * Zamiana znaków
+ * @method self setSearch($search)
+ * @method string getSearch()
+ * @method self setReplace($replace)
+ * @method string getReplace()
  */
 class Replace extends \Mmi\Filter\FilterAbstract {
+
+	/**
+	 * Ustawia opcje
+	 * @param array $options
+	 * @return self
+	 */
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setSearch(current($options))
+				->setReplace(next($options));
+	}
 
 	/**
 	 * Zamienia znaki
@@ -22,9 +36,7 @@ class Replace extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		$search = isset($this->_options[0]) ? $this->_options[0] : '';
-		$replace = isset($this->_options[1]) ? $this->_options[1] : '';
-		return str_replace($search, $replace, $value);
+		return str_replace($this->getSearch(), $this->getReplace(), $value);
 	}
 
 }

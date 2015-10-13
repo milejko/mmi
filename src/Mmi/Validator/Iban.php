@@ -24,11 +24,12 @@ class Iban extends ValidatorAbstract {
 	const INVALID = 'Wprowadzona wartość nie jest poprawnym numerem IBAN';
 
 	/**
-	 * Konstruktor tworzy opcje
+	 * Ustawia opcje
 	 * @param array $options
+	 * @return self
 	 */
-	public function __construct(array $options) {
-		$this->setCountry(current($options) ? current($options) : 'PL');
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setCountry(current($options) ? current($options) : 'PL');
 	}
 
 	/**

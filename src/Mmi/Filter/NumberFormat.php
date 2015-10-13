@@ -12,8 +12,32 @@ namespace Mmi\Filter;
 
 /**
  * Formater numerów
+ * 
+ * @method self setDigits($digits) ilość znaków
+ * @method integer getDigits() pobiera ilość znaków
+ * @method self setSeparator($separator) znak separatora przecinka
+ * @method string getSeparator()
+ * @method self setThousands($thousands) separator tysięcy
+ * @method string getThousands()
+ * @method self setTrimZeros($trim) czy ucina zera
+ * @method boolean getTrimZeros()
+ * @method self setTrimLeaveZeros($leave) ilość zer po przecinku
+ * @method integer getTrimLeaveZeros()
  */
 class NumberFormat extends \Mmi\Filter\FilterAbstract {
+	
+	/**
+	 * Ustawia opcje
+	 * @param array $options
+	 * @return self
+	 */
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setDigits(current($options) ? (int)current($options) : 2)
+			->setSeparator(next($options) ? current($options) : ',')
+			->setThousands(next($options) ? current($options) : ' ')
+			->setTrimZeros(next($options) ? (bool)current($options) : false)
+			->setTrimLeaveZeros(next($options) ? current($options) : 2);
+	}
 
 	/**
 	 * Filtruje zmienne numeryczne
@@ -22,15 +46,11 @@ class NumberFormat extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		$digits = isset($this->_options[0]) ? $this->_options[0] : 2;
-		$separator = isset($this->_options[1]) ? $this->_options[1] : ',';
-		$thousands = isset($this->_options[2]) ? $this->_options[2] : ' ';
-		$trimZeros = isset($this->_options[3]) ? $this->_options[3] : false;
-		$trimLeaveZeros = isset($this->_options[4]) ? $this->_options[4] : 2;
-		$value = number_format($value, $digits, $separator, $thousands);
-		if ($trimZeros && strpos($value, $separator)) {
+		$value = number_format($value, $this->getDigits(), $this->getSeparator(), $this->getThousands());
+		if ($this->getTrimZeros() && strpos($value, $this->getSeparator())) {
 			$tmp = rtrim($value, '0');
-			for ($i = 0, $missing = $trimLeaveZeros - ($digits - (strlen($value) - strlen($tmp))); $i < $missing; $i++) {
+			//iteracja po brakujących zerach
+			for ($i = 0, $missing = $this->getTrimLeaveZeros() - ($this->getDigits() - (strlen($value) - strlen($tmp))); $i < $missing; $i++) {
 				$tmp .= '0';
 			}
 			$value = rtrim($tmp, '.,');

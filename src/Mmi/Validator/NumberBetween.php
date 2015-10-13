@@ -26,11 +26,12 @@ class NumberBetween extends ValidatorAbstract {
 	const INVALID = 'Wprowadzona wartość nie mieści się w wymaganym przedziale';
 
 	/**
-	 * Konstruktor tworzy opcje
+	 * Ustawia opcje
 	 * @param array $options
+	 * @return self
 	 */
-	public function __construct(array $options) {
-		$this->setFrom(current($options))
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setFrom(current($options))
 			->setTo(next($options));
 	}
 

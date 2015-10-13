@@ -24,11 +24,12 @@ class Equal extends ValidatorAbstract {
 	const INVALID = 'Wprowadzona wartość nie jest poprawna';
 
 	/**
-	 * Konstruktor tworzy opcje
+	 * Ustawia opcje
 	 * @param array $options
+	 * @return self
 	 */
-	public function __construct(array $options) {
-		$this->setValue(current($options));
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setValue(current($options));
 	}
 
 	/**

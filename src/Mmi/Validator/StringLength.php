@@ -31,11 +31,12 @@ class StringLength extends ValidatorAbstract {
 	const LONG = 'Tekst jest zbyt długi';
 
 	/**
-	 * Konstruktor tworzy opcje
+	 * Ustawia opcje
 	 * @param array $options
+	 * @return self
 	 */
-	public function __construct(array $options) {
-		$this->setFrom(current($options))
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setFrom(current($options))
 			->setTo(next($options));
 	}
 
@@ -46,14 +47,12 @@ class StringLength extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		$short = $this->getFrom() ? $this->getFrom() : 0;
-		$long = $this->getTo() ? $this->getTo() : 255;
 		//za krótki
-		if (mb_strlen($value) < $short) {
+		if (mb_strlen($value) < $this->getFrom()) {
 			return $this->_error(self::SHORT);
 		}
 		//za długi
-		if (mb_strlen($value) > $long) {
+		if (mb_strlen($value) > $this->getTo()) {
 			return $this->_error(self::LONG);
 		}
 		return true;

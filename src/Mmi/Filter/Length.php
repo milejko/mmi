@@ -22,9 +22,11 @@ class Length extends \Mmi\Filter\FilterAbstract {
 	 * @return int
 	 */
 	public function filter($value) {
+		//string lub numer
 		if (is_string($value) || is_numeric($value)) {
-			return mb_strlen((string) $value);
+			return mb_strlen((string) $value, mb_detect_encoding($value));
 		}
+		//array
 		if (is_array($value) || $value instanceof \ArrayObject) {
 			return count($value);
 		}

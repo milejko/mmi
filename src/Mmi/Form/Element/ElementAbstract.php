@@ -12,6 +12,8 @@ namespace Mmi\Form\Element;
 
 /**
  * Abstrakcyjna klasa elementu formularza
+ * 
+ * Settery i gettery
  * @method self setName($name) ustawia nazwę
  * @method string getName() pobiera nazwę
  * @method mixed getValue() pobiera wartość pola
@@ -20,6 +22,7 @@ namespace Mmi\Form\Element;
  * @method ElementAbstract setPlaceholder($placeholder) ustawia placeholder pola
  * @method string getPlaceholder() pobiera placeholder
  * 
+ * Walidatory
  * @method self addValidatorAlnum() walidator alfanumeryczny
  * @method self addValidatorDate() walidator daty
  * @method self addValidatorEmailAddress() walidator email
@@ -35,7 +38,36 @@ namespace Mmi\Form\Element;
  * @method self addValidatorPostal() walidator kodu pocztowego
  * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null) walidator unikalności rekordu
  * @method self addValidatorRegex($pattern) walidator regex
- * @method self addValidatorStringLength() walidator numeryczny
+ * @method self addValidatorStringLength() walidator długości ciągu
+ * 
+ * Filtry
+ * @method self addFilterAlnum() filtr alfanumeryczny
+ * @method self addFilterAscii() filtr ASCII
+ * @method self addFilterCapitalize() filtr kapitalizacja
+ * @method self addFilterCeil() filtr sufit
+ * @method self addFilterCount() filtr zliczający
+ * @method self addFilterDateFormat($format) filtr formatujący datę
+ * @method self addFilterDump() filtr zrzucający
+ * @method self addFilterEmptyToNull() filtr konwertujący pustą wartość do null
+ * @method self addFilterEscape() filtr wykluczający HTML
+ * @method self addFilterInput() filtr tekstowy
+ * @method self addFilterIntval() filtr konwertujący do liczby całkowitej
+ * @method self addFilterIsEmpty() filtr sprawdzający pustość
+ * @method self addFilterLength() filtr długości zmiennej
+ * @method self addFilterLowercase() filtr obniżający litery
+ * @method self addFilterMarkupProperty() filtr wycina znaki do poprawnych dla atrybutu HTML
+ * @method self addFilterNl2Br() filtr nowa linia do br
+ * @method self addFilterNumberFormat($digits, $separator, $thousands = null, $trimZeros = null, $trimZerosLeave = null) filtr format liczby
+ * @method self addFilterReplace($search, $replace) filtr zamiana
+ * @method self addFilterRound($precision) filtr zaokrąglenie z precyzją
+ * @method self addFilterStringTrim($extras) filtr trim
+ * @method self addFilterStripTags($exceptions) filtr usuwanie tagów HTML
+ * @method self addFilterTinyMce() filtr dla tinyMce
+ * @method self addFilterTruncate($length, $ending = '...', $boundary = false) filtr obcięcie
+ * @method self addFilterUppercase() filtr wielkie litery
+ * @method self addFilterUrl() filtr url
+ * @method self addFilterUrlencode() filtr urlencode
+ * @method self addFilterZeroToNull() filtr zero do null'a
  */
 abstract class ElementAbstract extends \Mmi\OptionObject {
 
@@ -44,12 +76,18 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @var array
 	 */
 	protected $_errors = [];
-	
+
 	/**
 	 * Tablica walidatorów
 	 * @var \Mmi\Validator\ValidatorAbstract[]
 	 */
 	protected $_validators = [];
+
+	/**
+	 * Tablica filtrów
+	 * @var \Mmi\Filter\FilterAbstract[]
+	 */
+	protected $_filters = [];
 
 	/**
 	 * Formularz macierzysty
@@ -242,9 +280,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 
 	/**
 	 * Dodaje walidator
-	 * @param string $name nazwa
-	 * @param string $options opcje
-	 * @param string $message wiadomość
+	 * @param \Mmi\Validator\ValidatorAbstract $validator
 	 * @return self
 	 */
 	public final function addValidator(\Mmi\Validator\ValidatorAbstract $validator) {
@@ -263,13 +299,13 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 
 	/**
 	 * Dodaje filtr
-	 * @param string $name nazwa
-	 * @return \Mmi\Form\Element\ElementAbstract
+	 * @param \Mmi\Filter\FilterAbstract $filter
+	 * @return self
 	 */
-	public final function addFilter($name, array $options = []) {
-		$filters = $this->getFilters();
-		$filters[] = ['filter' => $name, 'options' => $options];
-		return $this->setOption('filters', $filters);
+	public final function addFilter(\Mmi\Filter\FilterAbstract $filter) {
+		//ustawianie opcji na elemencie
+		$this->_filters[get_class($filter)] = $filter;
+		return $this;
 	}
 
 	/**
@@ -277,7 +313,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return \Mmi\Filter\FilterAbstract[]
 	 */
 	public final function getFilters() {
-		return is_array($this->getOption('filters')) ? $this->getOption('filters') : [];
+		return is_array($this->_filters) ? $this->_filters : [];
 	}
 
 	/**
@@ -342,15 +378,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Pobiera obiekt filtra
-	 * @param string $name nazwa filtra
-	 * @return \Mmi\Filter\FilterAbstract
-	 */
-	protected final function _getFilter($name) {
-		return \Mmi\App\FrontController::getInstance()->getView()->getFilter($name);
-	}
-
-	/**
 	 * Filtruje daną wartość za pomocą filtrów pola
 	 * @param mixed $value wartość
 	 * @return mixed wynik filtracji
@@ -359,9 +386,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		//iteracja po filtrach
 		foreach ($this->getFilters() as $filter) {
 			//pobranie filtra, ustawienie opcji i filtracja zmiennej
-			$value = $this->_getFilter($filter['filter'])
-				->setOptions(isset($filter['options']) ? $filter['options'] : [])
-				->filter($value);
+			$value = $filter->filter($value);
 		}
 		return $value;
 	}
@@ -512,7 +537,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		$html .= '<div class="clear"></div></div>';
 		return $html;
 	}
-	
+
 	/**
 	 * Obsługa dodawania validatorów i filtrów
 	 * @param string $name
@@ -521,10 +546,15 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 */
 	public function __call($name, $params) {
 		$matches = [];
-		//obsługa getterów
+		//obsługa walidatorów
 		if (preg_match('/^addValidator([a-zA-Z0-9]+)/', $name, $matches)) {
 			$validatorClass = '\\Mmi\\Validator\\' . $matches[1];
 			return $this->addValidator(new $validatorClass($params));
+		}
+		//obsługa filtrów
+		if (preg_match('/^addFilter([a-zA-Z0-9]+)/', $name, $matches)) {
+			$filterClass = '\\Mmi\\Filter\\' . $matches[1];
+			return $this->addFilter(new $filterClass($params));
 		}
 		return parent::__call($name, $params);
 	}

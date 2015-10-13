@@ -22,9 +22,8 @@ class MarkupProperty extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		$value = trim(strip_tags($value));
-
-		$value = str_replace([
+		//zamiana znaków
+		return str_replace([
 			'\'',
 			'`',
 			',',
@@ -32,7 +31,7 @@ class MarkupProperty extends \Mmi\Filter\FilterAbstract {
 			'#',
 			'?',
 			'=',
-		], [
+			], [
 			'',
 			'',
 			'',
@@ -40,8 +39,7 @@ class MarkupProperty extends \Mmi\Filter\FilterAbstract {
 			'',
 			'',
 			'',
-		], $value);
-		return $value;
+			], trim(strip_tags($value)));
 	}
 
 }

@@ -12,8 +12,19 @@ namespace Mmi\Filter;
 
 /**
  * Usunięcie tagów HTML
+ * @method self setExceptions($exception)
+ * @method string getExceptions()
  */
 class StripTags extends \Mmi\Filter\FilterAbstract {
+
+	/**
+	 * Ustawia opcje
+	 * @param array $options
+	 * @return self
+	 */
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setExceptions(current($options));
+	}
 
 	/**
 	 * Kasuje html'a
@@ -22,11 +33,7 @@ class StripTags extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		$except = '';
-		if (isset($this->_options['exceptions'])) {
-			$except = $this->_options['exceptions'];
-		}
-		return strip_tags($value, $except);
+		return strip_tags($value, $this->getExceptions() ? $this->getExceptions() : '');
 	}
 
 }

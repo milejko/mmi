@@ -12,8 +12,19 @@ namespace Mmi\Filter;
 
 /**
  * Zaokrąglenie
+ * @method self setPrecision($precision)
+ * @method integer getPrecision()
  */
 class Round extends \Mmi\Filter\FilterAbstract {
+
+	/**
+	 * Ustawia opcje
+	 * @param array $options
+	 * @return self
+	 */
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setPrecision((int)current($options));
+	}
 
 	/**
 	 * Zaokrągla liczby
@@ -22,8 +33,7 @@ class Round extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		$precision = (int) (isset($this->_options[0]) ? $this->_options[0] : 0);
-		return round($value, $precision);
+		return round($value, $this->getPrecision());
 	}
 
 }

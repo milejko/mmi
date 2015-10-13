@@ -34,11 +34,12 @@ class Regex extends ValidatorAbstract {
 	const ERROROUS = 'Błędne wyrażenie regularne';
 
 	/**
-	 * Konstruktor tworzy opcje
+	 * Ustawia opcje
 	 * @param array $options
+	 * @return self
 	 */
-	public function __construct(array $options) {
-		$this->setPattern(current($options));
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setPattern(current($options));
 	}
 
 	/**
