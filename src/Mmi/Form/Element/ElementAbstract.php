@@ -16,6 +16,7 @@ namespace Mmi\Form\Element;
  * Settery i gettery
  * @method self setName($name) ustawia nazwę
  * @method string getName() pobiera nazwę
+ * @method self setValue($value) ustawia wartość
  * @method mixed getValue() pobiera wartość pola
  * @method ElementAbstract setId($id) ustawia identyfikator
  * @method string getId() pobiera nazwę
@@ -117,16 +118,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 */
 	public final function addClass($className) {
 		return $this->setOption('class', trim($this->getOption('class') . ' ' . $className));
-	}
-
-	/**
-	 * Ustawia wartość pola formularza
-	 * @param mixed $value wartość
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setValue($value) {
-		//ustawia filtrowaną wartość
-		return $this->setOption('value', $this->_applyFilters($value));
 	}
 
 	/**
@@ -382,13 +373,14 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @param mixed $value wartość
 	 * @return mixed wynik filtracji
 	 */
-	protected function _applyFilters($value) {
+	public function getFilteredValue() {
+		$val = $this->getValue();
 		//iteracja po filtrach
 		foreach ($this->getFilters() as $filter) {
 			//pobranie filtra, ustawienie opcji i filtracja zmiennej
-			$value = $filter->filter($value);
+			$val = $filter->filter($val);
 		}
-		return $value;
+		return $val;
 	}
 
 	/**

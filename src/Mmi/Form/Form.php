@@ -355,7 +355,7 @@ abstract class Form extends \Mmi\OptionObject {
 				continue;
 			}
 			//dodawanie wartości do tabeli
-			$data[$element->getName()] = $element->getValue();
+			$data[$element->getName()] = $element->getFilteredValue();
 		}
 		//ustawianie rekordu na podstawie danych
 		$this->_record->setFromArray($data);
