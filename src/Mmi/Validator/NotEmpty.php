@@ -10,6 +10,9 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator pustości
+ */
 class NotEmpty extends ValidatorAbstract {
 
 	/**

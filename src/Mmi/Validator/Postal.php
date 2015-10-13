@@ -10,6 +10,9 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator kodu pocztowego
+ */
 class Postal extends ValidatorAbstract {
 
 	/**
@@ -23,11 +26,11 @@ class Postal extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
+		//błąd
 		if (preg_match('/^[0-9]{2}-[0-9]{3}$/', $value)) {
 			return true;
 		}
-		$this->_error(self::ERROR);
-		return false;
+		return $this->_error(self::ERROR);
 	}
 
 }

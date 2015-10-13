@@ -36,7 +36,7 @@ abstract class Form extends \Mmi\OptionObject {
 
 	/**
 	 * Elementy formularza
-	 * @var array
+	 * @var Element\ElementAbstract[]
 	 */
 	protected $_elements = [];
 
@@ -128,7 +128,7 @@ abstract class Form extends \Mmi\OptionObject {
 
 	/**
 	 * Pobranie elementów formularza
-	 * @return \Mmi\Form\Element\ElementAbstract[]
+	 * @return Element\ElementAbstract[]
 	 */
 	public final function getElements() {
 		return $this->_elements;

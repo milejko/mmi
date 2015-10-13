@@ -10,6 +10,9 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator daty
+ */
 class Date extends ValidatorAbstract {
 
 	/**
@@ -23,9 +26,9 @@ class Date extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
+		//data niepoprawna
 		if (!strtotime($value)) {
-			$this->_error(self::INVALID);
-			return false;
+			return $this->_error(self::INVALID);
 		}
 		return true;
 	}

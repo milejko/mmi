@@ -10,12 +10,15 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidacja listy adresów
+ */
 class EmailAddressList extends ValidatorAbstract {
 
 	/**
 	 * Komunikat niedostatecznej długości
 	 */
-	const ERROR = 'Niepoprawny adres e-mail lub składnia';
+	const INVALID = 'Niepoprawny adres e-mail lub składnia';
 
 	/**
 	 * Sprawdza czy tekst jest e-mailem
@@ -23,16 +26,13 @@ class EmailAddressList extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		if (empty($this->_options)) {
-			$this->_options[] = ';';
-		}
-		$emails = explode($this->_options[0], urldecode($value));
+		$emails = explode(((false !== strpos($value = urldecode($value), ',')) ? ',' : ';'), $value);
+		//iteracja po mailach
 		foreach ($emails as $email) {
-			if (preg_match('/^([*+!.&#$¦\'\\%\/0-9a-z^_`{}=?~:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,4})$/i', trim($email))) {
-				continue;
+			//niepoprawny email
+			if (!(new EmailAddress())->isValid($email)) {
+				return $this->_error(self::INVALID);
 			}
-			$this->_error(self::ERROR);
-			return false;
 		}
 		return true;
 	}

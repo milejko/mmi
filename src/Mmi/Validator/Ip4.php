@@ -10,6 +10,9 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator IP4
+ */
 class Ip4 extends ValidatorAbstract {
 
 	/**
@@ -24,8 +27,7 @@ class Ip4 extends ValidatorAbstract {
 	 */
 	public function isValid($value) {
 		if (!preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $value)) {
-			$this->_error(self::INVALID);
-			return false;
+			return $this->_error(self::INVALID);
 		}
 		foreach (explode('.', $value) as $num) {
 			if ($num > 255 || $num < 0) {

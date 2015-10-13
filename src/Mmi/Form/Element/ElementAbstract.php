@@ -12,13 +12,30 @@ namespace Mmi\Form\Element;
 
 /**
  * Abstrakcyjna klasa elementu formularza
- * @method ElementAbstract setName($name) ustawia nazwę
+ * @method self setName($name) ustawia nazwę
  * @method string getName() pobiera nazwę
  * @method mixed getValue() pobiera wartość pola
  * @method ElementAbstract setId($id) ustawia identyfikator
  * @method string getId() pobiera nazwę
  * @method ElementAbstract setPlaceholder($placeholder) ustawia placeholder pola
  * @method string getPlaceholder() pobiera placeholder
+ * 
+ * @method self addValidatorAlnum() walidator alfanumeryczny
+ * @method self addValidatorDate() walidator daty
+ * @method self addValidatorEmailAddress() walidator email
+ * @method self addValidatorEmailAddressList() walidator listy email
+ * @method self addValidatorEqual($value) walidator równości
+ * @method self addValidatorIban($country = null) walidator IBAN
+ * @method self addValidatorInteger() walidator liczb całkowitych
+ * @method self addValidatorIp4() walidator IPv4
+ * @method self addValidatorIp6() walidator IPv6
+ * @method self addValidatorNotEmpty() walidator niepustości
+ * @method self addValidatorNumberBetween($from, $to) walidator numer pomiędzy
+ * @method self addValidatorNumeric() walidator numeryczny
+ * @method self addValidatorPostal() walidator kodu pocztowego
+ * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null) walidator unikalności rekordu
+ * @method self addValidatorRegex($pattern) walidator regex
+ * @method self addValidatorStringLength() walidator numeryczny
  */
 abstract class ElementAbstract extends \Mmi\OptionObject {
 
@@ -27,6 +44,12 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @var array
 	 */
 	protected $_errors = [];
+	
+	/**
+	 * Tablica walidatorów
+	 * @var \Mmi\Validator\ValidatorAbstract[]
+	 */
+	protected $_validators = [];
 
 	/**
 	 * Formularz macierzysty
@@ -222,24 +245,20 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @param string $name nazwa
 	 * @param string $options opcje
 	 * @param string $message wiadomość
-	 * @return \Mmi\Form\Element\ElementAbstract
+	 * @return self
 	 */
-	public final function addValidator($name, array $options = [], $message = null) {
-		$validators = $this->getValidators();
-		$validator = ['validator' => $name, 'options' => $options];
-		if ($message !== null) {
-			$validator['message'] = $message;
-		}
-		$validators[] = $validator;
-		return $this->setOption('validators', $validators);
+	public final function addValidator(\Mmi\Validator\ValidatorAbstract $validator) {
+		//ustawianie opcji na elemencie
+		$this->_validators[get_class($validator)] = $validator;
+		return $this;
 	}
 
 	/**
 	 * Pobiera walidatory
-	 * @return array
+	 * @return \Mmi\Validator\ValidatorAbstract[]
 	 */
 	public final function getValidators() {
-		return is_array($this->getOption('validators')) ? $this->getOption('validators') : [];
+		return is_array($this->_validators) ? $this->_validators : [];
 	}
 
 	/**
@@ -255,7 +274,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 
 	/**
 	 * Pobiera walidatory
-	 * @return array
+	 * @return \Mmi\Filter\FilterAbstract[]
 	 */
 	public final function getFilters() {
 		return is_array($this->getOption('filters')) ? $this->getOption('filters') : [];
@@ -281,23 +300,18 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		$result = true;
 		//waliduje poprawnie jeśli niewymagane, ale tylko gdy niepuste
 		if (!($this->getRequired() || $this->getValue() != '')) {
-			return true;
+			return $result;
 		}
+		//iteracja po walidatorach
 		foreach ($this->getValidators() as $validator) {
-			$options = [];
-			$message = null;
-			if (is_array($validator)) {
-				$options = isset($validator['options']) ? $validator['options'] : [];
-				$message = isset($validator['message']) ? $validator['message'] : null;
-				$validator = $validator['validator'];
+			if ($validator->isValid($this->getValue())) {
+				continue;
 			}
-			$v = $this->_getValidator($validator);
-			$v->setOptions($options);
-			if (!$v->isValid($this->getValue())) {
-				$result = false;
-				$this->addError(($message !== null) ? $message : $v->getError());
-			}
+			$result = false;
+			//@TODO: custom error messages	
+			$this->addError($validator->getError());
 		}
+		//zwrot rezultatu wszystkich walidacji (iloczyn)
 		return $result;
 	}
 
@@ -337,25 +351,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Pobiera nazwę walidatora
-	 * @param string $name nazwa walidatora
-	 * @return \Mmi\Validator\ValidatorAbstract
-	 */
-	protected final function _getValidator($name) {
-		$structure = \Mmi\App\FrontController::getInstance()->getStructure('validator');
-		foreach ($structure as $namespace => $validators) {
-			if (!isset($validators[$name])) {
-				continue;
-			}
-			$className = '\\' . $namespace . '\\Validator\\' . ucfirst($name);
-		}
-		if (!isset($className)) {
-			throw new \Mmi\Form\FormException('Unknown validator: ' . $name);
-		}
-		return new $className();
-	}
-
-	/**
 	 * Filtruje daną wartość za pomocą filtrów pola
 	 * @param mixed $value wartość
 	 * @return mixed wynik filtracji
@@ -391,156 +386,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		}
 		//zwrot html
 		return $html;
-	}
-
-	/**
-	 * Dodaje walidator alfanumeryczny
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorAlnum($message = null) {
-		return $this->addValidator('alnum', [], $message);
-	}
-
-	/**
-	 * Dodaje walidator dat
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorDate($message = null) {
-		return $this->addValidator('date', [], $message);
-	}
-
-	/**
-	 * Dodaje walidator e-maili
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorEmailAddress($message = null) {
-		return $this->addValidator('emailAddress', [], $message);
-	}
-
-	/**
-	 * Dodaje walidator listy e-maili
-	 * @param string $separator separator adresów e-mail, domyślnie ";"
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorEmailAddressList($separator = ';', $message = null) {
-		return $this->addValidator('emailAddressList', [$separator], $message);
-	}
-
-	/**
-	 * Dodaje walidator równości z wartością
-	 * @param mixed $value wartość porównania
-	 * @param bool $isCheckbox czy checkbox
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorEqual($value, $isCheckbox = false, $message = null) {
-		return $this->addValidator('equal', ['value' => $value, 'checkbox' => (bool) $isCheckbox], $message);
-	}
-
-	/**
-	 * Dodaje walidator numerów IBAN
-	 * @param string $countryPrefix kod kraju np. GB, PL
-	 * @param array $allowedCountries lista dozwolonych prefixów
-	 * @param $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorIban($countryPrefix = 'PL', array $allowedCountries = [], $message = null) {
-		return $this->addValidator('iban', [$countryPrefix, $allowedCountries], $message);
-	}
-
-	/**
-	 * Walidacja całkowitych
-	 * @param bool $positive czy tylko naturalne
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorInteger($positive = false, $message = null) {
-		return $this->addValidator('integer', ['positive' => $positive], $message);
-	}
-
-	/**
-	 * Walidacja udziału wielkich liter
-	 * @param int $percent maksymalny udział
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorLargeSmall($percent = 40, $message = null) {
-		return $this->addValidator('largeSmall', [$percent], $message);
-	}
-
-	/**
-	 * Walidacja wypełnienia pola
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorNotEmpty($message = null) {
-		return $this->addValidator('notEmpty', [], $message);
-	}
-
-	/**
-	 * Walidacja od/do
-	 * @param mixed $from większa od
-	 * @param mixed $to mniejsza od
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorValueBetween($from = null, $to = null, $message = null) {
-		return $this->addValidator('numberBetween', [$from, $to], $message);
-	}
-
-	/**
-	 * Walidacja numeryczna
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorNumeric($message = null) {
-		return $this->addValidator('numeric', [], $message);
-	}
-
-	/**
-	 * Walidacja numeryczna
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorPostal($message = null) {
-		return $this->addValidator('postal', [], $message);
-	}
-
-	/**
-	 * Walidacja unikalności rekordu
-	 * @param (\Mmi\Orm\Query $query obiekt zapytania
-	 * @param string $fieldName nazwa pola
-	 * @param int $id identyfikator istniejącego pola (domyślnie null)
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorRecordUnique(\Mmi\Orm\Query $query, $fieldName, $id = null, $message = null) {
-		return $this->addValidator('recordUnique', [$query, $fieldName, $id], $message);
-	}
-
-	/**
-	 * Walidacja regex
-	 * @param string $pattern wzorzec
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorRegex($pattern, $message = null) {
-		return $this->addValidator('regex', [$pattern], $message);
-	}
-
-	/**
-	 * Walidacja długości ciągu znaków
-	 * @param int $from długość od
-	 * @param int $to długość do
-	 * @param string $message opcjonalny komunikat błędu
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public function addValidatorStringLength($from, $to, $message = null) {
-		return $this->addValidator('stringLength', [\intval($from), \intval($to)], $message);
 	}
 
 	/**
@@ -666,6 +511,22 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		}
 		$html .= '<div class="clear"></div></div>';
 		return $html;
+	}
+	
+	/**
+	 * Obsługa dodawania validatorów i filtrów
+	 * @param string $name
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function __call($name, $params) {
+		$matches = [];
+		//obsługa getterów
+		if (preg_match('/^addValidator([a-zA-Z0-9]+)/', $name, $matches)) {
+			$validatorClass = '\\Mmi\\Validator\\' . $matches[1];
+			return $this->addValidator(new $validatorClass($params));
+		}
+		return parent::__call($name, $params);
 	}
 
 }

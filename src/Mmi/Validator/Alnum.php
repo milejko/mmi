@@ -10,6 +10,9 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Waliduje ciąg literowo cyfrowy
+ */
 class Alnum extends ValidatorAbstract {
 
 	/**
@@ -24,18 +27,16 @@ class Alnum extends ValidatorAbstract {
 	 */
 	public function isValid($value) {
 
+		//nieprawidłowy typ danych
 		if (!is_string($value) && !is_int($value) && !is_float($value)) {
-			$this->_error(self::INVALID);
-			return false;
+			return $this->_error(self::INVALID);
 		}
-
-		$filter = new \Mmi\Filter\Alnum();
-
-		if ($filter->filter($value) != $value) {
-			$this->_error(self::INVALID);
-			return false;
+		//wartość filtrowana alnumem jest równa zadanej
+		if ((new \Mmi\Filter\Alnum())->filter($value) == $value) {
+			return true;
 		}
-		return true;
+		//w pozostałych przypadkach - błąd
+		return $this->_error(self::INVALID);
 	}
 
 }

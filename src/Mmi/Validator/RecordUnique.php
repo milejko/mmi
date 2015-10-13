@@ -10,6 +10,16 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator unikalności rekordu
+ * 
+ * @method self setQuery(\Mmi\Orm\Query $query) ustawia querę
+ * @method \Mmi\Orm\Query getQuery() pobiera querę
+ * @method self setField($field) ustawia nazwę pola
+ * @method string getField() pobiera nazwę pola
+ * @method self setId($id) ustawia ID
+ * @method integer getId() pobiera ID
+ */
 class RecordUnique extends ValidatorAbstract {
 
 	/**
@@ -18,26 +28,38 @@ class RecordUnique extends ValidatorAbstract {
 	const EXISTS = 'Pole o takiej wartości już istnieje';
 
 	/**
+	 * Konstruktor tworzy opcje
+	 * @param array $options
+	 */
+	public function __construct(array $options) {
+		$this->setQuery(current($options))
+			->setField(next($options))
+			->setId(next($options));
+	}
+
+	/**
 	 * Walidacja unikalności rekordu z użyciem Query
 	 * @param mixed $value wartość
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		if (!isset($this->_options[0]) || !($this->_options[0] instanceof \Mmi\Orm\Query)) {
+		//niepoprawna quera
+		if (!($this->getQuery() instanceof \Mmi\Orm\Query)) {
 			throw new ValidatorException('No query class supplied.');
 		}
-		if (!isset($this->_options[1])) {
+		//brak pola
+		if (!$this->getField()) {
 			throw new ValidatorException('No field name supplied.');
 		}
-		$q = $this->_options[0];
+		$q = $this->getQuery();
 		/* @var $q \Mmi\Orm\Query */
-		$q->where($this->_options[1])->equals($value);
-		if (isset($this->_options[2])) {
-			$q->andField('id')->notEquals(intval($this->_options[2]));
+		$q->where($this->getField())->equals($value);
+		if ($this->getId()) {
+			$q->andField('id')->notEquals(intval($this->getId()));
 		}
+		//rekord istnieje
 		if ($q->count() > 0) {
-			$this->_error(self::EXISTS);
-			return false;
+			return $this->_error(self::EXISTS);
 		}
 		return true;
 	}

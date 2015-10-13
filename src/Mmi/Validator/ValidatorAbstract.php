@@ -10,6 +10,10 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Abstrakcyjna klasa walidatora
+ * @method setMessage();
+ */
 abstract class ValidatorAbstract extends \Mmi\OptionObject {
 
 	/**
@@ -17,14 +21,6 @@ abstract class ValidatorAbstract extends \Mmi\OptionObject {
 	 * @var string
 	 */
 	protected $_error;
-
-	/**
-	 * Konstruktor, ustawia opcje
-	 * @param array $options opcje
-	 */
-	public final function __construct(array $options = []) {
-		$this->setOptions($options);
-	}
 
 	/**
 	 * Abstrakcyjna funkcja sprawdzająca poprawność wartości
@@ -43,9 +39,11 @@ abstract class ValidatorAbstract extends \Mmi\OptionObject {
 	/**
 	 * Ustawia błąd
 	 * @param string $message
+	 * @retur boolean false
 	 */
 	protected final function _error($message) {
 		$this->_error = $message;
+		return false;
 	}
 
 }

@@ -10,6 +10,9 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator IP6
+ */
 class Ip6 extends ValidatorAbstract {
 
 	/**
@@ -23,11 +26,11 @@ class Ip6 extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		if (!preg_match('/^(?>(?>([a-f0-9]{1,4})(?>:(?1)){7}|(?!(?:.*[a-f0-9](?>:|$)){8,})((?1)(?>:(?1)){0,6})?::(?2)?)|(?>(?>(?1)(?>:(?1)){5}:|(?!(?:.*[a-f0-9]:){6,})(?3)?::(?>((?1)(?>:(?1)){0,4}):)?)?(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(?>\.(?4)){3}))$/iD', $value)) {
-			$this->_error(self::INVALID);
-			return false;
+		//poprawny IP6
+		if (preg_match('/^(?>(?>([a-f0-9]{1,4})(?>:(?1)){7}|(?!(?:.*[a-f0-9](?>:|$)){8,})((?1)(?>:(?1)){0,6})?::(?2)?)|(?>(?>(?1)(?>:(?1)){5}:|(?!(?:.*[a-f0-9]:){6,})(?3)?::(?>((?1)(?>:(?1)){0,4}):)?)?(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(?>\.(?4)){3}))$/iD', $value)) {
+			return true;
 		}
-		return true;
+		return $this->_error(self::INVALID);
 	}
 
 }

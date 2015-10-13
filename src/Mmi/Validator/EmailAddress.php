@@ -10,12 +10,15 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator adresu email
+ */
 class EmailAddress extends ValidatorAbstract {
 
 	/**
 	 * Komunikat niedostatecznej długości
 	 */
-	const ERROR = 'Niepoprawny adres e-mail';
+	const INVALID = 'Niepoprawny adres e-mail';
 
 	/**
 	 * Sprawdza czy tekst jest e-mailem
@@ -23,11 +26,11 @@ class EmailAddress extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
+		//dopasowanie emaila
 		if (preg_match('/^([*+!.&#$¦\'\\%\/0-9a-z^_`{}=?~:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,4})$/i', $value)) {
 			return true;
 		}
-		$this->_error(self::ERROR);
-		return false;
+		return $this->_error(self::INVALID);
 	}
 
 }

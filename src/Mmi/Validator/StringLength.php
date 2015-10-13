@@ -10,6 +10,14 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator długość ciągu pomiędzy
+ * 
+ * @method self setFrom($from) ustawia od
+ * @method integer getFrom() pobiera od
+ * @method self setTo($to) ustawia do
+ * @method integer getTo() pobiera do
+ */
 class StringLength extends ValidatorAbstract {
 
 	/**
@@ -23,21 +31,30 @@ class StringLength extends ValidatorAbstract {
 	const LONG = 'Tekst jest zbyt długi';
 
 	/**
+	 * Konstruktor tworzy opcje
+	 * @param array $options
+	 */
+	public function __construct(array $options) {
+		$this->setFrom(current($options))
+			->setTo(next($options));
+	}
+
+	/**
 	 * Waliduje długość ciągu, długość zadana jest w opcjach (przy konstruktorze)
 	 * w tabeli postaci array(minimum, maksimum)
 	 * @param string $value
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		$short = isset($this->_options[0]) ? $this->_options[0] : 0;
-		$long = isset($this->_options[1]) ? $this->_options[1] : 255;
-		if (strlen($value) < $short) {
-			$this->_error(self::SHORT);
-			return false;
+		$short = $this->getFrom() ? $this->getFrom() : 0;
+		$long = $this->getTo() ? $this->getTo() : 255;
+		//za krótki
+		if (mb_strlen($value) < $short) {
+			return $this->_error(self::SHORT);
 		}
-		if (strlen($value) > $long) {
-			$this->_error(self::LONG);
-			return false;
+		//za długi
+		if (mb_strlen($value) > $long) {
+			return $this->_error(self::LONG);
 		}
 		return true;
 	}

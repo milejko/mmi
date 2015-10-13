@@ -10,6 +10,14 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator liczba pomiędzy
+ * 
+ * @method self setFrom($from) ustawia od
+ * @method integer getFrom() pobiera od
+ * @method self setTo($to) ustawia do
+ * @method integer getTo() pobiera do
+ */
 class NumberBetween extends ValidatorAbstract {
 
 	/**
@@ -18,16 +26,23 @@ class NumberBetween extends ValidatorAbstract {
 	const INVALID = 'Wprowadzona wartość nie mieści się w wymaganym przedziale';
 
 	/**
+	 * Konstruktor tworzy opcje
+	 * @param array $options
+	 */
+	public function __construct(array $options) {
+		$this->setFrom(current($options))
+			->setTo(next($options));
+	}
+
+	/**
 	 * Walidacja liczb od-do
 	 * @param mixed $value wartość
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		$from = isset($this->_options[0]) ? $this->_options[0] : 0;
-		$to = isset($this->_options[1]) ? $this->_options[1] : 1000000000;
-		if (($value < $from) || ($value > $to)) {
-			$this->_error(self::INVALID);
-			return false;
+		//błąd
+		if (($value < $this->getFrom()) || ($value > $this->getTo())) {
+			return $this->_error(self::INVALID);
 		}
 		return true;
 	}

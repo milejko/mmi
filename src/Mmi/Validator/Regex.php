@@ -10,6 +10,12 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator równości
+ * 
+ * @method self setPattern($pattern) ustawia pattern
+ * @method string getPattern() pobiera pattern
+ */
 class Regex extends ValidatorAbstract {
 
 	/**
@@ -28,28 +34,34 @@ class Regex extends ValidatorAbstract {
 	const ERROROUS = 'Błędne wyrażenie regularne';
 
 	/**
+	 * Konstruktor tworzy opcje
+	 * @param array $options
+	 */
+	public function __construct(array $options) {
+		$this->setPattern(current($options));
+	}
+
+	/**
 	 * Walidacja za pomocą wyrażenia regularnego
 	 * @param mixed $value wartość
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		$pattern = isset($this->_options[0]) ? $this->_options[0] : null;
 		//jeśli nie podano wzorca, to przyjmujemy, że pasuje
-		if (is_null($pattern)) {
+		if (is_null($this->getPattern()) || false === $this->getPattern()) {
 			return true;
 		}
+		//błędny typ danych
 		if (!is_string($value) && !is_int($value) && !is_float($value)) {
-			$this->_error(self::INVALID);
-			return false;
+			return $this->_error(self::INVALID);
 		}
-		$status = preg_match($pattern, $value);
-		if ($status === false) {
-			$this->_error(self::ERROROUS);
-			return false;
+		//błędne dopasowanie
+		if (false === $status = preg_match($this->getPattern(), $value)) {
+			return $this->_error(self::ERROROUS);
 		}
+		//ciąg nieodnaleziony
 		if (!$status) {
-			$this->_error(self::NOT_MATCH);
-			return false;
+			return $this->_error(self::NOT_MATCH);
 		}
 		return true;
 	}

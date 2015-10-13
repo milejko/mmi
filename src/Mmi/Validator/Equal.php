@@ -10,6 +10,12 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator równości
+ * 
+ * @method self setValue($value) ustawia wartość bazową
+ * @method string getValue() pobiera wartość bazową
+ */
 class Equal extends ValidatorAbstract {
 
 	/**
@@ -18,9 +24,12 @@ class Equal extends ValidatorAbstract {
 	const INVALID = 'Wprowadzona wartość nie jest poprawna';
 
 	/**
-	 * Komunikat zaznaczenia pola
+	 * Konstruktor tworzy opcje
+	 * @param array $options
 	 */
-	const CHECKBOX_INVALID = 'Zaznaczenie jest wymagane';
+	public function __construct(array $options) {
+		$this->setValue(current($options));
+	}
 
 	/**
 	 * Walidacja porówniania wartości
@@ -28,13 +37,9 @@ class Equal extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		if (!isset($this->_options['value']) || $this->_options['value'] != $value) {
-			if (isset($this->_options['type']) && $this->_options['type'] == 'checkbox') {
-				$this->_error(self::CHECKBOX_INVALID);
-			} else {
-				$this->_error(self::INVALID);
-			}
-			return false;
+		//wartość nierówna
+		if ($this->getValue() != $value) {
+			return $this->_error(self::INVALID);
 		}
 		return true;
 	}

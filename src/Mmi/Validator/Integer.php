@@ -10,6 +10,9 @@
 
 namespace Mmi\Validator;
 
+/**
+ * Walidator liczb całkowitych
+ */
 class Integer extends ValidatorAbstract {
 
 	/**
@@ -18,28 +21,18 @@ class Integer extends ValidatorAbstract {
 	const INVALID = 'Wprowadzona wartość nie jest liczbą całkowitą';
 
 	/**
-	 * Treść błędu o liczbie dodatniej
-	 */
-	const INVALID_POSITIVE = 'Wprowadzona wartość nie jest liczbą dodatnią';
-
-	/**
 	 * Walidacja liczb całkowitych
 	 * @param mixed $value wartość
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		$positive = (isset($this->_options['positive']) && $this->_options['positive']) ? true : false;
+		//wartość nienumeryczna
 		if (!is_numeric($value)) {
-			$this->_error(self::INVALID);
-			return false;
+			return $this->_error(self::INVALID);
 		}
+		//wartość nie równa
 		if (!(intval($value) == $value)) {
-			$this->_error(self::INVALID);
-			return false;
-		}
-		if ($positive && !($value >= 0)) {
-			$this->_error(self::INVALID_POSITIVE);
-			return false;
+			return $this->_error(self::INVALID);
 		}
 		return true;
 	}
