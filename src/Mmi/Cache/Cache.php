@@ -62,11 +62,12 @@ class Cache {
 			return;
 		}
 		//pobranie z rejestru aplikacji jeśli istnieje
-		if (\App\Registry::issetVar($this->_registryNamespace . $key)) {
-			return \App\Registry::getVar($this->_registryNamespace . $key);
+		if (CacheRegistry::getInstance()->issetOption($this->_registryNamespace . $key)) {
+			return CacheRegistry::getInstance()->getOption($this->_registryNamespace . $key);
 		}
-		//pobranie z backendu i zapis do rejestru
-		return \App\Registry::setVar($this->_registryNamespace . $key, $this->_getValidCacheData($this->_backend->load($key)));
+		//pobranie z backendu zapis do rejestru i zwrot wartości
+		return CacheRegistry::getInstance()->setOption($this->_registryNamespace . $key, $this->_getValidCacheData($this->_backend->load($key)))
+				->getOption($this->_registryNamespace . $key);
 	}
 
 	/**
@@ -89,7 +90,7 @@ class Cache {
 		//dodanie losowej wartości do długości bufora
 		$lifetime += rand(0, 15);
 		//zapis w rejestrze
-		\App\Registry::setVar($this->_registryNamespace . $key, $data);
+		CacheRegistry::getInstance()->setOption($this->_registryNamespace . $key, $data);
 		//zapis w backendzie
 		return $this->_backend->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
 	}
@@ -104,7 +105,7 @@ class Cache {
 			return;
 		}
 		//usunięcie z rejestru
-		\App\Registry::unsetVar($key);
+		CacheRegistry::getInstance()->unsetOption($this->_registryNamespace . $key);
 		//usunięcie z backendu
 		return $this->_backend->delete($key);
 	}
@@ -118,6 +119,9 @@ class Cache {
 		if (!$this->isActive()) {
 			return;
 		}
+		//czyszczenie rejestru
+		CacheRegistry::getInstance()->setOptions([]);
+		//czyszczenie backendu
 		return $this->_backend->deleteAll();
 	}
 
