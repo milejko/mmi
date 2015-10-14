@@ -10,8 +10,8 @@
 
 namespace Mmi\Log;
 
-use Monolog\Logger;
-use Monolog\Handler;
+use Monolog\Logger,
+	Monolog\Handler;
 
 /**
  * Klasa nakładki na Monolog
@@ -23,13 +23,13 @@ class LoggerHelper {
 	 * @var \Monolog\Logger
 	 */
 	protected static $_loggerInstance;
-	
+
 	/**
 	 * Konfiguracja loggera
 	 * @var Config
 	 */
 	protected static $_config;
-	
+
 	/**
 	 * Ustawia konfigurację loggera
 	 * @param \Mmi\Logger\Config $config
@@ -37,7 +37,7 @@ class LoggerHelper {
 	public static function setConfig(Config $config) {
 		self::$_config = $config;
 	}
-	
+
 	/**
 	 * Zwraca poziom logowania
 	 * @return integer
@@ -55,7 +55,7 @@ class LoggerHelper {
 		}
 		return $minLevel;
 	}
-	
+
 	/**
 	 * Zwraca instancję helpera logowania
 	 * @return \Monolog\Logger
@@ -67,7 +67,7 @@ class LoggerHelper {
 		//konfiguruje loggera
 		return self::$_loggerInstance = self::_configureLogger();
 	}
-	
+
 	/**
 	 * Konfiguruje loggera
 	 * @return \Mmi\Logger\LoggerHelper
@@ -85,7 +85,7 @@ class LoggerHelper {
 		}
 		return $logger;
 	}
-	
+
 	private static function _configureInstance(ConfigInstance $config, Logger $logger) {
 		//wybór handlera
 		switch ($config->getHandler()) {

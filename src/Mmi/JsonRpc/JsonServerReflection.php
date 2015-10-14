@@ -10,7 +10,11 @@
 
 namespace Mmi\JsonRpc;
 
-class ServerReflection {
+use ReflectionClass,
+	ReflectionMethod,
+	ReflectionProperty;
+
+class JsonServerReflection {
 
 	/**
 	 * Refleksja klasy głównej

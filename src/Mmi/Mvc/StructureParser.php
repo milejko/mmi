@@ -19,7 +19,8 @@ class StructureParser {
 	 * Katalogi konieczne w module
 	 * @var array
 	 */
-	protected static $_moduleRequirements = ['Controller',
+	protected static $_moduleRequirements = ['IndexController.php',
+		'Model',
 		'Filter',
 		'Resource',
 		'Validator',

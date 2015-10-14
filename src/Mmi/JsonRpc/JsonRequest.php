@@ -10,7 +10,7 @@
 
 namespace Mmi\JsonRpc;
 
-class Request {
+class JsonRequest {
 
 	/**
 	 * Wersja JSON-RPC

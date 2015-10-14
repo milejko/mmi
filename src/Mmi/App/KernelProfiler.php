@@ -10,8 +10,8 @@
 
 namespace Mmi\App;
 
-use \Mmi\Log\LoggerHelper;
-use \Monolog\Logger;
+use Mmi\Log\LoggerHelper,
+	Monolog\Logger;
 
 /**
  * Klasa profilera aplikacji

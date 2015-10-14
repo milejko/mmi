@@ -10,16 +10,16 @@
 
 namespace Mmi\Orm\QueryHelper;
 
-use Mmi\Db\Adapter\PdoBindHelper;
-use Mmi\Orm\DbConnector;
-use Mmi\Orm\OrmException;
-use Mmi\Orm\Query;
+use Mmi\Db\Adapter\PdoBindHelper,
+	Mmi\Orm\DbConnector,
+	Mmi\Orm\OrmException,
+	Mmi\Orm\Query;
 
 /**
  * Klasa pola zapytania
  */
 class QueryField {
-	
+
 	/**
 	 * Nazwa pola
 	 * @var string
@@ -49,7 +49,7 @@ class QueryField {
 		$this->_logic = ($logic == 'OR') ? 'OR' : 'AND';
 		$this->_query = $query;
 	}
-	
+
 	/**
 	 * Magiczne wywołanie metod equalsColumn, greaterThanColumn itp.
 	 * @param string $name

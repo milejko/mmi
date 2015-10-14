@@ -10,7 +10,7 @@
 
 namespace Mmi\JsonRpc;
 
-class Response {
+class JsonResponse {
 
 	/**
 	 * Wersja JSON-RPC
@@ -39,7 +39,7 @@ class Response {
 	/**
 	 * Ustawia obiekt na podstawie JSON'a
 	 * @param string $data
-	 * @return \Mmi\JsonRpc\Response
+	 * @return \Mmi\JsonRpc\JsonResponse
 	 */
 	public function setFromJson($data) {
 		$response = json_decode($data);

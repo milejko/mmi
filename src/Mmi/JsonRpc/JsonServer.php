@@ -10,7 +10,7 @@
 
 namespace Mmi\JsonRpc;
 
-class Server {
+class JsonServer {
 
 	/**
 	 * Obsługa serwera
@@ -19,8 +19,8 @@ class Server {
 	 */
 	public static function handle($className) {
 
-		$response = new \Mmi\JsonRpc\Response();
-		$request = new \Mmi\JsonRpc\Request();
+		$response = new \Mmi\JsonRpc\JsonResponse();
+		$request = new \Mmi\JsonRpc\JsonRequest();
 
 		//wczytywanie danych
 		try {
@@ -75,7 +75,7 @@ class Server {
 		//wykonanie metody
 		try {
 			if ($method == 'getMethodList') {
-				$reflection = new \Mmi\JsonRpc\ServerReflection($className);
+				$reflection = new \Mmi\JsonRpc\JsonServerReflection($className);
 				$response->result = $reflection->getMethodList();
 				return $response->toJson();
 			}
