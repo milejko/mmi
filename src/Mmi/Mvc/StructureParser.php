@@ -20,10 +20,10 @@ class StructureParser {
 	 * @var array
 	 */
 	protected static $_moduleRequirements = ['IndexController.php',
-		'Model',
 		'Filter',
+		'Model',
+		'Orm',
 		'Resource',
-		'Validator',
 		'View'
 	];
 
