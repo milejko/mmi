@@ -16,15 +16,6 @@ namespace Mmi\Form\Element;
 class Textarea extends ElementAbstract {
 
 	/**
-	 * Ustawia domyślne rows i cols
-	 */
-	public function __construct($name) {
-		parent::__construct($name);
-		$this->setOption('rows', $this->getOption('rows') ? : 10);
-		$this->setOption('cols', $this->getOption('cols') ? : 20);
-	}
-
-	/**
 	 * Buduje pole
 	 * @return string
 	 */

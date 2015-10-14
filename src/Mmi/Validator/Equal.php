@@ -14,7 +14,10 @@ namespace Mmi\Validator;
  * Walidator równości
  * 
  * @method self setValue($value) ustawia wartość bazową
+ * @method self setMessage($message) ustawia własną wiadomość walidatora
+ * 
  * @method string getValue() pobiera wartość bazową
+ * @method string getMessage() pobiera wiadomość
  */
 class Equal extends ValidatorAbstract {
 
@@ -29,7 +32,8 @@ class Equal extends ValidatorAbstract {
 	 * @return self
 	 */
 	public function setOptions(array $options = [], $reset = false) {
-		return $this->setValue(current($options));
+		return $this->setValue(current($options))
+				->setMessage(next($options));
 	}
 
 	/**

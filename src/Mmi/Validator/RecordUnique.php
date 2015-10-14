@@ -14,11 +14,14 @@ namespace Mmi\Validator;
  * Walidator unikalności rekordu
  * 
  * @method self setQuery(\Mmi\Orm\Query $query) ustawia querę
- * @method \Mmi\Orm\Query getQuery() pobiera querę
  * @method self setField($field) ustawia nazwę pola
- * @method string getField() pobiera nazwę pola
  * @method self setId($id) ustawia ID
+ * @method self setMessage($message) ustawia własną wiadomość walidatora
+ *
+ * @method \Mmi\Orm\Query getQuery() pobiera querę
+ * @method string getField() pobiera nazwę pola
  * @method integer getId() pobiera ID
+ * @method string getMessage() pobiera własną wiadomość walidatora
  */
 class RecordUnique extends ValidatorAbstract {
 
@@ -34,8 +37,9 @@ class RecordUnique extends ValidatorAbstract {
 	 */
 	public function setOptions(array $options = [], $reset = false) {
 		return $this->setQuery(current($options))
-			->setField(next($options))
-			->setId(next($options));
+				->setField(next($options))
+				->setId(next($options))
+				->setMessage(next($options));
 	}
 
 	/**

@@ -17,7 +17,7 @@ namespace Mmi\Filter;
  * @method string getFormat()
  */
 class DateFormat extends \Mmi\Filter\FilterAbstract {
-	
+
 	/**
 	 * Ustawia opcje
 	 * @param array $options

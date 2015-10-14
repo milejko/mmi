@@ -12,9 +12,12 @@ namespace Mmi\Validator;
 
 /**
  * Walidator IBAN
- * 
+ *
  * @method self setCountry($country) ustawia kraj
+ * @method self setMessage($message) ustawia własną wiadomość walidatora
+ * 
  * @method string getCountry() pobiera kraj
+ * @method string getMessage() pobiera wiadomość
  */
 class Iban extends ValidatorAbstract {
 
@@ -29,7 +32,8 @@ class Iban extends ValidatorAbstract {
 	 * @return self
 	 */
 	public function setOptions(array $options = [], $reset = false) {
-		return $this->setCountry(current($options) ? current($options) : 'PL');
+		return $this->setCountry(current($options) ? current($options) : 'PL')
+				->setMessage(next($options));
 	}
 
 	/**

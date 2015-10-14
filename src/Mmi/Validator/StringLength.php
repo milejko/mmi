@@ -14,9 +14,12 @@ namespace Mmi\Validator;
  * Walidator długość ciągu pomiędzy
  * 
  * @method self setFrom($from) ustawia od
- * @method integer getFrom() pobiera od
  * @method self setTo($to) ustawia do
+ * @method self setMessage($message) ustawia własną wiadomość walidatora
+ *  
+ * @method integer getFrom() pobiera od
  * @method integer getTo() pobiera do
+ * @method string getMessage() pobiera wiadomość
  */
 class StringLength extends ValidatorAbstract {
 
@@ -37,7 +40,8 @@ class StringLength extends ValidatorAbstract {
 	 */
 	public function setOptions(array $options = [], $reset = false) {
 		return $this->setFrom(current($options))
-			->setTo(next($options));
+				->setTo(next($options))
+				->setMessage(next($options));
 	}
 
 	/**

@@ -10,6 +10,9 @@
 
 namespace Mmi;
 
+/**
+ * Klasa obiektu opcji
+ */
 abstract class OptionObject {
 
 	/**
@@ -17,20 +20,12 @@ abstract class OptionObject {
 	 * @var array
 	 */
 	protected $_options = [];
-
-	/**
-	 * Fabryka obiektów
-	 * @return \self
-	 */
-	public static function factory() {
-		return new self();
-	}
-
+	
 	/**
 	 * Ustawia opcję
 	 * @param string $key klucz
 	 * @param string $value wartość
-	 * @return \Mmi\OptionObject
+	 * @return self
 	 */
 	public function setOption($key, $value) {
 		$this->_options[$key] = $value;
@@ -49,7 +44,7 @@ abstract class OptionObject {
 	/**
 	 * Usuwa opcję
 	 * @param string $key klucz
-	 * @return \Mmi\OptionObject
+	 * @return self
 	 */
 	public function unsetOption($key) {
 		unset($this->_options[$key]);
@@ -69,14 +64,16 @@ abstract class OptionObject {
 	 * Ustawia wszystkie opcje na podstawie tabeli
 	 * @param array $options tabela opcji
 	 * @param boolean $reset usuwa poprzednie wartości (domyślnie nie)
-	 * @return \Mmi\OptionObject
+	 * @return self
 	 */
 	public function setOptions(array $options = [], $reset = false) {
+		//jeśli reset
 		if ($reset) {
-			$this->_options = $options;
+			$this->_options = [];
 		}
+		//dopełnianie tabeli opcji
 		foreach ($options as $key => $value) {
-			$this->_options[$key] = $value;
+			$this->setOption($key, $value);
 		}
 		return $this;
 	}

@@ -25,18 +25,18 @@ namespace Mmi\Filter;
  * @method integer getTrimLeaveZeros()
  */
 class NumberFormat extends \Mmi\Filter\FilterAbstract {
-	
+
 	/**
 	 * Ustawia opcje
 	 * @param array $options
 	 * @return self
 	 */
 	public function setOptions(array $options = [], $reset = false) {
-		return $this->setDigits(current($options) ? (int)current($options) : 2)
-			->setSeparator(next($options) ? current($options) : ',')
-			->setThousands(next($options) ? current($options) : ' ')
-			->setTrimZeros(next($options) ? (bool)current($options) : false)
-			->setTrimLeaveZeros(next($options) ? current($options) : 2);
+		return $this->setDigits(current($options) ? (int) current($options) : 2)
+				->setSeparator(next($options) ? current($options) : ',')
+				->setThousands(next($options) ? current($options) : ' ')
+				->setTrimZeros(next($options) ? (bool) current($options) : false)
+				->setTrimLeaveZeros(next($options) ? current($options) : 2);
 	}
 
 	/**

@@ -12,10 +12,12 @@ namespace Mmi\Validator;
 
 /**
  * Abstrakcyjna klasa walidatora
- * @method setMessage();
+ * 
+ * @method self setMessage($message) ustawia własną wiadomość walidatora
+ * @method string getMessage() pobiera wiadomość
  */
 abstract class ValidatorAbstract extends \Mmi\OptionObject {
-
+	
 	/**
 	 * Wiadomość
 	 * @var string
@@ -26,8 +28,17 @@ abstract class ValidatorAbstract extends \Mmi\OptionObject {
 	 * Konstruktor ustawia opcje
 	 * @param array $options
 	 */
-	public function __construct(array $options = []) {
+	public final function __construct(array $options = []) {
 		$this->setOptions($options);
+	}
+	
+	/**
+	 * Ustawia opcje (domyślnie wiadomość)
+	 * @param array $options
+	 * @return self
+	 */
+	public function setOptions(array $options = [], $reset = false) {
+		return $this->setMessage(current($options));
 	}
 
 	/**

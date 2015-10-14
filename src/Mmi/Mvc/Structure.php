@@ -23,9 +23,8 @@ class Structure {
 		$components = ['module' => [],
 			'template' => [],
 			'translate' => [],
-			'helper' => [],
 			'filter' => [],
-			'validator' => []
+			'helper' => [],
 		];
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			$components = array_merge_recursive(self::_parseModule($module), $components);
@@ -42,9 +41,8 @@ class Structure {
 		$components = ['module' => [],
 			'template' => [],
 			'translate' => [],
-			'helper' => [],
 			'filter' => [],
-			'validator' => []
+			'helper' => [],
 		];
 		//brak modułów
 		if (!file_exists($path)) {
@@ -55,8 +53,6 @@ class Structure {
 		self::_parseAdditions($components['helper'], $module, $path . '/Mvc/ViewHelper');
 		//filtry
 		self::_parseAdditions($components['filter'], $module, $path . '/Filter');
-		//walidatory
-		self::_parseAdditions($components['validator'], $module, $path . '/Validator');
 		//tłumaczenia
 		self::_parseAdditions($components['translate'], $module, $path . '/Resource/i18n');
 		//kontrolery

@@ -13,33 +13,35 @@ namespace Mmi\Form\Element;
 /**
  * Abstrakcyjna klasa elementu formularza
  * 
- * Settery i gettery
- * @method self setName($name) ustawia nazwę
+ * Gettery
  * @method string getName() pobiera nazwę
- * @method self setValue($value) ustawia wartość
  * @method mixed getValue() pobiera wartość pola
- * @method ElementAbstract setId($id) ustawia identyfikator
  * @method string getId() pobiera nazwę
- * @method ElementAbstract setPlaceholder($placeholder) ustawia placeholder pola
  * @method string getPlaceholder() pobiera placeholder
  * 
+ * Settery
+ * @method self setName($name) ustawia nazwę
+ * @method self setValue($value) ustawia wartość
+ * @method self setId($id) ustawia identyfikator
+ * @method self setPlaceholder($placeholder) ustawia placeholder pola
+ * 
  * Walidatory
- * @method self addValidatorAlnum() walidator alfanumeryczny
- * @method self addValidatorDate() walidator daty
- * @method self addValidatorEmailAddress() walidator email
- * @method self addValidatorEmailAddressList() walidator listy email
- * @method self addValidatorEqual($value) walidator równości
- * @method self addValidatorIban($country = null) walidator IBAN
- * @method self addValidatorInteger() walidator liczb całkowitych
- * @method self addValidatorIp4() walidator IPv4
- * @method self addValidatorIp6() walidator IPv6
- * @method self addValidatorNotEmpty() walidator niepustości
- * @method self addValidatorNumberBetween($from, $to) walidator numer pomiędzy
- * @method self addValidatorNumeric() walidator numeryczny
- * @method self addValidatorPostal() walidator kodu pocztowego
- * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null) walidator unikalności rekordu
- * @method self addValidatorRegex($pattern) walidator regex
- * @method self addValidatorStringLength() walidator długości ciągu
+ * @method self addValidatorAlnum($message = null) walidator alfanumeryczny
+ * @method self addValidatorDate($message = null) walidator daty
+ * @method self addValidatorEmailAddress($message = null) walidator email
+ * @method self addValidatorEmailAddressList($message = null) walidator listy email
+ * @method self addValidatorEqual($value, $message = null) walidator równości
+ * @method self addValidatorIban($country = null, $message = null) walidator IBAN
+ * @method self addValidatorInteger($message = null) walidator liczb całkowitych
+ * @method self addValidatorIp4($message = null) walidator IPv4
+ * @method self addValidatorIp6($message = null) walidator IPv6
+ * @method self addValidatorNotEmpty($message = null) walidator niepustości
+ * @method self addValidatorNumberBetween($from, $to, $message = null) walidator numer pomiędzy
+ * @method self addValidatorNumeric($message = null) walidator numeryczny
+ * @method self addValidatorPostal($message = null) walidator kodu pocztowego
+ * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null, $message = null) walidator unikalności rekordu
+ * @method self addValidatorRegex($pattern, $message = null) walidator regex
+ * @method self addValidatorStringLength($message = null) walidator długości ciągu
  * 
  * Filtry
  * @method self addFilterAlnum() filtr alfanumeryczny
@@ -97,6 +99,12 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	protected $_form = null;
 
 	/**
+	 * Kolejność renderowania pola
+	 * @var array
+	 */
+	protected $_renderingOrder = ['fetchBegin', 'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchEnd'];
+	
+	/**
 	 * Konstruktor
 	 * @param string $name nazwa
 	 */
@@ -114,178 +122,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	/**
 	 * Dodaje klasę do elementu
 	 * @param string $className nazwa klasy
-	 * @return \Mmi\Form\Element\ElementAbstract
+	 * @return self
 	 */
 	public final function addClass($className) {
 		return $this->setOption('class', trim($this->getOption('class') . ' ' . $className));
-	}
-
-	/**
-	 * Ustawia opis
-	 * @param string $description
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setDescription($description) {
-		return $this->setOption('data-description', $description);
-	}
-
-	/**
-	 * Pobiera opis
-	 * @return string
-	 */
-	public final function getDescription() {
-		return $this->getOption('data-description');
-	}
-
-	/**
-	 * Ustawia ignorowanie pola
-	 * @param bool $ignore
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setIgnore($ignore = true) {
-		return $this->setOption('data-ignore', (bool) $ignore);
-	}
-
-	/**
-	 * Zwraca czy pole jest ignorowane
-	 * @return boolean
-	 */
-	public final function getIgnore() {
-		return (bool) $this->getOption('data-ignore');
-	}
-
-	/**
-	 * Ustawia wyłączenie pola
-	 * @param bool $disabled
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setDisabled($disabled = true) {
-		return $disabled ? $this->setOption('disabled', '') : $this;
-	}
-
-	/**
-	 * Zwraca czy pole jest wyłączone
-	 * @return boolean
-	 */
-	public final function getDisabled() {
-		return null !== $this->getOption('disabled');
-	}
-
-	/**
-	 * Ustawia pole do odczytu
-	 * @param boolean $readOnly
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setReadOnly($readOnly = true) {
-		return $readOnly ? $this->setOption('readonly', '') : $this;
-	}
-
-	/**
-	 * Ustawia label pola
-	 * @param string $label
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setLabel($label) {
-		return $this->setOption('data-label', $label);
-	}
-
-	/**
-	 * Pobiera label
-	 * @return string
-	 */
-	public final function getLabel() {
-		return $this->getOption('data-label');
-	}
-
-	/**
-	 * Ustawia postfix labela
-	 * @param string $labelPostfix postfix labelki
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setLabelPostfix($labelPostfix) {
-		return $this->setOption('data-labelPostfix', $labelPostfix);
-	}
-
-	/**
-	 * Pobiera postfix labelki
-	 * @return string
-	 */
-	public final function getLabelPostfix() {
-		return $this->getOption('data-labelPostfix');
-	}
-
-	/**
-	 * Ustawia czy pole jest wymagane
-	 * @param bool $required wymagane
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setRequired($required = true) {
-		return $this->setOption('data-required', (bool) $required);
-	}
-
-	/**
-	 * Zwraca czy pole jest wymagane
-	 * @return boolean
-	 */
-	public final function getRequired() {
-		return (bool) $this->getOption('data-required');
-	}
-
-	/**
-	 * Ustawia symbol gwiazdki pól wymaganych
-	 * @param string $asterisk
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setRequiredAsterisk($asterisk = '*') {
-		return $this->setOption('data-requiredAsterisk', $asterisk);
-	}
-
-	/**
-	 * Ustawia wszystkie opcje wyboru na podstawie tabeli
-	 * @param array $multiOptions opcje
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setMultiOptions(array $multiOptions = []) {
-		return $this->setOption('multiOptions', $multiOptions);
-	}
-
-	/**
-	 * Zwraca multi opcje pola
-	 * @return array
-	 */
-	public final function getMultiOptions() {
-		return is_array($this->getOption('multiOptions')) ? $this->getOption('multiOptions') : [];
-	}
-
-	/**
-	 * Dodaje opcję wyboru
-	 * @param string $value wartość
-	 * @param string $caption nazwa
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function addMultiOption($value, $caption) {
-		$multiOptions = $this->getMultiOptions();
-		$multiOptions[$value] = $caption;
-		return $this->setOption('multiOptions', $multiOptions);
-	}
-
-	/**
-	 * Dodaje walidator
-	 * @param \Mmi\Validator\ValidatorAbstract $validator
-	 * @return self
-	 */
-	public final function addValidator(\Mmi\Validator\ValidatorAbstract $validator) {
-		//ustawianie opcji na elemencie
-		$this->_validators[get_class($validator)] = $validator;
-		return $this;
-	}
-
-	/**
-	 * Pobiera walidatory
-	 * @return \Mmi\Validator\ValidatorAbstract[]
-	 */
-	public final function getValidators() {
-		return is_array($this->_validators) ? $this->_validators : [];
 	}
 
 	/**
@@ -300,23 +140,187 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Pobiera walidatory
-	 * @return \Mmi\Filter\FilterAbstract[]
+	 * Dodaje walidator
+	 * @param \Mmi\Validator\ValidatorAbstract $validator
+	 * @return self
 	 */
-	public final function getFilters() {
-		return is_array($this->_filters) ? $this->_filters : [];
+	public final function addValidator(\Mmi\Validator\ValidatorAbstract $validator) {
+		//ustawianie opcji na elemencie
+		$this->_validators[get_class($validator)] = $validator;
+		return $this;
+	}
+
+	/**
+	 * Dodaje błąd
+	 * @param string $error
+	 * @return ElementAbstract
+	 */
+	public final function addError($error) {
+		$this->_errors[] = $error;
+		return $this;
+	}
+
+	/**
+	 * Ustawia opis
+	 * @param string $description
+	 * @return self
+	 */
+	public final function setDescription($description) {
+		return $this->setOption('data-description', $description);
+	}
+
+	/**
+	 * Ustawia ignorowanie pola
+	 * @param bool $ignore
+	 * @return self
+	 */
+	public final function setIgnore($ignore = true) {
+		return $this->setOption('data-ignore', (bool) $ignore);
+	}
+
+	/**
+	 * Ustawia wyłączenie pola
+	 * @param bool $disabled
+	 * @return self
+	 */
+	public final function setDisabled($disabled = true) {
+		return $disabled ? $this->setOption('disabled', '') : $this;
+	}
+
+	/**
+	 * Ustawia pole do odczytu
+	 * @param boolean $readOnly
+	 * @return self
+	 */
+	public final function setReadOnly($readOnly = true) {
+		return $readOnly ? $this->setOption('readonly', '') : $this;
+	}
+
+	/**
+	 * Ustawia label pola
+	 * @param string $label
+	 * @return self
+	 */
+	public final function setLabel($label) {
+		return $this->setOption('data-label', $label);
+	}
+
+	/**
+	 * Ustawia symbol gwiazdki pól wymaganych
+	 * @param string $asterisk
+	 * @return ElementAbstract
+	 */
+	public final function setRequiredAsterisk($asterisk = '*') {
+		return $this->setOption('data-requiredAsterisk', $asterisk);
+	}
+
+	/**
+	 * Ustawia czy pole jest wymagane
+	 * @param bool $required wymagane
+	 * @return self
+	 */
+	public final function setRequired($required = true) {
+		return $this->setOption('data-required', (bool) $required);
+	}
+
+	/**
+	 * Ustawia postfix labela
+	 * @param string $labelPostfix postfix labelki
+	 * @return self
+	 */
+	public final function setLabelPostfix($labelPostfix) {
+		return $this->setOption('data-labelPostfix', $labelPostfix);
 	}
 
 	/**
 	 * Ustawia form macierzysty
 	 * @param \Mmi\Form\Form $form
-	 * @return \Mmi\Form\Element\ElementAbstract
+	 * @return self
 	 */
 	public final function setForm(\Mmi\Form\Form $form) {
 		$this->_form = $form;
 		//ustawianie ID
 		$this->setId($form->getBaseName() . '-' . $this->getName());
 		return $this;
+	}
+
+	/**
+	 * Ustaw kolejność realizacji
+	 * @param array $renderingOrder
+	 * @return ElementAbstract
+	 */
+	public final function setRenderingOrder(array $renderingOrder = []) {
+		foreach ($renderingOrder as $method) {
+			if (!method_exists($this, $method)) {
+				throw new \Mmi\Form\FormException('Unknown rendering method');
+			}
+		}
+		$this->_renderingOrder = $renderingOrder;
+		return $this;
+	}
+
+	/**
+	 * Pobiera opis
+	 * @return string
+	 */
+	public final function getDescription() {
+		return $this->getOption('data-description');
+	}
+
+	/**
+	 * Zwraca czy pole jest ignorowane
+	 * @return boolean
+	 */
+	public final function getIgnore() {
+		return (bool) $this->getOption('data-ignore');
+	}
+
+	/**
+	 * Zwraca czy pole jest wyłączone
+	 * @return boolean
+	 */
+	public final function getDisabled() {
+		return null !== $this->getOption('disabled');
+	}
+
+	/**
+	 * Pobiera label
+	 * @return string
+	 */
+	public final function getLabel() {
+		return $this->getOption('data-label');
+	}
+
+	/**
+	 * Pobiera postfix labelki
+	 * @return string
+	 */
+	public final function getLabelPostfix() {
+		return $this->getOption('data-labelPostfix');
+	}
+
+	/**
+	 * Zwraca czy pole jest wymagane
+	 * @return boolean
+	 */
+	public final function getRequired() {
+		return (bool) $this->getOption('data-required');
+	}
+
+	/**
+	 * Pobiera walidatory
+	 * @return \Mmi\Validator\ValidatorAbstract[]
+	 */
+	public final function getValidators() {
+		return is_array($this->_validators) ? $this->_validators : [];
+	}
+
+	/**
+	 * Pobiera walidatory
+	 * @return \Mmi\Filter\FilterAbstract[]
+	 */
+	public final function getFilters() {
+		return is_array($this->_filters) ? $this->_filters : [];
 	}
 
 	/**
@@ -335,19 +339,11 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 				continue;
 			}
 			$result = false;
-			//@TODO: custom error messages	
-			$this->addError($validator->getError());
+			//dodawanie wiadomości z walidatora
+			$this->addError($validator->getMessage() ? $validator->getMessage() : $validator->getError());
 		}
 		//zwrot rezultatu wszystkich walidacji (iloczyn)
 		return $result;
-	}
-
-	/**
-	 * Zwraca czy pole ma błędy
-	 * @return boolean
-	 */
-	public final function hasErrors() {
-		return !empty($this->_errors);
 	}
 
 	/**
@@ -356,16 +352,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 */
 	public final function getErrors() {
 		return $this->_errors;
-	}
-
-	/**
-	 * Dodaje błąd
-	 * @param string $error
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function addError($error) {
-		$this->_errors[] = $error;
-		return $this;
 	}
 
 	/**
@@ -406,57 +392,13 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Kolejność renderowania pola
-	 * @var array
-	 */
-	protected $_renderingOrder = ['fetchBegin', 'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchEnd'];
-
-	/**
-	 * Renderer pola
-	 * @return string
-	 */
-	public function __toString() {
-		try {
-			$html = '';
-			//ustawienie nazwy po nazwie forma
-			if ($this->_form) {
-				$this->setName($this->_form->getBaseName() . '[' . rtrim($this->getName(), '[]') . ']' . (substr($this->getName(), -2) == '[]' ? '[]' : ''));
-			}
-			foreach ($this->_renderingOrder as $method) {
-				if (!method_exists($this, $method)) {
-					continue;
-				}
-				$html .= $this->{$method}();
-			}
-			return $html;
-		} catch (\Exception $e) {
-			return $e->getMessage();
-		}
-	}
-
-	/**
-	 * Ustaw kolejność realizacji
-	 * @param array $renderingOrder
-	 * @return \Mmi\Form\Element\ElementAbstract
-	 */
-	public final function setRenderingOrder(array $renderingOrder = []) {
-		foreach ($renderingOrder as $method) {
-			if (!method_exists($this, $method)) {
-				throw new \Mmi\Form\FormException('Unknown rendering method');
-			}
-		}
-		$this->_renderingOrder = $renderingOrder;
-		return $this;
-	}
-
-	/**
 	 * Buduje kontener pola (początek)
 	 * @return string
 	 */
 	public final function fetchBegin() {
 		$class = get_class($this);
 		$this->addClass(strtolower(substr($class, strrpos($class, '\\') + 1)));
-		if ($this->hasErrors()) {
+		if ($this->getErrors()) {
 			$this->addClass('error');
 		}
 		return '<div' . ($this->getId() ? ' id="' . $this->getId() . '-container"' : '') . ' class="' . $this->getOption('class') . '">';
@@ -516,7 +458,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	public final function fetchErrors() {
 		$idHtml = $this->getId() ? ' id="' . $this->getId() . '-errors"' : '';
 		$html = '<div class="errors"' . $idHtml . '>';
-		if ($this->hasErrors()) {
+		if ($this->getErrors()) {
 			$html .= '<span class="marker"></span>'
 				. '<ul>'
 				. '<li class="point first"></li>';
@@ -528,6 +470,29 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 		}
 		$html .= '<div class="clear"></div></div>';
 		return $html;
+	}
+
+	/**
+	 * Renderer pola
+	 * @return string
+	 */
+	public function __toString() {
+		try {
+			$html = '';
+			//ustawienie nazwy po nazwie forma
+			if ($this->_form) {
+				$this->setName($this->_form->getBaseName() . '[' . rtrim($this->getName(), '[]') . ']' . (substr($this->getName(), -2) == '[]' ? '[]' : ''));
+			}
+			foreach ($this->_renderingOrder as $method) {
+				if (!method_exists($this, $method)) {
+					continue;
+				}
+				$html .= $this->{$method}();
+			}
+			return $html;
+		} catch (\Exception $e) {
+			return $e->getMessage();
+		}
 	}
 
 	/**

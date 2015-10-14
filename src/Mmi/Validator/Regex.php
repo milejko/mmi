@@ -14,7 +14,10 @@ namespace Mmi\Validator;
  * Walidator równości
  * 
  * @method self setPattern($pattern) ustawia pattern
+ * @method self setMessage($message) ustawia własną wiadomość walidatora
+ * 
  * @method string getPattern() pobiera pattern
+ * @method string getMessage() pobiera wiadomość
  */
 class Regex extends ValidatorAbstract {
 
@@ -39,7 +42,8 @@ class Regex extends ValidatorAbstract {
 	 * @return self
 	 */
 	public function setOptions(array $options = [], $reset = false) {
-		return $this->setPattern(current($options));
+		return $this->setPattern(current($options))
+				->setMessage(next($options));
 	}
 
 	/**

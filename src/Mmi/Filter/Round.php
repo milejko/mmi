@@ -23,7 +23,7 @@ class Round extends \Mmi\Filter\FilterAbstract {
 	 * @return self
 	 */
 	public function setOptions(array $options = [], $reset = false) {
-		return $this->setPrecision((int)current($options));
+		return $this->setPrecision((int) current($options));
 	}
 
 	/**

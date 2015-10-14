@@ -30,7 +30,7 @@ class Truncate extends \Mmi\Filter\FilterAbstract {
 	public function setOptions(array $options = [], $reset = false) {
 		return $this->setLength(current($options) ? (int) current($options) : 80)
 				->setEnding(next($options) ? current($options) : '...')
-				->setBoundary(next($options) ? (bool)current($options) : false);
+				->setBoundary(next($options) ? (bool) current($options) : false);
 	}
 
 	/**

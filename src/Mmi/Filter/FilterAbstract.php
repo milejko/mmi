@@ -19,7 +19,7 @@ abstract class FilterAbstract extends \Mmi\OptionObject {
 	 * Konstruktor ustawia opcje
 	 * @param array $options
 	 */
-	public function __construct(array $options = []) {
+	public final function __construct(array $options = []) {
 		$this->setOptions($options);
 	}
 
