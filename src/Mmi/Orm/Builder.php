@@ -21,6 +21,12 @@ class Builder {
 	 * @throws \Mmi\Orm\OrmException
 	 */
 	public static function buildFromTableName($tableName) {
+		//pomijanie modułów z vendorów
+		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
+			if (strtolower(basename($module)) == explode('_', $tableName)[0] && false !== strpos($module, 'vendor')) {
+				return;
+			}
+		}
 		//aktualizacja QUERY-FIELD
 		self::_updateQueryField($tableName);
 		//aktualizacja QUERY-JOIN
@@ -115,13 +121,13 @@ class Builder {
 			' * @method \\' . $queryClassName . ' lessOrEquals($value)' . "\n" .
 			' * @method \\' . $queryClassName . ' like($value)' . "\n" .
 			' * @method \\' . $queryClassName . ' ilike($value)' . "\n" .
-			$methods . 
+			$methods .
 			' */' . "\n" .
 			'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryField') . ' extends \Mmi\Orm\QueryHelper\QueryField {' .
 			"\n\n" .
 			'}' . "\n";
 		//zapis pliku
-		file_put_contents(self::_mkdirRecursive(self::_getPathPrefix($tableName) . '/QueryHelper') .  '/' . $className . '.php', $queryCode);
+		file_put_contents(self::_mkdirRecursive(self::_getPathPrefix($tableName) . '/QueryHelper') . '/' . $className . '.php', $queryCode);
 	}
 
 	/**
@@ -166,7 +172,7 @@ class Builder {
 			. "\n\n\t"
 			. 'protected $_tableName = \''
 			. $tableName . '\';'
-			. "\n\n" 
+			. "\n\n"
 			. "\t" . '/**' . "\n"
 			. "\t" . ' * @return ' . $className . "\n"
 			. "\t" . ' */' . "\n"
@@ -240,7 +246,7 @@ class Builder {
 		$baseDir = BASE_PATH . '/src/' . ucfirst($table[0]) . '/Orm';
 		return $baseDir;
 	}
-	
+
 	/**
 	 * Generuje namespace klasy
 	 * @param string $tableName
