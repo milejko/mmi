@@ -17,7 +17,7 @@ class Messenger {
 
 	/**
 	 * Przestrzeń w sesji zarezerwowana dla wiadomości
-	 * @var \Mmi\Session\Space
+	 * @var \Mmi\Session\SessionSpace
 	 */
 	private $_session;
 
@@ -26,7 +26,7 @@ class Messenger {
 	 * @param string $namespace
 	 */
 	public function __construct($namespace) {
-		$this->_session = new \Mmi\Session\Space($namespace);
+		$this->_session = new \Mmi\Session\SessionSpace($namespace);
 	}
 
 	/**

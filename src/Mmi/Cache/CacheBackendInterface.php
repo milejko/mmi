@@ -17,9 +17,9 @@ interface CacheBackendInterface {
 
 	/**
 	 * Konstruktor
-	 * @param \Mmi\Cache\Config $config konfiguracja
+	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
-	public function __construct(\Mmi\Cache\Config $config);
+	public function __construct(\Mmi\Cache\CacheConfig $config);
 
 	/**
 	 * Ładuje dane o podanym kluczu

@@ -23,7 +23,7 @@ class MemcacheBackend implements CacheBackendInterface {
 
 	/**
 	 * Konfiguracja
-	 * @var \Mmi\Cache\Config
+	 * @var \Mmi\Cache\CacheConfig
 	 */
 	private $_config;
 
@@ -35,10 +35,9 @@ class MemcacheBackend implements CacheBackendInterface {
 
 	/**
 	 * Ustawia obiekt Memcache
-	 * @param \Mmi\Cache\Config $config konfiguracja
+	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
-	public function __construct(\Mmi\Cache\Config $config) {
-		//@TODO: przenieść namespace do konfiguracji
+	public function __construct(\Mmi\Cache\CacheConfig $config) {
 		$this->_namespace = crc32(BASE_PATH);
 		$this->_config = $config;
 		$this->_connect();

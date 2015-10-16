@@ -70,12 +70,12 @@ class LdapClient extends \Mmi\OptionObject {
 	 * @param string $filter
 	 * @param integer $limit
 	 * @param string $dn opcjonalny dn
-	 * @return \Mmi\Ldap\User\Collection
+	 * @return \Mmi\LdapUserCollection
 	 */
 	public function findUser($filter = '*', $limit = 100, array $searchFields = ['mail', 'cn', 'uid', 'sAMAccountname'], $dn = null) {
 		//brak możliwości zalogowania
-		if (!$this->authenticate($this->_config->getUser(), $this->_config->getPassword())) {
-			throw new LdapException('Unable to find users due to "' . $this->_config->getUser() . '" is not authorized');
+		if (!$this->authenticate($this->_config->user, $this->_config->password)) {
+			throw new LdapException('Unable to find users due to "' . $this->_config->user . '" is not authorized');
 		}
 		try {
 			//budowanie filtra
@@ -85,7 +85,7 @@ class LdapClient extends \Mmi\OptionObject {
 			}
 			$searchString .= ')';
 			//odpowiedź z LDAP'a
-			$rawResource = ldap_search($this->_getActiveServer(), $dn ? : 'dc=' . implode(',dc=', explode('.', $this->_config->getDomain())), $searchString);
+			$rawResource = ldap_search($this->_getActiveServer(), $dn ? : 'dc=' . implode(',dc=', explode('.', $this->_config->domain)), $searchString);
 		} catch (\Exception $e) {
 			//puste
 			return new User\Collection();
@@ -105,7 +105,7 @@ class LdapClient extends \Mmi\OptionObject {
 			return $this->_activeServerResource;
 		}
 		//jeśli adres nie jest tablicą - tworzy tablicę 1 elementową z nim w środku
-		$servers = is_array($this->_config->getAddress()) ? $this->_config->getAddress() : [$this->_config->getAddress()];
+		$servers = is_array($this->_config->address) ? $this->_config->address : [$this->_config->address];
 		//logowanie kolejności serwerów
 		\shuffle($servers);
 		//wybór akrywnego serwera

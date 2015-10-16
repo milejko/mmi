@@ -17,31 +17,31 @@ abstract class KernelConfig {
 	
 	/**
 	 * Konfiguracja postawowego cache
-	 * @var \Mmi\Cache\Config
+	 * @var \Mmi\Cache\CacheConfig
 	 */
 	public $cache;
 
 	/**
 	 * Konfiguracji bazy danych
-	 * @var \Mmi\Db\Config
+	 * @var \Mmi\Db\DbConfig
 	 */
 	public $db;
 
 	/**
 	 * Konfiguracja loggera
-	 * @var \Mmi\Log\Config
+	 * @var \Mmi\Log\LogConfig
 	 */
 	public $log;
 
 	/**
 	 * Konfiguracja routera
-	 * @var \Mmi\Mvc\Router\Config
+	 * @var \Mmi\Mvc\RouterConfig
 	 */
 	public $router;
 
 	/**
 	 * Konfiguracja sesji
-	 * @var \Mmi\Session\Config
+	 * @var \Mmi\Session\SessionConfig
 	 */
 	public $session;
 
@@ -100,15 +100,15 @@ abstract class KernelConfig {
 	 */
 	public function __construct() {
 		//konfiguracja bufora
-		$this->cache = new \Mmi\Cache\Config();
+		$this->cache = new \Mmi\Cache\CacheConfig();
 		//konfiguracja bazy danych
-		$this->db = new \Mmi\Db\Config();
+		$this->db = new \Mmi\Db\DbConfig();
 		//ustawienia loggera
-		$this->log = new \Mmi\Log\Config();
+		$this->log = new \Mmi\Log\LogConfig();
 		//ustawienia routera
-		$this->router = new \Mmi\Mvc\Router\Config();
+		$this->router = new \Mmi\Mvc\RouterConfig();
 		//konfiguracja sesji
-		$this->session = new \Mmi\Session\Config();
+		$this->session = new \Mmi\Session\SessionConfig();
 	}
 
 }

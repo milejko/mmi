@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Mvc\Router;
+namespace Mmi\Mvc;
 
 /**
  * Obiekt konfiguracji routera
  */
-class Config {
+class RouterConfig {
 
 	/**
 	 * Dane rout
@@ -27,10 +27,10 @@ class Config {
 	 * @param string $pattern wyrażenie regularne lub plain
 	 * @param array $replace tablica zastąpień
 	 * @param array $default tablica wartości domyślnych
-	 * @return \Mmi\Mvc\Router\Config
+	 * @return \Mmi\Mvc\RouterConfig
 	 */
 	public function setRoute($name, $pattern, array $replace = [], array $default = []) {
-		$route = new \Mmi\Mvc\Router\Config\Route();
+		$route = new \Mmi\Mvc\RouterConfigRoute();
 		$route->name = $name;
 		$route->pattern = $pattern;
 		$route->replace = $replace;
@@ -40,10 +40,10 @@ class Config {
 
 	/**
 	 * Dodaje routę do stosu rout
-	 * @param \Mmi\Mvc\Router\Config\Route $route
-	 * @return \Mmi\Mvc\Router\Config
+	 * @param \Mmi\Mvc\RouterConfigRoute $route
+	 * @return \Mmi\Mvc\RouterConfig
 	 */
-	public function addRoute(\Mmi\Mvc\Router\Config\Route $route) {
+	public function addRoute(\Mmi\Mvc\RouterConfigRoute $route) {
 		$this->_data[$route->name] = $route;
 		return $this;
 	}
@@ -52,7 +52,7 @@ class Config {
 	 * Ustawia routy
 	 * @param array $routes tablica z obiektami rout
 	 * @param boolean $replace czy zastąpić obecną tablicę
-	 * @return \Mmi\Mvc\Router\Config
+	 * @return \Mmi\Mvc\RouterConfig
 	 */
 	public function setRoutes(array $routes, $replace = false) {
 		if ($replace) {
@@ -60,7 +60,7 @@ class Config {
 		}
 		//dodaje routy z tablicy
 		foreach ($routes as $route) {
-			/* @var $route \Mmi\Mvc\Router\Config\Route */
+			/* @var $route \Mmi\Mvc\RouterConfigRoute */
 			$this->addRoute($route);
 		}
 		return $this;
@@ -69,7 +69,7 @@ class Config {
 	/**
 	 * Pobierz routę
 	 * @param string $name nazwa lub indeks
-	 * @return \Mmi\Mvc\Router\Config\Route
+	 * @return \Mmi\Mvc\RouterConfigRoute
 	 */
 	public function getRoute($name) {
 		if (!$this->isRoute($name)) {

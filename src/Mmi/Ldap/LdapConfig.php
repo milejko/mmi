@@ -12,31 +12,45 @@ namespace Mmi\Ldap;
 
 /**
  * Klasa konfiguracji klienta LDAP
- * 
- * @method mixed getAddress()
- * @method LdapConfig setAddress($address) adres wraz z protokołem i portem np. ldap://example.com:389, można podać tablicę
- * @method string getUser()
- * @method LdapConfig setUser($user)
- * @method string getPassword()
- * @method LdapConfig setPassword($password)
- * @method string getDomain()
- * @method LdapConfig setDomain($domain)
  */
-class LdapConfig extends \Mmi\OptionObject {
+class LdapConfig {
 
 	/**
-	 * Fabryka obiektów
-	 * @return ServerConfig
+	 * Aktywny
+	 * @var boolean
 	 */
-	public static function factory() {
-		return new self();
-	}
+	public $active = false;
 
 	/**
-	 * Zabezpieczony konstruktor
+	 * Adres lub tablica adresów
+	 * @var string|array
 	 */
-	private function __construct() {
-		
-	}
+	public $address;
+
+	/**
+	 * Użytkownik
+	 * @var string
+	 */
+	public $user;
+
+	/**
+	 * Hasło
+	 * @var string
+	 */
+	public $password;
+
+	/**
+	 * Domena
+	 * @var string
+	 */
+	public $domain;
+
+	/**
+	 * Wzorzec logowania (domyślnie %s)
+	 * np. %s@example.com
+	 * np. uid=%s,dc=example,dc=com
+	 * @var string
+	 */
+	public $dnPattern = '%s';
 
 }

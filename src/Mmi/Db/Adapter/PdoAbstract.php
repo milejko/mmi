@@ -31,7 +31,7 @@ abstract class PdoAbstract {
 
 	/**
 	 * Konfiguracja
-	 * @var \Mmi\Db\Config
+	 * @var \Mmi\Db\DbConfig
 	 */
 	protected $_config;
 
@@ -115,15 +115,15 @@ abstract class PdoAbstract {
 
 	/**
 	 * Konstruktor wczytujący konfigurację
-	 * @param \Mmi\Db\Config $config
+	 * @param \Mmi\Db\DbConfig $config
 	 */
-	public function __construct(\Mmi\Db\Config $config) {
+	public function __construct(\Mmi\Db\DbConfig $config) {
 		$this->_config = $config;
 	}
 
 	/**
 	 * Zwraca konfigurację
-	 * @return \Mmi\Db\Config
+	 * @return \Mmi\Db\DbConfig
 	 */
 	public final function getConfig() {
 		return $this->_config;

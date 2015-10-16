@@ -13,17 +13,11 @@ namespace Mmi\Log;
 /**
  * Klasa konfiguracji loggera
  * 
- * @method ConfigInstance next()
- * @method ConfigInstance current()
- * @method ConfigInstance rewind()
+ * @method LogConfigInstance next()
+ * @method LogConfigInstance current()
+ * @method LogConfigInstance rewind()
  */
-class Config extends \Mmi\DataObject {
-
-	/**
-	 * Indeks elementów
-	 * @var integer
-	 */
-	public $_index = 0;
+class LogConfig extends \Mmi\DataObject {
 
 	/**
 	 * Nazwa loggera
@@ -33,11 +27,11 @@ class Config extends \Mmi\DataObject {
 
 	/**
 	 * Dodaje element nawigatora
-	 * @param ConfigElement $element
-	 * @return \Mmi\Log\Config
+	 * @param LogConfigInstance $instance
+	 * @return \Mmi\Log\LogConfig
 	 */
-	public function addInstance(ConfigInstance $element) {
-		$this->_data[$this->_index++] = $element;
+	public function addInstance(LogConfigInstance $instance) {
+		$this->_data[] = $instance;
 		return $this;
 	}
 

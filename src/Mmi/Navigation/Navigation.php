@@ -17,7 +17,7 @@ class Navigation {
 
 	/**
 	 * Klasa kongiguracji
-	 * @var \Mmi\Navigation\Config
+	 * @var \Mmi\Navigation\NavigationConfig
 	 */
 	private $_config;
 
@@ -29,9 +29,9 @@ class Navigation {
 
 	/**
 	 * Konstruktor, buduje drzewo na podstawie struktury zagnieżdżonej
-	 * @param \Mmi\Navigation\Config $config konfiguracja nawigatora
+	 * @param \Mmi\Navigation\NavigationConfig $config konfiguracja nawigatora
 	 */
-	public function __construct(\Mmi\Navigation\Config $config) {
+	public function __construct(\Mmi\Navigation\NavigationConfig $config) {
 		$this->_config = $config;
 		$config->build();
 	}

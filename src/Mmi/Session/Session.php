@@ -14,9 +14,9 @@ class Session {
 
 	/**
 	 * Rozpoczęcie sesji
-	 * @param \Mmi\Session\Config $config
+	 * @param \Mmi\Session\SessionConfig $config
 	 */
-	public static function start(\Mmi\Session\Config $config) {
+	public static function start(\Mmi\Session\SessionConfig $config) {
 		session_name($config->name);
 		session_set_cookie_params($config->cookieLifetime);
 		session_cache_expire($config->cacheExpire);

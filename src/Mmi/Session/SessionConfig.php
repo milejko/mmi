@@ -13,7 +13,7 @@ namespace Mmi\Session;
 /**
  * Klasa konfiguracji sesji
  */
-class Config {
+class SessionConfig {
 
 	/**
 	 * Nazwa sesji

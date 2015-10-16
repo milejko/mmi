@@ -26,15 +26,15 @@ class LoggerHelper {
 
 	/**
 	 * Konfiguracja loggera
-	 * @var Config
+	 * @var LogConfig
 	 */
 	protected static $_config;
 
 	/**
 	 * Ustawia konfigurację loggera
-	 * @param \Mmi\Logger\Config $config
+	 * @param \Mmi\Logger\LogConfig $config
 	 */
-	public static function setConfig(Config $config) {
+	public static function setConfig(LogConfig $config) {
 		self::$_config = $config;
 	}
 
@@ -86,7 +86,7 @@ class LoggerHelper {
 		return $logger;
 	}
 
-	private static function _configureInstance(ConfigInstance $config, Logger $logger) {
+	private static function _configureInstance(LogConfigInstance $config, Logger $logger) {
 		//wybór handlera
 		switch ($config->getHandler()) {
 			case 'stream':

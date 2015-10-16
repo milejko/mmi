@@ -10,7 +10,7 @@
 
 namespace Mmi\Db;
 
-class Config {
+class DbConfig {
 
 	/**
 	 * Silnik bazy danych

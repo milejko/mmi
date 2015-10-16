@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Navigation\Config;
+namespace Mmi\Navigation;
 
-class Element {
+class NavigationConfigElement {
 
 	/**
 	 * Dane elementu
@@ -71,7 +71,7 @@ class Element {
 	 * @param integer $id
 	 */
 	public function __construct($id = null) {
-		$this->_data['id'] = ($id === null) ? \Mmi\Navigation\Config::getAutoIndex() : $id;
+		$this->_data['id'] = ($id === null) ? \Mmi\Navigation\NavigationConfig::getAutoIndex() : $id;
 	}
 	
 	/**
@@ -87,7 +87,7 @@ class Element {
 	 * Ustawia wartość
 	 * @param string $name
 	 * @param string $value
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function set($name, $value) {
 		$this->_data[$name] = $value;
@@ -105,7 +105,7 @@ class Element {
 	/**
 	 * Ustawia ID
 	 * @param integer $id
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setId($id) {
 		return $this->set('id', $id);
@@ -122,7 +122,7 @@ class Element {
 	/**
 	 * Ustawia język
 	 * @param string $lang
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setLang($lang) {
 		return $this->set('lang', $lang);
@@ -131,7 +131,7 @@ class Element {
 	/**
 	 * Wyłącza element
 	 * @param boolean $disabled
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setDisabled($disabled = true) {
 		return $this->set('disabled', (bool) $disabled);
@@ -140,7 +140,7 @@ class Element {
 	/**
 	 * Ustawia widoczność
 	 * @param boolean $visible
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setVisible($visible = true) {
 		return $this->set('visible', (bool) $visible);
@@ -149,7 +149,7 @@ class Element {
 	/**
 	 * Ustawia labelkę
 	 * @param string $label
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setLabel($label) {
 		return $this->set('label', $label);
@@ -158,7 +158,7 @@ class Element {
 	/**
 	 * Ustawia moduł
 	 * @param string $module
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setModule($module) {
 		return $this->set('module', $module);
@@ -167,7 +167,7 @@ class Element {
 	/**
 	 * Ustawia kontroler
 	 * @param string $controller
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setController($controller) {
 		return $this->set('controller', $controller);
@@ -176,7 +176,7 @@ class Element {
 	/**
 	 * Ustawia akcję
 	 * @param string $action
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setAction($action) {
 		return $this->set('action', $action);
@@ -185,7 +185,7 @@ class Element {
 	/**
 	 * Ustawia parametry
 	 * @param array $params
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setParams(array $params) {
 		return $this->set('params', $params);
@@ -194,7 +194,7 @@ class Element {
 	/**
 	 * Ustawia tytuł
 	 * @param string $title
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setTitle($title) {
 		return $this->set('title', $title);
@@ -203,7 +203,7 @@ class Element {
 	/**
 	 * Ustawia keywords
 	 * @param string $keywords
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setKeywords($keywords) {
 		return $this->set('keywords', $keywords);
@@ -212,7 +212,7 @@ class Element {
 	/**
 	 * Ustawia opis
 	 * @param string $description
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setDescription($description) {
 		return $this->set('description', $description);
@@ -221,7 +221,7 @@ class Element {
 	/**
 	 * Ustawia uri
 	 * @param string $uri
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setUri($uri) {
 		return $this->set('uri', $uri);
@@ -230,7 +230,7 @@ class Element {
 	/**
 	 * Ustawia HTTPS
 	 * @param boolean $https
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setHttps($https = null) {
 		//jeśli https null (bez zmiany)
@@ -244,7 +244,7 @@ class Element {
 	/**
 	 * Ustawia typ linku na absolutny
 	 * @param boolean $absolute
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setAbsolute($absolute = true) {
 		return $this->set('absolute', (bool) $absolute);
@@ -253,7 +253,7 @@ class Element {
 	/**
 	 * Ustawia typ meta na niezależne
 	 * @param boolean $independent
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setIndependent($independent = true) {
 		return $this->set('independent', (bool) $independent);
@@ -262,7 +262,7 @@ class Element {
 	/**
 	 * Ustawia typ linku na nofollow
 	 * @param boolean $nofollow
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setNofollow($nofollow = true) {
 		return $this->set('nofollow', (bool) $nofollow);
@@ -271,7 +271,7 @@ class Element {
 	/**
 	 * Ustawia target linku na blank
 	 * @param boolean $blank
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setBlank($blank = true) {
 		return $this->set('blank', (bool) $blank);
@@ -280,7 +280,7 @@ class Element {
 	/**
 	 * Ustawia datę włączenia węzła
 	 * @param string $dateStart
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setDateStart($dateStart) {
 		return $this->set('dateStart', $dateStart);
@@ -289,7 +289,7 @@ class Element {
 	/**
 	 * Ustawia datę wyłączenia węzła
 	 * @param string $dateEnd
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function setDateEnd($dateEnd) {
 		return $this->set('dateEnd', $dateEnd);
@@ -297,10 +297,10 @@ class Element {
 
 	/**
 	 * Dodaje element potomny
-	 * @param \Mmi\Navigation\Config\Element $element
-	 * @return \Mmi\Navigation\Config\Element
+	 * @param \Mmi\Navigation\NavigationConfigElement $element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
-	public function addChild(\Mmi\Navigation\Config\Element $element) {
+	public function addChild(\Mmi\Navigation\NavigationConfigElement $element) {
 		$this->_data['children'][$element->getId()] = $element;
 		return $this;
 	}
@@ -311,7 +311,7 @@ class Element {
 	 */
 	public function build() {
 		//korzysta z klasy buildera
-		return ($this->_build = Builder::build($this->_data));
+		return ($this->_build = NavigationConfigBuilder::build($this->_data));
 	}
 
 }

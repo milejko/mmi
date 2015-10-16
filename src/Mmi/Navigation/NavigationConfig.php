@@ -13,7 +13,7 @@ namespace Mmi\Navigation;
 /**
  * Klasa konfiguracji nawigatora
  */
-class Config {
+class NavigationConfig {
 
 	/**
 	 * Dane nawigacji
@@ -35,10 +35,10 @@ class Config {
 
 	/**
 	 * Dodaje element nawigatora
-	 * @param \Mmi\Navigation\Config\Element $element
-	 * @return \Mmi\Navigation\Config
+	 * @param \Mmi\Navigation\NavigationConfigElement $element
+	 * @return \Mmi\Navigation\NavigationConfig
 	 */
-	public function addElement(\Mmi\Navigation\Config\Element $element) {
+	public function addElement(\Mmi\Navigation\NavigationConfigElement $element) {
 		$this->_data[$element->getId()] = $element;
 		return $this;
 	}
@@ -46,10 +46,10 @@ class Config {
 	/**
 	 * Tworzy nowy element nawigacyjny
 	 * @param int $id opcjonalny parametr klucza (zostanie zastąpiony domyślnym gdy nieobecny)
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public static function newElement($id = null) {
-		return new \Mmi\Navigation\Config\Element($id);
+		return new \Mmi\Navigation\NavigationConfigElement($id);
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Config {
 	/**
 	 * Znajduje element po identyfikatorze
 	 * @param int $id identyfikator
-	 * @return \Mmi\Navigation\Config\Element
+	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
 	public function findById($id, $withParents = false) {
 		$parents = [];

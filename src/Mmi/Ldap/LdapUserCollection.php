@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Ldap\User;
+namespace Mmi\Ldap;
 
 /**
  * Kolekcja użytkowników LDAP
  */
-class Collection extends \ArrayObject {
+class LdapUserCollection extends \ArrayObject {
 
 	/**
 	 * Konstruktor z odpowiedzi ldapa
@@ -30,7 +30,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Tworzy kolekcję na podstawie zwrotu z LDAP'a
 	 * @param array $ldapResponse
-	 * @return \Mmi\Ldap\User\Collection
+	 * @return \Mmi\LdapUserCollection
 	 */
 	public function setFromLdapResponse(array $ldapResponse, $limit = 10000) {
 		$records = [];
@@ -42,7 +42,7 @@ class Collection extends \ArrayObject {
 				continue;
 			}
 			//nowy rekord użytkownika
-			$record = new Record();
+			$record = new LdapUserRecord();
 			//ustawianie dn
 			$record->dn = $user['dn'];
 			//cn

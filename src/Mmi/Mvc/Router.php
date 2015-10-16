@@ -14,7 +14,7 @@ class Router {
 
 	/**
 	 * Konfiguracja
-	 * @var \Mmi\Mvc\Router\Config
+	 * @var \Mmi\Mvc\RouterConfig
 	 */
 	private $_config;
 
@@ -37,11 +37,11 @@ class Router {
 	private $_defaultLanguage;
 
 	/**
-	 *
-	 * @param \Mmi\Mvc\Router\Config $config
+	 * Konstruktor routera
+	 * @param \Mmi\Mvc\RouterConfig $config
 	 * @param string $defaultLanguage domyślny język
 	 */
-	public function __construct(\Mmi\Mvc\Router\Config $config, $defaultLanguage = null) {
+	public function __construct(\Mmi\Mvc\RouterConfig $config, $defaultLanguage = null) {
 		$this->_config = $config;
 		$this->_defaultLanguage = $defaultLanguage;
 		$this->_url = urldecode(trim(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri, '/ '));
@@ -65,7 +65,7 @@ class Router {
 
 	/**
 	 * Pobiera konfigurację routera
-	 * @return \Mmi\Mvc\Router\Config
+	 * @return \Mmi\Mvc\RouterConfig
 	 */
 	public function getConfig() {
 		return $this->_config;
@@ -115,8 +115,8 @@ class Router {
 
 		//próba aplikacji rout
 		foreach ($this->getRoutes() as $route) {
-			/* @var $route \Mmi\Mvc\Router\Config\Route */
-			$result = Router\Matcher::tryRouteForUrl($route, $filteredUrl);
+			/* @var $route \Mmi\Mvc\RouterConfigRoute */
+			$result = RouterMatcher::tryRouteForUrl($route, $filteredUrl);
 			//dopasowano routę
 			if ($result['matched']) {
 				//łączenie parametrów
@@ -145,8 +145,8 @@ class Router {
 
 		//aplikacja rout
 		foreach ($this->getRoutes() as $route) {
-			/* @var $route \Mmi\Mvc\Router\Config\Route */
-			$result = Router\Matcher::tryRouteForParams($route, array_merge($route->default, $params));
+			/* @var $route \Mmi\Mvc\RouterConfigRoute */
+			$result = RouterMatcher::tryRouteForParams($route, array_merge($route->default, $params));
 			//dopasowano routę
 			if ($result['applied']) {
 				$url .= '/' . $result['url'];

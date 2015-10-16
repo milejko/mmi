@@ -17,7 +17,7 @@ class Cache {
 
 	/**
 	 * Konfiguracja bufora
-	 * @var Config
+	 * @var CacheConfig
 	 */
 	protected $_config;
 
@@ -36,7 +36,7 @@ class Cache {
 	/**
 	 * Konstruktor, wczytuje konfigurację i ustawia backend
 	 */
-	public function __construct(Config $config) {
+	public function __construct(CacheConfig $config) {
 		$this->_config = $config;
 		$saveHandler = $config->handler;
 		//określanie klasy backendu

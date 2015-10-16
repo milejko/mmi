@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Mvc\Router\Config;
+namespace Mmi\Mvc;
 
-class Route {
+class RouterConfigRoute {
 
 	/**
 	 * Nazwa routy (unikalna)

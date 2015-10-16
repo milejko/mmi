@@ -10,7 +10,7 @@
 
 namespace Mmi\Session;
 
-class Space {
+class SessionSpace {
 
 	/**
 	 * Nazwa przestrzeni
@@ -29,7 +29,7 @@ class Space {
 	/**
 	 * Statyczna fabryka
 	 * @param string $namespace
-	 * @return \Mmi\Session\Space
+	 * @return \Mmi\Session\SessionSpace
 	 */
 	public static function factory($namespace) {
 		return new self($namespace);
@@ -83,7 +83,7 @@ class Space {
 	/**
 	 * Ustawia namespace z tabeli
 	 * @param array $data
-	 * @return \Mmi\Session\Space
+	 * @return \Mmi\Session\SessionSpace
 	 */
 	public function setFromArray(array $data) {
 		$_SESSION[$this->_namespace] = $data;

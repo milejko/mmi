@@ -29,7 +29,7 @@ class Auth {
 
 	/**
 	 * Przestrzeń w sesji
-	 * @var \Mmi\Session\Space
+	 * @var \Mmi\Session\SessionSpace
 	 */
 	private $_session;
 
@@ -55,7 +55,7 @@ class Auth {
 	 * Kostruktor, tworzy przestrzeń w sesji
 	 */
 	public function __construct() {
-		$this->_session = new \Mmi\Session\Space($this->_namespace);
+		$this->_session = new \Mmi\Session\SessionSpace($this->_namespace);
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Auth {
 
 	/**
 	 * Zwraca przestrzeń w sesji
-	 * @return \Mmi\Session\Space
+	 * @return \Mmi\Session\SessionSpace
 	 */
 	public function getSessionNamespace() {
 		return $this->_session;

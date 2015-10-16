@@ -16,23 +16,15 @@ use Monolog\Logger;
  * Klasa konfiguracji elementu loggera
  * 
  * @method string getName() pobiera nazwę aplikacji logującej
- * @method ConfigInstance setName($name) ustawia nazwę aplikacji logującej
+ * @method LogConfigInstance setName($name) ustawia nazwę aplikacji logującej
  * @method string getPath() pobiera ścieżkę (lub kanał czy IP)
- * @method ConfigInstance setPath($path) ustawia ścieżkę
+ * @method LogConfigInstance setPath($path) ustawia ścieżkę
  * @method string getHandler() pobiera handler
  * @method string getLevel() pobiera poziom logowania
  * @method string getToken() pobiera token
- * @method ConfigInstance setToken($path) ustawia token
+ * @method LogConfigInstance setToken($path) ustawia token
  */
-class ConfigInstance extends \Mmi\OptionObject {
-
-	/**
-	 * Fabryka obiektów
-	 * @return ConfigInstance
-	 */
-	public static function factory() {
-		return new self();
-	}
+class LogConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Domyślne ustawienia
@@ -45,7 +37,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na debug
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelDebug() {
 		return $this->setOption('level', Logger::DEBUG);
@@ -53,7 +45,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na Info
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelInfo() {
 		return $this->setOption('level', Logger::INFO);
@@ -61,7 +53,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na Notice
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelNotice() {
 		return $this->setOption('level', Logger::NOTICE);
@@ -69,7 +61,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na Warning
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelWarning() {
 		return $this->setOption('level', Logger::WARNING);
@@ -77,7 +69,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na Error
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelError() {
 		return $this->setOption('level', Logger::ERROR);
@@ -85,7 +77,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na Alert
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelAlert() {
 		return $this->setOption('level', Logger::ALERT);
@@ -93,7 +85,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na Critical
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelCritical() {
 		return $this->setOption('level', Logger::CRITICAL);
@@ -101,7 +93,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Poziom na Emergency
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setLevelEmergency() {
 		return $this->setOption('level', Logger::EMERGENCY);
@@ -109,7 +101,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Ustawia handler na stream
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setHandlerStream() {
 		return $this->setOption('handler', 'stream');
@@ -117,7 +109,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Ustawia handler na slack
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setHandlerSlack() {
 		return $this->setOption('handler', 'slack');
@@ -125,7 +117,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Ustawia handler na stream
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setHandlerConsole() {
 		return $this->setOption('handler', 'console');
@@ -133,7 +125,7 @@ class ConfigInstance extends \Mmi\OptionObject {
 
 	/**
 	 * Ustawia handler na gelf
-	 * @return \Mmi\Log\ConfigInstance
+	 * @return \Mmi\Log\LogConfigInstance
 	 */
 	public function setHandlerGelf() {
 		return $this->setOption('handler', 'gelf');

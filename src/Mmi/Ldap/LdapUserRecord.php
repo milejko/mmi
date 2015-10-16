@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Ldap\User;
+namespace Mmi\Ldap;
 
 /**
  * Rekord użytkownika LDAP
  */
-class Record {
+class LdapUserRecord {
 
 	/**
 	 * Distinguished Name

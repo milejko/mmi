@@ -10,7 +10,7 @@
 
 namespace Mmi\Cache;
 
-class Config {
+class CacheConfig {
 
 	/**
 	 * Buforowanie włączone

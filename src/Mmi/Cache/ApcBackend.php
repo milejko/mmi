@@ -23,9 +23,9 @@ class ApcBackend implements CacheBackendInterface {
 
 	/**
 	 * Kostruktor
-	 * @param \Mmi\Cache\Config $config konfiguracja
+	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
-	public function __construct(\Mmi\Cache\Config $config) {
+	public function __construct(\Mmi\Cache\CacheConfig $config) {
 		$this->_namespace = crc32(BASE_PATH);
 	}
 

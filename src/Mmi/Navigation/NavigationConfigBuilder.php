@@ -8,9 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Navigation\Config;
+namespace Mmi\Navigation;
 
-class Builder {
+class NavigationConfigBuilder {
 	
 	/**
 	 * Buduje strukturę drzewiastą na podstawie struktury płaskiej
