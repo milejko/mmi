@@ -22,6 +22,7 @@ class Deployer {
 	public function deploy() {
 		//wyłączenie cache
 		\App\Registry::$config->cache->active = false;
+		$incrementals = [];
 		//iteracja po modułach aplikacji
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			//moduł nie zawiera incrementali
@@ -30,8 +31,14 @@ class Deployer {
 			}
 			//iteracja po incrementalach
 			foreach (glob($module . '/Resource/incremental/' . \App\Registry::$config->db->driver . '/*.sql') as $file) {
-				$this->_importIncremental($file);
+				$incrementals[basename($file)] = $file;
 			}
+		}
+		//sortowanie plików
+		ksort($incrementals);
+		//przywracanie incrementali
+		foreach ($incrementals as $incremental) {
+			$this->_importIncremental($incremental);
 		}
 	}
 

@@ -23,7 +23,7 @@ class Builder {
 	public static function buildFromTableName($tableName) {
 		//pomijanie modułów z vendorów
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
-			if (strtolower(basename($module)) == explode('_', $tableName)[0] && false !== strpos($module, 'vendor')) {
+			if (strtolower(basename($module)) == explode('_', $tableName)[0] && false !== strpos(realpath($module), 'vendor')) {
 				return;
 			}
 		}
@@ -172,7 +172,7 @@ class Builder {
 			. "\n\n\t"
 			. 'protected $_tableName = \''
 			. $tableName . '\';'
-			. "\n\n";
+			. "\n\n}";
 		//wczytanie istniejącego rekordu
 		if (file_exists($path)) {
 			$queryCode = file_get_contents($path);
