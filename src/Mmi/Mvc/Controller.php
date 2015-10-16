@@ -147,7 +147,7 @@ class Controller {
 	
 	/**
 	 * Pobiera profiler
-	 * @return type
+	 * @return \Mmi\App\KernelProfiler
 	 */
 	public final function getProfiler() {
 		return FrontController::getInstance()->getProfiler();

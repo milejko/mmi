@@ -20,7 +20,7 @@ class Template extends HelperAbstract {
 	public function template($input) {
 
 		//buforowanie renderowanie szablonu
-		$input = preg_replace_callback('/\{\'([a-z\-]+)\/([a-zA-Z]+)\/?([a-zA-Z]+)?\'\}/', [&$this, '_render'], $input);
+		$input = preg_replace_callback('/\{\'([a-zA-Z\-]+)\/([a-zA-Z]+)\/?([a-zA-Z]+)?\'\}/', [&$this, '_render'], $input);
 
 		/**
 		 * obsługa klamr
