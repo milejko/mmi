@@ -96,7 +96,7 @@ class Radio extends ElementAbstract {
 		$baseId = $this->getId();
 		$value = $this->getValue();
 		$html = '<ul id="' . $this->getId() . '-list">';
-		$f = new \Mmi\Filter\Url();
+		$f = new \Mmi\Filter\Url;
 		foreach ($this->getMultioptions() as $key => $caption) {
 			//konfiguracja pola
 			$this->setValue($key)

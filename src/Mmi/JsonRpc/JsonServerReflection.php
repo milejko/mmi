@@ -27,7 +27,7 @@ class JsonServerReflection {
 	 * @param string $className
 	 */
 	public function __construct($className) {
-		new $className();
+		new $className;
 		$this->_reflectionClass = new ReflectionClass($className);
 	}
 

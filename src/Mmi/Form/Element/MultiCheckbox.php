@@ -108,7 +108,7 @@ class MultiCheckbox extends ElementAbstract {
 		$values = is_array($this->getValue()) ? $this->getValue() : [$this->getValue];
 		$html = '<ul id="' . ($baseId = $this->getId()) . '-list">';
 		//filtr url
-		$f = new \Mmi\Filter\Url();
+		$f = new \Mmi\Filter\Url;
 		foreach ($this->getMultioptions() as $key => $caption) {
 			//nowy checkbox
 			$checkbox = new Checkbox($this->getBaseName() . '[]');

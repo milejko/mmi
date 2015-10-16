@@ -75,7 +75,7 @@ class Deployer {
 		\Mmi\Orm\DbConnector::resetTableStructures();
 
 		//brak restore - zakłada nowy rekord
-		$newDc = new \Mmi\Orm\Changelog\DbChangelogRecord();
+		$newDc = new \Mmi\Orm\Changelog\DbChangelogRecord;
 		//zapis informacji o incrementalu
 		$newDc->filename = $baseFileName;
 		$newDc->md5 = $md5file;

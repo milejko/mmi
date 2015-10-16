@@ -265,7 +265,7 @@ class Response {
 		//opcjonalne uruchomienie panelu deweloperskiego
 		if ($this->_debug) {
 			//debugger wykonuje appendContent()
-			new \Mmi\Http\ResponseDebugger();
+			new \Mmi\Http\ResponseDebugger;
 		}
 		//zwrot contentu
 		echo $this->_content;

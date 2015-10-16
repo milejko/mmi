@@ -47,7 +47,7 @@ class MemcacheBackend implements CacheBackendInterface {
 	 * Łączenie z pulą serwerów
 	 */
 	private function _connect() {
-		$this->_server = new \Memcache();
+		$this->_server = new \Memcache;
 		//dodawanie całej puli
 		if (is_array($this->_config->path)) {
 			$this->_addServers($this->_config->path);

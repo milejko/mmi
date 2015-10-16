@@ -41,7 +41,7 @@ class ActionHelper {
 	public static function getInstance() {
 		//jeśli nie istnieje instancja tworzenie nowej
 		if (null === self::$_instance) {
-			self::$_instance = new self();
+			self::$_instance = new self;
 		}
 		return self::$_instance;
 	}

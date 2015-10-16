@@ -30,7 +30,7 @@ class EmailAddressList extends ValidatorAbstract {
 		//iteracja po mailach
 		foreach ($emails as $email) {
 			//niepoprawny email
-			if (!(new EmailAddress())->isValid($email)) {
+			if (!(new EmailAddress)->isValid($email)) {
 				return $this->_error(self::INVALID);
 			}
 		}

@@ -42,7 +42,7 @@ class LdapUserCollection extends \ArrayObject {
 				continue;
 			}
 			//nowy rekord użytkownika
-			$record = new LdapUserRecord();
+			$record = new LdapUserRecord;
 			//ustawianie dn
 			$record->dn = $user['dn'];
 			//cn

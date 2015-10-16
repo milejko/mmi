@@ -88,10 +88,10 @@ class LdapClient extends \Mmi\OptionObject {
 			$rawResource = ldap_search($this->_getActiveServer(), $dn ? : 'dc=' . implode(',dc=', explode('.', $this->_config->domain)), $searchString);
 		} catch (\Exception $e) {
 			//puste
-			return new User\Collection();
+			return new LdapUserCollection;
 		}
 		//konwersja do obiektów
-		return new User\Collection(ldap_get_entries($this->_getActiveServer(), $rawResource), $limit);
+		return new LdapUserCollection(ldap_get_entries($this->_getActiveServer(), $rawResource), $limit);
 	}
 
 	/**

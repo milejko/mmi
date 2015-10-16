@@ -20,7 +20,7 @@ class Textarea extends ElementAbstract {
 	 * @return string
 	 */
 	public function fetchField() {
-		$value = (new \Mmi\Filter\Input())->filter($this->getValue());
+		$value = (new \Mmi\Filter\Input)->filter($this->getValue());
 		$this->unsetOption('value');
 		return '<textarea ' . $this->_getHtmlOptions() . '>' . $value . '</textarea>';
 	}

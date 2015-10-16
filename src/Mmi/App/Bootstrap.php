@@ -52,7 +52,7 @@ class Bootstrap implements BootstrapInterface {
 	 * @return \Mmi\Translate
 	 */
 	protected function _setupTranslate() {
-		$translate = new \Mmi\Translate();
+		$translate = new \Mmi\Translate;
 		//domyślny język
 		$translate->setDefaultLocale(isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null);
 		//język ze zmiennej środowiskowej
@@ -136,7 +136,7 @@ class Bootstrap implements BootstrapInterface {
 	 */
 	protected function _setupView(\Mmi\Translate $translate, \Mmi\Mvc\Router $router) {
 		//powołanie widoku
-		$view = new \Mmi\Mvc\View();
+		$view = new \Mmi\Mvc\View;
 		//ustawienie widoku
 		return $view->setCache(\App\Registry::$cache)
 			->setAlwaysCompile(\App\Registry::$config->compile)

@@ -97,7 +97,7 @@ class Auth {
 	 */
 	public function forgetMe() {
 		//usuwanie ciasteczka
-		$cookie = new \Mmi\Http\Cookie();
+		$cookie = new \Mmi\Http\Cookie;
 		$cookie->match('remember');
 		$cookie->delete();
 		return $this;

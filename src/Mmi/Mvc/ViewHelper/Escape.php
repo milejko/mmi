@@ -19,8 +19,7 @@ class Escape extends HelperAbstract {
 	 * @return string
 	 */
 	public function escape($input) {
-		$escape = new \Mmi\Filter\Escape();
-		return $escape->filter($input);
+		return (new \Mmi\Filter\Escape)->filter($input);
 	}
 
 }

@@ -103,8 +103,8 @@ class SolrClient {
 	public function insert(\stdClass $obj, $commit = true) {
 		$this->_solrMethod = 'update';
 
-		$addObj = new \stdClass();
-		$addObj->add = new \stdClass();
+		$addObj = new \stdClass;
+		$addObj->add = new \stdClass;
 		$addObj->add->overwrite = true;
 		$addObj->add->doc = $obj;
 

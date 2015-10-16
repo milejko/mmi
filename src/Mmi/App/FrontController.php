@@ -80,13 +80,13 @@ class FrontController {
 	 */
 	protected function __construct() {
 		//nowe zapytanie
-		$this->_request = new \Mmi\Http\Request();
+		$this->_request = new \Mmi\Http\Request;
 		//nowy odpowiedź
-		$this->_response = new \Mmi\Http\Response();
+		$this->_response = new \Mmi\Http\Response;
 		//nowe środowisko
-		$this->_environment = new \Mmi\Http\HttpServerEnv();
+		$this->_environment = new \Mmi\Http\HttpServerEnv;
 		//profiler aplikacji
-		$this->_profiler = new \Mmi\App\KernelProfiler();
+		$this->_profiler = new \Mmi\App\KernelProfiler;
 		//logger - monolog
 		$this->_logger = \Mmi\Log\LoggerHelper::getLogger();
 	}
@@ -98,7 +98,7 @@ class FrontController {
 	public static function getInstance() {
 		//jeśli nie istnieje instancja tworzenie nowej
 		if (null === self::$_instance) {
-			self::$_instance = new self();
+			self::$_instance = new self;
 		}
 		//zwrot instancji
 		return self::$_instance;
@@ -258,7 +258,7 @@ class FrontController {
 	 */
 	public function run() {
 		//dispatcher
-		$content = (new \Mmi\Mvc\Dispatcher())->dispatch();
+		$content = (new \Mmi\Mvc\Dispatcher)->dispatch();
 		//jeśli layout nie jest wyłączony
 		if (!$this->getView()->isLayoutDisabled()) {
 			//renderowanie layoutu

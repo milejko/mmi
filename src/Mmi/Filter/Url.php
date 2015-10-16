@@ -23,7 +23,7 @@ class Url extends \Mmi\Filter\FilterAbstract {
 	 */
 	public function filter($value) {
 		if (!is_array($value)) {
-			$ascii = new \Mmi\Filter\Ascii();
+			$ascii = new \Mmi\Filter\Ascii;
 			return preg_replace('!\-+!', '-', preg_replace('/[^\p{L}\p{N}]/u', '-', strtolower(trim($ascii->filter($value), '-'))));
 		}
 		foreach ($value as $key => $val) {

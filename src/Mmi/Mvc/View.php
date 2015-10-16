@@ -153,7 +153,7 @@ class View extends \Mmi\DataObject {
 	 * @return \Mmi\Translate
 	 */
 	public function getTranslate() {
-		return ($this->_translate !== null) ? $this->_translate : new \Mmi\Translate();
+		return ($this->_translate !== null) ? $this->_translate : new \Mmi\Translate;
 	}
 
 	/**
@@ -187,7 +187,7 @@ class View extends \Mmi\DataObject {
 			return $this->_helpers[$className];
 		}
 		//zwrot nowej klasy
-		return $this->_helpers[$className] = new $className();
+		return $this->_helpers[$className] = new $className;
 	}
 
 	/**
@@ -209,7 +209,7 @@ class View extends \Mmi\DataObject {
 		if (isset($this->_filters[$className])) {
 			return $this->_filters[$className];
 		}
-		return $this->_filters[$className] = new $className();
+		return $this->_filters[$className] = new $className;
 	}
 
 	/**

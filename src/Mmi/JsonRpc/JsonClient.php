@@ -67,7 +67,7 @@ class JsonClient {
 		$id = (microtime(true) * 10000);
 
 		//przygotowanie żądania
-		$request = new \Mmi\JsonRpc\JsonRequest();
+		$request = new \Mmi\JsonRpc\JsonRequest;
 		$request->jsonrpc = '2.0';
 		$request->method = $method;
 		//obsługa parametrów w postaci pojedynczego arraya typu javascript [klucz => wartość]
@@ -82,7 +82,7 @@ class JsonClient {
 						'content' => $request->toJson()
 			]]));
 			$this->_debug($id, $this->_url, $request, $rawResponse, $httpMethod);
-			$response = new \Mmi\JsonRpc\JsonResponse();
+			$response = new \Mmi\JsonRpc\JsonResponse;
 			$response->setFromJson($rawResponse);
 		} catch (\Exception $e) {
 			$message = substr($e->getMessage(), 30 + strpos($e->getMessage(), 'HTTP request failed! '));

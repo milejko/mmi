@@ -172,13 +172,7 @@ class Builder {
 			. "\n\n\t"
 			. 'protected $_tableName = \''
 			. $tableName . '\';'
-			. "\n\n"
-			. "\t" . '/**' . "\n"
-			. "\t" . ' * @return ' . $className . "\n"
-			. "\t" . ' */' . "\n"
-			. "\t" . 'public static function factory($tableName = null)' . " {\n"
-			. "\t\t" . 'return new self($tableName);' . "\n"
-			. "\t}\n\n}\n";
+			. "\n\n";
 		//wczytanie istniejącego rekordu
 		if (file_exists($path)) {
 			$queryCode = file_get_contents($path);

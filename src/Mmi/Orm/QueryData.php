@@ -30,15 +30,6 @@ class QueryData {
 	}
 
 	/**
-	 * Fabryka obiektów
-	 * @param \Mmi\Orm\Query $query
-	 * @return \Mmi\Orm\Query
-	 */
-	public static function factory(\Mmi\Orm\Query $query) {
-		return new self($query);
-	}
-
-	/**
 	 * Pobiera ilość rekordów
 	 * @return int
 	 */
@@ -60,7 +51,7 @@ class QueryData {
 		$records = [];
 		//tworzenie rekordów
 		foreach ($result as $row) {
-			$record = new $recordName();
+			$record = new $recordName;
 			/* @var $record \Mmi\Orm\Record */
 			$record->setFromArray($row)->clearModified();
 			$records[] = $record;

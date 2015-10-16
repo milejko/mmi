@@ -19,8 +19,8 @@ class JsonServer {
 	 */
 	public static function handle($className) {
 
-		$response = new \Mmi\JsonRpc\JsonResponse();
-		$request = new \Mmi\JsonRpc\JsonRequest();
+		$response = new \Mmi\JsonRpc\JsonResponse;
+		$request = new \Mmi\JsonRpc\JsonRequest;
 
 		//wczytywanie danych
 		try {
@@ -79,7 +79,7 @@ class JsonServer {
 				$response->result = $reflection->getMethodList();
 				return $response->toJson();
 			}
-			$object = new $className();
+			$object = new $className;
 			$response->result = call_user_func_array([$object, $method], $request->params);
 			return $response->toJson();
 			//wykonanie nie powiodło się

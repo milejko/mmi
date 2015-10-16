@@ -63,7 +63,7 @@ namespace Mmi\App {
 			//konwencja nazwy konfiguracji
 			$configClassName = '\App\Config' . $env;
 			//konfiguracja dla danego środowiska
-			\App\Registry::$config = new $configClassName();
+			\App\Registry::$config = new $configClassName;
 			//ustawianie konfiguracji loggera
 			\Mmi\Log\LoggerHelper::setConfig(\App\Registry::$config->log);
 			return $this;
@@ -114,7 +114,7 @@ namespace Mmi\App {
 		 * @return \Mmi\App\Kernel
 		 */
 		private function _initEventHandler() {
-			new KernelEventHandler();
+			new KernelEventHandler;
 			return $this;
 		}
 

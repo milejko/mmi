@@ -38,7 +38,7 @@ class Record extends \Mmi\Orm\RecordRo {
 		}
 		$query = $this->_queryClass;
 		$bindKey = PdoBindHelper::generateBindKey();
-		$result = DbConnector::getAdapter()->delete($query::factory()->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
+		$result = DbConnector::getAdapter()->delete((new $query)->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
 		return ($result > 0) ? true : false;
 	}
 
@@ -48,7 +48,7 @@ class Record extends \Mmi\Orm\RecordRo {
 	 */
 	protected function _insert() {
 		$query = $this->_queryClass;
-		$table = $query::factory()->getTableName();
+		$table = (new $query)->getTableName();
 		$result = DbConnector::getAdapter()->insert($table, $this->_truncateToStructure());
 		//odczyt id z sekwencji
 		if ($result && property_exists($this, 'id') && $this->id === null) {
@@ -66,7 +66,7 @@ class Record extends \Mmi\Orm\RecordRo {
 	protected function _update() {
 		$query = $this->_queryClass;
 		$bindKey = PdoBindHelper::generateBindKey();
-		$result = DbConnector::getAdapter()->update($query::factory()->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
+		$result = DbConnector::getAdapter()->update((new $query)->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
 		//utrwalanie bieżącego stanu
 		$this->clearModified();
 		return ($result >= 0);
@@ -80,7 +80,7 @@ class Record extends \Mmi\Orm\RecordRo {
 	protected final function _truncateToStructure($modifiedOnly = false) {
 		$tableData = [];
 		$query = $this->_queryClass;
-		$structure = DbConnector::getTableStructure($query::factory()->getTableName());
+		$structure = DbConnector::getTableStructure((new $query)->getTableName());
 		foreach ($this as $field => $value) {
 			//jeśli tylko zmodyfikowane i pole nie jest modyfikowane - omijanie
 			if ($modifiedOnly && !$this->isModified($field)) {

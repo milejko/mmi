@@ -51,7 +51,7 @@ class RecordRo {
 			return;
 		}
 		$query = $this->_queryClass;
-		if (null === ($record = $query::factory()->findPk($id))) {
+		if (null === ($record = (new $query)->findPk($id))) {
 			throw new RecordNotFoundException('Record not found: ' . $id);
 		}
 		//ustawianie z tablicy i zapis stanu

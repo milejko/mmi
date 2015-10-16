@@ -22,7 +22,7 @@ class DbDeploy extends CommandAbstract {
 	 * Uruchomienie deployera
 	 */
 	public function run() {
-		(new \Mmi\Db\Deployer())->deploy();
+		(new \Mmi\Db\Deployer)->deploy();
 	}
 	
 }

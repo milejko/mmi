@@ -11,7 +11,7 @@
 namespace Mmi\Orm;
 
 /**
- * Klasa zapytania powoływana przez Query::factory()
+ * Klasa zapytania
  * umożliwia odpytywanie DAO o Rekordy
  */
 class Query {
@@ -33,9 +33,9 @@ class Query {
 	 * @throws \Mmi\Orm\OrmException tabela niewyspecyfikowana
 	 * @param string $tableName nazwa tabeli
 	 */
-	protected final function __construct($tableName = null) {
+	public final function __construct($tableName = null) {
 		//nowa kompilacja
-		$this->_compile = new QueryCompile();
+		$this->_compile = new QueryCompile;
 		//klasa DAO na podstawie parametru konstruktora
 		if ($tableName !== null) {
 			$this->_tableName = $tableName;
@@ -62,15 +62,6 @@ class Query {
 		}
 		//wywołanie metody
 		return $this->{$matches[1]}(lcfirst($matches[2]));
-	}
-
-	/**
-	 * Zwraca instancję siebie
-	 * @return Query
-	 */
-	public static function factory($tableName = null) {
-		//nowy obiekt swojej klasy
-		return new self($tableName);
 	}
 
 	/**
@@ -279,7 +270,7 @@ class Query {
 	 * @return int
 	 */
 	public final function count($column = '*') {
-		return QueryData::factory($this)
+		return (new QueryData($this))
 				->count($column);
 	}
 
@@ -300,7 +291,7 @@ class Query {
 	 * @return RecordCollection
 	 */
 	public final function find() {
-		return QueryData::factory($this)
+		return (new QueryData($this))
 				->find();
 	}
 
@@ -311,7 +302,7 @@ class Query {
 	 * @return RecordRo
 	 */
 	public final function findFirst() {
-		return QueryData::factory($this)
+		return (new QueryData($this))
 				->findFirst();
 	}
 
@@ -322,7 +313,7 @@ class Query {
 	 * @return array
 	 */
 	public final function findPairs($keyName, $valueName) {
-		return QueryData::factory($this)
+		return (new QueryData($this))
 				->findPairs($keyName, $valueName);
 	}
 
@@ -332,7 +323,7 @@ class Query {
 	 * @return string wartość maksymalna
 	 */
 	public final function findMax($keyName) {
-		return QueryData::factory($this)
+		return (new QueryData($this))
 				->findMax($keyName);
 	}
 
@@ -342,7 +333,7 @@ class Query {
 	 * @return string wartość minimalna
 	 */
 	public final function findMin($keyName) {
-		return QueryData::factory($this)
+		return (new QueryData($this))
 				->findMin($keyName);
 	}
 
@@ -352,7 +343,7 @@ class Query {
 	 * @return array mixed wartości unikalne
 	 */
 	public final function findUnique($keyName) {
-		return QueryData::factory($this)
+		return (new QueryData($this))
 				->findUnique($keyName);
 	}
 

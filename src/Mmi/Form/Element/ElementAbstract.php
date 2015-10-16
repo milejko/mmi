@@ -103,7 +103,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @var array
 	 */
 	protected $_renderingOrder = ['fetchBegin', 'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchEnd'];
-	
+
 	/**
 	 * Konstruktor
 	 * @param string $name nazwa
@@ -220,7 +220,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return self
 	 */
 	public final function setRequired($required = true) {
-		return $this->setOption('data-required', (bool) $required);
+		return $this->addValidatorNotEmpty()
+				->setOption('data-required', (bool) $required);
 	}
 
 	/**

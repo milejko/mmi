@@ -20,7 +20,7 @@ class Text extends ElementAbstract {
 	 * @return string
 	 */
 	public function fetchField() {
-		$this->setValue((new \Mmi\Filter\Input())->filter($this->getValue()));
+		$this->setValue((new \Mmi\Filter\Input)->filter($this->getValue()));
 		return '<input type="text" ' . $this->_getHtmlOptions() . '/>';
 	}
 

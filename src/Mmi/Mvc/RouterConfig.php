@@ -30,7 +30,7 @@ class RouterConfig {
 	 * @return \Mmi\Mvc\RouterConfig
 	 */
 	public function setRoute($name, $pattern, array $replace = [], array $default = []) {
-		$route = new \Mmi\Mvc\RouterConfigRoute();
+		$route = new \Mmi\Mvc\RouterConfigRoute;
 		$route->name = $name;
 		$route->pattern = $pattern;
 		$route->replace = $replace;

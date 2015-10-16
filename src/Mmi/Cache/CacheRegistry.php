@@ -27,7 +27,7 @@ class CacheRegistry extends \Mmi\OptionObject {
 	 */
 	public static function getInstance() {
 		if (null === self::$_instance) {
-			return self::$_instance = new self();
+			return self::$_instance = new self;
 		}
 		return self::$_instance;
 	}

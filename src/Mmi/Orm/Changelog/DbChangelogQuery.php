@@ -18,21 +18,12 @@ class DbChangelogQuery extends \Mmi\Orm\Query {
 	protected $_tableName = 'DB_CHANGELOG';
 
 	/**
-	 * Zwraca instancję siebie
-	 * @return \App\Orm\Changelog\Query
-	 */
-	public static function factory($tableName = null) {
-		//nowy obiekt swojej klasy
-		return new self($tableName);
-	}
-
-	/**
 	 * Zapytanie szukające po nazwie pliku
 	 * @param string $filename
 	 * @return \App\Orm\Changelog
 	 */
 	public static function byFilename($filename) {
-		return self::factory()
+		return (new self)
 				->whereFilename()->equals($filename);
 	}
 
