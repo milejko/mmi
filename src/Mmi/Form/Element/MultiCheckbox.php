@@ -105,7 +105,7 @@ class MultiCheckbox extends ElementAbstract {
 	 */
 	public function fetchField() {
 		//wartości pola
-		$values = is_array($this->getValue()) ? $this->getValue() : [$this->getValue];
+		$values = is_array($this->getValue()) ? $this->getValue() : [$this->getValue()];
 		$html = '<ul id="' . ($baseId = $this->getId()) . '-list">';
 		//filtr url
 		$f = new \Mmi\Filter\Url;
@@ -132,5 +132,5 @@ class MultiCheckbox extends ElementAbstract {
 		}
 		return $html . '</ul>';
 	}
-
+	
 }

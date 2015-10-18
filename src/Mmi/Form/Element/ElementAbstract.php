@@ -220,8 +220,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return self
 	 */
 	public final function setRequired($required = true) {
-		return $this->addValidatorNotEmpty()
-				->setOption('data-required', (bool) $required);
+		if ($required) {
+			$this->addValidatorNotEmpty();
+		}
+		return $this->setOption('data-required', (bool) $required);
 	}
 
 	/**
