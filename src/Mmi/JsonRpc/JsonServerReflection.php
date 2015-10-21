@@ -54,21 +54,19 @@ class JsonServerReflection {
 					continue;
 				}
 				$params[$param->name]['type'] = $type[1];
-				//typ array
-				if ($type[1] == 'array') {
-					if (preg_match('/\@see\s([a-zA-Z\_]+)/', $comment, $dtoClass)) {
-						$dtoClassName = $dtoClass[1];
+				//opisy parametrów
+				if (preg_match('/\@param\s([a-zA-Z]+)\s\$' . $param->name . '\ (.[^\n]+)/', $comment, $comm)) {
+					if (class_exists($comm[2])) {
+						$dtoClassName = $comm[2];
 						$dtoReflection = new ReflectionClass($dtoClassName);
 						$props = [];
 						foreach ($dtoReflection->getProperties(ReflectionProperty::IS_PUBLIC) as $prop) {
 							$props[] = $prop->name . ' => ?';
 						}
 						$params[$param->name]['type'] = 'array(' . implode(', ', $props) . ')';
+					} else {
+						$params[$param->name]['comment'] = trim($comm[2]);
 					}
-				}
-				//opisy parametrów
-				if (preg_match('/\@param\s([a-zA-Z]+)\s\$' . $param->name . '\ (.[^\n]+)/', $comment, $comm)) {
-					$params[$param->name]['comment'] = trim($comm[2]);
 				}
 			}
 			//typ prosty

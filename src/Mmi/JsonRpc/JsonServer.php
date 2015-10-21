@@ -99,7 +99,7 @@ class JsonServer {
 			}
 			//błąd metody
 			if (isset($object) && is_object($object) && method_exists($object, $method)) {
-				\Mmi\App\KernelExceptionLogger::log($e);
+				\Mmi\App\FrontController::getInstance()->getLogger()->addCritical($e->getMessage());
 				$response->error = self::_newErrorInternal([
 						'details' => 'Method "' . $method . '" failed in class "' . $className . '".'
 				]);

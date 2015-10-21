@@ -30,7 +30,7 @@ class Image {
 			return imagecreatefromstring((strlen($input) < 1024) ? file_get_contents($input) : $input);
 		} catch (\Exception $e) {
 			//logujemy potencjalne błędy
-			\Mmi\App\KernelExceptionLogger::log($e);
+			\Mmi\App\FrontController::getInstance()->getLogger()->addCritical($e->getMessage());
 			return;
 		}
 	}
