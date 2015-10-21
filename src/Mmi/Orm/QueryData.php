@@ -159,13 +159,13 @@ class QueryData {
 			$fields .= $table . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($fieldName) . ', ';
 		}
 		//pola z tabel dołączonych
-		foreach ($this->_query->getQueryCompile()->joinSchema as $tableName => $schema) {
+		foreach ($this->_query->getQueryCompile()->joinSchema as $schema) {
 			//pobranie struktury tabeli dołączonej
-			$structure = \Mmi\Orm\DbConnector::getTableStructure($tableName);
-			$joinedTable = \Mmi\Orm\DbConnector::getAdapter()->prepareTable($tableName);
+			$structure = \Mmi\Orm\DbConnector::getTableStructure($schema[0]);
+			$joinAlias = isset($schema[5]) ? $schema[5] : $schema[0];
 			//pola tabeli dołączonej
 			foreach ($structure as $fieldName => $info) {
-				$fields .= $joinedTable . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($fieldName) . ' AS ' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($tableName . '__' . $fieldName) . ', ';
+				$fields .= \Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinAlias) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($fieldName) . ' AS ' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($joinAlias . '__' . $schema[0] . '__' . $fieldName) . ', ';
 			}
 		}
 		return rtrim($fields, ', ');
@@ -183,12 +183,13 @@ class QueryData {
 		}
 		$baseTable = $table;
 		//przygotowanie joinów
-		foreach ($this->_query->getQueryCompile()->joinSchema as $joinTable => $condition) {
-			$targetTable = isset($condition[2]) ? $condition[2] : $baseTable;
-			$joinType = isset($condition[3]) ? $condition[3] : 'JOIN';
-			$table .= ' ' . $joinType . ' ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinTable) . ' ON ' .
-				\Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinTable) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($condition[0]) .
-				' = ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($targetTable) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($condition[1]);
+		foreach ($this->_query->getQueryCompile()->joinSchema as $schema) {
+			$targetTable = isset($schema[3]) ? $schema[3] : $baseTable;
+			$joinType = isset($schema[4]) ? $schema[4] : 'JOIN';
+			$joinAlias = isset($schema[5]) ? $schema[5] : $schema[0];
+			$table .= ' ' . $joinType . ' ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($schema[0]) . ' AS ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinAlias) . ' ON ' .
+				\Mmi\Orm\DbConnector::getAdapter()->prepareTable($schema[0]) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($schema[1]) .
+				' = ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($targetTable) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($schema[2]);
 		}
 		return $table;
 	}

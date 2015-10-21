@@ -127,8 +127,9 @@ class RecordRo {
 		$joinedRows = [];
 		foreach ($row as $key => $value) {
 			//przyjęcie pól z joinów
-			if (false !== ($underline = strpos($key, '__'))) {
-				$joinedRows[substr($key, 0, $underline)][substr($key, $underline + 2)] = $value;
+			if (false !== strpos($key, '__')) {
+				$keyParts = explode('__', $key);
+				$joinedRows[$keyParts[0]][$keyParts[1]][$keyParts[2]] = $value;
 				continue;
 			}
 			$field = \Mmi\Orm\Convert::underscoreToCamelcase($key);
@@ -139,11 +140,13 @@ class RecordRo {
 			$this->setOption($field, $value);
 		}
 		//podpięcie joinów pod główny rekord
-		foreach ($joinedRows as $tableName => $rows) {
-			$recordName = \Mmi\Orm\DbConnector::getRecordNameByTable($tableName);
-			$record = new $recordName;
-			$record->setFromArray($rows);
-			$this->_joined[$tableName] = $record;
+		foreach ($joinedRows as $alias => $tables) {
+			foreach ($tables as $tableName => $fields) {
+				$recordClass = \Mmi\Orm\DbConnector::getRecordNameByTable($tableName);
+				$record = new $recordClass;
+				$record->setFromArray($fields);
+				$this->_joined[$alias] = $record;
+			}
 		}
 		return $this;
 	}

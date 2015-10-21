@@ -176,20 +176,22 @@ class Query {
 	 * Dołącza tabelę tabelę
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
+	 * @param string $alias alias złączenia
 	 * @return QueryHelper\QueryJoin
 	 */
-	public final function join($tableName, $targetTableName = null) {
-		return new QueryHelper\QueryJoin($this, $tableName, 'JOIN', $targetTableName);
+	public final function join($tableName, $targetTableName = null, $alias = null) {
+		return new QueryHelper\QueryJoin($this, $tableName, 'JOIN', $targetTableName, $alias);
 	}
 
 	/**
 	 * Dołącza tabelę złączeniem lewym
 	 * @param string $tableName nazwa tabeli
 	 * @param string $targetTableName opcjonalnie nazwa tabeli do której łączyć
+	 * @param string $alias alias złączenia
 	 * @return QueryHelper\QueryJoin
 	 */
-	public final function joinLeft($tableName, $targetTableName = null) {
-		return new QueryHelper\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName);
+	public final function joinLeft($tableName, $targetTableName = null, $alias = null) {
+		return new QueryHelper\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName, $alias);
 	}
 
 	/**
@@ -396,12 +398,7 @@ class Query {
 		/* @var $db \Mmi\Db\Adapter\Pdo\PdoAbstract */
 		//konwersja camelcase do podkreślników (przechowywanych w bazie)
 		$convertedFieldName = Convert::camelcaseToUnderscore($fieldName);
-		//jeśli pole podkreślnikowe występuje w bazie
-		if (DbConnector::fieldInTable($convertedFieldName, $tableName)) {
-			return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField($convertedFieldName);
-		}
-		//w pozostałych wypadkach wyjątek o braku pola
-		throw new OrmException(get_called_class() . ': "' . $fieldName . '" not found in ' . $tableName . ' table');
+		return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField($convertedFieldName);
 	}
 
 	/**

@@ -40,6 +40,12 @@ class QueryJoin {
 	 * @var string
 	 */
 	protected $_type;
+	
+	/**
+	 * Alias złączenia
+	 * @var string
+	 */
+	protected $_alias;
 
 	/**
 	 * Ustawia parametry połączenia
@@ -47,12 +53,14 @@ class QueryJoin {
 	 * @param string $tableName nazwa tabeli
 	 * @param string $type typ złączenia: 'JOIN', 'LEFT JOIN', 'INNER JOIN', 'RIGHT JOIN'
 	 * @param string $targetTableName opcjonalna tabela do której złączyć
+	 * @param string $alias alias złączenia
 	 */
-	public function __construct(Query $query, $tableName, $type = 'JOIN', $targetTableName = null) {
+	public function __construct(Query $query, $tableName, $type = 'JOIN', $targetTableName = null, $alias = null) {
 		$this->_query = $query;
 		$this->_tableName = $tableName;
 		$this->_targetTableName = $targetTableName;
 		$this->_type = $type;
+		$this->_alias = $alias;
 	}
 
 	/**
@@ -62,7 +70,7 @@ class QueryJoin {
 	 * @return Query
 	 */
 	public function on($localKeyName, $joinedKeyName = 'id') {
-		$this->_query->getQueryCompile()->joinSchema[$this->_tableName] = [$joinedKeyName, $localKeyName, $this->_targetTableName, $this->_type];
+		$this->_query->getQueryCompile()->joinSchema[] = [$this->_tableName, $joinedKeyName, $localKeyName, $this->_targetTableName, $this->_type, $this->_alias];
 		return $this->_query;
 	}
 
