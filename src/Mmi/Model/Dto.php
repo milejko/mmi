@@ -29,11 +29,15 @@ abstract class Dto {
 		}
 		//rekord ORM
 		if ($data instanceof \Mmi\Orm\Record) {
-			return $this->setFromDaoRecord($data);
+			return $this->setFromOrmRecord($data);
 		}
 		//dto
 		if ($data instanceof \Mmi\Model\Dto) {
 			return $this->setFromArray($data->toArray());
+		}
+		//stdClass
+		if ($data instanceof \stdClass) {
+			return $this->setFromArray((array)$data);
 		}
 		//brak danych
 		if ($data === null) {
@@ -55,7 +59,7 @@ abstract class Dto {
 			if (!property_exists($this, $key)) {
 				continue;
 			}
-			$this->{$key} = $value;
+			$this->{$key} = trim($value);
 		}
 		//iteracja po zamiennikach
 		foreach ($this->_replacementFields as $recordKey => $dtoKey) {
@@ -71,7 +75,7 @@ abstract class Dto {
 				if (!array_key_exists($recordKey, $data)) {
 					continue;
 				}
-				$this->$dKey = $data[$recordKey];
+				$this->$dKey = trim($data[$recordKey]);
 			}
 		}
 		return $this;
@@ -82,7 +86,7 @@ abstract class Dto {
 	 * @param \Mmi\Orm\Record $record
 	 * @return \Cms\Model\Api\Dto
 	 */
-	public final function setFromDaoRecord(\Mmi\Orm\Record $record) {
+	public final function setFromOrmRecord(\Mmi\Orm\Record $record) {
 		return $this->setFromArray($record->toArray());
 	}
 

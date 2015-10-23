@@ -70,8 +70,7 @@ class JsonClient {
 		$request = new \Mmi\JsonRpc\JsonRequest;
 		$request->jsonrpc = '2.0';
 		$request->method = $method;
-		//obsługa parametrów w postaci pojedynczego arraya typu javascript [klucz => wartość]
-		$request->params = (count($params) == 1 && is_array($params[0])) ? $params[0] : array_values($params);
+		$request->params = array_values($params);
 		$request->id = $id;
 		
 		//pobieranie odpowiedzi z serwera
@@ -107,10 +106,10 @@ class JsonClient {
 			if (isset($response->error->data) && isset($response->error->data->details)) {
 				$errorMessage .= ' ' . $response->error->data->details;
 			}
-			if (isset($response->error->code) && $response->error->code == -10) {
+			if (isset($response->error->code) && $response->error->code == 200) {
 				throw new JsonDataException($errorMessage);
 			}
-			if (isset($response->error->code) && $response->error->code == -500) {
+			if (isset($response->error->code) && $response->error->code == 250) {
 				throw new JsonGeneralException($errorMessage);
 			}
 			throw new JsonException($errorMessage);

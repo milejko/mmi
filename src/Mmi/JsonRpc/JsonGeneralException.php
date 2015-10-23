@@ -15,6 +15,6 @@ namespace Mmi\JsonRpc;
  */
 class JsonGeneralException extends JsonException {
 
-	protected $code = -500;
+	protected $code = 250;
 
 }

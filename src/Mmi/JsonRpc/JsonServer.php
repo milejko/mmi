@@ -9,12 +9,13 @@
  */
 
 namespace Mmi\JsonRpc;
+use Mmi\App\FrontController;
 
 class JsonServer {
 
 	/**
 	 * Obsługa serwera
-	 * @param string $className nazwa klasy
+	 * @param string $className nazwa klasy_newErrorMethodNotFound
 	 * @return string odpowiedź JSON
 	 */
 	public static function handle($className) {
@@ -37,9 +38,10 @@ class JsonServer {
 			if (!is_array($request->params)) {
 				$request->params = [];
 			}
+			FrontController::getInstance()->getProfiler()->event('JsonRpc\JsonServer received ' . $httpMethod . ': ' . $request->toJson());
 		} catch (\Exception $e) {
 			$response->error = self::_newErrorInvalidRequest([
-					'details' => 'Request is not in a JSON format.'
+					'details' => 'Request is not in a JSON format'
 			]);
 			return $response->toJson();
 		}
@@ -71,9 +73,9 @@ class JsonServer {
 
 		//filtrowanie nazwy metody
 		$method = strtolower($httpMethod) . ucfirst($request->method);
-
 		//wykonanie metody
 		try {
+			FrontController::getInstance()->getProfiler()->event('JsonRpc\JsonServer call: ' . $className . '::' . $method . '()');
 			if ($method == 'getMethodList') {
 				$reflection = new \Mmi\JsonRpc\JsonServerReflection($className);
 				$response->result = $reflection->getMethodList();
@@ -83,10 +85,10 @@ class JsonServer {
 			$response->result = call_user_func_array([$object, $method], $request->params);
 			return $response->toJson();
 			//wykonanie nie powiodło się
-		} catch (DataException $e) {
+		} catch (JsonDataException $e) {
 			$response->error = self::_newError($e->getCode(), $e->getMessage());
 			return $response->toJson();
-		} catch (GeneralException $e) {
+		} catch (JsonGeneralException $e) {
 			$response->error = self::_newError($e->getCode(), $e->getMessage());
 			return $response->toJson();
 		} catch (\Exception $e) {
@@ -99,7 +101,7 @@ class JsonServer {
 			}
 			//błąd metody
 			if (isset($object) && is_object($object) && method_exists($object, $method)) {
-				\Mmi\App\FrontController::getInstance()->getLogger()->addCritical($e->getMessage());
+				FrontController::getInstance()->getLogger()->addWarning($e->getMessage());
 				$response->error = self::_newErrorInternal([
 						'details' => 'Method "' . $method . '" failed in class "' . $className . '".'
 				]);
