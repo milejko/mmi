@@ -59,7 +59,7 @@ abstract class Dto {
 			if (!property_exists($this, $key)) {
 				continue;
 			}
-			$this->{$key} = trim($value);
+			$this->{$key} = is_string($value) ? trim($value) : $value;
 		}
 		//iteracja po zamiennikach
 		foreach ($this->_replacementFields as $recordKey => $dtoKey) {

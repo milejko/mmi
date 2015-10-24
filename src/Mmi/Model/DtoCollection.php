@@ -96,7 +96,7 @@ class DtoCollection extends \ArrayObject {
 	 * @return string
 	 */
 	protected final function _getDtoClass() {
-		$dtoClass = substr(get_class($this), 0, -11);
+		$dtoClass = substr(get_class($this), 0, -10);
 		if ($dtoClass == '\Mmi\Model\Dto') {
 			throw new DtoException('Invalid DTO object name');
 		}
