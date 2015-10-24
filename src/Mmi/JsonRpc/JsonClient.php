@@ -70,7 +70,7 @@ class JsonClient {
 		$request = new \Mmi\JsonRpc\JsonRequest;
 		$request->jsonrpc = '2.0';
 		$request->method = $method;
-		$request->params = array_values($params);
+		$request->params = ($params instanceof \Mmi\Model\Dto) ? array_values($params->toArray()) : array_values($params);
 		$request->id = $id;
 		
 		//pobieranie odpowiedzi z serwera

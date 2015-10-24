@@ -30,7 +30,7 @@ abstract class KernelRegistry {
 
 	/**
 	 * Obiekt adaptera bazodanowego
-	 * @var \Mmi\Db\Adapter\Pdo\PdoAbstract
+	 * @var \Mmi\Db\Adapter\PdoAbstract
 	 */
 	public static $db;
 

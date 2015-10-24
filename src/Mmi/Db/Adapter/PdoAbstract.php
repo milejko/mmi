@@ -401,6 +401,7 @@ abstract class PdoAbstract {
 
 	/**
 	 * Rozpoczyna transakcję
+	 * @return boolean
 	 */
 	public final function beginTransaction() {
 		//łączenie jeśli niepołączony
@@ -414,6 +415,7 @@ abstract class PdoAbstract {
 
 	/**
 	 * Zatwierdza transakcję
+	 * @return boolean
 	 */
 	public final function commit() {
 		//łączenie jeśli niepołączony
