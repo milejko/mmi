@@ -29,8 +29,12 @@
 	"autoload": {
 		"psr-4": {
 			"Mmi\\": "src/Mmi",
-			"Tests\\": "tests/",
 			"": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Mmi\\": "tests/Mmi"
 		}
 	},
 	"minimum-stability": "dev",

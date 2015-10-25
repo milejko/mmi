@@ -8,9 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Tests\Mmi\Validator;
-
-use Mmi\Validator\Equal;
+namespace Mmi\Validator;
 
 class EqualTest extends \PHPUnit_Framework_TestCase {
 
