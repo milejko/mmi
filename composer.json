@@ -29,6 +29,7 @@
 	"autoload": {
 		"psr-4": {
 			"Mmi\\": "src/Mmi",
+			"Tests\\": "tests/",
 			"": "src/"
 		}
 	},
