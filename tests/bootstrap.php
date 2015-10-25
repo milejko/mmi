@@ -12,9 +12,3 @@ define('BASE_PATH', __DIR__ . '/../');
 
 //dołączenie autoloadera
 require BASE_PATH . 'vendor/autoload.php';
-
-//uruchomienie aplikacji
-(new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', 'DEV'))->run();
-
-//ustawienie typu odpowiedzi na plain
-\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();

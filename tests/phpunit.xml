@@ -7,8 +7,8 @@
 	syntaxCheck="false"
 	>
 	<testsuites>
-		<testsuite name="Mmi">
-			<directory suffix="Test.php">Mmi</directory>
+		<testsuite name="Tests">
+			<directory suffix="Test.php">.</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
