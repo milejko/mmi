@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+	backupGlobals="false"
+	backupStaticAttributes="false"
+	bootstrap="bootstrap.php"
+	stopOnFailure="true"
+	syntaxCheck="false"
+	>
+	<testsuites>
+		<testsuite name="Mmi">
+			<directory suffix="Test.php">Mmi</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
