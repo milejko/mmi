@@ -10,6 +10,9 @@
 
 namespace Mmi;
 
+/**
+ * Kontroler powitalny
+ */
 class IndexController extends Mvc\Controller {
 
 	public function indexAction() {
@@ -17,7 +20,8 @@ class IndexController extends Mvc\Controller {
 	}
 
 	public function errorAction() {
-		
+		$this->getResponse()
+			->setCodeNotFound();
 	}
 
 }

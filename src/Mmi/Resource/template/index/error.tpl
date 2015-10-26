@@ -1,2 +1,2 @@
-<h1>Error!</h1>
-<p>Ooops, something went wrong.</p>
+<h1>Not Found</h1>
+<p>The requested URL {@@} was not found on this server.</p>
