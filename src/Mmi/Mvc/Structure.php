@@ -26,7 +26,8 @@ class Structure {
 			'filter' => [],
 			'helper' => [],
 		];
-		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
+		//vendors na koniec
+		foreach (array_reverse(\Mmi\Mvc\StructureParser::getModules()) as $module) {
 			$components = array_merge_recursive(self::_parseModule($module), $components);
 		}
 		return $components;
