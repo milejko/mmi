@@ -24,8 +24,8 @@ class Opcache {
 		if (null !== ($opcache = self::_getOpcacheStatus())) {
 			return $opcache;
 		}
-		//brak
-		return '<span style="color: #ff0000; font-weight: bold; font-size: 14px;">PHP precompiler (such as OPcache or APC) not found. <br />Execution not optimal.</span>';
+		//brak opcache
+		return '<span style="color: #ff0000; font-weight: bold; font-size: 14px;">OPcache precompiler not found. If no other installed it is not optimal.</span>';
 	}
 	
 	protected static function _getOpcacheStatus() {

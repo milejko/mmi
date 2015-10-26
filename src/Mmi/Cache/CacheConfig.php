@@ -35,6 +35,6 @@ class CacheConfig {
 	 * Ścieżka dla handlerów plikowych i memcache
 	 * @var string
 	 */
-	public $path = BASE_PATH . '/var/cache';
+	public $path = '/tmp';
 
 }
