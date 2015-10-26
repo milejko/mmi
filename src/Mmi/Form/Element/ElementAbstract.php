@@ -377,8 +377,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return string
 	 */
 	protected final function _getHtmlOptions() {
+		$validators = $this->getValidators();
 		//jeśli istnieją validatory dodajemy klasę validate
-		if (!empty($this->getValidators())) {
+		if (!empty($validators)) {
 			$this->addClass('validate');
 		}
 		$html = '';
