@@ -218,8 +218,8 @@ class Builder {
 			' * @method QueryHelper\\' . $fieldClassName . ' andField($fieldName, $tableName = null)' . "\n" .
 			' * @method QueryHelper\\' . $fieldClassName . ' where($fieldName, $tableName = null)' . "\n" .
 			' * @method QueryHelper\\' . $fieldClassName . ' orField($fieldName, $tableName = null)' . "\n" .
-			' * @method QueryHelper\\' . $joinClassName . ' join($tableName, $targetTableName = null)' . "\n" .
-			' * @method QueryHelper\\' . $joinClassName . ' joinLeft($tableName, $targetTableName = null)' . "\n" .
+			' * @method QueryHelper\\' . $joinClassName . ' join($tableName, $targetTableName = null, $alias = null)' . "\n" .
+			' * @method QueryHelper\\' . $joinClassName . ' joinLeft($tableName, $targetTableName = null, $alias = null)' . "\n" .
 			' * @method ' . $recordClassName . '[] find()' . "\n" .
 			' * @method ' . $recordClassName . ' findFirst()' . "\n" .
 			' * @method ' . $recordClassName . ' findPk($value)' . "\n" .

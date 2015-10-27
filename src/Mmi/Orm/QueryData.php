@@ -188,7 +188,7 @@ class QueryData {
 			$joinType = isset($schema[4]) ? $schema[4] : 'JOIN';
 			$joinAlias = isset($schema[5]) ? $schema[5] : $schema[0];
 			$table .= ' ' . $joinType . ' ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($schema[0]) . ' AS ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinAlias) . ' ON ' .
-				\Mmi\Orm\DbConnector::getAdapter()->prepareTable($schema[0]) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($schema[1]) .
+				\Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinAlias) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($schema[1]) .
 				' = ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($targetTable) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($schema[2]);
 		}
 		return $table;
