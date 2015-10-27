@@ -24,6 +24,12 @@ class ComposerInstaller {
 	protected static $_distFiles = [
 		'dist' => '',
 	];
+	
+	/**
+	 * Karalogi systemowe
+	 * @var array
+	 */
+	protected static $_sysDirs = ['bin', 'var/cache', 'var/compile', 'var/data', 'var/log', 'var/session', 'web/data', 'web/resource'];
 
 	/**
 	 * Po aktualizacji
@@ -55,6 +61,7 @@ class ComposerInstaller {
 		//ustawianie ścieżki bazowej projektu
 		define('BASE_PATH', $vendorDir . '/../');
 		//kopiowanie plików dist
+		self::_createSysDirs();
 		self::_copyDistFiles();
 		//wczytanie autoloadera
 		require $vendorDir . '/autoload.php';
@@ -64,6 +71,17 @@ class ComposerInstaller {
 		\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
 		//uruchomienie aplikacji
 		$application->run();
+	}
+	
+	/**
+	 * Tworzenie katalogów
+	 */
+	protected static function _createSysDirs() {
+		//iteracja po katalogach obowiązkowych
+		foreach (self::$_sysDirs as $dir) {
+			//tworzenie katalogu
+			!file_exists(BASE_PATH . '/' . $dir) ? mkdir(BASE_PATH . '/' . $dir, 0777, true) : null;
+		}
 	}
 
 	/**
@@ -90,8 +108,6 @@ class ComposerInstaller {
 	 * Kopiuje zasoby publiczne do /web
 	 */
 	protected static function _copyModuleWebResources() {
-		//brak katalogu
-		!file_exists(BASE_PATH . '/web/resource/') ? mkdir(BASE_PATH . '/web/resource/', 0777, true) : null;
 		//iteracja po modułach
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			//istnieje resource web
@@ -105,8 +121,6 @@ class ComposerInstaller {
 	 * Kopiuje binaria do /bin
 	 */
 	protected static function _copyModuleBinaries() {
-		//brak katalogu
-		!file_exists(BASE_PATH . '/bin/') ? mkdir(BASE_PATH . '/bin/', 0777, true) : null;
 		//iteracja po modułach
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			//istnieje resource web
