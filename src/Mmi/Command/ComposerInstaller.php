@@ -96,7 +96,7 @@ class ComposerInstaller {
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			//istnieje resource web
 			if (file_exists($module . '/Resource/web')) {
-				\Mmi\FileSystem::copyRecursive($module . '/Resource/web', BASE_PATH . '/web/resource/' . basename($module));
+				\Mmi\FileSystem::copyRecursive($module . '/Resource/web', BASE_PATH . '/web/resource/' . lcfirst(basename($module)));
 			}
 		}
 	}
