@@ -66,7 +66,7 @@ class ComposerInstaller {
 		//wczytanie autoloadera
 		require $vendorDir . '/autoload.php';
 		//powołanie aplikacji
-		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', 'DEV');
+		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', 'PROD');
 		//ustawienie typu odpowiedzi na plain
 		\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
 		//uruchomienie aplikacji
