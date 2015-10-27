@@ -36,7 +36,7 @@ class ComposerInstaller {
 	 * @param Event $event
 	 */
 	public static function postUpdate(Event $event) {
-		self::_initApp($event);
+		self::_initAutoload($event);
 		self::_copyModuleWebResources();
 		self::_copyModuleBinaries();
 	}
@@ -46,7 +46,7 @@ class ComposerInstaller {
 	 * @param Event $event
 	 */
 	public static function postInstall(Event $event) {
-		self::_initApp($event);
+		self::_initAutoload($event);
 		self::_copyDistFiles();
 		self::_copyModuleWebResources();
 	}
@@ -55,7 +55,7 @@ class ComposerInstaller {
 	 * Inicjalizacja autoloadera
 	 * @param Event $event
 	 */
-	protected static function _initApp(Event $event) {
+	protected static function _initAutoload(Event $event) {
 		//określenie katalogu vendorów
 		$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
 		//ustawianie ścieżki bazowej projektu
@@ -65,12 +65,6 @@ class ComposerInstaller {
 		self::_copyDistFiles();
 		//wczytanie autoloadera
 		require $vendorDir . '/autoload.php';
-		//powołanie aplikacji
-		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', 'PROD');
-		//ustawienie typu odpowiedzi na plain
-		\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
-		//uruchomienie aplikacji
-		$application->run();
 	}
 	
 	/**
