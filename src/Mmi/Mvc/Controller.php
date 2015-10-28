@@ -139,7 +139,7 @@ class Controller {
 
 	/**
 	 * Pobiera helper logowania
-	 * @return \Mmi\Logger\LoggerHelper
+	 * @return \Monolog\Logger
 	 */
 	public final function getLogger() {
 		return FrontController::getInstance()->getLogger();
