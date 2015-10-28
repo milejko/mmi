@@ -64,6 +64,8 @@ namespace Mmi\App {
 			$configClassName = '\App\Config' . $env;
 			//konfiguracja dla danego środowiska
 			\App\Registry::$config = new $configClassName;
+			//strefa czasowa
+			date_default_timezone_set(\App\Registry::$config->timeZone);
 			//ustawianie konfiguracji loggera
 			\Mmi\Log\LoggerHelper::setConfig(\App\Registry::$config->log);
 			return $this;
@@ -82,7 +84,6 @@ namespace Mmi\App {
 			setlocale(LC_ALL, 'pl_PL.utf-8');
 			setlocale(LC_NUMERIC, 'en_US.UTF-8');
 			//ustawienie lokalizacji
-			date_default_timezone_set(\App\Registry::$config->timeZone);
 			ini_set('default_charset', \App\Registry::$config->charset);
 			return $this;
 		}
