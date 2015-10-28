@@ -76,6 +76,7 @@ class ComposerInstaller {
 		foreach (self::$_sysDirs as $dir) {
 			//tworzenie katalogu
 			!file_exists(BASE_PATH . '/' . $dir) ? mkdir(BASE_PATH . '/' . $dir, 0777, true) : null;
+			chmod($dir, 0777);
 		}
 	}
 
@@ -129,7 +130,7 @@ class ComposerInstaller {
 				continue;
 			}
 			//zmiana uprawnień
-			chmod($file->getPathname(), 0777);
+			chmod($file->getPathname(), 0755);
 		}
 	}
 	
