@@ -49,6 +49,7 @@ class ComposerInstaller {
 		self::_initAutoload($event);
 		self::_copyDistFiles();
 		self::_copyModuleWebResources();
+		self::_copyModuleBinaries();
 	}
 
 	/**
