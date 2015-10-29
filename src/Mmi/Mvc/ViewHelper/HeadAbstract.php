@@ -30,7 +30,7 @@ class HeadAbstract extends HelperAbstract {
 				$location = substr($location, 0, strrpos($location, '?'));
 			}
 			$baseUrlLength = strlen($this->view->baseUrl);
-			$location = PUBLIC_PATH . substr($location, $baseUrlLength);
+			$location = BASE_PATH . '/web/' . substr($location, $baseUrlLength);
 			$online = false;
 		}
 		if (!$online && !file_exists($location)) {

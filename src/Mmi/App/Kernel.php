@@ -31,7 +31,6 @@ namespace Mmi\App {
 			FrontController::getInstance()->getProfiler()->event('App\Kernel: application startup');
 			//inicjalizacja aplikacji
 			$this->_initEventHandler()
-				->_initPaths()
 				->_initEncoding()
 				->_initCache();
 			//bootstrap start
@@ -85,19 +84,6 @@ namespace Mmi\App {
 			setlocale(LC_NUMERIC, 'en_US.UTF-8');
 			//ustawienie lokalizacji
 			ini_set('default_charset', \App\Registry::$config->charset);
-			return $this;
-		}
-
-		/**
-		 * Definicja ścieżek
-		 * @param string $systemPath
-		 * @return \Mmi\App\Kernel
-		 */
-		private function _initPaths() {
-			//zasoby publiczne
-			define('PUBLIC_PATH', BASE_PATH . '/web');
-			//dane
-			define('DATA_PATH', BASE_PATH . '/var/data');
 			return $this;
 		}
 

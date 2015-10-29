@@ -167,7 +167,7 @@ class HeadStyle extends HelperAbstract {
 	protected function _filterCssFile($fileName) {
 		try {
 			//pobranie kontentu
-			$content = file_get_contents(PUBLIC_PATH . '/' . $fileName);
+			$content = file_get_contents(BASE_PATH . '/web/' . $fileName);
 		} catch (\Exception $e) {
 			return '/* CSS file not found: ' . $fileName . ' */';
 		}
