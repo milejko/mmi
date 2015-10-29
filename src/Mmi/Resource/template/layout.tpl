@@ -6,6 +6,6 @@
 	<body>
 		{content()}
 		<hr />
-		<i>MMi Framework/3.1 PHP/5</i>
+		<i>MMi Framework/3.1</i>
 	</body>
 </html>
