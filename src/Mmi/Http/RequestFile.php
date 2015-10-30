@@ -10,14 +10,33 @@
 
 namespace Mmi\Http;
 
+/**
+ * Klasa pliku
+ */
 class RequestFile {
 	
+	/**
+	 * Nazwa pliku
+	 * @var string
+	 */
 	public $name;
 	
+	/**
+	 * Tymczasowa ścieżka
+	 * @var string 
+	 */
 	public $tmpName;
 	
+	/**
+	 * Rozmiar pliku
+	 * @var integer
+	 */
 	public $size;
 	
+	/**
+	 * Typ mime
+	 * @var string 
+	 */
 	public $type;
 	
 	/**

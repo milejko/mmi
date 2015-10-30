@@ -32,7 +32,6 @@ namespace Mmi\Form\Element;
  * @method self setRequiredAsterisk($asterisk = '*') ustawia znak gwiazdki
  * @method self setRequired($required = true) ustawia wymagalność
  * @method self setLabelPostfix($labelPostfix) ustawia postfix labelki
- * @method self setForm(\Mmi\Form\Form $form) ustawia formularz
  * 
  * Walidatory
  * @method self addValidatorAlnum($message = null) walidator alfanumeryczny
@@ -97,21 +96,17 @@ class File extends ElementAbstract {
 		return '<input type="file" ' . $this->_getHtmlOptions() . '/>';
 	}
 
-	/**
-	 * Zbiera pliki z tabeli $_FILES jeśli istnieją jakieś pliki dla tego pola
-	 * @return \Mmi\Form\Element\File
-	 */
-	public function __construct($name) {
-		parent::__construct($name);
+	public function setForm(\Mmi\Form\Form $form) {
+		parent::setForm($form);
 		//nazwa pola
-		$fieldName = $this->getOption('name');
-		//tablica obiektów file
+		$namespace = $form->getBaseName();
+		$fieldName = $this->getName();
 		$files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles();
-		//brak pliku dla tego elementu formularza
-		if (!$files->{$fieldName}) {
-			return;
+		//brak pliku
+		if (!isset($files->{$namespace}->{$fieldName})) {
+			return $this;
 		}
-		$this->_files = $files->{$fieldName};
+		$this->_files = $files->{$namespace}->{$fieldName};
 		//opakowanie w array jeśli plik jest jeden
 		if ($this->_files instanceof \Mmi\Http\RequestFile) {
 			$this->_files = [$this->_files];

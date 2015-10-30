@@ -240,7 +240,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @param \Mmi\Form\Form $form
 	 * @return self
 	 */
-	public final function setForm(\Mmi\Form\Form $form) {
+	public function setForm(\Mmi\Form\Form $form) {
 		$this->_form = $form;
 		//ustawianie ID
 		$this->setId($form->getBaseName() . '-' . $this->getName());

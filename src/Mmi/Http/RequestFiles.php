@@ -57,7 +57,7 @@ class RequestFiles extends \Mmi\DataObject {
 		if (is_array($fileData['name'])) {
 			return;
 		}
-		//brak 
+		//brak pliku
 		if (!isset($fileData['tmp_name']) || $fileData['tmp_name'] == '') {
 			return;
 		}
@@ -71,20 +71,33 @@ class RequestFiles extends \Mmi\DataObject {
 	 * @return \Mmi\Http\RequestFile[]
 	 */
 	protected function _handleMultiUpload(array $fileData) {
-		$files = [];
-		//upload wielokrotny html5
-		for ($i = 0, $count = count($fileData); $i < $count; $i++) {
-			if (!isset($fileData['tmp_name'][$i]) || !$fileData['tmp_name'][$i]) {
-				continue;
+		$files = new RequestFiles();
+		//iteracja po plikach
+		foreach ($this->_fixFiles($fileData) as $key => $file) {
+			//brak pliku
+			if (!isset($file['tmp_name']) || $file['tmp_name'] == '') {
+				return;
 			}
-			//tworzenie obiektów plików
-			$files[] = new RequestFile([
-				'name' => $fileData['name'][$i],
-				'tmp_name' => $fileData['tmp_name'][$i],
-				'size' => $fileData['size'][$i]
-			]);
+			//dodawanie pliku
+			$files->{$key} = new RequestFile($file);
 		}
 		return $files;
+	}
+
+	/**
+	 * Zmienia tabelę z postaci $_FILES na przyjazną
+	 * @param array $files
+	 * @return array
+	 */
+	protected function _fixFiles(array $files) {
+		$fixed = [];
+		//iteracja po plikach
+		foreach ($files as $key => $all) {
+			foreach ($all as $i => $val) {
+				$fixed[$i][$key] = $val;
+			}
+		}
+		return $fixed;
 	}
 
 }
