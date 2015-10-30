@@ -177,7 +177,7 @@ abstract class Form extends \Mmi\OptionObject {
 			}
 		}
 		//rezultat walidacji
-		return $this->_valid = $validationResult && $this->validator();
+		return $this->_valid = $this->validator() && $validationResult;
 	}
 
 	/**
