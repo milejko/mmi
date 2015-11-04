@@ -142,6 +142,7 @@ class JsonClient {
 		$this->_debugData[] = ['request' => $request,
 			'url' => $url,
 			'response' => $response,
+			'requestJson' => $request->toJson(),
 			'method' => $method
 		];
 	}
