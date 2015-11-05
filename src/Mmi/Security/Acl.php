@@ -35,7 +35,7 @@ class Acl {
 	 * @param string $resource zasób
 	 */
 	public function add($resource) {
-		$this->_resources[$resource] = true;
+		$this->_resources[strtolower($resource)] = true;
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Acl {
 	 * @param string $resource zasób
 	 */
 	public function has($resource) {
-		return isset($this->_resources[$resource]);
+		return isset($this->_resources[strtolower($resource)]);
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Acl {
 	 */
 	public function allow($role, $resource) {
 		$this->addRole($role);
-		$this->_rights[$role . ':' . $resource] = true;
+		$this->_rights[$role . ':' . strtolower($resource)] = true;
 	}
 
 	/**
@@ -81,7 +81,7 @@ class Acl {
 	 */
 	public function deny($role, $resource) {
 		$this->addRole($role);
-		$this->_rights[$role . ':' . $resource] = false;
+		$this->_rights[$role . ':' . strtolower($resource)] = false;
 	}
 
 	/**
@@ -108,11 +108,18 @@ class Acl {
 	 * @return boolean
 	 */
 	public function isRoleAllowed($role, $resource) {
+		//zmniejszanie liter
+		$resource = strtolower($resource);
+		//istnieje konkretne uprawnienie
 		if (isset($this->_rights[$role . ':' . $resource])) {
 			return $this->_rights[$role . ':' . $resource];
-		} elseif (strrpos($resource, ':') !== false) {
+		}
+		//uprawnienie do zasobu powyżej
+		if (strrpos($resource, ':') !== false) {
 			return $this->isRoleAllowed($role, substr($resource, 0, strrpos($resource, ':')));
-		} elseif (isset($this->_rights[$role . ':'])) {
+		}
+		//globalne dla roli
+		if (isset($this->_rights[$role . ':'])) {
 			return $this->_rights[$role . ':'];
 		}
 		return false;
