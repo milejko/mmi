@@ -47,7 +47,7 @@ class KernelProfiler {
 	 * @param string $name nazwa
 	 * @param string $elapsed opcjonalnie czas operacji
 	 */
-	public function event($name, $elapsed = null) {
+	public function event($name) {
 		//profiler wyłączony
 		if (LoggerHelper::getLevel() != Logger::DEBUG) {
 			return;
@@ -56,11 +56,9 @@ class KernelProfiler {
 		$time = microtime(true);
 		//obliczanie timestampu uruchomienia
 		$this->_runtimeStamp = !$this->_runtimeStamp ? substr(md5($time . rand(0, 10000)), 6, 6) : $this->_runtimeStamp;
-		if ($elapsed === null && $this->_counter > 0) {
-			$elapsed = $time - $this->_data[$this->_counter - 1]['time'];
-		} elseif ($elapsed === null) {
-			$elapsed = 0;
-		}
+		//obliczanie czasu trwania
+		$elapsed = isset($this->_data[$this->_counter - 1]) ? ($time - $this->_data[$this->_counter - 1]['time']) : 0;
+		//zapis rekordu
 		$this->_data[$this->_counter] = [
 			'name' => $name,
 			'time' => $time,
