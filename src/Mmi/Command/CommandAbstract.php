@@ -25,12 +25,20 @@ abstract class CommandAbstract {
 		}
 		//konfiguracja autoloadera
 		$this->_setupAutoload();
+		//brak limitu czasowego
+		set_time_limit(0);
 		//powołanie aplikacji
 		$application = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', $env);
 		//ustawienie typu odpowiedzi na plain
 		\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
 		//uruchomienie aplikacji
 		$application->run();
+		//próba usunięcia buforowania wyjścia
+		try {
+			ob_end_flush();
+		} catch (\Exception $e) {
+			//nic
+		}
 	}
 
 	/**
