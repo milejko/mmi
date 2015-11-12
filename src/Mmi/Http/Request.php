@@ -53,6 +53,14 @@ class Request extends \Mmi\DataObject {
 	public function getPost() {
 		return new RequestPost($_POST);
 	}
+	
+	/**
+	 * Zwraca zmienne GET w postaci tabeli
+	 * @return RequestGet
+	 */
+	public function getGet() {
+		return new RequestGet($_GET);
+	}
 
 	/**
 	 * Pobiera informacje o zuploadowanych plikach FILES
