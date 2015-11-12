@@ -121,6 +121,7 @@ class Builder {
 			' * @method \\' . $queryClassName . ' lessOrEquals($value)' . "\n" .
 			' * @method \\' . $queryClassName . ' like($value)' . "\n" .
 			' * @method \\' . $queryClassName . ' ilike($value)' . "\n" .
+			' * @method \\' . $queryClassName . ' between($from, $to)' . "\n" .
 			$methods .
 			' */' . "\n" .
 			'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryField') . ' extends \Mmi\Orm\QueryHelper\QueryField {' .

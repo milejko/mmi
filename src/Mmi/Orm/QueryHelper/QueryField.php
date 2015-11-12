@@ -200,6 +200,18 @@ class QueryField {
 	}
 
 	/**
+	 * Porównanie podobieństwa bez wielkości liter
+	 * @param string $value
+	 * @return Query
+	 */
+	public function between($from, $to) {
+		//większe równe od
+		$this->greaterOrEquals($from);
+		//mniejsze równe do
+		return $this->lessOrEquals($to);
+	}
+
+	/**
 	 * Przygotowuje zapytanie
 	 * @param mixed $value
 	 * @param string $condition
