@@ -30,12 +30,16 @@ class Template extends HelperAbstract {
 		$input = str_replace([
 			'{{',
 			'}}',
+			'({',
+			')}',
 			"\r\n",
 			'{*',
 			'*}',
 		], [
-			'__"ldelim"__',
-			'__"rdelim"__',
+			'__-angular-start-__',
+			'__-angular-end-__',
+			'__-js-start-__',
+			'__-js-end-__',
 			"\n",
 			'<?php /*',
 			'*/ ?>',
@@ -122,11 +126,15 @@ class Template extends HelperAbstract {
 		 * odzyskuje klamry
 		 */
 		$input = str_replace([
-			'__"ldelim"__',
-			'__"rdelim"__',
+			'__-angular-start-__',
+			'__-angular-end-__',
+			'__-js-start-__',
+			'__-js-end-__',
 		], [
-			'{',
-			'}',
+			'{{',
+			'}}',
+			'({',
+			'})',
 		], $input);
 
 		/**
