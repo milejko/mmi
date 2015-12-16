@@ -88,6 +88,15 @@ class Structure {
 				if ($action->isDot()) {
 					continue;
 				}
+				if ($action->isDir()) {
+					foreach (new \DirectoryIterator($action->getPathname()) as $partial) {
+						if ($partial->isDot()) {
+							continue;
+						}
+						$components[$moduleName][$template->getFilename()][$action->getFilename() . '/' . substr($partial->getFilename(), 0, -4)] = $partial->getPathname();
+					}
+					continue;
+				}
 				if ($action->isFile()) {
 					$components[$moduleName][$template->getFilename()][substr($action->getFilename(), 0, -4)] = $action->getPathname();
 					continue;

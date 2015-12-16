@@ -231,7 +231,7 @@ class FrontController {
 	public function getView() {
 		//brak widoku
 		if ($this->_view === null) {
-			throw new KernelException('\Mmi\View should be specified in \Mmi\App\FrontController');
+			throw new KernelException('\Mmi\Mvc\View should be specified in \Mmi\App\FrontController');
 		}
 		return $this->_view;
 	}
@@ -244,7 +244,7 @@ class FrontController {
 	public function getStructure($part = null) {
 		//brak struktury
 		if ($this->_structure === null) {
-			throw new KernelException('\Mmi\Contoller\Front structure not found');
+			throw new KernelException('\Mmi\App\FrontController structure not found');
 		}
 		//struktura nieprawidłowa (brak części)
 		if ($part !== null && !isset($this->_structure[$part])) {
