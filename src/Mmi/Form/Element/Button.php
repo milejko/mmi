@@ -21,7 +21,7 @@ class Button extends ElementAbstract {
 	public function __construct($name) {
 		parent::__construct($name);
 		$this->setIgnore();
-		$this->getRenderer()->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
+		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
 	}
 
 	/**
