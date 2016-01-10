@@ -337,7 +337,12 @@ class View extends \Mmi\DataObject {
 		}
 		//przechwycenie danych
 		$data = ob_get_contents();
-		ob_clean();
+		//możliwy brak bufora
+		try {
+			ob_clean();
+		} catch (\Exception $e) {
+			//nic do czyszczenia
+		}
 		FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . basename($fileName) . ' rendered');
 		return $data;
 	}
