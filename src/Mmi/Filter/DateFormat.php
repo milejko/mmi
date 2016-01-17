@@ -34,7 +34,8 @@ class DateFormat extends \Mmi\Filter\FilterAbstract {
 	 * @return mixed
 	 */
 	public function filter($value) {
-		!$this->getFormat() ? null : $this->setFormat('d.m.Y H:i:s');
+		//domyślny format jeśli brak
+		!$this->getFormat() ? $this->setFormat('d.m.Y H:i:s') : null;
 		$timestamp = $value;
 		//nienumeryczna
 		if (!is_numeric($value)) {
