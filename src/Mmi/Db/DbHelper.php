@@ -15,7 +15,7 @@ class DbHelper {
 	/**
 	 * Tworzy obiekty adaptera na podstawie opcji
 	 * @param \Mmi\Db\DbConfig $config
-	 * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
+	 * @return \Mmi\Db\Adapter\PdoAbstract
 	 */
 	public static function getAdapter(\Mmi\Db\DbConfig $config) {
 		if ($config->driver != 'mysql' && $config->driver != 'pgsql' && $config->driver != 'sqlite' && $config->driver != 'oci') {
