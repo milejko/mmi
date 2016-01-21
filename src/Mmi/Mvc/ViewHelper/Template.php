@@ -33,20 +33,20 @@ class Template extends HelperAbstract {
 			"\r\n",
 			'{*',
 			'*}',
-		], [
+			], [
 			'__-angular-start-__',
 			'__-angular-end-__',
 			"\n",
 			'<?php /*',
 			'*/ ?>',
-		], $input);
+			], $input);
 
 		//buforowanie linkowanie aplikacji
 		$input = preg_replace_callback('/\{@([\*]+)?(.[^@\^]+)?[\^]?(.[^@\^]+)?@\}/', [&$this, '_url'], $input);
-		
+
 		//zmiana zmiennych obiektowych w linkach np. $request->test
 		$input = preg_replace_callback('/%7B((%3E|%28|%29|%24)?([a-zA-Z\.\-\_\[\]\'\"\(\)]+)?)+%7D/', [&$this, '_routerLinks'], $input);
-		
+
 		//zmiana zmiennych skalarnych lub tablicowych w linkach np. $requestTest
 		$input = preg_replace('/%7B%24([a-z0-9A-Z\.\-\_\[\]\'\"\(\)]+)%7D/', '{$$1}', $input);
 
@@ -83,7 +83,7 @@ class Template extends HelperAbstract {
 			'/\{\$this->([a-z0-9_-]+)\(/i', //wyświetlanie helperów
 			'/([a-z0-9)\]\'\+\-])}/i', //obsługa zamknięcia
 			'/\{\$\$this->([a-z0-9_-]+)/i', //$nazwa -> $this->{$this->nazwa}
-		], [
+			], [
 			'$this->${1}',
 			'<?php end${1}; ?>',
 			'<?php ${1}; ?>',
@@ -106,7 +106,7 @@ class Template extends HelperAbstract {
 			'<?php echo \$this->${1}(',
 			'${1}; ?>',
 			'<?php echo \$this->{$this->${1}}',
-		], $input);
+			], $input);
 
 		/**
 		 * first i last w pętlach foreach
@@ -124,10 +124,10 @@ class Template extends HelperAbstract {
 		$input = str_replace([
 			'__-angular-start-__',
 			'__-angular-end-__',
-		], [
+			], [
 			'{{',
 			'}}',
-		], $input);
+			], $input);
 
 		/**
 		 * fix dla funkcji JS'owych - badanie krótkich pod-ciągów
@@ -185,7 +185,7 @@ class Template extends HelperAbstract {
 		}
 		return \Mmi\App\FrontController::getInstance()->getView()->getHelper('url')->url($params, true, $absolute, $https);
 	}
-	
+
 	/**
 	 * Dekoduje linki z routera
 	 * @param array $matches dopasowania
@@ -205,8 +205,8 @@ class Template extends HelperAbstract {
 	}
 
 	/**
-	 * Konwertuje tagi {'ścieżka do pliku'} na wynik renderowania pliku
-	 * przykład: {'index.tpl'} wyrenderuje plik index.tpl
+	 * Konwertuje tagi {'element struktury'} na wynik renderowania pliku
+	 * przykład: {'cms/index'} wyrenderuje template index.tpl w module cms 
 	 * @param array $matches dopasowania
 	 * @return string
 	 */
@@ -224,7 +224,7 @@ class Template extends HelperAbstract {
 			}
 			$template = is_array($structure[$matches[1]][$matches[2]]) ? $structure[$matches[1]][$matches[2]][0] : $structure[$matches[1]][$matches[2]];
 		}
-		return preg_replace_callback('/\{\'(.[^\']+)\'\}/', [&$this, '_render'], file_get_contents($template));
+		return preg_replace_callback('/\{\'([a-zA-Z\-]+)\/([a-zA-Z]+)\/?([a-zA-Z\/]+)?\'\}/', [&$this, '_render'], file_get_contents($template));
 	}
 
 	/**
