@@ -9,6 +9,7 @@
  */
 
 namespace Mmi\Form;
+
 use Mmi\Form\Element;
 
 /**
@@ -69,7 +70,7 @@ abstract class Form extends \Mmi\OptionObject {
 	 * @param \Mmi\Orm\Record $record obiekt recordu
 	 * @param array $options opcje
 	 */
-	public function __construct(\Mmi\Orm\Record $record = null) {
+	public function __construct(\Mmi\Orm\Record $record = null, array $options = []) {
 		//podłączenie rekordu
 		$this->_record = $record;
 
@@ -81,6 +82,9 @@ abstract class Form extends \Mmi\OptionObject {
 			->setOption('accept-charset', 'utf-8')
 			->setMethod('post')
 			->setOption('enctype', 'multipart/form-data');
+
+		//opcje przekazywane z konstruktora
+		$this->setOptions($options);
 
 		//inicjalizacja formularza
 		$this->init();
