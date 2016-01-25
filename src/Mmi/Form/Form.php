@@ -216,6 +216,8 @@ abstract class Form extends \Mmi\OptionObject {
 			}
 			//ustawianie wartości
 			$element->setValue($data[$element->getName()]);
+			//aktualizacja na wartość po filtracji
+			$element->setValue($element->getFilteredValue());
 		}
 		return $this;
 	}
@@ -359,7 +361,7 @@ abstract class Form extends \Mmi\OptionObject {
 				continue;
 			}
 			//dodawanie wartości do tabeli
-			$data[$element->getName()] = $element->getFilteredValue();
+			$data[$element->getName()] = $element->getValue();
 		}
 		//ustawianie rekordu na podstawie danych
 		$this->_record->setFromArray($data);
