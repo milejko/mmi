@@ -31,7 +31,7 @@ class NumberBetween extends ValidatorAbstract {
 	/**
 	 * Treść błędu, jeśli nie jest liczbą
 	 */
-	const INVALID = 'Wprowadzona wartość nie jest liczbą';
+	const NUMERIC = 'Wprowadzona wartość nie jest liczbą';
 
 	/**
 	 * Ustawia opcje
