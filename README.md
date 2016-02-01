@@ -11,4 +11,8 @@ MMi is only supported on PHP 5.4.0 and up.
 
 Installation
 
-The best way to install MMi is to use composer.
+The best way to install MMi is to use composer:
+
+1). composer install
+2). configure Your environment in src/App/ConfigXXX.php (where XXX is Your ENV)
+3). php bin/DbDeploy.php <ENV>
