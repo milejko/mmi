@@ -36,6 +36,7 @@ namespace Mmi\Form\Element;
  * 
  * Walidatory
  * @method self addValidatorAlnum($message = null) walidator alfanumeryczny
+ * @method self addValidatorChecked(\Mmi\Form\Element\Checkbox $element, $message = null) walidator alfanumeryczny
  * @method self addValidatorDate($message = null) walidator daty
  * @method self addValidatorEmailAddress($message = null) walidator email
  * @method self addValidatorEmailAddressList($message = null) walidator listy email
@@ -110,4 +111,12 @@ class Checkbox extends ElementAbstract {
 		return $checked ? $this->setOption('checked', '') : $this->unsetOption('checked');
 	}
 
+	/**
+	 * Czy zaznaczone
+	 * @return \Mmi\Form\Element\Checkbox
+	 */
+	public function isChecked() {
+		return $this->issetOption('checked');
+	}
+	
 }
