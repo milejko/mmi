@@ -117,7 +117,7 @@ class ComposerInstaller {
 			}
 			//istnieje resource web
 			if (file_exists($module . '/Resource/web')) {
-				symlink($module . '/Resource/web', $linkName);
+				symlink(realpath($module . '/Resource/web'), $linkName);
 			}
 		}
 	}
