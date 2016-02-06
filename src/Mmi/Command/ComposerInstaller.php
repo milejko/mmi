@@ -107,6 +107,10 @@ class ComposerInstaller {
 		//iteracja po modułach
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			$linkName = BASE_PATH . '/web/resource/' . lcfirst(basename($module));
+			//link istnieje
+			if (is_link($linkName)) {
+				continue;
+			}
 			//czyszczenie katalogu który ma być linkiem
 			if (file_exists($linkName)) {
 				\Mmi\FileSystem::rmdirRecursive($linkName);
