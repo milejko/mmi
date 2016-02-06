@@ -106,9 +106,14 @@ class ComposerInstaller {
 	protected static function _linkModuleWebResources() {
 		//iteracja po modułach
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
+			$linkName = BASE_PATH . '/web/resource/' . lcfirst(basename($module));
+			//czyszczenie katalogu który ma być linkiem
+			if (file_exists($linkName)) {
+				\Mmi\FileSystem::rmdirRecursive($linkName);
+			}
 			//istnieje resource web
 			if (file_exists($module . '/Resource/web')) {
-				symlink($module . '/Resource/web', BASE_PATH . '/web/resource/' . lcfirst(basename($module)));
+				symlink($module . '/Resource/web', $linkName);
 			}
 		}
 	}
