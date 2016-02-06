@@ -4,7 +4,7 @@
  * Mmi Framework (https://github.com/milejko/mmi.git)
  * 
  * @link       https://github.com/milejko/mmi.git
- * @copyright  Copyright (c) 2010-2016 Mariusz Miłejko (http://milejko.com)
+ * @copyright  Copyright (c) 2010-2015 Mariusz Miłejko (http://milejko.com)
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
@@ -37,7 +37,7 @@ class ComposerInstaller {
 	 */
 	public static function postUpdate(Event $event) {
 		self::_initAutoload($event);
-		self::_copyModuleWebResources();
+		self::_linkModuleWebResources();
 		self::_copyModuleBinaries();
 	}
 
@@ -48,7 +48,7 @@ class ComposerInstaller {
 	public static function postInstall(Event $event) {
 		self::_initAutoload($event);
 		self::_copyDistFiles();
-		self::_copyModuleWebResources();
+		self::_linkModuleWebResources();
 		self::_copyModuleBinaries();
 	}
 
@@ -101,14 +101,14 @@ class ComposerInstaller {
 	}
 	
 	/**
-	 * Kopiuje zasoby publiczne do /web
+	 * Linkuje zasoby publiczne do /web
 	 */
-	protected static function _copyModuleWebResources() {
+	protected static function _linkModuleWebResources() {
 		//iteracja po modułach
 		foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
 			//istnieje resource web
 			if (file_exists($module . '/Resource/web')) {
-				\Mmi\FileSystem::copyRecursive($module . '/Resource/web', BASE_PATH . '/web/resource/' . lcfirst(basename($module)));
+				symlink($module . '/Resource/web', BASE_PATH . '/web/resource/' . lcfirst(basename($module)));
 			}
 		}
 	}
