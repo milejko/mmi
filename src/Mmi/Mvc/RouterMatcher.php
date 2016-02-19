@@ -71,14 +71,13 @@ class RouterMatcher {
 		$applied = true;
 		$url = '';
 		$replace = array_merge($route->default, $route->replace);
-		//routy statyczne tylko ze zgodną liczbą parametrów
-		if (!self::_isPatternRegular($route->pattern) && count($replace) != count($params)) {
-			return [
-				'applied' => false,
-				'matched' => $matched,
-				'url' => $url
-			];
-		}
+		//ustawianie domyślnego kontrolera i akcji, jeśli brak w parametrach
+		$params['controller'] = isset($params['controller']) ? $params['controller'] : 'index';
+		$params['action'] = isset($params['action']) ? $params['action'] : 'index';
+		//ustawianie domyślnego kontrolera i akcji, jeśli brak w roucie
+		$replace['controller'] = isset($replace['controller']) ? $replace['controller'] : 'index';
+		$replace['action'] = isset($replace['action']) ? $replace['action'] : 'index';
+		//iteracja po roucie
 		foreach ($replace as $key => $value) {
 			if (is_array($value) && isset($params[$key]) && $value == $params[$key]) {
 				$matched[$key] = true;
