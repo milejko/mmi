@@ -118,8 +118,11 @@ class Cookie {
 	 * @return boolean
 	 */
 	public function delete() {
-		unset($_COOKIE);
-		return setcookie($this->getName(), null, time() - 3600, '/');
+		if ($this->getName()) {
+			unset($_COOKIE[$this->getName()]);
+			setcookie($this->getName(), null, time() - 3600, '/');
+		}
+		return;
 	}
 
 }

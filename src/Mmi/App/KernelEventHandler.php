@@ -61,7 +61,7 @@ class KernelEventHandler {
 	 * @param \Exception $exception wyjątek
 	 * @return boolean
 	 */
-	public static function exceptionHandler(\Exception $exception) {
+	public static function exceptionHandler(\Throwable $exception) {
 		//czyszczenie bufora
 		try {
 			ob_clean();
@@ -105,7 +105,7 @@ class KernelEventHandler {
 	 * @param type $response
 	 * @param \Exception $exception
 	 */
-	private static function _sendRawResponse(\Mmi\Http\Response $response, \Exception $exception) {
+	private static function _sendRawResponse(\Mmi\Http\Response $response, \Throwable $exception) {
 		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), $exception->getTraceAsString())));
 	}
 
@@ -140,7 +140,7 @@ class KernelEventHandler {
 	 * Logowanie wyjątków
 	 * @param \Exception $exception
 	 */
-	private static function _logException(\Exception $exception) {
+	private static function _logException(\Throwable $exception) {
 		//logowanie wyjątku aplikacyjnego
 		if ($exception instanceof \Mmi\App\KernelException) {
 			FrontController::getInstance()->getLogger()->addRecord($exception->getCode(), self::_formatException($exception));
@@ -155,7 +155,7 @@ class KernelEventHandler {
 	 * @param \Exception $exception
 	 * @return string
 	 */
-	private static function _formatException(\Exception $exception) {
+	private static function _formatException(\Throwable $exception) {
 		return str_replace(realpath(BASE_PATH), '', \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' (' . $exception->getMessage() . ') @' .
 			$exception->getFile() . '(' . $exception->getLine() . ') ' .
 			$exception->getTraceAsString());
