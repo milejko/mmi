@@ -19,7 +19,7 @@
 		}
 	],
 	"require": {
-		"php": ">=5.4.0",
+		"php": ">=5.6.0",
 		"monolog/monolog": "~1.11",
 		"graylog2/gelf-php": "~1.0"
 	},
@@ -40,7 +40,7 @@
 	"minimum-stability": "dev",
 	"extra": {
 		"branch-alias": {
-			"dev-master": "3.1-dev"
+			"dev-master": "3.2-dev"
 		}
 	}
 }
