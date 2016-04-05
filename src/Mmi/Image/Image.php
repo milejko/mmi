@@ -55,10 +55,12 @@ class Image {
 		$sy = round($height * $scale);
 
 		$tmp = imagecreatetruecolor($sx, $sy);
+		self::_saveAlpha($tmp);
 		imagecopyresampled($tmp, $input, 0, 0, 0, 0, $sx, $sy, $width, $height);
 		$input = $tmp;
 
 		$tmp = imagecreatetruecolor($x, $y);
+		self::_saveAlpha($tmp);
 		imagecopyresized($tmp, $input, 0, 0, abs($sx - $x) / 2, abs($sy - $y) / 2, $x, $y, $x, $y);
 		return $tmp;
 	}
@@ -79,6 +81,7 @@ class Image {
 		$sx = round($width * $percent / 100);
 		$sy = round($height * $percent / 100);
 		$tmp = imagecreatetruecolor($sx, $sy);
+		self::_saveAlpha($tmp);
 		imagecopyresampled($tmp, $input, 0, 0, 0, 0, $sx, $sy, $width, $height);
 		return $tmp;
 	}
@@ -157,6 +160,7 @@ class Image {
 			$sx = round($width * $scale);
 			$sy = round($height * $scale);
 			$tmp = imagecreatetruecolor($sx, $sy);
+			self::_saveAlpha($tmp);
 			imagecopyresampled($tmp, $input, 0, 0, 0, 0, $sx, $sy, $width, $height);
 			$input = $tmp;
 		}
@@ -187,6 +191,7 @@ class Image {
 				break;
 			case '2':
 				$output = imagecreatetruecolor($x, $y);
+				self::_saveAlpha($output);
 				imagecopyresampled($output, $input, 0, 0, $x - 1, $y - 1, $x, $y, 0 - $x, 0 - $y);
 				break;
 			case '3':
@@ -222,8 +227,18 @@ class Image {
 		}
 		//wycinanie obrazka
 		$destination = imagecreatetruecolor($newWidth, $newHeight);
+		self::_saveAlpha($destination);
 		imagecopy($destination, $input, 0, 0, $x, $y, $newWidth, $newHeight);
 		return $destination;
+	}
+	
+	/**
+	 * Zachowanie alphy
+	 * @param resource $imgRes
+	 */
+	protected static function _saveAlpha($imgRes) {
+		imagealphablending($imgRes, false);
+		imagesavealpha($imgRes, true);
 	}
 
 }
