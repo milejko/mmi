@@ -33,12 +33,6 @@ abstract class CommandAbstract {
 		\Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
 		//uruchomienie aplikacji
 		$application->run();
-		//próba usunięcia buforowania wyjścia
-		try {
-			ob_end_flush();
-		} catch (\Exception $e) {
-			//nic
-		}
 	}
 
 	/**

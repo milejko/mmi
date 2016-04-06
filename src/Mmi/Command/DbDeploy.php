@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
  * 
@@ -18,14 +17,21 @@ require_once 'CommandAbstract.php';
  * Wdrożenie bazy danych
  */
 class DbDeploy extends CommandAbstract {
-	
+
 	/**
 	 * Uruchomienie deployera
 	 */
 	public function run() {
+		//próba usunięcia buforowania wyjścia
+		try {
+			ob_end_flush();
+		} catch (\Exception $e) {
+			//nic
+		}
+
 		(new \Mmi\Db\Deployer)->deploy();
 	}
-	
+
 }
 
 new DbDeploy(isset($argv[1]) ? $argv[1] : null);
