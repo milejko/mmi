@@ -32,6 +32,7 @@ use Mmi\Form\Element;
  * @method Element\Submit addElementSubmit($name) dodaje element submit
  * @method Element\Text addElementText($name) dodaje element text
  * @method Element\Textarea addElementTextarea($name) dodaje element textarea
+ * @method Element\Csrf addElementCsrf($name) dodaje element zabezpieczający CSRF
  */
 abstract class Form extends \Mmi\OptionObject {
 
