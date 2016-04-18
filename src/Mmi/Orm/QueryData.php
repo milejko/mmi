@@ -126,6 +126,17 @@ class QueryData {
 	}
 
 	/**
+	 * Pobiera sumę z kolumny
+	 * @param string $keyName nazwa klucza
+	 * @return string wartość minimalna
+	 */
+	public final function findSum($keyName) {
+		//odpytanie adaptera o rekord
+		$result = \Mmi\Orm\DbConnector::getAdapter()->select('SUM(' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
+		return isset($result[0]) ? current($result[0]) : null;
+	}
+
+	/**
 	 * Pobiera unikalne wartości kolumny
 	 * @param string $keyName nazwa klucza
 	 * @return array mixed wartości unikalne

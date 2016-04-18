@@ -340,6 +340,16 @@ class Query {
 	}
 
 	/**
+	 * Pobiera sumę z kolumny
+	 * @param string $keyName nazwa klucza
+	 * @return string suma
+	 */
+	public final function findSum($keyName) {
+		return (new QueryData($this))
+				->findSum($keyName);
+	}
+
+	/**
 	 * Pobiera unikalne wartości kolumny
 	 * @param string $keyName nazwa klucza
 	 * @return array mixed wartości unikalne
