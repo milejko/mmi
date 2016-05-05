@@ -22,18 +22,5 @@ class MvcNotFoundException extends MvcException {
 	 * @var integer
 	 */
 	protected $code = Logger::INFO;
-	
-	/**
-	 * Konstruktor
-	 * @param wiadomość $message
-	 * @param kod $code
-	 * @param \Mmi\Mvc\Exception $previous
-	 */
-	public function __construct ($message = "", $code = 0, Exception $previous = null) {
-		//ignorowanie transakcji
-		extension_loaded('newrelic') ? newrelic_ignore_transaction() : null;
-		//konstruktor nadrzędny
-		parent::__construct($message, $code, $previous);
-	}
 
 }
