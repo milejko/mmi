@@ -101,7 +101,7 @@ class ResponseDebugger {
 		if (null !== $view->_exception) {
 			$html .= '<h2 style="color: #bb0000; margin: 0px; font-size: 14px; text-transform: none;">' . get_class($view->_exception) . ': ' . $view->_exception->getMessage() . '</h2>';
 			$html .= '<p style="margin: 0px; padding: 0px 0px 10px 0px;">' . $view->_exception->getFile() . ' <strong>(' . $view->_exception->getLine() . ')</strong></p>';
-			$html .= '<pre>' . $view->_exception->getTraceAsString() . '</pre><br />';
+			$html .= '<pre>' . $view->_trace . '</pre><br />';
 		}
 		$html .= '<table cellspacing="0" cellpadding="0" border="0" style="width: 100%; padding: 0px; margin: 0px;"><tr><td style="vertical-align: top; padding-right: 5px;">';
 

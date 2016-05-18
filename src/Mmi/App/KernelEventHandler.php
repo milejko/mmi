@@ -76,6 +76,7 @@ class KernelEventHandler {
 			//widok
 			$view = \Mmi\App\FrontController::getInstance()->getView();
 			$view->_exception = $exception;
+			$view->_trace = self::_formatTrace($exception);
 			//błąd bez layoutu lub nie HTML
 			if ($view->isLayoutDisabled() || $response->getType() != 'html') {
 				//domyślna prezentacja błędów
@@ -106,7 +107,7 @@ class KernelEventHandler {
 	 * @param \Exception $exception
 	 */
 	private static function _sendRawResponse(\Mmi\Http\Response $response, $exception) {
-		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), $exception->getTraceAsString())));
+		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), self::_logException($exception))));
 	}
 
 	/**
@@ -158,7 +159,29 @@ class KernelEventHandler {
 	private static function _formatException($exception) {
 		return str_replace(realpath(BASE_PATH), '', \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' (' . $exception->getMessage() . ') @' .
 			$exception->getFile() . '(' . $exception->getLine() . ') ' .
-			$exception->getTraceAsString());
+			self::_formatTrace($exception));
+	}
+
+	/**
+	 * Format trace
+	 * @param \Exception $exception
+	 * @return string
+	 */
+	private static function _formatTrace($exception) {
+		$message = '';
+		$i = 0;
+		$trace = $exception->getTrace();
+		array_shift($trace);
+		foreach ($trace as $row) {
+			$i++;
+			$message .= "\n" . '#' . $i;
+			$message .= isset($row['file']) ? ' ' . $row['file'] : '';
+			$message .= isset($row['line']) ? '(' . $row['line'] . ')' : '';
+			$message .= isset($row['class']) ? ' ' . $row['class'] . '::' : '';
+			$message .= isset($row['function']) ? (isset($row['class']) ? '' : ' ') . $row['function'] . '(' : '';
+			$message .= isset($row['args']) ? json_encode($row['args']) . ')' : '';
+		}
+		return $message;
 	}
 
 }
