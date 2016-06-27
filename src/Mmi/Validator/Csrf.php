@@ -41,7 +41,8 @@ class Csrf extends ValidatorAbstract {
 	 * @return boolean
 	 */
 	public function isValid($value) {
-		if ($this->getHash() == $value) {
+		//wartość niepusta i zgodna z sesją
+		if ($value != '' && $this->getHash() == $value) {
 			return true;
 		}
 		return $this->_error(self::INVALID);
@@ -62,7 +63,7 @@ class Csrf extends ValidatorAbstract {
 	 */
 	public function generateHash() {
 		$sessionSpace = new \Mmi\Session\SessionSpace($this->getOption('name'));
-		$sessionSpace->hash = md5('hash:' . rand(0, 1000000000));
+		$sessionSpace->hash = sha1(microtime(true) . rand(0, 1000000));
 		return $sessionSpace->hash;
 	}
 
