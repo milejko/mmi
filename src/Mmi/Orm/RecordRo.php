@@ -168,7 +168,25 @@ class RecordRo {
 	 * @return boolean
 	 */
 	public final function isModified($field) {
-		return !isset($this->_state[$field]) || ($this->_state[$field] !== $this->$field);
+		//brak klucza w tablicy stanu - niezmodyfikowane
+		if (!array_key_exists($field, $this->_state)) {
+			return false;
+		}
+		//wartość liczbowa - porównanie proste
+		if (is_numeric($this->$field) && $this->_state[$field] == $this->$field) {
+			return false;
+		}
+		//porównanie z typem
+		return ($this->_state[$field] !== $this->$field);
+	}
+	
+	/**
+	 * Zwraca wartość startową pola
+	 * @param string $field nazwa pola
+	 * @return mixed
+	 */
+	public final function getInitialStateValue($field) {
+		return isset($this->_state[$field]) ? $this->_state[$field] : null;
 	}
 
 	/**

@@ -16,7 +16,7 @@ namespace Mmi;
 class IndexController extends Mvc\Controller {
 
 	public function indexAction() {
-		
+
 	}
 
 	public function errorAction() {
