@@ -205,11 +205,11 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 			$title[] = (isset($breadcrumb['title']) && $breadcrumb['title']) ? strip_tags($breadcrumb['title']) : strip_tags($breadcrumb['label']);
 			//dodawanie keywords
 			if (isset($breadcrumb['keywords'])) {
-				$keywords[] = htmlspecialchars($breadcrumb['keywords']);
+				$keywords[] = strip_tags($breadcrumb['keywords']);
 			}
 			//dodawanie opisów
 			if (isset($breadcrumb['description'])) {
-				$descriptions[] = htmlspecialchars($breadcrumb['description']);
+				$descriptions[] = strip_tags($breadcrumb['description']);
 			}
 		}
 		//ustawianie pól
@@ -412,7 +412,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @return string
 	 */
 	public function title() {
-		return $this->_title;
+		return strip_tags($this->_title);
 	}
 
 	/**
@@ -420,7 +420,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @return string
 	 */
 	public function keywords() {
-		return str_replace(['&amp;nbsp;', '&amp;oacute;', '-  -'], [' ', 'ó', '-'], $this->_keywords);
+		return str_replace(['&amp;nbsp;', '&amp;oacute;', '-  -'], [' ', 'ó', '-'], strip_tags($this->_keywords));
 	}
 
 	/**
