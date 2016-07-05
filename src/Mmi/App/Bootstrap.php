@@ -78,8 +78,6 @@ class Bootstrap implements BootstrapInterface {
 		if (!\App\Registry::$config->session->name) {
 			return $this;
 		}
-		//ustawia ID sesji jeśli jawnie podana w żądaniu get
-		(null !== ($sid = filter_input(INPUT_GET, 'sessionId', FILTER_DEFAULT))) ? \Mmi\Session\Session::setId($sid) : null;
 		//uruchomienie sesji
 		\Mmi\Session\Session::start(\App\Registry::$config->session);
 		return $this;
