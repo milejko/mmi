@@ -126,7 +126,7 @@ class Radio extends ElementAbstract {
 	 */
 	public function fetchLabel() {
 		//brak labelki
-		if (!isset($this->_options['label'])) {
+		if (!$this->getOption('data-label')) {
 			return;
 		}
 		$requiredClass = '';
@@ -137,12 +137,9 @@ class Radio extends ElementAbstract {
 			$required = '<span class="required">' . $this->getOption('data-requiredAsterisk') . '</span>';
 		}
 		//tłumaczenie labelki
-		$label = $this->_options['label'];
-		if ($this->_translatorEnabled) {
-			$label = $this->getTranslate()->_($label);
-		}
+		$label = $this->getOption('data-label');
 		//rendering
-		return '<label' . $requiredClass . '>' . $label . $this->_options['labelPostfix'] . $required . '</label>';
+		return '<label' . $requiredClass . '>' . $label . $this->getOption('data-labelPostfix') . $required . '</label>';
 	}
 
 }
