@@ -9,7 +9,9 @@
  */
 
 namespace Mmi\Mvc;
-use Mmi\App\FrontController;
+
+use Mmi\App\FrontController,
+	\Mmi\Http\Request;
 
 /**
  * Helper akcji
@@ -27,7 +29,7 @@ class ActionHelper {
 	 * @var \Mmi\Security\Auth
 	 */
 	protected $_auth;
-	
+
 	/**
 	 * Instancja helpera akcji
 	 * @var \Mmi\Mvc\ActionHelper 
@@ -67,61 +69,48 @@ class ActionHelper {
 	}
 
 	/**
-	 * Uruchamia akcję z kontrolera
+	 * Uruchamia akcję z kontrolera ze sprawdzeniem ACL
 	 * @param array $params parametry
 	 * @return mixed
 	 */
 	public function action(array $params = []) {
-		$frontRequest = \Mmi\App\FrontController::getInstance()->getRequest();
-		$controllerRequest = new \Mmi\Http\Request(array_merge($frontRequest->toArray(), $params));
-		$actionLabel = $controllerRequest->getModuleName() . ':' . $controllerRequest->getControllerName() . ':' . $controllerRequest->getActionName();
-		//sprawdzenie ACL
-		if (!$this->_checkAcl($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName())) {
-			FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' blocked');
-			return;
-		}
+		//ustawienie nowego requestu
+		$request = new Request(array_merge(FrontController::getInstance()->getRequest()->toArray(), $params));
 		//wywołanie akcji
-		$actionContent = $this->_invokeAction($controllerRequest, $actionLabel);
-		FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' done');
-		//jeśli akcja zwraca cokolwiek, automatycznie jest to content
-		if ($actionContent !== null) {
-			FrontController::getInstance()->getView()
-				->setLayoutDisabled()
-				->setRequest($frontRequest);
+		if (null !== $actionContent = $this->_invoke($request)) {
+			//reset requestu i wyłączenie layoutu
+			FrontController::getInstance()->getView()->setRequest(FrontController::getInstance()->getRequest())
+				->setLayoutDisabled();
 			return $actionContent;
 		}
 		//rendering szablonu jeśli akcja zwraca null
-		$content = \Mmi\App\FrontController::getInstance()->getView()->renderTemplate($controllerRequest->getModuleName(), $controllerRequest->getControllerName(), $controllerRequest->getActionName());
-		//przywrócenie do widoku request'a z front controllera
-		\Mmi\App\FrontController::getInstance()->getView()->setRequest($frontRequest);
+		$content = FrontController::getInstance()->getView()->renderTemplate($request);
+		//reset requestu
+		FrontController::getInstance()->getView()->setRequest(FrontController::getInstance()->getRequest());
 		return $content;
 	}
-	
+
 	/**
-	 * Wykonuje akcję
+	 * Przekierowuje wykonanie do akcji
 	 * @param \Mmi\Http\Request $request
-	 * @param string $actionLabel
 	 * @return string
 	 * @throws \Mmi\Mvc\MvcException
 	 */
-	protected function _invokeAction(\Mmi\Http\Request $request, $actionLabel) {
-		$structure = \Mmi\App\FrontController::getInstance()->getStructure('module');
-		//brak w strukturze
-		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-			throw new MvcNotFoundException('Component not found: ' . $actionLabel);
-		}
-		//ustawienie requestu w widoku
-		\Mmi\App\FrontController::getInstance()->getView()->setRequest($request);
-		//powołanie kontrolera
-		$controllerParts = explode('-', $request->getControllerName());
-		foreach ($controllerParts as $key => $controllerPart) {
-			$controllerParts[$key] = ucfirst($controllerPart);
-		}
-		$controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
-		$actionMethodName = $request->getActionName() . 'Action';
-		$controller = new $controllerClassName($request);
+	public function forward(Request $request) {
+		//reset requesta frontcontrollera
+		FrontController::getInstance()
+			->setRequest($request)
+			->getView()->setRequest($request);
 		//wywołanie akcji
-		return $controller->$actionMethodName();
+		if (null !== $actionContent = $this->_invoke($request)) {
+			//wyłączenie layout
+			FrontController::getInstance()->getView()->setLayoutDisabled();
+			//zwrot jeśli akcja zwraca wynik
+			return $actionContent;
+		}
+		return FrontController::getInstance()->getView()
+				->setPlaceholder('content', FrontController::getInstance()->getView()->renderTemplate($request))
+				->renderLayout($request);
 	}
 
 	/**
@@ -131,12 +120,49 @@ class ActionHelper {
 	 * @param string $action akcja
 	 * @return boolean
 	 */
-	protected function _checkAcl($module, $controller, $action) {
+	private function _checkAcl($module, $controller, $action) {
 		//jeśli brak - dozwolone
 		if ($this->_acl === null || $this->_auth === null) {
 			return true;
 		}
+		//sprawdzenie acl
 		return $this->_acl->isAllowed($this->_auth->getRoles(), $module . ':' . $controller . ':' . $action);
+	}
+
+	/**
+	 * Wywołanie akcji
+	 * @param \Mmi\Http\Request $request
+	 * @return string
+	 * @throws MvcNotFoundException
+	 */
+	private function _invoke(Request $request) {
+		//labelka akcji
+		$actionLabel = $request->getModuleName() . ':' . $request->getControllerName() . ':' . $request->getActionName();
+		//sprawdzenie ACL
+		if (!$this->_checkAcl($request->getModuleName(), $request->getControllerName(), $request->getActionName())) {
+			FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' blocked');
+			return;
+		}
+		//pobranie struktury
+		$structure = FrontController::getInstance()->getStructure('module');
+		//brak w strukturze
+		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
+			throw new MvcNotFoundException('Component not found: ' . $actionLabel);
+		}
+		//ustawienie requestu w widoku
+		FrontController::getInstance()->getView()->setRequest($request);
+		//powołanie kontrolera
+		$controllerParts = explode('-', $request->getControllerName());
+		foreach ($controllerParts as $key => $controllerPart) {
+			$controllerParts[$key] = ucfirst($controllerPart);
+		}
+		//ustalenie klasy kontrolera
+		$controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
+		$actionMethodName = $request->getActionName() . 'Action';
+		//wywołanie akcji
+		$content = (new $controllerClassName($request))->$actionMethodName();
+		FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' done');
+		return $content;
 	}
 
 }

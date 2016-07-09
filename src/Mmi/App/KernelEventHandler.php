@@ -83,8 +83,7 @@ class KernelEventHandler {
 				return self::_sendRawResponse($response, $exception);
 			}
 			//błąd z prezentacją HTML
-			return self::_sendResponse($response->setContent($view->setPlaceholder('content', \Mmi\Mvc\ActionHelper::getInstance()->action(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))
-							->renderLayout('mmi', 'index')));
+			return self::_sendResponse($response->setContent(\Mmi\Mvc\ActionHelper::getInstance()->forward(new \Mmi\Http\Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))));
 		} catch (\Exception $e) {
 			//domyślna prezentacja błędów
 			return self::_sendRawResponse($response, $exception);

@@ -242,13 +242,11 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Renderuje i zwraca wynik wykonania template
-	 * @param string $module moduł
-	 * @param string $controller kontroler
-	 * @param string $action akcja
+	 * @param \Mmi\Http\Request $request
 	 * @param bool $fetch przekaż wynik wywołania w zmiennej
 	 */
-	public function renderTemplate($module, $controller, $action) {
-		return $this->render($this->_getTemplate($module, $controller, $action));
+	public function renderTemplate(\Mmi\Http\Request $request) {
+		return $this->render($this->_getTemplate($request));
 	}
 
 	/**
@@ -307,10 +305,12 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Renderuje layout
+	 * @param \Mmi\Http\Request $request
+	 * @return string
 	 */
-	public function renderLayout($module, $controller) {
+	public function renderLayout(\Mmi\Http\Request $request) {
 		//renderowanie layoutu
-		return $this->render($this->_getLayout($module, $controller));
+		return $this->render($this->_getLayout($request));
 	}
 
 	/**
@@ -349,22 +349,21 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Pobiera dostępny layout
-	 * @param string $module moduł
-	 * @param string $controller kontroler
+	 * @param \Mmi\Http\Request $request
 	 * @return string
 	 * @throws \Mmi\Mvc\MvcException brak layoutów
 	 */
-	private function _getLayout($module, $controller) {
+	private function _getLayout(\Mmi\Http\Request $request) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
 		//layout dla modułu i kontrolera
-		if (isset($structure[$module][$controller]['layout'])) {
+		if (isset($structure[$request->getModuleName()][$request->getControllerName()]['layout'])) {
 			//pobieranie pierwszego jeśli vendor -> local
-			return is_array($structure[$module][$controller]['layout']) ? $structure[$module][$controller]['layout'][0] : $structure[$module][$controller]['layout'];
+			return is_array($structure[$request->getModuleName()][$request->getControllerName()]['layout']) ? $structure[$request->getModuleName()][$request->getControllerName()]['layout'][0] : $structure[$request->getModuleName()][$request->getControllerName()]['layout'];
 		}
 		//layout dla modułu
-		if (isset($structure[$module]['layout'])) {
+		if (isset($structure[$request->getModuleName()]['layout'])) {
 			//pobieranie pierwszego jeśli jest i w vendor i src
-			return is_array($structure[$module]['layout']) ? $structure[$module]['layout'][0] : $structure[$module]['layout'];
+			return is_array($structure[$request->getModuleName()]['layout']) ? $structure[$request->getModuleName()]['layout'][0] : $structure[$request->getModuleName()]['layout'];
 		}
 		//layout aplikacyjny app
 		if (isset($structure['app']['layout'])) {
@@ -376,17 +375,15 @@ class View extends \Mmi\DataObject {
 
 	/**
 	 * Pobiera dostępny template
-	 * @param string $module moduł
-	 * @param string $controller kontroler
-	 * @param string $action akcja
+	 * @param \Mmi\Http\Request $request
 	 * @return string
 	 * @throws \Mmi\Mvc\MvcException brak templatów
 	 */
-	private function _getTemplate($module, $controller, $action) {
+	private function _getTemplate(\Mmi\Http\Request $request) {
 		$structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
-		if (isset($structure[$module][$controller][$action])) {
+		if (isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
 			//pobieranie pierwszego jeśli jest i w vendor i src
-			return is_array($structure[$module][$controller][$action]) ? $structure[$module][$controller][$action][0] : $structure[$module][$controller][$action];
+			return is_array($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()]) ? $structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()][0] : $structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()];
 		}
 		//brak template
 		throw new \Mmi\Mvc\MvcException('Template not found.');

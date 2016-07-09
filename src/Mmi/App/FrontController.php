@@ -263,9 +263,8 @@ class FrontController {
 		if (!$this->getView()->isLayoutDisabled()) {
 			//renderowanie layoutu
 			$content = $this->getView()
-				->setRequest($this->getRequest())
 				->setPlaceholder('content', $content)
-				->renderLayout($this->getRequest()->__get('module'), $this->getRequest()->__get('controller'));
+				->renderLayout($this->getRequest());
 		}
 		//wysłanie odpowiedzi
 		$this->getResponse()
