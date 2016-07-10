@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html>
 	<head>
-		<title>404 Not Found</title>
+		<title>MMi Framework/3.1</title>
 	</head>
 	<body>
 		{content()}
