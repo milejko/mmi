@@ -82,7 +82,7 @@ class JsonServer {
 				return $response->toJson();
 			}
 			$object = new $className;
-			$response->result = call_user_func_array([$object, $method], $request->params);
+			$response->result = call_user_func([$object, $method], $request->params);
 			return $response->toJson();
 			//wykonanie nie powiodło się
 		} catch (JsonDataException $e) {
