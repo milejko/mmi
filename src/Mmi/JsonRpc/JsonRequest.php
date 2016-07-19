@@ -40,7 +40,10 @@ class JsonRequest {
 	 * Ustawia na podstawie tablicy
 	 * @param array $data
 	 */
-	public function setFromArray(array $data) {
+	public function setFromArray($data) {
+		if (!is_array($data)) {
+			return $this;
+		}
 		$this->jsonrpc = isset($data['jsonrpc']) ? $data['jsonrpc'] : null;
 		$this->id = isset($data['id']) ? $data['id'] : null;
 		$this->method = isset($data['method']) ? $data['method'] : null;
