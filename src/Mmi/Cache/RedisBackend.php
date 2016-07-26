@@ -13,7 +13,7 @@ namespace Mmi\Cache;
 /**
  * Backend memcache
  */
-class MemcacheBackend implements CacheBackendInterface {
+class RedisBackend implements CacheBackendInterface {
 
 	/**
 	 * Przechowuje obiekt Redisa
