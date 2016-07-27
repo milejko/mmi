@@ -534,7 +534,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		];
 		//wstawienie przed
 		if ($unshift) {
-			array_unshift($this->breadcrumbsData, $breadcrumb);
+			array_unshift($this->_breadcrumbsData, $breadcrumb);
 		} else {
 			//wstawienie po
 			$this->_breadcrumbsData[] = $breadcrumb;
