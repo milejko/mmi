@@ -73,7 +73,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * Przechowuje breadcrumbs w postaci tabelarycznej
 	 * @var array
 	 */
-	protected $_breadcrumbsData = [];
+	protected $_breadcrumbsData;
 
 	/**
 	 * Przechowuje czy ostatni breadcrumb to link
