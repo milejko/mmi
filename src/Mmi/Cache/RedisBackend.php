@@ -52,13 +52,13 @@ class RedisBackend implements CacheBackendInterface {
 		if (strpos($this->_config->path, ':') !== false) {
 			$srv = explode(':', $this->_config->path);
 			//połączenie na port
-			$this->_server->pconnect($srv['host'], $srv['port'], 1, null, 100);
-			$this->_server->select($this->_namespace);
+			$this->_server->pconnect($srv[0], $srv[1], 1, null, 100);
+			$this->_server->select(1);
 			return;
 		}
 		//połączenie na socket np. /tmp/redis.sock
 		$this->_server->pconnect($this->_config->path);
-		$this->_server->select($this->_namespace);
+		$this->_server->select(0);
 	}
 
 	/**
@@ -66,7 +66,7 @@ class RedisBackend implements CacheBackendInterface {
 	 * @param string $key klucz
 	 */
 	public function load($key) {
-		return $this->_server->get($key);
+		return $this->_server->get($this->_namespace . '_' . $key);
 	}
 
 	/**
@@ -76,11 +76,7 @@ class RedisBackend implements CacheBackendInterface {
 	 * @param int $lifeTime wygaśnięcie danych w buforze (informacja dla bufora)
 	 */
 	public function save($key, $data, $lifeTime) {
-		if ($lifeTime > 2592000) {
-			//memcache bug ta wartość nie może być większa
-			$lifeTime = 2592000;
-		}
-		return $this->_server->set($key, $data, 0, $lifeTime);
+		return $this->_server->set($this->_namespace . '_' . $key, $data, $lifeTime);
 	}
 
 	/**
@@ -88,7 +84,7 @@ class RedisBackend implements CacheBackendInterface {
 	 * @param string $key klucz
 	 */
 	public function delete($key) {
-		return $this->_server->delete($key);
+		return $this->_server->delete($this->_namespace . '_' . $key);
 	}
 
 	/**
