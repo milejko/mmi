@@ -96,6 +96,14 @@ class RecordRo {
 	public final function getOption($name) {
 		return isset($this->_options[$name]) ? $this->_options[$name] : null;
 	}
+	
+	/**
+	 * Zwraca wszystkie opcje w rekordzie
+	 * @return array
+	 */
+	public final function getOptions() {
+		return $this->_options;
+	}
 
 	/**
 	 * Ustawia opcję w rekordzie
