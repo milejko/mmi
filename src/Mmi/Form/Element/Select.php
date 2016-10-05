@@ -117,7 +117,7 @@ class Select extends ElementAbstract {
 		//nagłówek selecta
 		$html = '<select ' . $this->_getHtmlOptions() . '>';
 		//generowanie opcji
-		foreach ($this->getMultioptions() as $key => $caption) {
+		foreach (($this->getMultioptions() ? $this->getMultioptions() : []) as $key => $caption) {
 			$disabled = '';
 			//disabled
 			if (strpos($key, ':disabled') !== false && !is_array($caption)) {
