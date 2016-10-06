@@ -224,13 +224,21 @@ abstract class Form extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Ustawienie wartości pól
+	 * Ustawienie wartości pól na podstawie rekordu
 	 * @param \Mmi\Orm\Record $record
-	 * @return \Mmi\Form
+	 * @return \Mmi\Form\Form
 	 */
 	public final function setFromRecord(\Mmi\Orm\Record $record) {
 		//dane z rekordu i z opcji
-		$data = $record->toArray();
+		return $this->setFromArray($record->toArray());
+	}
+
+	/**
+	 * Ustawia wartości pól na podstawie tablicy
+	 * @param array $data
+	 * @return \Mmi\Form\Form
+	 */
+	public final function setFromArray(array $data = array()) {
 		//sprawdzenie wartości dla wszystkich elementów
 		foreach ($this->getElements() as $element) {
 			if (!array_key_exists($element->getName(), $data)) {

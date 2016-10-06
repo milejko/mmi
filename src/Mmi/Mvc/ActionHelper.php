@@ -74,19 +74,20 @@ class ActionHelper {
 	 * @return mixed
 	 */
 	public function action(array $params = []) {
+		$originalRequest = FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request;
 		//ustawienie nowego requestu
-		$request = new Request(array_merge(FrontController::getInstance()->getRequest()->toArray(), $params));
+		$request = new Request($params);
 		//wywołanie akcji
 		if (null !== $actionContent = $this->_invoke($request)) {
 			//reset requestu i wyłączenie layoutu
-			FrontController::getInstance()->getView()->setRequest(FrontController::getInstance()->getRequest())
+			FrontController::getInstance()->getView()->setRequest($originalRequest)
 				->setLayoutDisabled();
 			return $actionContent;
 		}
 		//rendering szablonu jeśli akcja zwraca null
 		$content = FrontController::getInstance()->getView()->renderTemplate($request);
 		//reset requestu
-		FrontController::getInstance()->getView()->setRequest(FrontController::getInstance()->getRequest());
+		FrontController::getInstance()->getView()->setRequest($originalRequest);
 		return $content;
 	}
 

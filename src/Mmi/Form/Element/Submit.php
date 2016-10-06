@@ -21,8 +21,8 @@ class Submit extends ElementAbstract {
 	 */
 	public function __construct($name) {
 		parent::__construct($name);
-		$this->setIgnore();
-		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
+		$this->setIgnore()
+			->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
 	}
 
 	/**

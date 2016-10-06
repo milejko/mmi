@@ -95,7 +95,7 @@ class View extends \Mmi\DataObject {
 		}
 		return $this->getPlaceholder($name);
 	}
-
+	
 	/**
 	 * Ustawia obiekt request
 	 * @param \Mmi\Http\Request $request
