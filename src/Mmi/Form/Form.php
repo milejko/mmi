@@ -351,6 +351,11 @@ abstract class Form extends \Mmi\OptionObject {
 			\Mmi\Orm\DbConnector::getAdapter()->rollback();
 			return $this->_saved = false;
 		}
+		//iteracja po elementach
+		foreach ($this->getElements() as $element) {
+			//powiadamianie elementu o poprawnym zapisie formularza
+			$element->onFormSaved();
+		}
 		//zatwierdzenie transakcji
 		\Mmi\Orm\DbConnector::getAdapter()->commit();
 		return $this->_saved = true;

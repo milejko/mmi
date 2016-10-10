@@ -99,6 +99,12 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	protected $_form = null;
 
 	/**
+	 * Zapisany formularz macierzysty
+	 * @var boolean
+	 */
+	protected $_formSaved = false;
+
+	/**
 	 * Kolejność renderowania pola
 	 * @var array
 	 */
@@ -158,6 +164,13 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	public final function addError($error) {
 		$this->_errors[] = $error;
 		return $this;
+	}
+
+	/**
+	 * Zdarzenie wywoływane po zapisie
+	 */
+	public function onFormSaved() {
+		
 	}
 
 	/**
