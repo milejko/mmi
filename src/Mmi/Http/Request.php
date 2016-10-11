@@ -131,5 +131,13 @@ class Request extends \Mmi\DataObject {
 		$this->__set('action', $value);
 		return $this;
 	}
-
+	
+	/**
+	 * Pobiera request jako moduł:kontroler:akcja
+	 * @return string
+	 */
+	public function getAsColonSeparatedString() {
+		return $this->getModuleName() . ':' . $this->getControllerName() . ':' . $this->getActionName();
+	}
+	
 }

@@ -77,6 +77,12 @@ class ActionHelper {
 		$originalRequest = FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request;
 		//ustawienie nowego requestu
 		$request = new Request($params);
+		//sprawdzenie ACL
+		if (!$this->_checkAcl($request)) {
+			//logowanie zablokowania akcji
+			FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
+			return;
+		}
 		//wywołanie akcji
 		if (null !== $actionContent = $this->_invoke($request)) {
 			//reset requestu i wyłączenie layoutu
@@ -102,6 +108,12 @@ class ActionHelper {
 		FrontController::getInstance()
 			->setRequest($request)
 			->getView()->setRequest($request);
+		//sprawdzenie ACL
+		if (!$this->_checkAcl($request)) {
+			//logowanie zablokowania akcji
+			FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
+			return;
+		}
 		//wywołanie akcji
 		if (null !== $actionContent = $this->_invoke($request)) {
 			//wyłączenie layout
@@ -116,18 +128,16 @@ class ActionHelper {
 
 	/**
 	 * Sprawdza uprawnienie do widgetu
-	 * @param string $module moduł
-	 * @param string $controller kontroler
-	 * @param string $action akcja
+	 * @param \Mmi\Http\Request $request
 	 * @return boolean
 	 */
-	private function _checkAcl($module, $controller, $action) {
+	private function _checkAcl(Request $request) {
 		//jeśli brak - dozwolone
 		if ($this->_acl === null || $this->_auth === null) {
 			return true;
 		}
 		//sprawdzenie acl
-		return $this->_acl->isAllowed($this->_auth->getRoles(), $module . ':' . $controller . ':' . $action);
+		return $this->_acl->isAllowed($this->_auth->getRoles(), $request->getAsColonSeparatedString());
 	}
 
 	/**
@@ -137,18 +147,11 @@ class ActionHelper {
 	 * @throws MvcNotFoundException
 	 */
 	private function _invoke(Request $request) {
-		//labelka akcji
-		$actionLabel = $request->getModuleName() . ':' . $request->getControllerName() . ':' . $request->getActionName();
-		//sprawdzenie ACL
-		if (!$this->_checkAcl($request->getModuleName(), $request->getControllerName(), $request->getActionName())) {
-			FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' blocked');
-			return;
-		}
 		//pobranie struktury
 		$structure = FrontController::getInstance()->getStructure('module');
 		//brak w strukturze
 		if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-			throw new MvcNotFoundException('Component not found: ' . $actionLabel);
+			throw new MvcNotFoundException('Component not found: ' . $request->getAsColonSeparatedString());
 		}
 		//ustawienie requestu w widoku
 		FrontController::getInstance()->getView()->setRequest($request);
@@ -162,7 +165,7 @@ class ActionHelper {
 		$actionMethodName = $request->getActionName() . 'Action';
 		//wywołanie akcji
 		$content = (new $controllerClassName($request))->$actionMethodName();
-		FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $actionLabel . ' done');
+		FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' done');
 		return $content;
 	}
 
