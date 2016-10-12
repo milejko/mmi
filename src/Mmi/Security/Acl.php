@@ -86,11 +86,11 @@ class Acl {
 
 	/**
 	 * Sprawdza dostęp grupy ról do zasobu
-	 * @param string $roles tablica ról
+	 * @param array $roles tablica ról
 	 * @param string $resource zasób
 	 * @return boolean
 	 */
-	public function isAllowed($roles, $resource) {
+	public function isAllowed(array $roles, $resource) {
 		$allowed = false;
 		foreach ($roles as $role) {
 			if ($this->isRoleAllowed($role, $resource)) {

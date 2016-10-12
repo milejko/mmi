@@ -53,7 +53,7 @@ class Truncate extends \Mmi\Filter\FilterAbstract {
 			if (strrpos($value, ' ') !== false) {
 				$value = mb_substr($value, 0, strrpos($value, ' '), $encoding);
 			}
-			$value .= '...';
+			$value .= $this->getEnding();
 		}
 
 		return $value;
