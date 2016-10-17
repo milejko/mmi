@@ -374,6 +374,10 @@ abstract class Form extends \Mmi\OptionObject {
 				$data[$element->getName()] = 0;
 				continue;
 			}
+			//bez zapisu ignorowanych
+			if ($element->getIgnore()) {
+				continue;
+			}			
 			//dodawanie wartości do tabeli
 			$data[$element->getName()] = $element->getValue();
 		}
