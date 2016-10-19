@@ -13,7 +13,7 @@ namespace Mmi;
 /**
  * Klasa obiektu opcji
  */
-abstract class OptionObject {
+class OptionObject {
 
 	/**
 	 * Opcje pola

@@ -10,7 +10,7 @@
 
 namespace Mmi;
 
-abstract class DataObject implements \Iterator {
+class DataObject implements \Iterator {
 
 	/**
 	 * Dane
