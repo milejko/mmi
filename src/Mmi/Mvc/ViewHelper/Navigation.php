@@ -406,6 +406,14 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	public function breadcrumbs() {
 		return $this->_breadcrumbs;
 	}
+	
+	/**
+	 * Pobiera dane breadcrumbów
+	 * @return array
+	 */
+	public function getBreadcrumbsData() {
+		return $this->_breadcrumbsData;
+	}
 
 	/**
 	 * Zwraca tytuł aktywnej strony
