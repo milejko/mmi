@@ -20,7 +20,7 @@ class NavigationConfigBuilder {
 	public static function build(array $data = []) {
 		$lang = \Mmi\App\FrontController::getInstance()->getRequest()->lang;
 		$view = \Mmi\App\FrontController::getInstance()->getView();
-		if ($data['disabled'] || ($data['dateStart'] !== null && $data['dateStart'] > date('Y-m-d H:i:s')) || ($data['dateEnd'] !== null && $data['dateEnd'] < date('Y-m-d H:i:s'))) {
+		if (($data['dateStart'] !== null && $data['dateStart'] > date('Y-m-d H:i:s')) || ($data['dateEnd'] !== null && $data['dateEnd'] < date('Y-m-d H:i:s'))) {
 			$data['disabled'] = true;
 		}
 		if (!$data['uri']) {
@@ -32,22 +32,15 @@ class NavigationConfigBuilder {
 			$params['controller'] = $data['controller'];
 			$params['action'] = $data['action'];
 			if ($data['module']) {
-				$data['uri'] = $view->url($params, true, $data['absolute'], $data['https']);
-				if ($data['module'] == 'cms' && $data['controller'] == 'article' && $data['action'] == 'index') {
-					$data['type'] = 'simple';
-				} elseif ($data['module'] == 'cms' && $data['controller'] == 'container' && $data['action'] == 'display') {
-					$data['type'] = 'container';
-				}
+				$data['uri'] = $view->url($params, true, ($data['https'] == 1), ($data['https'] == 2));
 			} else {
 				$data['uri'] = '#';
-				$data['type'] = 'folder';
 			}
 			$data['request'] = $params;
 		} else {
 			if (strpos($data['uri'], '://') === false && strpos($data['uri'], '#') !== 0 && strpos($data['uri'], '/') !== 0) {
 				$data['uri'] = 'http://' . $data['uri'];
 			}
-			$data['type'] = 'link';
 		}
 		$build = $data;
 		$build['children'] = [];

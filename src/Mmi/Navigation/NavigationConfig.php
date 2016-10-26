@@ -44,15 +44,6 @@ class NavigationConfig {
 	}
 
 	/**
-	 * Tworzy nowy element nawigacyjny
-	 * @param int $id opcjonalny parametr klucza (zostanie zastąpiony domyślnym gdy nieobecny)
-	 * @return \Mmi\Navigation\NavigationConfigElement
-	 */
-	public static function newElement($id = null) {
-		return new \Mmi\Navigation\NavigationConfigElement($id);
-	}
-
-	/**
 	 * Zwraca i inkrementuje indeks elementów
 	 * @return int
 	 */
@@ -111,6 +102,7 @@ class NavigationConfig {
 		if (!empty($this->build)) {
 			return $this->build;
 		}
+		//root
 		$this->build = [[
 				'active' => true,
 				'name' => '',

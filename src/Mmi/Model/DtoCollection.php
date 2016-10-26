@@ -39,7 +39,7 @@ class DtoCollection extends \ArrayObject {
 	/**
 	 * Ustawia kolekcję na podstawie tablicy tablic
 	 * @param array $data tablica obiektów \stdClass
-	 * @return \Cms\Model\Api\DtoCollection
+	 * @return \Mmi\Model\Api\DtoCollection
 	 */
 	public final function setFromArray(array $data) {
 		$dtoClass = $this->_getDtoClass();
@@ -56,7 +56,7 @@ class DtoCollection extends \ArrayObject {
 	/**
 	 * Ustawia kolekcję na podstawie obiektu obiektów
 	 * @param \Mmi\Orm\RecordCollection $data kolekcja obiektów DAO
-	 * @return \Cms\Model\Api\Orm\DtoCollection
+	 * @return \Mmi\Model\Api\Orm\DtoCollection
 	 */
 	public final function setFromDaoRecordCollection(\Mmi\Orm\RecordCollection $data) {
 		$dtoClass = $this->_getDtoClass();

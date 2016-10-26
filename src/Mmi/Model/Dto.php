@@ -50,7 +50,7 @@ abstract class Dto {
 	/**
 	 * Ustawia obiekt DTO na podstawie tabeli
 	 * @param array $data
-	 * @return \Cms\Model\Api\Dto
+	 * @return \Mmi\Model\Api\Dto
 	 */
 	public final function setFromArray(array $data) {
 		//iteracja po danych
@@ -84,7 +84,7 @@ abstract class Dto {
 	/**
 	 * Ustawia obiekt z \Mmi\Orm\Record
 	 * @param \Mmi\Orm\Record $record
-	 * @return \Cms\Model\Api\Dto
+	 * @return \Mmi\Model\Api\Dto
 	 */
 	public final function setFromOrmRecord(\Mmi\Orm\Record $record) {
 		return $this->setFromArray($record->toArray());

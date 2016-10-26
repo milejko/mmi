@@ -34,20 +34,14 @@ class NavigationConfigElement {
 		'params' => [],
 		//tytuł
 		'title' => null,
-		//keywords
-		'keywords' => null,
 		//opis
 		'description' => null,
 		//uri
 		'uri' => null,
 		//czy https
 		'https' => null,
-		//czy absolutny
-		'absolute' => false,
-		//czy niezależne meta
-		'independent' => false,
-		//czy nofollow
-		'nofollow' => false,
+		//czy follow
+		'follow' => true,
 		//czy blank
 		'blank' => false,
 		//data rozpoczęcia publikacji
@@ -201,15 +195,6 @@ class NavigationConfigElement {
 	}
 
 	/**
-	 * Ustawia keywords
-	 * @param string $keywords
-	 * @return \Mmi\Navigation\NavigationConfigElement
-	 */
-	public function setKeywords($keywords) {
-		return $this->set('keywords', $keywords);
-	}
-
-	/**
 	 * Ustawia opis
 	 * @param string $description
 	 * @return \Mmi\Navigation\NavigationConfigElement
@@ -242,30 +227,12 @@ class NavigationConfigElement {
 	}
 
 	/**
-	 * Ustawia typ linku na absolutny
-	 * @param boolean $absolute
+	 * Ustawia typ linku na follow
+	 * @param boolean $follow
 	 * @return \Mmi\Navigation\NavigationConfigElement
 	 */
-	public function setAbsolute($absolute = true) {
-		return $this->set('absolute', (bool) $absolute);
-	}
-
-	/**
-	 * Ustawia typ meta na niezależne
-	 * @param boolean $independent
-	 * @return \Mmi\Navigation\NavigationConfigElement
-	 */
-	public function setIndependent($independent = true) {
-		return $this->set('independent', (bool) $independent);
-	}
-
-	/**
-	 * Ustawia typ linku na nofollow
-	 * @param boolean $nofollow
-	 * @return \Mmi\Navigation\NavigationConfigElement
-	 */
-	public function setNofollow($nofollow = true) {
-		return $this->set('nofollow', (bool) $nofollow);
+	public function setFollow($follow = true) {
+		return $this->set('follow', (bool) $follow);
 	}
 
 	/**

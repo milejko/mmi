@@ -118,7 +118,7 @@ class Navigation {
 				continue;
 			}
 			//jeśli ustawiony moduł lub widoczny dodawanie do breadcrumbs
-			if ($item['module'] || $item['visible'] == 1) {
+			if ($item['module'] || $item['visible']) {
 				$this->_breadcrumbs[] = $item;
 			}
 			//jeśli dzieci - schodzenie rekurencyjne

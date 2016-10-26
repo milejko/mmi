@@ -82,12 +82,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	protected $_linkLastBreadcrumb = false;
 
 	/**
-	 * Przechowuje słowa kluczowe aktywnej strony
-	 * @var string
-	 */
-	protected $_keywords;
-
-	/**
 	 * Przechowuje opis aktywnej strony
 	 * @var string
 	 */
@@ -163,7 +157,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 */
 	protected function _checkAcl(array $leaf) {
 		//sprawdzanie na acl jeśli auth i acl włączone
-		if ($this->_allowedOnly && self::$_auth && self::$_acl && $leaf['type'] != 'link' && $leaf['type'] != 'folder') {
+		if ($this->_allowedOnly && self::$_auth && self::$_acl) {
 			return self::$_acl->isAllowed(self::$_auth->getRoles(), strtolower($leaf['module'] . ':' . $leaf['controller'] . ':' . $leaf['action']));
 		}
 		return true;
@@ -189,7 +183,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		}
 		$title = [];
 		$breadcrumbs = [];
-		$keywords = [];
 		$descriptions = [];
 		$count = count($data);
 		$i = 0;
@@ -203,10 +196,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 			}
 			//dodawanie tytułu
 			$title[] = (isset($breadcrumb['title']) && $breadcrumb['title']) ? strip_tags($breadcrumb['title']) : strip_tags($breadcrumb['label']);
-			//dodawanie keywords
-			if (isset($breadcrumb['keywords'])) {
-				$keywords[] = strip_tags($breadcrumb['keywords']);
-			}
 			//dodawanie opisów
 			if (isset($breadcrumb['description'])) {
 				$descriptions[] = strip_tags($breadcrumb['description']);
@@ -215,7 +204,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		//ustawianie pól
 		return $this->setTitle(trim(implode($this->_metaSeparator, array_reverse($title))))
 				->setDescription(trim(implode($this->_metaSeparator, array_reverse($descriptions))))
-				->setKeywords(trim(implode(' ', array_reverse($keywords))))
 				->setBreadcrumbs(trim(implode($this->_separator, $breadcrumbs)));
 	}
 
@@ -233,7 +221,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		$menu = $tree['children'];
 		//przygotowanie menu do wyświetlenia: usunięcie niedozwolonych i nieaktywnych elementów
 		foreach ($menu as $key => $leaf) {
-			$leaf['module'] = $leaf['module'] ? : 'default';
+			$leaf['module'] = $leaf['module'] ? : 'mmi';
 			//usuwanie modułu
 			if ($leaf['disabled'] || !$leaf['visible'] || !$this->_checkAcl($leaf)) {
 				unset($menu[$key]);
@@ -267,7 +255,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 			}
 			$extras = '';
 			//opcja nofollow
-			if (isset($leaf['nofollow']) && $leaf['nofollow'] == 1) {
+			if (!$leaf['follow']) {
 				$extras .= ' rel="nofollow"';
 			}
 			//opcja blank
@@ -362,16 +350,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	}
 
 	/**
-	 * Ustawia słowa kluczowe
-	 * @param string $keywords słowa kluczowe
-	 * @return \Mmi\Mvc\ViewHelper\Navigation
-	 */
-	public function setKeywords($keywords) {
-		$this->_keywords = $keywords;
-		return $this;
-	}
-
-	/**
 	 * Ustawia okruchy
 	 * @param string $breadcrumbs okruchy
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
@@ -424,14 +402,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	}
 
 	/**
-	 * Zwraca słowa kluczowe aktywnej strony
-	 * @return string
-	 */
-	public function keywords() {
-		return str_replace(['&amp;nbsp;', '&amp;oacute;', '-  -'], [' ', 'ó', '-'], strip_tags($this->_keywords));
-	}
-
-	/**
 	 * Zwraca opis aktywnej strony
 	 * @return string
 	 */
@@ -463,10 +433,9 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @param string $uri URL
 	 * @param string $title tytuł
 	 * @param string $description opis
-	 * @param string $keywords słowa kluczowe
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
-	public function modifyBreadcrumb($index, $label, $uri = null, $title = null, $description = null, $keywords = null) {
+	public function modifyBreadcrumb($index, $label, $uri = null, $title = null, $description = null) {
 		//brak breadcrumbów
 		if (!isset($this->_breadcrumbsData[$index])) {
 			return $this;
@@ -479,8 +448,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		$this->_modifyBreadcrumbData($index, 'title', $title);
 		//ustawianie opisu
 		$this->_modifyBreadcrumbData($index, 'description', $description);
-		//ustawianie słów kluczowych
-		$this->_modifyBreadcrumbData($index, 'keywords', $keywords);
 		//przebudowa breadcrumba
 		return $this->_buildBreadcrumbs();
 	}
@@ -515,11 +482,10 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @param string $uri URL
 	 * @param string $title tytuł
 	 * @param string $description opis
-	 * @param string $keywords słowa kluczowe
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
-	public function modifyLastBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null) {
-		return $this->modifyBreadcrumb(count($this->_breadcrumbsData) - 1, $label, $uri, $title, $description, $keywords);
+	public function modifyLastBreadcrumb($label, $uri = null, $title = null, $description = null) {
+		return $this->modifyBreadcrumb(count($this->_breadcrumbsData) - 1, $label, $uri, $title, $description);
 	}
 
 	/**
@@ -528,17 +494,15 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @param string $uri URL
 	 * @param string $title tytuł
 	 * @param string $description opis
-	 * @param string $keywords słowa kluczowe
 	 * @param bool $unshift wstaw na początku
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
-	public function createBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null, $unshift = false) {
+	public function createBreadcrumb($label, $uri = null, $title = null, $description = null, $unshift = false) {
 		$breadcrumb = [
 			'label' => $label,
 			'uri' => $uri,
 			'title' => $title,
 			'description' => $description,
-			'keywords' => $keywords
 		];
 		//wstawienie przed
 		if ($unshift) {
@@ -557,11 +521,10 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @param string $uri URL
 	 * @param string $title tytuł
 	 * @param string $description opis
-	 * @param string $keywords słowa kluczowe
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
-	public function appendBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null) {
-		return $this->createBreadcrumb($label, $uri, $title, $description, $keywords, false);
+	public function appendBreadcrumb($label, $uri = null, $title = null, $description = null) {
+		return $this->createBreadcrumb($label, $uri, $title, $description, false);
 	}
 
 	/**
@@ -570,11 +533,10 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @param string $uri URL
 	 * @param string $title tytuł
 	 * @param string $description opis
-	 * @param string $keywords słowa kluczowe
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
-	public function prependBreadcrumb($label, $uri = null, $title = null, $description = null, $keywords = null) {
-		return $this->createBreadcrumb($label, $uri, $title, $description, $keywords, true);
+	public function prependBreadcrumb($label, $uri = null, $title = null, $description = null) {
+		return $this->createBreadcrumb($label, $uri, $title, $description, true);
 	}
 
 	/**
@@ -591,15 +553,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		unset($this->_breadcrumbsData[$index]);
 		//przebudowa
 		return $this->_buildBreadcrumbs();
-	}
-
-	/**
-	 * Alias renderera menu
-	 * @see \Mmi\Mvc\ViewHelper\Navigation::menu()
-	 * @return string
-	 */
-	public function renderMenu() {
-		return $this->menu();
 	}
 
 	/**
