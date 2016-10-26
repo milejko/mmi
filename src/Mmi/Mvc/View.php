@@ -14,7 +14,7 @@ use Mmi\App\FrontController;
 
 /**
  * Klasa widoku
- * @method string url(array $params = [], $reset = false, $absolute = false, $https = null)
+ * @method string url(array $params = [], $reset = false, $https = null)
  * @method string widget($module, $controller = 'index', $action = 'index', array $params = [])
  * @method ViewHelper\Navigation navigation()
  */

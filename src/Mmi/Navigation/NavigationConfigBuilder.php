@@ -11,36 +11,20 @@
 namespace Mmi\Navigation;
 
 class NavigationConfigBuilder {
-	
+
 	/**
 	 * Buduje strukturę drzewiastą na podstawie struktury płaskiej
 	 * @param array $data
 	 * @return array
 	 */
 	public static function build(array $data = []) {
-		$lang = \Mmi\App\FrontController::getInstance()->getRequest()->lang;
-		$view = \Mmi\App\FrontController::getInstance()->getView();
 		if (($data['dateStart'] !== null && $data['dateStart'] > date('Y-m-d H:i:s')) || ($data['dateEnd'] !== null && $data['dateEnd'] < date('Y-m-d H:i:s'))) {
 			$data['disabled'] = true;
 		}
+		//budowanie requestu
+		$data['request'] = array_merge($data['params'], ['module' => $data['module'], 'controller' => $data['controller'], 'action' => $data['action']]);
 		if (!$data['uri']) {
-			$params = $data['params'];
-			if ($lang !== null && $data['lang'] !== null) {
-				$params['lang'] = $data['lang'];
-			}
-			$params['module'] = $data['module'];
-			$params['controller'] = $data['controller'];
-			$params['action'] = $data['action'];
-			if ($data['module']) {
-				$data['uri'] = $view->url($params, true, ($data['https'] == 1), ($data['https'] == 2));
-			} else {
-				$data['uri'] = '#';
-			}
-			$data['request'] = $params;
-		} else {
-			if (strpos($data['uri'], '://') === false && strpos($data['uri'], '#') !== 0 && strpos($data['uri'], '/') !== 0) {
-				$data['uri'] = 'http://' . $data['uri'];
-			}
+			$data['uri'] = \Mmi\App\FrontController::getInstance()->getView()->url($data['request'], true, $data['https']);
 		}
 		$build = $data;
 		$build['children'] = [];
@@ -52,5 +36,5 @@ class NavigationConfigBuilder {
 		}
 		return $build;
 	}
-	
+
 }

@@ -111,8 +111,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @return \Mmi\Navigation\Navigation
 	 */
 	public static function setNavigation(\Mmi\Navigation\Navigation $navigation) {
-		self::$_navigation = $navigation;
-		return $navigation;
+		return self::$_navigation = $navigation;
 	}
 
 	/**
@@ -121,8 +120,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @return \Mmi\Security\Acl
 	 */
 	public static function setAcl(\Mmi\Security\Acl $acl) {
-		self::$_acl = $acl;
-		return $acl;
+		return self::$_acl = $acl;
 	}
 
 	/**
@@ -131,8 +129,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	 * @return \Mmi\Security\Auth
 	 */
 	public static function setAuth(\Mmi\Security\Auth $auth) {
-		self::$_auth = $auth;
-		return $auth;
+		return self::$_auth = $auth;
 	}
 
 	/**
@@ -254,13 +251,13 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 				$class = ' class="' . rtrim($class) . '"';
 			}
 			$extras = '';
+			//opcja blank
+			if ($leaf['blank']) {
+				$extras .= ' target="_blank"';
+			}
 			//opcja nofollow
 			if (!$leaf['follow']) {
 				$extras .= ' rel="nofollow"';
-			}
-			//opcja blank
-			if (isset($leaf['blank']) && $leaf['blank'] == 1) {
-				$extras .= ' target="_blank"';
 			}
 			//generowanie li
 			$html .= '<li id="item-' . $leaf['id'] . '" ' . $class . '><span class="item-begin"></span><a href="' . htmlspecialchars($leaf['uri']) . '"' . $extras . '>' . $leaf['label'] . '</a>' . $subHtml . '<span class="item-end"></span></li>';
@@ -319,10 +316,10 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 
 	/**
 	 * Ustawia węzeł startowy
-	 * @param int $key klucz
+	 * @param string $key klucz
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
-	public function setRoot($key) {
+	public function setRoot($key = 'root') {
 		$this->setMinDepth();
 		$this->setMaxDepth();
 		$this->_root = $key;

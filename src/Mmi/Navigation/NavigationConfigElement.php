@@ -62,7 +62,7 @@ class NavigationConfigElement {
 
 	/**
 	 * Konstruktor
-	 * @param integer $id
+	 * @param string $id
 	 */
 	public function __construct($id = null) {
 		$this->_data['id'] = ($id === null) ? \Mmi\Navigation\NavigationConfig::getAutoIndex() : $id;

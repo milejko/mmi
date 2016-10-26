@@ -165,25 +165,17 @@ class Template extends HelperAbstract {
 				$params[$key] = null;
 			}
 		}
-		$absolute = false;
 		$https = null;
 		$flags = (isset($matches[1]) ? $matches[1] : null);
 		switch (substr_count($flags, '*')) {
 			case 1:
-				$absolute = true;
+				$https = false;
 				break;
 			case 2:
 				$https = true;
 				break;
-			case 3:
-				$https = false;
-				break;
-			case 4:
-				$https = false;
-				$absolute = false;
-				break;
 		}
-		return \Mmi\App\FrontController::getInstance()->getView()->getHelper('url')->url($params, true, $absolute, $https);
+		return \Mmi\App\FrontController::getInstance()->getView()->getHelper('url')->url($params, true, $https);
 	}
 
 	/**

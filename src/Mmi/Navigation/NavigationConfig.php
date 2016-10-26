@@ -107,7 +107,7 @@ class NavigationConfig {
 				'active' => true,
 				'name' => '',
 				'label' => '',
-				'id' => 0,
+				'id' => 'root',
 				'level' => 0,
 				'uri' => '',
 				'children' => []
