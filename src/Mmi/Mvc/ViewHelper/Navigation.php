@@ -160,7 +160,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		return true;
 	}
 
-		/**
+	/**
 	 * Buduje breadcrumbs
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
@@ -169,11 +169,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		if (null === self::$_navigation) {
 			return $this;
 		}
-		//ustawianie danych breadcrumbów
-		if (null === ($data = $this->_breadcrumbsData)) {
-			$data = self::$_navigation->getBreadcrumbs();
-			$this->_breadcrumbsData = $data;
-		}
+		$data = $this->getBreadcrumbsData();
 		//błędny format danych
 		if (!is_array($data)) {
 			return $this;
@@ -185,6 +181,9 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		$i = 0;
 		foreach (array_reverse($data) as $breadcrumb) {
 			$i++;
+			if ($breadcrumb['disabled']) {
+				continue;
+			}
 			//dodawanie breadcrumbów
 			if ($i == $count) {
 				$breadcrumbs[] = '<span>' . strip_tags($breadcrumb['label']) . '</span>';
@@ -385,13 +384,18 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	public function breadcrumbs() {
 		return $this->_breadcrumbs;
 	}
-	
+
 	/**
 	 * Pobiera dane breadcrumbów
 	 * @return array
 	 */
 	public function getBreadcrumbsData() {
-		return $this->_breadcrumbsData;
+		//breadcrumby zbudowane
+		if (is_array($this->_breadcrumbsData)) {
+			return $this->_breadcrumbsData;
+		}
+		//ustawianie danych breadcrumbów
+		return $this->_breadcrumbsData = self::$_navigation->getBreadcrumbs();
 	}
 
 	/**

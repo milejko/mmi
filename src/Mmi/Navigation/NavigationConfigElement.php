@@ -23,8 +23,6 @@ class NavigationConfigElement {
 		'lang' => null,
 		//wyłączony
 		'disabled' => false,
-		//widoczny
-		'visible' => true,
 		//labelka
 		'label' => null,
 		//moduł + kontroler + akcja + parametry
@@ -48,8 +46,6 @@ class NavigationConfigElement {
 		'dateStart' => null,
 		//data wyłączenia publikacji
 		'dateEnd' => null,
-		//typ
-		'type' => 'cms',
 		//tabela z elementami potomnymi
 		'children' => [],
 	];
@@ -129,15 +125,6 @@ class NavigationConfigElement {
 	 */
 	public function setDisabled($disabled = true) {
 		return $this->set('disabled', (bool) $disabled);
-	}
-
-	/**
-	 * Ustawia widoczność
-	 * @param boolean $visible
-	 * @return \Mmi\Navigation\NavigationConfigElement
-	 */
-	public function setVisible($visible = true) {
-		return $this->set('visible', (bool) $visible);
 	}
 
 	/**

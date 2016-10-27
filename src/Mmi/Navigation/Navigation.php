@@ -99,7 +99,7 @@ class Navigation {
 					$tree[$key]['active'] = true;
 				}
 			}
-			if ($tree[$key]['active'] && array_key_exists('visible', $tree[$key])) {
+			if ($tree[$key]['active']) {
 				unset($item['children']);
 				$branchActive = true;
 			}
@@ -117,10 +117,7 @@ class Navigation {
 			if (!$item['active']) {
 				continue;
 			}
-			//jeśli ustawiony moduł lub widoczny dodawanie do breadcrumbs
-			if ($item['module'] || $item['visible']) {
-				$this->_breadcrumbs[] = $item;
-			}
+			$this->_breadcrumbs[] = $item;
 			//jeśli dzieci - schodzenie rekurencyjne
 			if (isset($item['children'])) {
 				$this->_setupBreadcrumbs($item['children']);
