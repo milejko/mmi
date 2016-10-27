@@ -160,7 +160,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		return true;
 	}
 
-	/**
+		/**
 	 * Buduje breadcrumbs
 	 * @return \Mmi\Mvc\ViewHelper\Navigation
 	 */
@@ -183,25 +183,29 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		$descriptions = [];
 		$count = count($data);
 		$i = 0;
-		foreach ($data as $breadcrumb) {
+		foreach (array_reverse($data) as $breadcrumb) {
 			$i++;
 			//dodawanie breadcrumbów
-			if (($i == $count && !$this->_linkLastBreadcrumb) || $breadcrumb['uri'] == '#') {
+			if ($i == $count) {
 				$breadcrumbs[] = '<span>' . strip_tags($breadcrumb['label']) . '</span>';
 			} else {
 				$breadcrumbs[] = '<a href="' . $breadcrumb['uri'] . '">' . strip_tags($breadcrumb['label']) . '</a>';
 			}
 			//dodawanie tytułu
-			$title[] = (isset($breadcrumb['title']) && $breadcrumb['title']) ? strip_tags($breadcrumb['title']) : strip_tags($breadcrumb['label']);
+			$title[] = ($breadcrumb['title']) ? strip_tags($breadcrumb['title']) : strip_tags($breadcrumb['label']);
 			//dodawanie opisów
 			if (isset($breadcrumb['description'])) {
 				$descriptions[] = strip_tags($breadcrumb['description']);
 			}
+			//ustawiony jest tytuł - nie łączymy z poprzednikami
+			if ($breadcrumb['title']) {
+				break;
+			}
 		}
 		//ustawianie pól
-		return $this->setTitle(trim(implode($this->_metaSeparator, array_reverse($title))))
-				->setDescription(trim(implode($this->_metaSeparator, array_reverse($descriptions))))
-				->setBreadcrumbs(trim(implode($this->_separator, $breadcrumbs)));
+		return $this->setTitle(trim(implode($this->_metaSeparator, $title)))
+				->setDescription(trim(implode($this->_metaSeparator, $descriptions)))
+				->setBreadcrumbs(trim(implode($this->_separator, array_reverse($breadcrumbs))));
 	}
 
 	/**
@@ -220,7 +224,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		foreach ($menu as $key => $leaf) {
 			$leaf['module'] = $leaf['module'] ? : 'mmi';
 			//usuwanie modułu
-			if ($leaf['disabled'] || !$leaf['visible'] || !$this->_checkAcl($leaf)) {
+			if ($leaf['disabled'] || !$this->_checkAcl($leaf)) {
 				unset($menu[$key]);
 			}
 		}
@@ -457,8 +461,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	public function setSeparator($separator) {
 		$this->_separator = $separator;
 		//przebudowa breadcrumbów
-		$this->_buildBreadcrumbs();
-		return $this;
+		return $this->_buildBreadcrumbs();
 	}
 
 	/**
@@ -469,8 +472,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 	public function setMetaSeparator($separator) {
 		$this->_metaSeparator = $separator;
 		//przebudowa breadcrumbów
-		$this->_buildBreadcrumbs();
-		return $this;
+		return $this->_buildBreadcrumbs();
 	}
 
 	/**
@@ -560,10 +562,9 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		if (null === self::$_navigation) {
 			return '';
 		}
+		$tree = null;
 		if ($this->_root) {
 			$tree = self::$_navigation->seek($this->_root);
-		} else {
-			$tree = null;
 		}
 		return $this->_getHtml($tree);
 	}
