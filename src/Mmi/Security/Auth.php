@@ -300,7 +300,7 @@ class Auth {
 		$model = $this->_modelName;
 		$record = $model::authenticate($this->_identity, $this->_credential);
 		//autoryzacja poprawna
-		if (!$record) {
+		if ($record) {
 			return;
 		}
 		//odpowiedź 401
