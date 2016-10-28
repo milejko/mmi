@@ -296,7 +296,6 @@ class Auth {
 		//pobieranie usera i hasła ze zmiennych środowiskowych
 		$this->setIdentity(\Mmi\App\FrontController::getInstance()->getEnvironment()->authUser)
 			->setCredential(\Mmi\App\FrontController::getInstance()->getEnvironment()->authPassword);
-
 		$model = $this->_modelName;
 		$record = $model::authenticate($this->_identity, $this->_credential);
 		//autoryzacja poprawna
@@ -306,7 +305,7 @@ class Auth {
 		//odpowiedź 401
 		\Mmi\App\FrontController::getInstance()->getResponse()
 			->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
-			->setCodeForbidden()
+			->setCodeUnauthorized()
 			->setContent($errorMessage)
 			->send();
 		exit;
