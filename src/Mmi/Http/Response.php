@@ -134,12 +134,12 @@ class Response {
 		//skrócona forma
 		if (null !== ($mimeType = ResponseTypes::getTypeByExtension($normalizedType))) {
 			//ustawienie wewnętrznego typu
-			$this->_type = $normalizedType;
+			$this->_type = $mimeType;
 			//wysłanie nagłówka
 			return $this->setHeader('Content-type', $this->_type, $replace);
 		}
 		//forma pełna
-		if (null !== ($extension = ResponseTypes::getExtensionByType($normalizedType))) {
+		if (null !== ResponseTypes::getExtensionByType($normalizedType)) {
 			//ustawienie wewnętrznego typu
 			$this->_type = $normalizedType;
 			//wysłanie nagłówka
