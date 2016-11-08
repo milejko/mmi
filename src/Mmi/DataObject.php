@@ -64,7 +64,7 @@ class DataObject implements \Iterator {
 			$this->_data = $data;
 		}
 		foreach ($data as $key => $value) {
-			$this->_data[$key] = $value;
+			$this->__set($key, $value);
 		}
 		return $this;
 	}
