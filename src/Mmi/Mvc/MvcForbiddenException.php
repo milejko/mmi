@@ -13,9 +13,9 @@ namespace Mmi\Mvc;
 use Monolog\Logger;
 
 /**
- * Klasa wyjątku nieodnalezionego miejsca mvc
+ * Klasa wyjątku niedozwolonego miejsca mvc
  */
-class MvcNotFoundException extends MvcException {
+class MvcForbiddenException extends MvcException {
 
 	/**
 	 * Poziom logowania

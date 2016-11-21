@@ -53,7 +53,7 @@ class KernelEventHandler {
 		//logowanie błędu Emergency
 		FrontController::getInstance()->getLogger()->addEmergency($error['message']);
 		//wysyłanie odpowiedzi
-		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $error['message'], $error['file'] . ' [' . $error['line'] . ']')));
+		return self::_sendResponse($response->setContent(self::_rawErrorResponse($response)));
 	}
 
 	/**
@@ -112,26 +112,23 @@ class KernelEventHandler {
 	/**
 	 * Zwraca sformatowany błąd dla danego typu odpowiedzi
 	 * @param \Mmi\Http\Response $response obiekt odpowiedzi
-	 * @param string $title
-	 * @param string $body
 	 * @return mixed
 	 */
-	private static function _rawErrorResponse(\Mmi\Http\Response $response, $title, $body) {
+	private static function _rawErrorResponse(\Mmi\Http\Response $response) {
 		switch ($response->getType()) {
 			//typy HTML
 			case 'htm':
 			case 'html':
 			case 'shtml':
-				return '<html><body><h1>' . $title . '</h1>' . nl2br($body) . '</body></html>';
+				return '<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>';
 			//plaintext
 			case 'txt':
-				return $title . "\n" . $body . "\n";
+				return 'Error 500' . "\n" . 'Something went wrong' . "\n";
 			//json
 			case 'json':
 				return json_encode([
 					'status' => 500,
-					'error' => $title,
-					'exception' => $body,
+					'error' => 'something went wrong',
 				]);
 		}
 	}

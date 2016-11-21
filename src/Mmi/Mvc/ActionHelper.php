@@ -110,9 +110,8 @@ class ActionHelper {
 			->getView()->setRequest($request);
 		//sprawdzenie ACL
 		if (!$this->_checkAcl($request)) {
-			//logowanie zablokowania akcji
-			FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
-			return;
+			//wyjątek niedozwolonej akcji
+			throw new MvcForbiddenException('Action ' . $request->getAsColonSeparatedString() . ' blocked');
 		}
 		//wywołanie akcji
 		if (null !== $actionContent = $this->_invoke($request)) {
