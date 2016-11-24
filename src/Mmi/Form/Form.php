@@ -300,14 +300,8 @@ abstract class Form extends \Mmi\OptionObject {
 		if (!$this->hasRecord()) {
 			return false;
 		}
-		//jeśli w rekordzie istnieje choć jedno pole nie będące nullem, zwraca prawdę
-		foreach ($this->_record->toArray() as $k => $v) {
-			if ($v !== null) {
-				return true;
-			}
-		}
-		//wszystkie pola null
-		return false;
+		//czy rekord wypełniony
+		return $this->getRecord()->getFilled();
 	}
 
 	/**

@@ -20,6 +20,12 @@ class RecordRo {
 	 * @var array
 	 */
 	protected $_options = [];
+	
+	/**
+	 * Rekord wypełniony przez setFromArray
+	 * @var boolean
+	 */
+	protected $_filled = false;
 
 	/**
 	 * Przechowuje dołączone dane (JOIN)
@@ -126,6 +132,14 @@ class RecordRo {
 	}
 
 	/**
+	 * Sprawdza czy rekord został wypełniony setFromArray
+	 * @return boolean
+	 */
+	public final function getFilled() {
+		return $this->_filled ? true : false;
+	}
+	
+	/**
 	 * Ustawia dane w obiekcie na podstawie tabeli
 	 * @param array $row tabela z danymi
 	 * @param bool $fromDb czy z bazy danych
@@ -156,6 +170,8 @@ class RecordRo {
 				$this->_joined[$alias] = $record;
 			}
 		}
+		//wypełniony
+		$this->_filled = true;
 		return $this;
 	}
 

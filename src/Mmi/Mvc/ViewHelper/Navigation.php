@@ -181,9 +181,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		$i = 0;
 		foreach (array_reverse($data) as $breadcrumb) {
 			$i++;
-			if ($breadcrumb['disabled']) {
-				continue;
-			}
 			//dodawanie breadcrumbów
 			if ($i == $count) {
 				$breadcrumbs[] = '<span>' . strip_tags($breadcrumb['label']) . '</span>';
