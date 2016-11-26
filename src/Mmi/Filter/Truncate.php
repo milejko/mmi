@@ -29,8 +29,8 @@ class Truncate extends \Mmi\Filter\FilterAbstract {
 	 */
 	public function setOptions(array $options = [], $reset = false) {
 		return $this->setLength(current($options) ? (int) current($options) : 80)
-				->setEnding(next($options) ? current($options) : '...')
-				->setBoundary(next($options) ? (bool) current($options) : false);
+			->setEnding(next($options) !== false ? current($options) : '...')
+			->setBoundary(next($options) !== false ? true : false);
 	}
 
 	/**
@@ -49,7 +49,7 @@ class Truncate extends \Mmi\Filter\FilterAbstract {
 		if ($this->getBoundary()) {
 			$value = mb_substr($value, 0, $length, $encoding) . $this->getEnding();
 		} else {
-			$value = mb_substr($value, 0, $length + 1, $encoding);
+			$value = mb_substr($value, 0, $length, $encoding);
 			if (strrpos($value, ' ') !== false) {
 				$value = mb_substr($value, 0, strrpos($value, ' '), $encoding);
 			}
