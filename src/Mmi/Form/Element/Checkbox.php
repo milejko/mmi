@@ -37,18 +37,11 @@ namespace Mmi\Form\Element;
  * Walidatory
  * @method self addValidatorAlnum($message = null) walidator alfanumeryczny
  * @method self addValidatorChecked(\Mmi\Form\Element\Checkbox $element, $message = null) walidator alfanumeryczny
- * @method self addValidatorDate($message = null) walidator daty
- * @method self addValidatorEmailAddress($message = null) walidator email
- * @method self addValidatorEmailAddressList($message = null) walidator listy email
  * @method self addValidatorEqual($value, $message = null) walidator równości
- * @method self addValidatorIban($country = null, $message = null) walidator IBAN
  * @method self addValidatorInteger($message = null) walidator liczb całkowitych
- * @method self addValidatorIp4($message = null) walidator IPv4
- * @method self addValidatorIp6($message = null) walidator IPv6
  * @method self addValidatorNotEmpty($message = null) walidator niepustości
  * @method self addValidatorNumberBetween($from, $to, $message = null) walidator numer pomiędzy
  * @method self addValidatorNumeric($message = null) walidator numeryczny
- * @method self addValidatorPostal($message = null) walidator kodu pocztowego
  * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null, $message = null) walidator unikalności rekordu
  * @method self addValidatorRegex($pattern, $message = null) walidator regex
  * @method self addValidatorStringLength($message = null) walidator długości ciągu

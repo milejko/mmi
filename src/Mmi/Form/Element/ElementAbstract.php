@@ -42,6 +42,7 @@ namespace Mmi\Form\Element;
  * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null, $message = null) walidator unikalności rekordu
  * @method self addValidatorRegex($pattern, $message = null) walidator regex
  * @method self addValidatorStringLength($message = null) walidator długości ciągu
+ * @method self addValidatorJson($message = null) walidator json
  * 
  * Filtry
  * @method self addFilterAlnum() filtr alfanumeryczny
