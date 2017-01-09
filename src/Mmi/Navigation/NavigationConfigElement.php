@@ -42,6 +42,7 @@ class NavigationConfigElement {
 		'follow' => true,
 		//czy blank
 		'blank' => false,
+		'config' => null,
 		//data rozpoczęcia publikacji
 		'dateStart' => null,
 		//data wyłączenia publikacji
@@ -61,6 +62,7 @@ class NavigationConfigElement {
 	 * @param string $id
 	 */
 	public function __construct($id = null) {
+		$this->_data['config'] = new \Mmi\DataObject();
 		$this->_data['id'] = ($id === null) ? \Mmi\Navigation\NavigationConfig::getAutoIndex() : $id;
 	}
 	
@@ -229,6 +231,15 @@ class NavigationConfigElement {
 	 */
 	public function setBlank($blank = true) {
 		return $this->set('blank', (bool) $blank);
+	}
+	
+	/**
+	 * Ustawia obiekt konfiguracyjny
+	 * @param \Mmi\DataObject $config
+	 * @return \Mmi\Navigation\NavigationConfigElement
+	 */
+	public function setConfig(\Mmi\DataObject $config) {
+		return $this->set('config', $config);
 	}
 
 	/**
