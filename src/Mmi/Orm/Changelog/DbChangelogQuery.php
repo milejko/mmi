@@ -11,20 +11,23 @@
 namespace Mmi\Orm\Changelog;
 
 /**
- * QUERY dla loga używanego przy wdrożeniach incrementali bazy danych
+ * Zapytanie dla loga używanego przy wdrożeniach incrementali bazy danych
  */
 class DbChangelogQuery extends \Mmi\Orm\Query {
 
+	/**
+	 * Nazwa tabeli
+	 * @var string
+	 */
 	protected $_tableName = 'DB_CHANGELOG';
 
 	/**
 	 * Zapytanie szukające po nazwie pliku
 	 * @param string $filename
-	 * @return \App\Orm\Changelog
+	 * @return \Mmi\Orm\Changelog\DbChangelogQuery
 	 */
-	public static function byFilename($filename) {
-		return (new self)
-				->whereFilename()->equals($filename);
+	public function byFilename($filename) {
+		return $this->whereFilename()->equals($filename);
 	}
 
 }

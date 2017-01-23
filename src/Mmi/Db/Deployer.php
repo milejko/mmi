@@ -58,7 +58,7 @@ class Deployer {
 
 		//pobranie rekordu
 		try {
-			$dc = \Mmi\Orm\Changelog\DbChangelogQuery::byFilename(basename($file))->findFirst();
+			$dc = (new \Mmi\Orm\Changelog\DbChangelogQuery)->byFilename(basename($file))->findFirst();
 		} catch (\Exception $e) {
 			echo 'INITIAL IMPORT.' . "\n";
 			$dc = null;

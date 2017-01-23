@@ -11,7 +11,7 @@
 namespace Mmi\Cache;
 
 /**
- * Backend plikowy
+ * Plikowy backend bufora
  */
 class FileBackend implements CacheBackendInterface {
 

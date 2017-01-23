@@ -31,8 +31,7 @@ namespace Mmi\App {
 			FrontController::getInstance()->getProfiler()->event('App\Kernel: application startup');
 			//inicjalizacja aplikacji
 			$this->_initEventHandler()
-				->_initEncoding()
-				->_initCache();
+				->_initEncoding();
 			//bootstrap start
 			FrontController::getInstance()->getProfiler()->event('App\Kernel: bootstrap startup');
 			//tworzenie instancji bootstrapa
@@ -84,15 +83,6 @@ namespace Mmi\App {
 			setlocale(LC_NUMERIC, 'en_US.UTF-8');
 			//ustawienie lokalizacji
 			ini_set('default_charset', \App\Registry::$config->charset);
-			return $this;
-		}
-
-		/**
-		 * Ustawianie bufora
-		 * @return \Mmi\App\Bootstrap
-		 */
-		private function _initCache() {
-			\App\Registry::$cache = new \Mmi\Cache\Cache(\App\Registry::$config->cache);
 			return $this;
 		}
 

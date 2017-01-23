@@ -74,7 +74,7 @@ class Session {
 	 * @param boolean $deleteOldSession kasuje starą sesję
 	 * @return boolean
 	 */
-	public static function regenerateId($deleteOldSession = false) {
+	public static function regenerateId($deleteOldSession = true) {
 		return session_regenerate_id($deleteOldSession);
 	}
 

@@ -22,13 +22,12 @@ class Bootstrap implements BootstrapInterface {
 		//inicjalizacja tłumaczeń
 		$translate = $this->_setupTranslate();
 
-		//inicjalizacja routera
-		$router = $this->_setupRouter($translate->getLocale());
-
 		//ustawienie front controllera, sesji i bazy danych
-		$this->_setupFrontController($router, $this->_setupView($translate, $router))
-			->_setupSession()
-			->_setupDatabase();
+		$this
+			->_setupDatabase()
+			->_setupCache()
+			->_setupFrontController($router = $this->_setupRouter($translate->getLocale()), $this->_setupView($translate, $router))
+			->_setupSession();
 	}
 
 	/**
@@ -78,8 +77,24 @@ class Bootstrap implements BootstrapInterface {
 		if (!\App\Registry::$config->session->name) {
 			return $this;
 		}
+		//własna sesja, oparta na obiekcie implementującym SessionHandlerInterface
+		if (strtolower(\App\Registry::$config->session->handler) == 'user') {
+			$sessionClass = \App\Registry::$config->session->path;
+			session_set_save_handler(new $sessionClass);
+		}
 		//uruchomienie sesji
 		\Mmi\Session\Session::start(\App\Registry::$config->session);
+		return $this;
+	}
+
+	/**
+	 * Inicjalizacja bufora
+	 * @return \Mmi\App\Bootstrap
+	 */
+	protected function _setupCache() {
+		\App\Registry::$cache = new \Mmi\Cache\Cache(\App\Registry::$config->cache);
+		//wstrzyknięcie cache do ORM
+		\Mmi\Orm\DbConnector::setCache(\App\Registry::$cache);
 		return $this;
 	}
 
@@ -96,8 +111,6 @@ class Bootstrap implements BootstrapInterface {
 		\App\Registry::$db = \Mmi\Db\DbHelper::getAdapter(\App\Registry::$config->db);
 		//wstrzyknięcie do ORM
 		\Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
-		//wstrzyknięcie cache do ORM
-		\Mmi\Orm\DbConnector::setCache(\App\Registry::$cache);
 		return $this;
 	}
 
@@ -137,9 +150,9 @@ class Bootstrap implements BootstrapInterface {
 		$view = new \Mmi\Mvc\View;
 		//ustawienie widoku
 		return $view->setCache(\App\Registry::$cache)
-			->setAlwaysCompile(\App\Registry::$config->compile)
-			->setTranslate($translate)
-			->setBaseUrl($router->getBaseUrl());
+				->setAlwaysCompile(\App\Registry::$config->compile)
+				->setTranslate($translate)
+				->setBaseUrl($router->getBaseUrl());
 	}
 
 }

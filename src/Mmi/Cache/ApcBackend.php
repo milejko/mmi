@@ -11,7 +11,7 @@
 namespace Mmi\Cache;
 
 /**
- * Backend Apc
+ * Backend bufora w APC
  */
 class ApcBackend implements CacheBackendInterface {
 

@@ -19,7 +19,21 @@ class DbConnector {
 	 * Przechowuje strukturę bazy danych
 	 * @var array
 	 */
-	protected static $_tableStructure = [];
+	protected static $_tableStructure = [
+		'DB_CACHE' => [
+			'id' => ['dataType' => 'varchar', 'maxLength' => 64, 'null', 'default'],
+			'data' => ['dataType' => 'mediumtext', 'maxLength' => 16777215, 'null', 'default'],
+		],
+		'DB_CHANGELOG' => [
+			'filename' => ['dataType' => 'varchar', 'maxLength' => 64, 'null', 'default'],
+			'md5' => ['dataType' => 'varchar', 'maxLength' => 32, 'null', 'default'],
+		],
+		'DB_SESSION' => [
+			'id' => ['dataType' => 'varchar', 'maxLength' => 64, 'null', 'default'],
+			'data' => ['dataType' => 'mediumtext', 'maxLength' => 16777215, 'null', 'default'],
+			'timestamp' => ['dataType' => 'int', 'maxLength', 'null' => 1, 'default'],
+		],
+	];
 
 	/**
 	 * Adapter DB

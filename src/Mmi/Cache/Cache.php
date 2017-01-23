@@ -38,17 +38,8 @@ class Cache {
 	 */
 	public function __construct(CacheConfig $config) {
 		$this->_config = $config;
-		$saveHandler = $config->handler;
-		//określanie klasy backendu
-		$backendClassName = '\\Mmi\\Cache\\' . ucfirst($saveHandler) . 'Backend';
-		//powoływanie obiektu backendu
-		$this->_backend = new $backendClassName($config);
 		//namespace w rejestrze
 		$this->_registryNamespace = 'Cache-' . crc32($config->path . $config->handler) . '-';
-		//niepoprawny backend
-		if (!($this->_backend instanceof CacheBackendInterface)) {
-			throw new CacheException('Backend invalid');
-		}
 	}
 
 	/**
@@ -62,12 +53,12 @@ class Cache {
 			return;
 		}
 		//pobranie z rejestru aplikacji jeśli istnieje
-		if (CacheRegistry::getInstance()->issetOption($this->_registryNamespace . $key)) {
-			return CacheRegistry::getInstance()->getOption($this->_registryNamespace . $key);
+		if (CacheRegistry::getInstance()->issetOption($key)) {
+			return CacheRegistry::getInstance()->getOption($key);
 		}
 		//pobranie z backendu zapis do rejestru i zwrot wartości
-		return CacheRegistry::getInstance()->setOption($this->_registryNamespace . $key, $this->_getValidCacheData($this->_backend->load($key)))
-				->getOption($this->_registryNamespace . $key);
+		return CacheRegistry::getInstance()->setOption($key, $this->_getValidCacheData($this->_backend->load($key)))
+				->getOption($key);
 	}
 
 	/**
@@ -90,7 +81,7 @@ class Cache {
 		//dodanie losowej wartości do długości bufora
 		$lifetime += rand(0, 15);
 		//zapis w rejestrze
-		CacheRegistry::getInstance()->setOption($this->_registryNamespace . $key, $data);
+		CacheRegistry::getInstance()->setOption($key, $data);
 		//zapis w backendzie
 		return $this->_backend->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
 	}
@@ -105,7 +96,7 @@ class Cache {
 			return;
 		}
 		//usunięcie z rejestru
-		CacheRegistry::getInstance()->unsetOption($this->_registryNamespace . $key);
+		CacheRegistry::getInstance()->unsetOption($key);
 		//usunięcie z backendu
 		return $this->_backend->delete($key);
 	}
@@ -130,7 +121,13 @@ class Cache {
 	 * @return boolean
 	 */
 	public function isActive() {
-		return $this->_config->active;
+		//sprawdzenie aktywności
+		if (!$this->_config->active) {
+			return false;
+		}
+		//ustawienie backendu
+		$this->_setupBackend();
+		return true;
 	}
 
 	/**
@@ -141,6 +138,14 @@ class Cache {
 	 */
 	protected function _setCacheData($data, $expire) {
 		return serialize(['expire' => $expire, 'data' => $data]);
+	}
+	
+	/**
+	 * Ustawia backend bufora
+	 * @param \Mmi\Cache\CacheBackendInterface $backend
+	 */
+	protected function _setBackend(CacheBackendInterface $backend) {
+		$this->_backend = $backend;
 	}
 
 	/**
@@ -161,6 +166,21 @@ class Cache {
 		if ($data['expire'] > time()) {
 			return $data['data'];
 		}
+	}
+
+	/**
+	 * Ustawianie backendu
+	 * @throws CacheException
+	 */
+	protected function _setupBackend() {
+		//backend już ustawiony
+		if (null !== $this->_backend) {
+			return;
+		}
+		//określanie klasy backendu
+		$backendClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Backend';
+		//powoływanie obiektu backendu
+		$this->_setBackend(new $backendClassName($this->_config));
 	}
 
 }

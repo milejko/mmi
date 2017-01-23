@@ -8,23 +8,23 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm\Changelog;
+namespace Mmi\Cache\Orm;
 
 /**
- * Rekord incrementala bazy danych
+ * Rekord cache
  */
-class DbChangelogRecord extends \Mmi\Orm\Record {
+class DbCacheRecord extends \Mmi\Orm\Record {
 
 	/**
-	 * Nazwa pliku
+	 * Klucz
 	 * @var string
 	 */
-	public $filename;
+	public $id;
 	
 	/**
-	 * Hash
+	 * Dane (longblob)
 	 * @var string
 	 */
-	public $md5;
-
+	public $data;
+	
 }

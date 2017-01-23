@@ -8,23 +8,17 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Orm\Changelog;
+namespace Mmi\Session\Orm;
 
 /**
- * Rekord incrementala bazy danych
+ * Zapytanie dla rekordów sesji
  */
-class DbChangelogRecord extends \Mmi\Orm\Record {
+class DbSessionQuery extends \Mmi\Orm\Query {
 
 	/**
-	 * Nazwa pliku
+	 * Nazwa tabeli
 	 * @var string
 	 */
-	public $filename;
-	
-	/**
-	 * Hash
-	 * @var string
-	 */
-	public $md5;
+	protected $_tableName = 'DB_SESSION';
 
 }
