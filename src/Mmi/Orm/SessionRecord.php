@@ -8,17 +8,29 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Cache\Orm;
+namespace Mmi\Orm;
 
 /**
- * Zapytanie dla rekordów cache
+ * Rekord sesji
  */
-class DbCacheQuery extends \Mmi\Orm\Query {
+class SessionRecord extends \Mmi\Orm\Record {
 
 	/**
-	 * Nazwa tabeli
+	 * Klucz
 	 * @var string
 	 */
-	protected $_tableName = 'DB_CACHE';
+	public $id;
+	
+	/**
+	 * Dane (mediumtext)
+	 * @var string
+	 */
+	public $data;
+	
+	/**
+	 * Timestamp
+	 * @var integer
+	 */
+	public $timestamp;
 
 }

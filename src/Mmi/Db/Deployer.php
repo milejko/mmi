@@ -10,6 +10,8 @@
 
 namespace Mmi\Db;
 
+use \Mmi\Orm;
+
 /**
  * Klasa wdrożeń incrementali bazy danych
  */
@@ -58,7 +60,7 @@ class Deployer {
 
 		//pobranie rekordu
 		try {
-			$dc = (new \Mmi\Orm\Changelog\DbChangelogQuery)->byFilename(basename($file))->findFirst();
+			$dc = (new Orm\ChangelogQuery)->byFilename(basename($file))->findFirst();
 		} catch (\Exception $e) {
 			echo 'INITIAL IMPORT.' . "\n";
 			$dc = null;
@@ -82,7 +84,7 @@ class Deployer {
 		\Mmi\Orm\DbConnector::resetTableStructures();
 
 		//brak restore - zakłada nowy rekord
-		$newDc = new \Mmi\Orm\Changelog\DbChangelogRecord;
+		$newDc = new Orm\ChangelogRecord;
 		//zapis informacji o incrementalu
 		$newDc->filename = $baseFileName;
 		$newDc->md5 = $md5file;

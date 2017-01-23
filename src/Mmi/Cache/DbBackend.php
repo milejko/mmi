@@ -10,6 +10,8 @@
 
 namespace Mmi\Cache;
 
+use \Mmi\Orm;
+
 /**
  * Bazodanowy backend bufora
  */
@@ -32,7 +34,7 @@ class DbBackend implements CacheBackendInterface {
 	 */
 	public function __construct(\Mmi\Cache\CacheConfig $config) {
 		//nowe zapytanie
-		$systemCacheQuery = new Orm\DbCacheQuery;
+		$systemCacheQuery = new Orm\CacheQuery;
 		//iteracja po prefixach systemowych
 		foreach ($this->_systemPrefixes as $prefix) {
 			//dodawanie prefiksów systemowych do zapytania (lub)
@@ -56,7 +58,7 @@ class DbBackend implements CacheBackendInterface {
 			return CacheRegistry::getInstance()->getOption(self::REGISTRY_PREFIX . $key);
 		}
 		//wyszukiwanie rekordu
-		if (null === $cacheRecord = (new Orm\DbCacheQuery)->findPk($key)) {
+		if (null === $cacheRecord = (new Orm\CacheQuery)->findPk($key)) {
 			return;
 		}
 		//zwrot danych
@@ -71,9 +73,9 @@ class DbBackend implements CacheBackendInterface {
 	 */
 	public function save($key, $data, $lifeTime) {
 		//wyszukiwanie rekordu
-		if (null === $cacheRecord = (new Orm\DbCacheQuery)->findPk($key)) {
+		if (null === $cacheRecord = (new Orm\CacheQuery)->findPk($key)) {
 			//tworzenie nowego rekordu
-			$cacheRecord = new Orm\DbCacheRecord;
+			$cacheRecord = new Orm\CacheRecord;
 			$cacheRecord->id = $key;
 		}
 		$cacheRecord->data = json_encode($data);
@@ -87,7 +89,7 @@ class DbBackend implements CacheBackendInterface {
 	 */
 	public function delete($key) {
 		//wyszukiwanie rekordu
-		if (null === $cacheRecord = (new Orm\DbCacheQuery)->findPk($key)) {
+		if (null === $cacheRecord = (new Orm\CacheQuery)->findPk($key)) {
 			return;
 		}
 		//usuwanie rekordu
@@ -99,7 +101,7 @@ class DbBackend implements CacheBackendInterface {
 	 */
 	public function deleteAll() {
 		//uproszczone usuwanie - jedynm zapytaniem
-		\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\DbCacheQuery)->getTableName());
+		\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\CacheQuery)->getTableName());
 	}
 
 }

@@ -8,12 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Session\Orm;
+namespace Mmi\Orm;
 
 /**
- * Rekord sesji
+ * Rekord cache
  */
-class DbSessionRecord extends \Mmi\Orm\Record {
+class CacheRecord extends \Mmi\Orm\Record {
 
 	/**
 	 * Klucz
@@ -22,15 +22,9 @@ class DbSessionRecord extends \Mmi\Orm\Record {
 	public $id;
 	
 	/**
-	 * Dane (mediumtext)
+	 * Dane (longblob)
 	 * @var string
 	 */
 	public $data;
 	
-	/**
-	 * Timestamp
-	 * @var integer
-	 */
-	public $timestamp;
-
 }

@@ -10,11 +10,13 @@
 
 namespace Mmi\Session;
 
+use \Mmi\Orm;
+
 /**
  * Klasa obsługi sesji w bazie danych
  */
-class DbSession implements \SessionHandlerInterface {
-	
+class DbHandler implements \SessionHandlerInterface {
+
 	/**
 	 * Zamknięcie sesji (nie robi nic)
 	 * @return boolean
@@ -29,7 +31,7 @@ class DbSession implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function destroy($session_id) {
-		if (null === $record = (new Orm\DbSessionQuery)->findPk($session_id)) {
+		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
 			return false;
 		}
 		return $record->delete();
@@ -42,7 +44,7 @@ class DbSession implements \SessionHandlerInterface {
 	 */
 	public function gc($maxLifetime) {
 		//uproszczone usuwanie - jednym zapytaniem
-		\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\DbSessionQuery)->getTableName(), 'WHERE timestamp < :time', [':time' => (time() - $maxLifetime)]);
+		\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp < :time', [':time' => (time() - $maxLifetime)]);
 		return true;
 	}
 
@@ -63,7 +65,7 @@ class DbSession implements \SessionHandlerInterface {
 	 */
 	public function read($session_id) {
 		//wyszukiwanie rekordu
-		if (null === $record = (new Orm\DbSessionQuery)->findPk($session_id)) {
+		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
 			//nie może zwracać null
 			return '';
 		}
@@ -78,9 +80,9 @@ class DbSession implements \SessionHandlerInterface {
 	 */
 	public function write($session_id, $data) {
 		//wyszukiwanie rekordu
-		if (null === $record = (new Orm\DbSessionQuery)->findPk($session_id)) {
+		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
 			//tworzenie nowego rekordu
-			$record = new Orm\DbSessionRecord;
+			$record = new Orm\SessionRecord;
 			$record->id = $session_id;
 		}
 		$record->data = $data;
@@ -88,5 +90,5 @@ class DbSession implements \SessionHandlerInterface {
 		//zapis rekordu
 		return $record->save();
 	}
-	
+
 }
