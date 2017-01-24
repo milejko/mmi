@@ -130,12 +130,18 @@ class ResponseDebugger {
 		$html .= self::PRE_OPEN;
 		$html .= ResponseDebugger\Colorify::colorify(print_r(\Mmi\App\FrontController::getInstance()->getRequest()->toArray(), true)) . '</pre>';
 
+		//zmienne rejestru
+		$html .= '<p style="margin: 0px;">Registry Variables: </p>';
+		$html .= self::PRE_OPEN;
+		$html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray(get_class_vars('\App\Registry')), true)) . '</pre>';
+
 		//zmienne widoku
 		if ($view !== null) {
 			$html .= '<p style="margin: 0px;">View Variables: </p>';
 			$html .= self::PRE_OPEN;
 			$html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($view->getAllVariables()), true)) . '</pre>';
 		}
+
 		//zmienne cookie
 		if (isset($_COOKIE) && count($_COOKIE) > 0) {
 			$html .= '<p style="margin: 0px;">Cookie Variables: </p>';
