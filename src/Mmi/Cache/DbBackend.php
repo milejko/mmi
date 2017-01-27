@@ -18,10 +18,10 @@ use \Mmi\Orm;
 class DbBackend implements CacheBackendInterface {
 	
 	/**
-	 * Prefiksy kluczy systemowych
+	 * Prefiks kluczy systemowych
 	 * @var array
 	 */
-	private $_systemPrefixes = ['Mmi-', 'Orm-', 'Head-'];
+	CONST SYSTEM_CACHE_PREFIX = 'mmi-';
 	
 	/**
 	 * Prefiks bufora pośredniego
@@ -34,12 +34,8 @@ class DbBackend implements CacheBackendInterface {
 	 */
 	public function __construct(\Mmi\Cache\CacheConfig $config) {
 		//nowe zapytanie
-		$systemCacheQuery = new Orm\CacheQuery;
-		//iteracja po prefixach systemowych
-		foreach ($this->_systemPrefixes as $prefix) {
-			//dodawanie prefiksów systemowych do zapytania (lub)
-			$systemCacheQuery->orFieldId()->like($prefix . '%');
-		}
+		$systemCacheQuery = (new Orm\CacheQuery)
+			->whereId()->like(self::SYSTEM_CACHE_PREFIX . '%');
 		//iteracja po kolekcji bufora systemowego
 		foreach ($systemCacheQuery->find() as $cacheRecord) {
 			//ustawianie bufora pośredniego w rejestrze

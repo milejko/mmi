@@ -186,7 +186,7 @@ class Controller {
 
 		//ładowanie zbuforowanego translatora
 		$cache = $this->view->getCache();
-		$key = 'Mmi-Translate-' . $lang . '-' . '-' . $module;
+		$key = 'mmi-translate-' . $lang . '-' . '-' . $module;
 
 		if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
 			$this->view->setTranslate($cachedTranslate);

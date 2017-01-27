@@ -104,7 +104,7 @@ class DbConnector {
 			return self::$_tableStructure[$tableName];
 		}
 		//pobranie z cache
-		$cacheKey = 'Orm-structure-' . self::getAdapter()->getConfig()->name . '-' . $tableName;
+		$cacheKey = 'mmi-orm-structure-' . self::getAdapter()->getConfig()->name . '-' . $tableName;
 		if (static::$_cache !== null && (null !== ($structure = static::$_cache->load($cacheKey)))) {
 			return $structure;
 		}
@@ -124,7 +124,7 @@ class DbConnector {
 	public static final function resetTableStructures() {
 		//usunięcie struktrur z cache
 		foreach (self::getAdapter()->tableList() as $tableName) {
-			static::$_cache->remove('Orm-structure-' . self::getAdapter()->getConfig()->name . '-' . $tableName);
+			static::$_cache->remove('mmi-orm-structure-' . self::getAdapter()->getConfig()->name . '-' . $tableName);
 		}
 		//usunięcie lokalnie zapisanych struktur
 		self::$_tableStructure = [];
