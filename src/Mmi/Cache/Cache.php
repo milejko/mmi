@@ -139,7 +139,7 @@ class Cache {
 	protected function _setCacheData($data, $expire) {
 		return serialize(['expire' => $expire, 'data' => $data]);
 	}
-	
+
 	/**
 	 * Ustawia backend bufora
 	 * @param \Mmi\Cache\CacheBackendInterface $backend
@@ -179,8 +179,13 @@ class Cache {
 		}
 		//określanie klasy backendu
 		$backendClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Backend';
-		//powoływanie obiektu backendu
-		$this->_setBackend(new $backendClassName($this->_config));
+		try {
+			//powoływanie obiektu backendu
+			$this->_setBackend(new $backendClassName($this->_config));
+		} catch (\Exception $e) {
+			\Mmi\App\FrontController::getInstance()->getLogger()->addWarning('Cache backend could not be initialized, DummyBackend used instead');
+			$this->_setBackend(new DummyBackend($this->_config));
+		}
 	}
 
 }

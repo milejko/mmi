@@ -16,6 +16,14 @@ namespace Mmi\App;
 class BootstrapCli extends \Mmi\App\Bootstrap {
 
 	/**
+	 * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
+	 */
+	public function __construct() {
+		\App\Registry::$config->session->name = null;
+		parent::__construct();
+	}
+
+	/**
 	 * Uruchamianie bootstrapa - brak front kontrolera
 	 */
 	public function run() {
