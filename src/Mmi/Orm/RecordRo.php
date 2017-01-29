@@ -125,7 +125,7 @@ class RecordRo {
 	/**
 	 * Pobiera dołączony rekord (JOIN)
 	 * @param string $tableName
-	 * @return \Mmi\Orm\RecordRo
+	 * @return \Mmi\Orm\Record
 	 */
 	public final function getJoined($tableName) {
 		return isset($this->_joined[$tableName]) ? $this->_joined[$tableName] : null;
@@ -166,7 +166,8 @@ class RecordRo {
 			foreach ($tables as $tableName => $fields) {
 				$recordClass = \Mmi\Orm\DbConnector::getRecordNameByTable($tableName);
 				$record = new $recordClass;
-				$record->setFromArray($fields);
+				$record->setFromArray($fields)
+					->clearModified();
 				$this->_joined[$alias] = $record;
 			}
 		}
