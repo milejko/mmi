@@ -52,7 +52,7 @@ class FrontController {
 	private $_profiler;
 
 	/**
-	 * Cache systemowy aplikacji (nie musi być rozproszony)
+	 * Lokalny bufor aplikacji
 	 * @var \Mmi\Cache\Cache
 	 */
 	private $_cache;
@@ -161,11 +161,11 @@ class FrontController {
 	}
 	
 	/**
-	 * Ustawia cache
+	 * Ustawia lokalny bufor
 	 * @param \Mmi\Cache\Cache $cache
 	 * @return \Mmi\App\FrontController
 	 */
-	public function setCache(\Mmi\Cache\Cache $cache) {
+	public function setLocalCache(\Mmi\Cache\Cache $cache) {
 		$this->_cache = $cache;
 		return $this;
 	}
@@ -241,13 +241,13 @@ class FrontController {
 	}
 
 	/**
-	 * Pobiera systemowy cache
+	 * Pobiera lokalny bufor
 	 * @return \Mmi\Cache\Cache
 	 */
-	public function getCache() {
+	public function getLocalCache() {
 		//brak bufora
 		if (null === $this->_cache) {
-			throw new KernelException('Missing FrontController Cache configuration');
+			throw new KernelException('Missing localCache configuration section');
 		}
 		return $this->_cache;
 	}

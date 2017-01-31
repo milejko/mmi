@@ -98,9 +98,9 @@ class Bootstrap implements BootstrapInterface {
 			return $this;
 		}
 		//ustawienie bufora systemowy aplikacji
-		FrontController::getInstance()->setCache(new \Mmi\Cache\Cache(\App\Registry::$config->localCache));
+		FrontController::getInstance()->setLocalCache(new \Mmi\Cache\Cache(\App\Registry::$config->localCache));
 		//wstrzyknięcie cache do ORM
-		\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getCache());
+		\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getLocalCache());
 		return $this;
 	}
 	
@@ -144,8 +144,8 @@ class Bootstrap implements BootstrapInterface {
 		//inicjalizacja frontu
 		$frontController = FrontController::getInstance();
 		//wczytywanie struktury frontu z cache
-		if (null === ($frontStructure = FrontController::getInstance()->getCache()->load($cacheKey = 'mmi-structure'))) {
-			FrontController::getInstance()->getCache()->save($frontStructure = \Mmi\Mvc\Structure::getStructure(), $cacheKey, 0);
+		if (null === ($frontStructure = FrontController::getInstance()->getLocalCache()->load($cacheKey = 'mmi-structure'))) {
+			FrontController::getInstance()->getLocalCache()->save($frontStructure = \Mmi\Mvc\Structure::getStructure(), $cacheKey, 0);
 		}
 		//konfiguracja frontu
 		FrontController::getInstance()->setStructure($frontStructure)
@@ -169,7 +169,7 @@ class Bootstrap implements BootstrapInterface {
 		//powołanie widoku
 		$view = new \Mmi\Mvc\View;
 		//ustawienie widoku
-		return $view->setCache(FrontController::getInstance()->getCache())
+		return $view->setCache(FrontController::getInstance()->getLocalCache())
 				->setAlwaysCompile(\App\Registry::$config->compile)
 				->setTranslate($translate)
 				->setBaseUrl($router->getBaseUrl());
