@@ -247,7 +247,7 @@ class FrontController {
 	public function getCache() {
 		//brak bufora
 		if (null === $this->_cache) {
-			throw new KernelException('\Mmi\Cache\Cache should be specified in \Mmi\App\FrontController');
+			throw new KernelException('Missing FrontController Cache configuration');
 		}
 		return $this->_cache;
 	}

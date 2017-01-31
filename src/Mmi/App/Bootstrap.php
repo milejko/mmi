@@ -25,9 +25,10 @@ class Bootstrap implements BootstrapInterface {
 		$translate = $this->_setupTranslate();
 		//ustawienie front controllera, sesji i bazy danych
 		$this
-			->_setupStorage()
-			->_setupCache()
+			->_setupDatabase()
+			->_setupFrontControllerCache()
 			->_setupFrontController($router = $this->_setupRouter($translate->getLocale()), $this->_setupView($translate, $router))
+			->_setupCache()
 			->_setupSession();
 	}
 
@@ -89,14 +90,29 @@ class Bootstrap implements BootstrapInterface {
 	}
 
 	/**
-	 * Inicjalizacja bufora
+	 * Inicjalizacja bufora FrontControllera
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupCache() {
+	protected function _setupFrontControllerCache() {
+		if (null === \App\Registry::$config->frontControllerCache) {
+			return $this;
+		}
 		//ustawienie bufora systemowy aplikacji
 		FrontController::getInstance()->setCache(new \Mmi\Cache\Cache(\App\Registry::$config->frontControllerCache));
 		//wstrzyknięcie cache do ORM
 		\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getCache());
+		return $this;
+	}
+	
+	
+	/**
+	 * Inicjalizacja bufora
+	 * @return \Mmi\App\Bootstrap
+	 */
+	protected function _setupCache() {
+		if (null === \App\Registry::$config->cache) {
+			return $this;
+		}
 		//cache użytkownika
 		\App\Registry::$cache = new \Mmi\Cache\Cache(\App\Registry::$config->cache);
 		return $this;
@@ -106,9 +122,9 @@ class Bootstrap implements BootstrapInterface {
 	 * Ustawianie przechowywania
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupStorage() {
+	protected function _setupDatabase() {
 		//połączenie do bazy danych i konfiguracja DAO
-		if (\App\Registry::$config->db->driver === null) {
+		if (null === \App\Registry::$config->db->driver) {
 			return $this;
 		}
 		//uzupełnienie rejestru
