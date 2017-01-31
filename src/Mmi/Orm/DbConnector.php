@@ -109,10 +109,7 @@ class DbConnector {
 			return $structure;
 		}
 		//pobranie z adaptera
-		if ([] === $structure = static::getAdapter()->tableInfo($tableName)) {
-			//brak tabeli
-			throw new \Mmi\App\KernelException('Table not found ' . $tableName . ', check if database is properly deployed');
-		}
+		$structure = static::getAdapter()->tableInfo($tableName);
 		//zapis do bufora
 		if (static::$_cache !== null) {
 			static::$_cache->save($structure, $cacheKey, 28800);
