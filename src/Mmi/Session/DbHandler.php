@@ -10,12 +10,15 @@
 
 namespace Mmi\Session;
 
-use \Mmi\Orm;
+use \Mmi\Orm,
+	Mmi\App\FrontController;
 
 /**
  * Klasa obsługi sesji w bazie danych
  */
 class DbHandler implements \SessionHandlerInterface {
+	
+	CONST CACHE_PREFIX = 'no-session-';
 
 	/**
 	 * Zamknięcie sesji (nie robi nic)
@@ -67,6 +70,10 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return mixed
 	 */
 	public function read($session_id) {
+		//zapisano w cache informację o braku danych w tej sesji
+		if (true === FrontController::getInstance()->getLocalCache()->load(self::CACHE_PREFIX . $session_id)) {
+			return '';
+		}
 		//wyszukiwanie rekordu
 		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
 			//nie może zwracać null
@@ -88,18 +95,19 @@ class DbHandler implements \SessionHandlerInterface {
 			$record = new Orm\SessionRecord;
 			$record->id = $session_id;
 		}
-		//brak danych i brak zapisanej sesji - nie zapisujemy w bazie
-		if (!$data && !$record->id) {
-			return true;
-		}
-		//brak danych i istnieje rekord - usuwanie
-		if (!$data && $record->id) {
-			$record->delete();
+		//brak danych
+		if (!$data) {
+			//jeśli istniał rekord - usuwamy
+			$record->id ? $record->delete() : null;
+			//zapis informacji do cache o braku danych w tej sesji
+			FrontController::getInstance()->getLocalCache()->save(true, self::CACHE_PREFIX . $session_id);
 			return true;
 		}
 		//ustawianie danych i czasu
 		$record->data = $data;
 		$record->timestamp = time();
+		//usuwanie z cache informacji o braku danych w tej sesji
+		FrontController::getInstance()->getLocalCache()->remove(self::CACHE_PREFIX . $session_id);
 		//zapis rekordu
 		return $record->save();
 	}
