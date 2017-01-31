@@ -26,7 +26,7 @@ class Bootstrap implements BootstrapInterface {
 		//ustawienie front controllera, sesji i bazy danych
 		$this
 			->_setupDatabase()
-			->_setupFrontControllerCache()
+			->_setupLocalCache()
 			->_setupFrontController($router = $this->_setupRouter($translate->getLocale()), $this->_setupView($translate, $router))
 			->_setupCache()
 			->_setupSession();
@@ -93,12 +93,12 @@ class Bootstrap implements BootstrapInterface {
 	 * Inicjalizacja bufora FrontControllera
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupFrontControllerCache() {
-		if (null === \App\Registry::$config->frontControllerCache) {
+	protected function _setupLocalCache() {
+		if (null === \App\Registry::$config->localCache) {
 			return $this;
 		}
 		//ustawienie bufora systemowy aplikacji
-		FrontController::getInstance()->setCache(new \Mmi\Cache\Cache(\App\Registry::$config->frontControllerCache));
+		FrontController::getInstance()->setCache(new \Mmi\Cache\Cache(\App\Registry::$config->localCache));
 		//wstrzyknięcie cache do ORM
 		\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getCache());
 		return $this;

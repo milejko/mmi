@@ -16,11 +16,10 @@ namespace Mmi\App;
 abstract class KernelConfig {
 	
 	/**
-	 * Konfiguracja bufora front kontrolera
-	 * bufor nie musi być rozproszony
+	 * Konfiguracja bufora lokalnego
 	 * @var \Mmi\Cache\CacheConfig
 	 */
-	public $frontControllerCache;
+	public $localCache;
 	
 	/**
 	 * Konfiguracja bufora
