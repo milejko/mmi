@@ -31,10 +31,13 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function destroy($session_id) {
+		//brak rekordu
 		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
-			return false;
+			return true;
 		}
-		return $record->delete();
+		//usuwanie rekordu
+		$record->delete();
+		return true;
 	}
 
 	/**
@@ -85,6 +88,16 @@ class DbHandler implements \SessionHandlerInterface {
 			$record = new Orm\SessionRecord;
 			$record->id = $session_id;
 		}
+		//brak danych i brak zapisanej sesji - nie zapisujemy w bazie
+		if (!$data && !$record->id) {
+			return true;
+		}
+		//brak danych i istnieje rekord - usuwanie
+		if (!$data && $record->id) {
+			$record->delete();
+			return true;
+		}
+		//ustawianie danych i czasu
 		$record->data = $data;
 		$record->timestamp = time();
 		//zapis rekordu
