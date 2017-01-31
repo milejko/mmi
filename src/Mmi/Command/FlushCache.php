@@ -20,7 +20,9 @@ require_once 'CommandAbstract.php';
 class FlushCache extends CommandAbstract {
 	
 	public function run() {
-		//usuwanie cache
+		//czyszczenie bufora systemowego
+		\Mmi\App\FrontController::getInstance()->getCache()->flush();
+		//czyszczenie bufora aplikacyjnego
 		\App\Registry::$cache->flush();
 	}
 	

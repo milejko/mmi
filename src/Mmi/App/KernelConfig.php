@@ -16,7 +16,14 @@ namespace Mmi\App;
 abstract class KernelConfig {
 	
 	/**
-	 * Konfiguracja postawowego cache
+	 * Konfiguracja bufora front kontrolera
+	 * bufor nie musi być rozproszony
+	 * @var \Mmi\Cache\CacheConfig
+	 */
+	public $frontControllerCache;
+	
+	/**
+	 * Konfiguracja bufora
 	 * @var \Mmi\Cache\CacheConfig
 	 */
 	public $cache;

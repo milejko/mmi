@@ -38,19 +38,25 @@ class FrontController {
 	 * @var \Mmi\Mvc\Router
 	 */
 	private $_router;
-	
+
 	/**
 	 * Środowisko uruchomieniowe
 	 * @var \Mmi\Http\HttpServerEnv
 	 */
 	private $_environment;
-	
+
 	/**
 	 * Profiler aplikacji
 	 * @var \Mmi\App\KernelProfiler 
 	 */
 	private $_profiler;
-	
+
+	/**
+	 * Cache systemowy aplikacji (nie musi być rozproszony)
+	 * @var \Mmi\Cache\Cache
+	 */
+	private $_cache;
+
 	/**
 	 * Logger - monolog
 	 * @var \Monolog\Logger
@@ -153,6 +159,16 @@ class FrontController {
 		$this->_router = $router;
 		return $this;
 	}
+	
+	/**
+	 * Ustawia cache
+	 * @param \Mmi\Cache\Cache $cache
+	 * @return \Mmi\App\FrontController
+	 */
+	public function setCache(\Mmi\Cache\Cache $cache) {
+		$this->_cache = $cache;
+		return $this;
+	}
 
 	/**
 	 * Ustawia widok
@@ -207,7 +223,7 @@ class FrontController {
 	public function getPlugins() {
 		return $this->_plugins;
 	}
-	
+
 	/**
 	 * Zwraca profiler
 	 * @return \Mmi\App\KernelProfiler
@@ -215,13 +231,25 @@ class FrontController {
 	public function getProfiler() {
 		return $this->_profiler;
 	}
-	
+
 	/**
 	 * Zwraca logger
 	 * @return \Monolog\Logger
 	 */
 	public function getLogger() {
 		return $this->_logger;
+	}
+
+	/**
+	 * Pobiera systemowy cache
+	 * @return \Mmi\Cache\Cache
+	 */
+	public function getCache() {
+		//brak bufora
+		if (null === $this->_cache) {
+			throw new KernelException('\Mmi\Cache\Cache should be specified in \Mmi\App\FrontController');
+		}
+		return $this->_cache;
 	}
 
 	/**
