@@ -34,7 +34,7 @@ class ApcBackend implements CacheBackendInterface {
 	 * @param string $key klucz
 	 */
 	public function load($key) {
-		return apc_fetch($this->_namespace . '_' . $key);
+		return \apcu_fetch($this->_namespace . '_' . $key);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class ApcBackend implements CacheBackendInterface {
 	 * @param int $lifeTime wygaśnięcie danych w buforze (informacja dla bufora)
 	 */
 	public function save($key, $data, $lifeTime) {
-		return apc_store($this->_namespace . '_' . $key, $data, $lifeTime);
+		return \apcu_store($this->_namespace . '_' . $key, $data, $lifeTime);
 	}
 
 	/**
@@ -52,14 +52,14 @@ class ApcBackend implements CacheBackendInterface {
 	 * @param string $key klucz
 	 */
 	public function delete($key) {
-		return apc_delete($this->_namespace . '_' . $key);
+		return \apcu_delete($this->_namespace . '_' . $key);
 	}
 
 	/**
 	 * Kasuje wszystkie dane
 	 */
 	public function deleteAll() {
-		return apc_clear_cache('user');
+		return \apcu_clear_cache('user');
 	}
 
 }

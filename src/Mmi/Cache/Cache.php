@@ -183,7 +183,7 @@ class Cache {
 			//powoływanie obiektu backendu
 			$this->_setBackend(new $backendClassName($this->_config));
 		} catch (\Exception $e) {
-			\Mmi\App\FrontController::getInstance()->getLogger()->addWarning('Cache backend could not be initialized, DummyBackend used instead');
+			\Mmi\App\FrontController::getInstance()->getLogger()->addWarning('Cache backend could not be initialized, DummyBackend used instead ' . $e->getMessage());
 			$this->_setBackend(new DummyBackend($this->_config));
 		}
 	}

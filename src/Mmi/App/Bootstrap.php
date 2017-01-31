@@ -23,13 +23,11 @@ class Bootstrap implements BootstrapInterface {
 	public function __construct() {
 		//inicjalizacja tłumaczeń
 		$translate = $this->_setupTranslate();
-		//cache systemowy aplikacji
-		FrontController::getInstance()->setCache(new \Mmi\Cache\Cache(\App\Registry::$config->frontControllerCache));
 		//ustawienie front controllera, sesji i bazy danych
 		$this
-			->_setupFrontController($router = $this->_setupRouter($translate->getLocale()), $this->_setupView($translate, $router))
-			->_setupDatabase()
+			->_setupStorage()
 			->_setupCache()
+			->_setupFrontController($router = $this->_setupRouter($translate->getLocale()), $this->_setupView($translate, $router))
 			->_setupSession();
 	}
 
@@ -95,16 +93,20 @@ class Bootstrap implements BootstrapInterface {
 	 * @return \Mmi\App\Bootstrap
 	 */
 	protected function _setupCache() {
+		//ustawienie bufora systemowy aplikacji
+		FrontController::getInstance()->setCache(new \Mmi\Cache\Cache(\App\Registry::$config->frontControllerCache));
+		//wstrzyknięcie cache do ORM
+		\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getCache());
 		//cache użytkownika
 		\App\Registry::$cache = new \Mmi\Cache\Cache(\App\Registry::$config->cache);
 		return $this;
 	}
 
 	/**
-	 * Ustawianie bazy danych
+	 * Ustawianie przechowywania
 	 * @return \Mmi\App\Bootstrap
 	 */
-	protected function _setupDatabase() {
+	protected function _setupStorage() {
 		//połączenie do bazy danych i konfiguracja DAO
 		if (\App\Registry::$config->db->driver === null) {
 			return $this;
@@ -113,8 +115,6 @@ class Bootstrap implements BootstrapInterface {
 		\App\Registry::$db = \Mmi\Db\DbHelper::getAdapter(\App\Registry::$config->db);
 		//wstrzyknięcie do ORM
 		\Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
-		//wstrzyknięcie cache do ORM
-		\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getCache());
 		return $this;
 	}
 

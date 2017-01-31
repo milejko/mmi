@@ -33,6 +33,10 @@ class DbBackend implements CacheBackendInterface {
 	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
 	public function __construct(\Mmi\Cache\CacheConfig $config) {
+		//bufor systemowy już zarejestrowany
+		if (CacheRegistry::getInstance()->issetOption($intermediateKey = self::REGISTRY_PREFIX . '-init')) {
+			return;
+		}
 		//nowe zapytanie
 		$systemCacheQuery = (new Orm\CacheQuery)
 			->whereId()->like(self::SYSTEM_CACHE_PREFIX . '%');
@@ -41,6 +45,8 @@ class DbBackend implements CacheBackendInterface {
 			//ustawianie bufora pośredniego w rejestrze
 			CacheRegistry::getInstance()->setOption(self::REGISTRY_PREFIX . $cacheRecord->id, json_decode($cacheRecord->data));
 		}
+		//informacja o wstępnej inicjalizacji bufora
+		CacheRegistry::getInstance()->setOption($intermediateKey, true);
 	}
 
 	/**
