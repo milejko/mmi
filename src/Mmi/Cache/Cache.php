@@ -90,6 +90,7 @@ class Cache {
 	/**
 	 * Usuwanie danych z bufora na podstawie klucza
 	 * @param string $key klucz
+	 * @return boolean
 	 */
 	public function remove($key) {
 		//bufor nieaktywny
@@ -99,12 +100,11 @@ class Cache {
 		//usunięcie z rejestru
 		$this->getRegistry()->unsetOption($key);
 		//usunięcie z backendu
-		return $this->_backend->delete($key);
+		return (bool)$this->_backend->delete($key);
 	}
 
 	/**
 	 * Usuwa wszystkie dane z bufora
-	 * UWAGA: nie usuwa danych z rejestru
 	 */
 	public function flush() {
 		//bufor nieaktywny
@@ -114,7 +114,7 @@ class Cache {
 		//czyszczenie rejestru
 		$this->getRegistry()->setOptions([]);
 		//czyszczenie backendu
-		return $this->_backend->deleteAll();
+		$this->_backend->deleteAll();
 	}
 
 	/**
