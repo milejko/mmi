@@ -17,8 +17,63 @@ use \Mmi\Orm,
  * Klasa obsługi sesji w bazie danych
  */
 class DbHandler implements \SessionHandlerInterface {
-	
-	CONST CACHE_PREFIX = 'no-session-';
+
+	CONST CACHE_PREFIX = 'sess-';
+
+	/**
+	 * Otwarcie sesji
+	 * @param string $savePath
+	 * @param string $sessionName
+	 * @return boolean
+	 */
+	public function open($savePath, $sessionName) {
+		return true;
+	}
+
+	/**
+	 * Odczyt danych do sesji
+	 * @param string $id
+	 * @return mixed
+	 */
+	public function read($id) {
+		//zapisano w cache informację o braku danych w tej sesji
+		if (true === $this->_isSessionEmpty($id)) {
+			return '';
+		}
+		//wyszukiwanie rekordu
+		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
+			//nie może zwracać null
+			return '';
+		}
+		return $record->data;
+	}
+
+	/**
+	 * Zapis danych w sesji
+	 * @param string $id
+	 * @param mixed $data
+	 * @return boolean
+	 */
+	public function write($id, $data) {
+		//wyszukiwanie rekordu
+		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
+			//tworzenie nowego rekordu
+			$record = new Orm\SessionRecord;
+		}
+		//brak danych
+		if (!$data) {
+			//jeśli istniał rekord - usuwamy
+			$record->id ? $record->delete() : null;
+			//zapis informacji do cache o braku danych w tej sesji
+			return $this->_noticeEmptySession($id);
+		}
+		//ustawianie danych i czasu
+		$record->id = $id;
+		$record->data = $data;
+		$record->timestamp = time();
+		//usuwanie informacji o pustej sesji i zapis rekordu
+		return $record->save() && $this->_cleanEmptySession($id);
+	}
 
 	/**
 	 * Zamknięcie sesji (nie robi nic)
@@ -30,13 +85,13 @@ class DbHandler implements \SessionHandlerInterface {
 
 	/**
 	 * Usunięcie sesji
-	 * @param string $session_id
+	 * @param string $id
 	 * @return boolean
 	 */
-	public function destroy($session_id) {
+	public function destroy($id) {
 		//brak rekordu
-		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
-			return true;
+		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
+			return $this->_cleanEmptySession($id);
 		}
 		//usuwanie rekordu
 		$record->delete();
@@ -55,61 +110,30 @@ class DbHandler implements \SessionHandlerInterface {
 	}
 
 	/**
-	 * Otwarcie sesji (nie robi nic)
-	 * @param string $save_path
-	 * @param string $session_name
+	 * Ustawienie w buforze pustej sesji
+	 * @param string $id
 	 * @return boolean
 	 */
-	public function open($save_path, $session_name) {
-		return true;
+	private function _noticeEmptySession($id) {
+		return FrontController::getInstance()->getLocalCache()->save(true, self::CACHE_PREFIX . $id);
 	}
 
 	/**
-	 * Odczyt danych do sesji
-	 * @param string $session_id
-	 * @return mixed
+	 * Czy sesja jest pusta (informacja z bufora)
+	 * @param string $id
+	 * @return boolean
 	 */
-	public function read($session_id) {
-		//zapisano w cache informację o braku danych w tej sesji
-		if (true === FrontController::getInstance()->getLocalCache()->load(self::CACHE_PREFIX . $session_id)) {
-			return '';
-		}
-		//wyszukiwanie rekordu
-		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
-			//nie może zwracać null
-			return '';
-		}
-		return $record->data;
+	private function _isSessionEmpty($id) {
+		return FrontController::getInstance()->getLocalCache()->load(self::CACHE_PREFIX . $id);
 	}
 
 	/**
-	 * Zapis danych w sesji
-	 * @param string $session_id
-	 * @param mixed $data
+	 * Czyszczenie informacji o pustości sesji
+	 * @param string $id
 	 * @return boolean
 	 */
-	public function write($session_id, $data) {
-		//wyszukiwanie rekordu
-		if (null === $record = (new Orm\SessionQuery)->findPk($session_id)) {
-			//tworzenie nowego rekordu
-			$record = new Orm\SessionRecord;
-			$record->id = $session_id;
-		}
-		//brak danych
-		if (!$data) {
-			//jeśli istniał rekord - usuwamy
-			$record->id ? $record->delete() : null;
-			//zapis informacji do cache o braku danych w tej sesji
-			FrontController::getInstance()->getLocalCache()->save(true, self::CACHE_PREFIX . $session_id);
-			return true;
-		}
-		//ustawianie danych i czasu
-		$record->data = $data;
-		$record->timestamp = time();
-		//usuwanie z cache informacji o braku danych w tej sesji
-		FrontController::getInstance()->getLocalCache()->remove(self::CACHE_PREFIX . $session_id);
-		//zapis rekordu
-		return $record->save();
+	private function _cleanEmptySession($id) {
+		return FrontController::getInstance()->getLocalCache()->remove(self::CACHE_PREFIX . $id);
 	}
 
 }

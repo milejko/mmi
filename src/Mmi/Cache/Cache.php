@@ -19,27 +19,27 @@ class Cache {
 	 * Konfiguracja bufora
 	 * @var CacheConfig
 	 */
-	protected $_config;
+	private $_config;
 
 	/**
 	 * Backend bufora
 	 * @var BackendInterface
 	 */
-	protected $_backend;
-
+	private $_backend;
+	
 	/**
-	 * Przestrzeń nazw dla rejestru
-	 * @var string
+	 * Rejestr bufora
+	 * @var CacheRegistry
 	 */
-	protected $_registryNamespace;
+	private $_registry;
 
 	/**
 	 * Konstruktor, wczytuje konfigurację i ustawia backend
 	 */
 	public function __construct(CacheConfig $config) {
 		$this->_config = $config;
-		//namespace w rejestrze
-		$this->_registryNamespace = 'Cache-' . crc32($config->path . $config->handler) . '-';
+		//powoływanie rejestru
+		$this->_registry = new CacheRegistry;
 	}
 
 	/**
@@ -53,11 +53,11 @@ class Cache {
 			return;
 		}
 		//pobranie z rejestru aplikacji jeśli istnieje
-		if (CacheRegistry::getInstance()->issetOption($key)) {
-			return CacheRegistry::getInstance()->getOption($key);
+		if ($this->getRegistry()->issetOption($key)) {
+			return $this->getRegistry()->getOption($key);
 		}
 		//pobranie z backendu zapis do rejestru i zwrot wartości
-		return CacheRegistry::getInstance()->setOption($key, $this->_getValidCacheData($this->_backend->load($key)))
+		return $this->getRegistry()->setOption($key, $this->_getValidCacheData($this->_backend->load($key)))
 				->getOption($key);
 	}
 
@@ -67,11 +67,12 @@ class Cache {
 	 * @param mixed $data dane
 	 * @param string $key klucz
 	 * @param integer $lifetime czas życia
+	 * @return boolean
 	 */
 	public function save($data, $key, $lifetime = null) {
 		//bufor nieaktywny
 		if (!$this->isActive()) {
-			return;
+			return true;
 		}
 		//brak podanego klucza (użycie domyślnego z cache)
 		if (!$lifetime) {
@@ -81,9 +82,9 @@ class Cache {
 		//dodanie losowej wartości do długości bufora
 		$lifetime += rand(0, 15);
 		//zapis w rejestrze
-		CacheRegistry::getInstance()->setOption($key, $data);
+		$this->getRegistry()->setOption($key, $data);
 		//zapis w backendzie
-		return $this->_backend->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
+		return (bool)$this->_backend->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
 	}
 
 	/**
@@ -93,10 +94,10 @@ class Cache {
 	public function remove($key) {
 		//bufor nieaktywny
 		if (!$this->isActive()) {
-			return;
+			return true;
 		}
 		//usunięcie z rejestru
-		CacheRegistry::getInstance()->unsetOption($key);
+		$this->getRegistry()->unsetOption($key);
 		//usunięcie z backendu
 		return $this->_backend->delete($key);
 	}
@@ -111,7 +112,7 @@ class Cache {
 			return;
 		}
 		//czyszczenie rejestru
-		CacheRegistry::getInstance()->setOptions([]);
+		$this->getRegistry()->setOptions([]);
 		//czyszczenie backendu
 		return $this->_backend->deleteAll();
 	}
@@ -129,6 +130,14 @@ class Cache {
 		$this->_setupBackend();
 		return true;
 	}
+	
+	/**
+	 * Zwraca rejestr bufora
+	 * @return CacheRegistry
+	 */
+	public function getRegistry() {
+		return $this->_registry;
+	}
 
 	/**
 	 * Serializuje dane i stempluje datą wygaśnięcia
@@ -137,7 +146,7 @@ class Cache {
 	 * @return string
 	 */
 	protected function _setCacheData($data, $expire) {
-		return serialize(['expire' => $expire, 'data' => $data]);
+		return serialize(['e' => $expire, 'd' => $data]);
 	}
 
 	/**
@@ -159,12 +168,12 @@ class Cache {
 			return;
 		}
 		//dane niepoprawne
-		if (!isset($data['expire']) || !isset($data['data'])) {
+		if (!isset($data['e']) || !isset($data['d'])) {
 			return;
 		}
 		//dane wygasłe
-		if ($data['expire'] > time()) {
-			return $data['data'];
+		if ($data['e'] > time()) {
+			return $data['d'];
 		}
 	}
 
@@ -181,10 +190,10 @@ class Cache {
 		$backendClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Backend';
 		try {
 			//powoływanie obiektu backendu
-			$this->_setBackend(new $backendClassName($this->_config));
+			$this->_setBackend(new $backendClassName($this->_config, $this));
 		} catch (\Exception $e) {
 			\Mmi\App\FrontController::getInstance()->getLogger()->addWarning('Cache backend could not be initialized, DummyBackend used instead ' . $e->getMessage());
-			$this->_setBackend(new DummyBackend($this->_config));
+			$this->_setBackend(new DummyBackend($this->_config, $this));
 		}
 	}
 

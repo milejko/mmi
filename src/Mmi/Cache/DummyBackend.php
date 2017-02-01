@@ -19,7 +19,7 @@ class DummyBackend implements CacheBackendInterface {
 	 * Kostruktor
 	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
-	public function __construct(\Mmi\Cache\CacheConfig $config) {
+	public function __construct(\Mmi\Cache\CacheConfig $config, \Mmi\Cache\Cache $cache) {
 		
 	}
 
@@ -36,6 +36,7 @@ class DummyBackend implements CacheBackendInterface {
 	 * @param string $key klucz
 	 * @param string $data
 	 * @param int $lifeTime wygaśnięcie danych w buforze (informacja dla bufora)
+	 * @return boolean
 	 */
 	public function save($key, $data, $lifeTime) {
 		return true;
@@ -44,9 +45,10 @@ class DummyBackend implements CacheBackendInterface {
 	/**
 	 * Kasuje dane o podanym kluczu
 	 * @param string $key klucz
+	 * @return booelan
 	 */
 	public function delete($key) {
-		
+		return true;
 	}
 
 	/**

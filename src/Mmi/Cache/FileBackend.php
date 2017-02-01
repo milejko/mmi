@@ -25,7 +25,7 @@ class FileBackend implements CacheBackendInterface {
 	 * Kostruktor
 	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
-	public function __construct(\Mmi\Cache\CacheConfig $config) {
+	public function __construct(\Mmi\Cache\CacheConfig $config, \Mmi\Cache\Cache $cache) {
 		$this->_savePath = $config->path;
 	}
 
@@ -60,6 +60,7 @@ class FileBackend implements CacheBackendInterface {
 		if (file_exists($this->_savePath . '/' . $key)) {
 			unlink($this->_savePath . '/' . $key);
 		}
+		return true;
 	}
 
 	/**

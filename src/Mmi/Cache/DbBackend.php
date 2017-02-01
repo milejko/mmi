@@ -18,6 +18,12 @@ use \Mmi\Orm;
 class DbBackend implements CacheBackendInterface {
 	
 	/**
+	 * Obiekt bufora
+	 * @var \Mmi\Cache\Cache
+	 */
+	private $_cache;
+	
+	/**
 	 * Prefiks kluczy systemowych
 	 * @var array
 	 */
@@ -32,9 +38,10 @@ class DbBackend implements CacheBackendInterface {
 	 * Kostruktor
 	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
-	public function __construct(\Mmi\Cache\CacheConfig $config) {
+	public function __construct(\Mmi\Cache\CacheConfig $config, \Mmi\Cache\Cache $cache) {
+		$this->_cache = $cache;
 		//bufor systemowy już zarejestrowany
-		if (CacheRegistry::getInstance()->issetOption($intermediateKey = self::REGISTRY_PREFIX . '-init')) {
+		if ($cache->getRegistry()->issetOption($intermediateKey = self::REGISTRY_PREFIX . '-init')) {
 			return;
 		}
 		//nowe zapytanie
@@ -43,10 +50,10 @@ class DbBackend implements CacheBackendInterface {
 		//iteracja po kolekcji bufora systemowego
 		foreach ($systemCacheQuery->find() as $cacheRecord) {
 			//ustawianie bufora pośredniego w rejestrze
-			CacheRegistry::getInstance()->setOption(self::REGISTRY_PREFIX . $cacheRecord->id, json_decode($cacheRecord->data));
+			$cache->getRegistry()->setOption(self::REGISTRY_PREFIX . $cacheRecord->id, json_decode($cacheRecord->data));
 		}
 		//informacja o wstępnej inicjalizacji bufora
-		CacheRegistry::getInstance()->setOption($intermediateKey, true);
+		$cache->getRegistry()->setOption($intermediateKey, true);
 	}
 
 	/**
@@ -55,9 +62,9 @@ class DbBackend implements CacheBackendInterface {
 	 */
 	public function load($key) {
 		//sprawdzanie w buforze pośrednim
-		if (CacheRegistry::getInstance()->issetOption(self::REGISTRY_PREFIX . $key)) {
+		if ($this->_cache->getRegistry()->issetOption(self::REGISTRY_PREFIX . $key)) {
 			//zwrot z bufora pośredniego
-			return CacheRegistry::getInstance()->getOption(self::REGISTRY_PREFIX . $key);
+			return $this->_cache->getRegistry()->getOption(self::REGISTRY_PREFIX . $key);
 		}
 		//wyszukiwanie rekordu
 		if (null === $cacheRecord = (new Orm\CacheQuery)->findPk($key)) {
@@ -88,14 +95,16 @@ class DbBackend implements CacheBackendInterface {
 	/**
 	 * Kasuje dane o podanym kluczu
 	 * @param string $key klucz
+	 * @return boolean
 	 */
 	public function delete($key) {
 		//wyszukiwanie rekordu
 		if (null === $cacheRecord = (new Orm\CacheQuery)->findPk($key)) {
-			return;
+			return true;
 		}
 		//usuwanie rekordu
 		$cacheRecord->delete();
+		return true;
 	}
 
 	/**

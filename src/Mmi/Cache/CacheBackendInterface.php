@@ -18,8 +18,9 @@ interface CacheBackendInterface {
 	/**
 	 * Konstruktor
 	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
+	 * @param \Mmi\Cache\Cache $cache obiekt bufora
 	 */
-	public function __construct(\Mmi\Cache\CacheConfig $config);
+	public function __construct(\Mmi\Cache\CacheConfig $config, \Mmi\Cache\Cache $cache);
 
 	/**
 	 * Ładuje dane o podanym kluczu

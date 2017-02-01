@@ -37,7 +37,7 @@ class MemcacheBackend implements CacheBackendInterface {
 	 * Ustawia obiekt Memcache
 	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
-	public function __construct(\Mmi\Cache\CacheConfig $config) {
+	public function __construct(\Mmi\Cache\CacheConfig $config, \Mmi\Cache\Cache $cache) {
 		$this->_namespace = crc32(BASE_PATH);
 		$this->_config = $config;
 		$this->_connect();
@@ -76,33 +76,25 @@ class MemcacheBackend implements CacheBackendInterface {
 	 * @param string $key klucz
 	 * @param string $data
 	 * @param int $lifeTime wygaśnięcie danych w buforze (informacja dla bufora)
+	 * @return boolean
 	 */
 	public function save($key, $data, $lifeTime) {
 		if ($lifeTime > 2592000) {
 			//memcache bug ta wartość nie może być większa
 			$lifeTime = 2592000;
 		}
-		try {
-			return $this->_server->set($this->_namespace . '_' . $key, $data, 0, $lifeTime);
-		} catch (\Exception $e) {
-			//zerwane połączenie
-			$this->_connect();
-			return $this->_server->set($this->_namespace . '_' . $key, $data, 0, $lifeTime);
-		}
+		$this->_server->set($this->_namespace . '_' . $key, $data, 0, $lifeTime);
+		return true;
 	}
 
 	/**
 	 * Kasuje dane o podanym kluczu
 	 * @param string $key klucz
+	 * @return boolean
 	 */
 	public function delete($key) {
-		try {
-			return $this->_server->delete($this->_namespace . '_' . $key);
-		} catch (\Exception $e) {
-			//zerwane połączenie
-			$this->_connect();
-			return $this->_server->delete($this->_namespace . '_' . $key);
-		}
+		$this->_server->delete($this->_namespace . '_' . $key);
+		return true;
 	}
 
 	/**
