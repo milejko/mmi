@@ -10,12 +10,15 @@
 
 namespace Mmi\Session;
 
-use \Mmi\Orm;
-
 /**
- * Klasa obsługi sesji w bazie danych
+ * Klasa obsługi sesji w apc
  */
-class DbHandler implements \SessionHandlerInterface {
+class ApcHandler implements \SessionHandlerInterface {
+	
+	/**
+	 * Namespace sesji
+	 */
+	private $_namespace;
 
 	/**
 	 * Otwarcie sesji
@@ -24,6 +27,7 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function open($savePath, $sessionName) {
+		$this->_namespace = 'sess-' . crc32($sessionName . $savePath) . '-';
 		return true;
 	}
 
@@ -33,13 +37,13 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return mixed
 	 */
 	public function read($id) {
-		//wyszukiwanie rekordu
-		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
+		//pobieranie z apcu
+		if (null === $data = \apcu_fetch($this->_namespace . $id)) {
 			//nie może zwracać null
 			return '';
 		}
 		//zwrot danych
-		return $record->data;
+		return $data;
 	}
 
 	/**
@@ -49,23 +53,15 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function write($id, $data) {
-		//wyszukiwanie rekordu
-		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
-			//tworzenie nowego rekordu
-			$record = new Orm\SessionRecord;
-		}
-		//puste dane sesyjne
+		//puste dane
 		if (!$data) {
-			//jeśli istniał rekord - usuwamy
-			$record->id ? $record->delete() : null;
+			//czyszczenie
+			\apcu_delete($this->_namespace . $id);
 			return true;
 		}
-		//ustawianie danych i czasu
-		$record->id = $id;
-		$record->data = $data;
-		$record->timestamp = time();
-		//zapis rekordu
-		return $record->save();
+		//zapis danych
+		\apcu_store($this->_namespace . $id, $data);
+		return true;
 	}
 
 	/**
@@ -82,12 +78,8 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function destroy($id) {
-		//brak rekordu
-		if ((null === $record = (new Orm\SessionQuery)->findPk($id))) {
-			return true;
-		}
-		//usuwanie rekordu
-		$record->delete();
+		//usuwanie danych
+		\apcu_delete($this->_namespace . $id);
 		return true;
 	}
 
@@ -97,8 +89,6 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function gc($maxLifetime) {
-		//uproszczone usuwanie - jednym zapytaniem
-		\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp < :time', [':time' => (time() - $maxLifetime)]);
 		return true;
 	}
 

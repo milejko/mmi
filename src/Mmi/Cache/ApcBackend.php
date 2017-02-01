@@ -26,7 +26,7 @@ class ApcBackend implements CacheBackendInterface {
 	 * @param \Mmi\Cache\CacheConfig $config konfiguracja
 	 */
 	public function __construct(\Mmi\Cache\CacheConfig $config, \Mmi\Cache\Cache $cache) {
-		$this->_namespace = crc32(BASE_PATH);
+		$this->_namespace = crc32(BASE_PATH) . '-';
 	}
 
 	/**
@@ -34,7 +34,7 @@ class ApcBackend implements CacheBackendInterface {
 	 * @param string $key klucz
 	 */
 	public function load($key) {
-		return \apcu_fetch($this->_namespace . '_' . $key);
+		return \apcu_fetch($this->_namespace . $key);
 	}
 
 	/**
@@ -45,7 +45,7 @@ class ApcBackend implements CacheBackendInterface {
 	 * @param boolean
 	 */
 	public function save($key, $data, $lifeTime) {
-		\apcu_store($this->_namespace . '_' . $key, $data, $lifeTime);
+		\apcu_store($this->_namespace . $key, $data, $lifeTime);
 		return true;
 	}
 
@@ -55,7 +55,7 @@ class ApcBackend implements CacheBackendInterface {
 	 * @return boolean
 	 */
 	public function delete($key) {
-		\apcu_delete($this->_namespace . '_' . $key);
+		\apcu_delete($this->_namespace . $key);
 		return true;
 	}
 
