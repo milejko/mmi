@@ -18,7 +18,10 @@ use \Mmi\Orm,
  */
 class DbHandler implements \SessionHandlerInterface {
 
-	CONST CACHE_PREFIX = 'sess-';
+	/**
+	 * Prefiks pustych sesji w buforze
+	 */
+	CONST CACHE_PREFIX = 'nosess-';
 
 	/**
 	 * Otwarcie sesji
