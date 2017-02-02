@@ -63,7 +63,7 @@ class ApcBackend implements CacheBackendInterface {
 	 * Kasuje wszystkie dane
 	 */
 	public function deleteAll() {
-		return \apcu_clear_cache('user');
+		return \apcu_clear_cache();
 	}
 
 }
