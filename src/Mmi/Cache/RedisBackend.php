@@ -48,16 +48,26 @@ class RedisBackend implements CacheBackendInterface {
 	 */
 	private function _connect() {
 		$this->_server = new \Redis;
-		//format host:port
-		if (strpos($this->_config->path, ':') !== false) {
-			$srv = explode(':', $this->_config->path);
-			//połączenie na port
-			$this->_server->pconnect($srv[0], $srv[1], 1, null, 100);
-			$this->_server->select(1);
+		$config = parse_url($this->_config->path);
+		//format połączenie host/port
+		if (isset($config['host']) && isset($config['port'])) {
+			//łączenie host/port
+			$this->_server->pconnect($config['host'], $config['port']);
+			//autoryzacja użytkownik i hasło
+			if (isset($config['pass']) && isset($config['user'])) {
+				$this->_server->auth($config['user'] . ':' . $config['pass']);
+			}
+			//autoryzacja sam użytkownik
+			if (isset($config['user'])) {
+				$this->_server->auth($config['user']);
+			}
+			//wybór bazy
+			$this->_server->select(($config['path'] ? ltrim($config['path'], '/') : '1'));
 			return;
 		}
-		//połączenie na socket np. /tmp/redis.sock
-		$this->_server->pconnect($this->_config->path);
+		//połączenie po sockecie
+		$this->_server->pconnect($config['path']);
+		//baza 0
 		$this->_server->select(0);
 	}
 
@@ -97,5 +107,5 @@ class RedisBackend implements CacheBackendInterface {
 	public function deleteAll() {
 		return $this->_server->flushDB();
 	}
-
+	
 }
