@@ -21,7 +21,7 @@ class FlushCache extends CommandAbstract {
 	
 	public function run() {
 		//czyszczenie bufora systemowego
-		\Mmi\App\FrontController::getInstance()->getCache()->flush();
+		\Mmi\App\FrontController::getInstance()->getLocalCache()->flush();
 		//czyszczenie bufora aplikacyjnego
 		\App\Registry::$cache->flush();
 	}
