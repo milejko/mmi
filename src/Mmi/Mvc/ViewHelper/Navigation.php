@@ -181,11 +181,12 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract {
 		$i = 0;
 		foreach (array_reverse($data) as $breadcrumb) {
 			$i++;
-			//dodawanie breadcrumbów
-			if ($i == $count) {
-				$breadcrumbs[] = '<span>' . strip_tags($breadcrumb['label']) . '</span>';
-			} else {
-				$breadcrumbs[] = '<a href="' . $breadcrumb['uri'] . '">' . strip_tags($breadcrumb['label']) . '</a>';
+			//dodawanie breadcrumbów (ostatni nie ma linku)
+			$breadcrumbs[] = ($i == $count) ? ('<span>' . strip_tags($breadcrumb['label']) . '</span>') :
+				('<a href="' . $breadcrumb['uri'] . '">' . strip_tags($breadcrumb['label']) . '</a>');
+			//liść wyłączony (poza ostatnim)
+			if (($i != $count) && $breadcrumb['disabled']) {
+				continue;
 			}
 			//dodawanie tytułu
 			$title[] = ($breadcrumb['title']) ? strip_tags($breadcrumb['title']) : strip_tags($breadcrumb['label']);
