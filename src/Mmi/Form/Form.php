@@ -104,6 +104,14 @@ abstract class Form extends \Mmi\OptionObject {
 	 * Inicjalizacja formularza przez programistę końcowego
 	 */
 	abstract public function init();
+	
+	/**
+	 * Metoda wykonywana przed właściwą walidacją
+	 * @return boolean
+	 */
+	public function beforeValidation() {
+		return true;
+	}
 
 	/**
 	 * Metoda walidacji całego formularza (domyślnie zawsze przechodzi)
@@ -173,7 +181,7 @@ abstract class Form extends \Mmi\OptionObject {
 		if (!$this->isMine()) {
 			return $this->_valid = false;
 		}
-		$validationResult = true;
+		$validationResult = $this->beforeValidation();
 		//walidacja poszczególnych elementów formularza
 		foreach ($this->getElements() as $element) {
 			//jeśli nieprawidłowy walidacja trwa dalej, ale wynik jest już negatywny
