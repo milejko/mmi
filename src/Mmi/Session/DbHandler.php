@@ -16,6 +16,12 @@ use \Mmi\Orm;
  * Klasa obsługi sesji w bazie danych
  */
 class DbHandler implements \SessionHandlerInterface {
+	
+	/**
+	 * Dane w sesji
+	 * @var mixed
+	 */
+	private $_data;
 
 	/**
 	 * Otwarcie sesji
@@ -36,10 +42,10 @@ class DbHandler implements \SessionHandlerInterface {
 		//wyszukiwanie rekordu
 		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
 			//nie może zwracać null
-			return '';
+			return ($this->_data = '');
 		}
 		//zwrot danych
-		return $record->data;
+		return ($this->_data = $record->data);
 	}
 
 	/**
@@ -49,6 +55,10 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function write($id, $data) {
+		//dane nie uległy zmianie
+		if ($data == $this->_data) {
+			return true;
+		}
 		//wyszukiwanie rekordu
 		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
 			//tworzenie nowego rekordu

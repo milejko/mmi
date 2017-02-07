@@ -11,18 +11,18 @@
 namespace Mmi\Session;
 
 /**
- * Klasa obsługi sesji w apc
+ * Klasa oszczędnej obsługi sesji w plikach
  */
-class ApcHandler implements \SessionHandlerInterface {
-
+class FileHandler implements \SessionHandlerInterface {
+	
 	/**
 	 * Namespace sesji
 	 */
 	private $_namespace;
-
+	
 	/**
 	 * Dane w sesji
-	 * @var mixed
+	 * @var mixed 
 	 */
 	private $_data;
 
@@ -33,7 +33,7 @@ class ApcHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function open($savePath, $sessionName) {
-		$this->_namespace = 'sess-' . crc32($sessionName . $savePath) . '-';
+		$this->_namespace = BASE_PATH . '/var/session/sess-';
 		return true;
 	}
 
@@ -43,13 +43,8 @@ class ApcHandler implements \SessionHandlerInterface {
 	 * @return mixed
 	 */
 	public function read($id) {
-		//pobieranie z apcu
-		if (null === $data = \apcu_fetch($this->_namespace . $id)) {
-			//nie może zwracać null
-			return ($this->_data = '');
-		}
-		//zwrot danych
-		return ($this->_data = $data);
+		//pobieranie z pliku i zapis do rejestru
+		return ($this->_data = file_exists($this->_namespace . $id) ? file_get_contents($this->_namespace . $id) : '');
 	}
 
 	/**
@@ -65,12 +60,12 @@ class ApcHandler implements \SessionHandlerInterface {
 		}
 		//puste dane
 		if (!$data) {
-			//czyszczenie
-			\apcu_delete($this->_namespace . $id);
+			//czyszczenie jeśli plik znaleziony
+			file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
 			return true;
 		}
 		//zapis danych
-		\apcu_store($this->_namespace . $id, $data);
+		file_put_contents($this->_namespace . $id, $data);
 		return true;
 	}
 
@@ -89,7 +84,7 @@ class ApcHandler implements \SessionHandlerInterface {
 	 */
 	public function destroy($id) {
 		//usuwanie danych
-		\apcu_delete($this->_namespace . $id);
+		file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
 		return true;
 	}
 
@@ -99,6 +94,14 @@ class ApcHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function gc($maxLifetime) {
+		//iteracja po plikach sesyjnych
+		foreach(glob($this->_namespace . '*') as $sessionFile) {
+			//usuwanie starych plików
+			if (filemtime($sessionFile) < (time() - $maxLifetime)) {
+				//usuwanie pliku
+				unlink($sessionFile);
+			}
+		}
 		return true;
 	}
 
