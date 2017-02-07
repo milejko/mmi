@@ -44,7 +44,7 @@ class ApcHandler implements \SessionHandlerInterface {
 	 */
 	public function read($id) {
 		//pobieranie z apcu
-		if (null === $data = \apcu_fetch($this->_namespace . $id)) {
+		if (!($data = \apcu_fetch($this->_namespace . $id))) {
 			//nie może zwracać null
 			return ($this->_data = '');
 		}

@@ -44,7 +44,7 @@ class FileHandler implements \SessionHandlerInterface {
 	 */
 	public function read($id) {
 		//pobieranie z pliku i zapis do rejestru
-		return ($this->_data = file_exists($this->_namespace . $id) ? file_get_contents($this->_namespace . $id) : '');
+		return ($this->_data = (file_exists($this->_namespace . $id) ? file_get_contents($this->_namespace . $id) : ''));
 	}
 
 	/**
