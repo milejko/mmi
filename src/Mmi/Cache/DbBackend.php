@@ -81,6 +81,8 @@ class DbBackend implements CacheBackendInterface {
 	 * @param int $lifeTime wygaśnięcie danych w buforze (informacja dla bufora)
 	 */
 	public function save($key, $data, $lifeTime) {
+		//start transakcji
+		Orm\DbConnector::getAdapter()->beginTransaction();
 		//wyszukiwanie rekordu
 		if (null === $cacheRecord = (new Orm\CacheQuery)->findPk($key)) {
 			//tworzenie nowego rekordu
@@ -89,7 +91,10 @@ class DbBackend implements CacheBackendInterface {
 		}
 		$cacheRecord->data = json_encode($data);
 		//zapis rekordu
-		return $cacheRecord->save();
+		$result = $cacheRecord->save();
+		//commit
+		Orm\DbConnector::getAdapter()->commit();
+		return $result;
 	}
 
 	/**
