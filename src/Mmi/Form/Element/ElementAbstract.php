@@ -141,8 +141,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return self
 	 */
 	public final function addFilter(\Mmi\Filter\FilterAbstract $filter) {
-		//ustawianie opcji na elemencie
-		$this->_filters[get_class($filter)] = $filter;
+		//dodawanie filtra
+		$this->_filters[] = $filter;
 		return $this;
 	}
 
@@ -152,8 +152,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject {
 	 * @return self
 	 */
 	public final function addValidator(\Mmi\Validator\ValidatorAbstract $validator) {
-		//ustawianie opcji na elemencie
-		$this->_validators[get_class($validator)] = $validator;
+		//dodawanie walidodatora
+		$this->_validators[] = $validator;
 		return $this;
 	}
 
