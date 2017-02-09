@@ -115,8 +115,14 @@ class DbHandler implements CacheHandlerInterface {
 		}
 		$cacheRecord->data = json_encode($data);
 		$cacheRecord->ttl = time() + $lifeTime + 1;
-		//zapis rekordu
-		return $cacheRecord->save();
+		//próba zapisu
+		try {
+			//zapis rekordu
+			return $cacheRecord->save();
+		} catch (\Exception $e) {
+			//zwrot nieudanego zapisu
+			return false;
+		}
 	}
 
 	/**
