@@ -23,10 +23,10 @@ class CacheConfig {
 	 * @var integer
 	 */
 	public $lifetime = 300;
-	
+
 	/**
-	 * Nazwa backendu obsługującego bufor:
-	 * apc | file | memcache
+	 * Nazwa handlera obsługującego bufor:
+	 * apc | file | memcache | redis | db
 	 * @var string
 	 */
 	public $handler = 'file';
@@ -36,5 +36,11 @@ class CacheConfig {
 	 * @var string
 	 */
 	public $path = '/tmp';
+
+	/**
+	 * Mechanizm rozpraszania z rozgłaszaniem usuwania za pomocą DBHandlera
+	 * @var boolean
+	 */
+	public $distributed = false;
 
 }

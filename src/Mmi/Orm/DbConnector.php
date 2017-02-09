@@ -23,6 +23,7 @@ class DbConnector {
 		'mmi_cache' => [
 			'id' => ['dataType' => 'varchar', 'maxLength' => 64, 'null', 'default'],
 			'data' => ['dataType' => 'mediumtext', 'maxLength' => 16777215, 'null', 'default'],
+			'ttl' => ['dataType' => 'int', 'maxLength', 'null' => 1, 'default'],
 		],
 		'mmi_changelog' => [
 			'filename' => ['dataType' => 'varchar', 'maxLength' => 64, 'null', 'default'],

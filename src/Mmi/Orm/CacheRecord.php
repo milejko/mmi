@@ -27,4 +27,10 @@ class CacheRecord extends \Mmi\Orm\Record {
 	 */
 	public $data;
 	
+	/**
+	 * TTL
+	 * @var integer
+	 */
+	public $ttl;
+	
 }

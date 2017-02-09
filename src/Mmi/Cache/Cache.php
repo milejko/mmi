@@ -22,24 +22,42 @@ class Cache {
 	private $_config;
 
 	/**
-	 * Backend bufora
-	 * @var BackendInterface
+	 * Handler bufora
+	 * @var HandlerInterface
 	 */
-	private $_backend;
+	private $_handler;
 	
 	/**
 	 * Rejestr bufora
 	 * @var CacheRegistry
 	 */
 	private $_registry;
+	
+	/**
+	 * Wiadomość przeterminowanego bufora
+	 */
+	CONST CACHE_INVALID = '@#0-mmi-cache-invalid-entry-0#@';
+	
+	/**
+	 * Maksymalna długość bufora
+	 */
+	CONST MAXLIFETIME = 2505600;
 
 	/**
-	 * Konstruktor, wczytuje konfigurację i ustawia backend
+	 * Konstruktor, wczytuje konfigurację i ustawia handler
 	 */
 	public function __construct(CacheConfig $config) {
 		$this->_config = $config;
 		//powoływanie rejestru
 		$this->_registry = new CacheRegistry;
+	}
+	
+	/**
+	 * Pobiera konfigurację
+	 * @return CacheConfig
+	 */
+	public function getConfig() {
+		return $this->_config;
 	}
 
 	/**
@@ -56,14 +74,19 @@ class Cache {
 		if ($this->getRegistry()->issetOption($key)) {
 			return $this->getRegistry()->getOption($key);
 		}
-		//pobranie z backendu zapis do rejestru i zwrot wartości
-		return $this->getRegistry()->setOption($key, $this->_getValidCacheData($this->_backend->load($key)))
-				->getOption($key);
+		//cache nieważny
+		if (self::CACHE_INVALID === $data = $this->_getValidCacheData($this->_handler->load($key))) {
+			return;
+		}
+		//zapis danych do rejestru
+		$this->getRegistry()->setOption($key, $data);
+		//zwrot danych
+		return $data;
 	}
 
 	/**
 	 * Zapis danych
-	 * Dane zostaną zserializowane i zapisane w backendzie
+	 * Dane zostaną zserializowane i zapisane w handlerzie
 	 * @param mixed $data dane
 	 * @param string $key klucz
 	 * @param integer $lifetime czas życia
@@ -77,14 +100,14 @@ class Cache {
 		//brak podanego klucza (użycie domyślnego z cache)
 		if (!$lifetime) {
 			//jeśli null - użycie domyślnego, jeśli zero lub false to maksymalny
-			$lifetime = $lifetime === null ? $this->_config->lifetime : 2505600;
+			$lifetime = $lifetime === null ? $this->_config->lifetime : self::MAXLIFETIME;
 		}
 		//dodanie losowej wartości do długości bufora
-		$lifetime += rand(0, 15);
+		$lifetime += rand(0, 5);
 		//zapis w rejestrze
 		$this->getRegistry()->setOption($key, $data);
-		//zapis w backendzie
-		return (bool)$this->_backend->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
+		//zapis w handlerzie
+		return (bool)$this->_handler->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
 	}
 
 	/**
@@ -99,8 +122,8 @@ class Cache {
 		}
 		//usunięcie z rejestru
 		$this->getRegistry()->unsetOption($key);
-		//usunięcie z backendu
-		return (bool)$this->_backend->delete($key);
+		//usunięcie handlerem
+		return (bool)$this->_handler->delete($key);
 	}
 
 	/**
@@ -113,8 +136,8 @@ class Cache {
 		}
 		//czyszczenie rejestru
 		$this->getRegistry()->setOptions([]);
-		//czyszczenie backendu
-		$this->_backend->deleteAll();
+		//czyszczenie do handler
+		$this->_handler->deleteAll();
 	}
 
 	/**
@@ -126,8 +149,8 @@ class Cache {
 		if (!$this->_config->active) {
 			return false;
 		}
-		//ustawienie backendu
-		$this->_setupBackend();
+		//ustawienie handleru
+		$this->_setupHandler();
 		return true;
 	}
 	
@@ -150,11 +173,11 @@ class Cache {
 	}
 
 	/**
-	 * Ustawia backend bufora
-	 * @param \Mmi\Cache\CacheBackendInterface $backend
+	 * Ustawia handler bufora
+	 * @param \Mmi\Cache\CacheHandlerInterface $handler
 	 */
-	protected function _setBackend(CacheBackendInterface $backend) {
-		$this->_backend = $backend;
+	protected function _setHandler(CacheHandlerInterface $handler) {
+		$this->_handler = $handler;
 	}
 
 	/**
@@ -164,36 +187,37 @@ class Cache {
 	 */
 	protected function _getValidCacheData($data) {
 		//brak danych
-		if (!($data = unserialize($data))) {
-			return;
+		if (!($data = \unserialize($data))) {
+			return self::CACHE_INVALID;
 		}
 		//dane niepoprawne
-		if (!isset($data['e']) || !isset($data['d'])) {
-			return;
+		if (!array_key_exists('e', $data) || !isset($data['d'])) {
+			return self::CACHE_INVALID;
 		}
 		//dane wygasłe
-		if ($data['e'] > time()) {
-			return $data['d'];
+		if ($data['e'] <= time()) {
+			return self::CACHE_INVALID;
 		}
+		return $data['d'];
 	}
 
 	/**
-	 * Ustawianie backendu
+	 * Ustawianie handlera
 	 * @throws CacheException
 	 */
-	protected function _setupBackend() {
-		//backend już ustawiony
-		if (null !== $this->_backend) {
+	protected function _setupHandler() {
+		//handler już ustawiony
+		if (null !== $this->_handler) {
 			return;
 		}
-		//określanie klasy backendu
-		$backendClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Backend';
+		//określanie klasy handlera
+		$handlerClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Handler';
 		try {
-			//powoływanie obiektu backendu
-			$this->_setBackend(new $backendClassName($this->_config, $this));
+			//powoływanie obiektu handlera
+			$this->_setHandler(new $handlerClassName($this));
 		} catch (\Exception $e) {
-			\Mmi\App\FrontController::getInstance()->getLogger()->addWarning('Cache backend could not be initialized, DummyBackend used instead ' . $e->getMessage());
-			$this->_setBackend(new DummyBackend($this->_config, $this));
+			\Mmi\App\FrontController::getInstance()->getLogger()->addWarning('Cache handler could not be initialized, DummyHandler used instead ' . $e->getMessage());
+			$this->_setHandler(new DummyHandler($this));
 		}
 	}
 

@@ -11,25 +11,8 @@
 namespace Mmi\Cache;
 
 /**
- * Klasa rejestru bufora
+ * Klasa rejestru lokalnego bufora
  */
 class CacheRegistry extends \Mmi\OptionObject {
-	
-	/**
-	 * Instancja rejestru
-	 * @var self
-	 */
-	protected static $_instance;
-	
-	/**
-	 * Pobiera instancję rejestru
-	 * @return self
-	 */
-	public static function getInstance() {
-		if (null === self::$_instance) {
-			return self::$_instance = new self;
-		}
-		return self::$_instance;
-	}
 	
 }
