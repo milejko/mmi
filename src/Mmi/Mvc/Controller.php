@@ -201,7 +201,7 @@ class Controller {
 
 		//zapis do cache
 		if ($cache !== null) {
-			$cache->save($translate, $key);
+			$cache->save($translate, $key, 0);
 		}
 
 		FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);

@@ -113,7 +113,7 @@ class DbConnector {
 		$structure = static::getAdapter()->tableInfo($tableName);
 		//zapis do bufora
 		if (static::$_cache !== null) {
-			static::$_cache->save($structure, $cacheKey, 28800);
+			static::$_cache->save($structure, $cacheKey, 0);
 		}
 		//zwrot i zapis do tablicy zapisanych struktur
 		return self::$_tableStructure[$tableName] = $structure;

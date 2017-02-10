@@ -39,7 +39,7 @@ class HeadAbstract extends HelperAbstract {
 			$crc = crc32(file_get_contents($location));
 		}
 		if ($cache !== null) {
-			$cache->save($crc, $cacheKey);
+			$cache->save($crc, $cacheKey, 0);
 		}
 		return $crc;
 	}
