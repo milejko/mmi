@@ -173,10 +173,8 @@ class HeadStyle extends HelperAbstract {
 		}
 		//lokalizacja zasobów z uwzględnieniem baseUrl
 		$location = $this->view->baseUrl . '/' . trim(dirname($fileName), '/') . '/';
-		//poprawianie lokalizacji
-		$content = str_replace(['url(\'', 'url("'], ['url(\'' . $location, 'url("' . $location], $content);
-		//usuwanie komentarzy nowych linii i tabów
-		return preg_replace(['/\/\*.+?\*\//is', '/\r\n/', '/\n/', '/\t/'], '', $content);
+		//usuwanie nowych linii i tabów
+		return preg_replace(['/\r\n/', '/\n/', '/\t/'], '', str_replace(['url(\'', 'url("'], ['url(\'' . $location, 'url("' . $location], $content));
 	}
 
 }
