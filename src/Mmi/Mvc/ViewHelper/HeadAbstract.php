@@ -37,7 +37,7 @@ class HeadAbstract extends HelperAbstract {
 	 * @return string
 	 */
 	protected function _getPublicSrc($src) {
-		return $this->view->cdn . $this->view->baseUrl . $src;
+		return $this->view->cdn ? $this->view->cdn . $src : $this->view->baseUrl . $src;
 	}
 
 }
