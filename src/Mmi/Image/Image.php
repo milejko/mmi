@@ -93,7 +93,7 @@ class Image {
 	 * @param int $maxDimY szerokość do której chcemy przeskalować obrazek
 	 * @return resource obrazek
 	 */
-	public static function scale($input, $maxDimX, $maxDimY = NULL) {
+	public static function scale($input, $maxDimX, $maxDimY = null) {
 		//brak zasobu
 		if (!($input = self::inputToResource($input))) {
 			return;
@@ -118,6 +118,39 @@ class Image {
 			return self::scaleProportional($input, $ratioY * 100);
 		}
 		return $input;
+	}
+
+	/**
+	 * Sprawdza czy obraz posiada przeźroczysty
+	 * @param type $input
+	 * @return boolean
+	 */
+	public static function hasTransparentArea($input) {
+		//brak zasobu
+		if (!($input = self::inputToResource($input))) {
+			return false;
+		}
+		$width = imagesx($input);
+		$height = imagesy($input);
+
+		//badanie przeźroczystości
+		for ($i = 0; $i < 5; $i++) {
+			for ($j = 0; $j < 5; $j++) {
+				//przekątne
+				if (imagecolorsforindex($input, imagecolorat($input, round($i * $width / 5), round($j * $height / 5)))['alpha'] > 0) {
+					return true;
+				}
+			}
+			//pozioma linia
+			if (imagecolorsforindex($input, imagecolorat($input, round($i * $width / 5), round($height / 2)))['alpha'] > 0) {
+				return true;
+			}
+			//pionowa linia
+			if (imagecolorsforindex($input, imagecolorat($input, round($width / 2), round($i * $height / 5)))['alpha'] > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -231,7 +264,7 @@ class Image {
 		imagecopy($destination, $input, 0, 0, $x, $y, $newWidth, $newHeight);
 		return $destination;
 	}
-	
+
 	/**
 	 * Zachowanie alphy
 	 * @param resource $imgRes
