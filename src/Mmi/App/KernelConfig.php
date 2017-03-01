@@ -100,5 +100,11 @@ abstract class KernelConfig {
 	 * @var string
 	 */
 	public $host = 'localhost';
+	
+	/**
+	 * Adres CDN
+	 * @var string 
+	 */
+	public $cdn;
 
 }

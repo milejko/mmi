@@ -54,10 +54,10 @@ class HeadLink extends HeadAbstract {
 				$html .= '<!--[if ' . $conditional . ']>';
 			}
 			$html .= '	<link ';
-			$crc = isset($link['crc']) ? $link['crc'] : null;
+			$crc = isset($link['crc']) ? $link['crc'] : 0;
 			unset($link['crc']);
 			foreach ($link as $key => $value) {
-				if ($key == 'href' && $crc !== null) {
+				if ($key == 'href' && $crc != 0) {
 					if (strpos($value, '?')) {
 						$value .= '&crc=' . $crc;
 					} else {
@@ -148,7 +148,8 @@ class HeadLink extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	protected function _setStylesheet($href, $media = null, $prepend = false, $conditional = '') {
-		$params = ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $href, 'crc' => $this->_getCrc($href)];
+		$crc = $this->_getCrc($href);
+		$params = ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $crc > 0 ? $this->_getPublicSrc($href) :  $href, 'crc' => $crc];
 		if ($media) {
 			$params['media'] = $media;
 		}

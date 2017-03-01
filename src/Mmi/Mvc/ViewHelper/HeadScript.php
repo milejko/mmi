@@ -63,10 +63,10 @@ class HeadScript extends HeadAbstract {
 				$html .= '<!--[if ' . $conditional . ']>';
 			}
 			$html .= '	<script ';
-			$crc = $script['crc'];
+			$crc = isset($script['crc']) ? $script['crc'] : 0;
 			unset($script['crc']);
 			foreach ($script as $key => $value) {
-				if ($key == 'src') {
+				if ($key == 'src' && $crc != 0) {
 					if (strpos($value, '?')) {
 						$value .= '&crc=' . $crc;
 					} else {
@@ -123,7 +123,8 @@ class HeadScript extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function setFile($src, $type = 'text/javascript', array $params = [], $prepend = false, $conditional = '') {
-		return $this->headScript(array_merge($params, ['type' => $type, 'src' => $src, 'crc' => $this->_getCrc($src)]), $prepend, $conditional);
+		$crc = $this->_getCrc($src);
+		return $this->headScript(array_merge($params, ['type' => $type, 'src' => $crc > 0 ? $this->_getPublicSrc($src) :  $src, 'crc' => $crc]), $prepend, $conditional);
 	}
 
 	/**

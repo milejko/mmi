@@ -103,8 +103,7 @@ class Bootstrap implements BootstrapInterface {
 		\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getLocalCache());
 		return $this;
 	}
-	
-	
+
 	/**
 	 * Inicjalizacja bufora
 	 * @return \Mmi\App\Bootstrap
@@ -172,6 +171,7 @@ class Bootstrap implements BootstrapInterface {
 		return $view->setCache(FrontController::getInstance()->getLocalCache())
 				->setAlwaysCompile(\App\Registry::$config->compile)
 				->setTranslate($translate)
+				->setCdn(\App\Registry::$config->cdn)
 				->setBaseUrl($router->getBaseUrl());
 	}
 

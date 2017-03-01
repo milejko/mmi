@@ -79,6 +79,12 @@ class View extends \Mmi\DataObject {
 	 * @var string
 	 */
 	public $baseUrl;
+	
+	/**
+	 * Adres CDN
+	 * @var string 
+	 */
+	public $cdn;
 
 	/**
 	 * Magicznie wywołuje metodę na widoku
@@ -145,6 +151,16 @@ class View extends \Mmi\DataObject {
 	 */
 	public function setBaseUrl($baseUrl) {
 		$this->baseUrl = $baseUrl;
+		return $this;
+	}
+	
+	/**
+	 * Ustawia adres CDN
+	 * @param string $cdn
+	 * @return \Mmi\Mvc\View
+	 */
+	public function setCdn($cdn) {
+		$this->cdn = $cdn;
 		return $this;
 	}
 

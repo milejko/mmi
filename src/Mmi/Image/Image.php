@@ -121,39 +121,6 @@ class Image {
 	}
 
 	/**
-	 * Sprawdza czy obraz posiada przeźroczysty
-	 * @param type $input
-	 * @return boolean
-	 */
-	public static function hasTransparentArea($input) {
-		//brak zasobu
-		if (!($input = self::inputToResource($input))) {
-			return false;
-		}
-		$width = imagesx($input);
-		$height = imagesy($input);
-
-		//badanie przeźroczystości
-		for ($i = 0; $i < 5; $i++) {
-			for ($j = 0; $j < 5; $j++) {
-				//przekątne
-				if (imagecolorsforindex($input, imagecolorat($input, round($i * $width / 5), round($j * $height / 5)))['alpha'] > 0) {
-					return true;
-				}
-			}
-			//pozioma linia
-			if (imagecolorsforindex($input, imagecolorat($input, round($i * $width / 5), round($height / 2)))['alpha'] > 0) {
-				return true;
-			}
-			//pionowa linia
-			if (imagecolorsforindex($input, imagecolorat($input, round($width / 2), round($i * $height / 5)))['alpha'] > 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Pomniejsza obrazek do danej szerokości zachowując proporcje, nie powiększa obrazka.
 	 * @param mixed $input wejście
 	 * @param int $maxDim szerokość do której chcemy pomniejszyć obrazek
