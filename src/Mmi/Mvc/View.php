@@ -67,6 +67,12 @@ class View extends \Mmi\DataObject {
 	 * @var boolean
 	 */
 	private $_alwaysCompile = true;
+	
+	/**
+	 * Dane widoku
+	 * @var \Mmi\Filter\FilterAbstract
+	 */
+	private $_variableFilter;
 
 	/**
 	 * Obiekt requestu
@@ -103,6 +109,15 @@ class View extends \Mmi\DataObject {
 	}
 	
 	/**
+	 * Pobranie danej z widoku
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function __get($key) {
+		return $this->_variableFilter ? $this->_variableFilter->filter(parent::__get($key)) : parent::__get($key);
+	}
+	
+	/**
 	 * Ustawia obiekt request
 	 * @param \Mmi\Http\Request $request
 	 * @return \Mmi\Mvc\View
@@ -111,6 +126,16 @@ class View extends \Mmi\DataObject {
 		$this->request = $request;
 		$this->module = $request->getModuleName();
 		$this->lang = $request->lang;
+		return $this;
+	}
+	
+	/**
+	 * Ustawianie klasy filtra zmiennych widoku
+	 * @param \Mmi\Filter\FilterAbstract $filter
+	 * @return \Mmi\Mvc\View
+	 */
+	public function setVariableFilter(\Mmi\Filter\FilterAbstract $filter) {
+		$this->_variableFilter = $filter;
 		return $this;
 	}
 
