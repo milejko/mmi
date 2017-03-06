@@ -19,27 +19,22 @@ class HeadMeta extends HeadAbstract {
 	private $_data = [];
 
 	/**
-	 * Metoda główna, dodaje właściwość do stosu
+	 * Metoda główna, dodaje lub nadpisuje właściwość
 	 * @param array $params parametry opisujące pola
-	 * @param boolean $prepend dodaj na początek stosu
+	 * @param boolean $replace nadpisz definicję dla klucza
 	 * @param string $conditional warunek np. ie6
 	 * @return \Mmi\Mvc\ViewHelper\HeadMeta
 	 */
-	public function headMeta(array $params = [], $prepend = false, $conditional = '') {
+	public function headMeta(array $params = [], $replace = false, $conditional = '') {
 		//jeśli brak parametrów - wyjście
 		if (empty($params)) {
 			return $this;
 		}
 		//warunek
 		$params['conditional'] = $conditional;
-		if (array_search($params, $this->_data) !== false) {
-			return '';
-		}
-		//wstawienie przed lub po
-		if ($prepend) {
-			array_unshift($this->_data, $params);
-		} else {
-			array_push($this->_data, $params);
+		if (!array_key_exists(reset($params), $this->_data) || $replace) {
+			//wstawienie pod danym kluczem
+			$this->_data[reset($params)] = $params;
 		}
 		return '';
 	}
@@ -48,12 +43,12 @@ class HeadMeta extends HeadAbstract {
 	 * Dodaje znacznik dla Open Graph
 	 * @param string $property nazwa właściwości, np. og:image
 	 * @param string $content zawartość
-	 * @param boolean $prepend dodaj na początek stosu
+	 * @param boolean $replace nadpisz definicję dla klucza
 	 * @param string $conditional warunek np. ie6
 	 * @return \Mmi\Mvc\ViewHelper\HeadMeta
 	 */
-	public function openGraph($property, $content, $prepend = false, $conditional = '') {
-		return $this->headMeta(['property' => $property, 'content' => $content], $prepend, $conditional);
+	public function openGraph($property, $content, $replace = false, $conditional = '') {
+		return $this->headMeta(['property' => $property, 'content' => $content], $replace, $conditional);
 	}
 	
 	/**
