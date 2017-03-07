@@ -73,7 +73,7 @@ class KernelEventHandler {
 		self::_logException($exception);
 		$response = \Mmi\App\FrontController::getInstance()->getResponse();
 		//kod błędu ustawiany dla wyjątków poza nieodnalezionymi
-		if ($exception instanceof \Mmi\Mvc\MvcNotFoundException) {
+		if (!($exception instanceof \Mmi\Mvc\MvcNotFoundException)) {
 			//ustawienie kodu 500
 			$response->setCodeError();
 		}
