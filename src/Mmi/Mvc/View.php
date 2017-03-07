@@ -335,6 +335,8 @@ class View extends \Mmi\DataObject {
 	 * @return string zwraca efekt renderowania
 	 */
 	public function render($fileName) {
+		$inputBuffer = ob_get_contents();
+		ob_clean();
 		if (!$this->_locale && $this->_translate !== null) {
 			$this->_locale = $this->_translate->getLocale();
 		}
@@ -353,12 +355,8 @@ class View extends \Mmi\DataObject {
 		}
 		//przechwycenie danych
 		$data = ob_get_contents();
-		//możliwy brak bufora
-		try {
-			ob_clean();
-		} catch (\Exception $e) {
-			//nic do czyszczenia
-		}
+		ob_clean();
+		echo $inputBuffer;
 		FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . basename($fileName) . ' rendered');
 		return $data;
 	}
