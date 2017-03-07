@@ -100,8 +100,7 @@ class KernelEventHandler {
 	 * @param \Mmi\Http\Response $response
 	 */
 	private static function _sendResponse(\Mmi\Http\Response $response) {
-		$response->setCodeError()
-			->send();
+		$response->send();
 		return true;
 	}
 
