@@ -169,7 +169,7 @@ class Cache {
 	 * @return string
 	 */
 	protected function _setCacheData($data, $expire) {
-		return serialize(['e' => $expire, 'd' => $data]);
+		return \serialize(['e' => $expire, 'd' => $data]);
 	}
 
 	/**
@@ -186,7 +186,7 @@ class Cache {
 	 * @return mixed
 	 */
 	protected function _getValidCacheData($data) {
-		//brak danych
+		//niepoprawna serializacja
 		if (!($data = \unserialize($data))) {
 			return self::CACHE_INVALID;
 		}
@@ -198,6 +198,7 @@ class Cache {
 		if ($data['e'] <= time()) {
 			return self::CACHE_INVALID;
 		}
+		//zwrot danych
 		return $data['d'];
 	}
 
