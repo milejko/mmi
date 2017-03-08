@@ -91,8 +91,12 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	 * @param string $key klucz
 	 */
 	protected function _broadcastDelete($key) {
+		//brak rozproszonego bufora
+		if (!$this->_distributedCache) {
+			return;
+		}
 		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_distributedCache ? $this->_distributedCache->save($time = time(), $cacheKey = self::DISTRIBUTED_PREFIX . $key) : null;
+		$this->_distributedCache->save($time = time(), $cacheKey = self::DISTRIBUTED_PREFIX . $key);
 		//lokalnie już usunięte - zapis do bufora
 		$this->_cache->save($time, $cacheKey, 0);
 	}
