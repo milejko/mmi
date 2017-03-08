@@ -36,7 +36,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	/**
 	 * Prefiks bufora dystrybuowanego
 	 */
-	CONST DISTRIBUTED_PREFIX = 'mmi-del-';
+	CONST DISTRIBUTED_PREFIX = 'mmi-cache-delete-';
 
 	/**
 	 * Kostruktor
@@ -90,9 +90,11 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	 * Ustawia w buforze rozproszonym rozgłoszenie o skasowaniu klucza
 	 * @param string $key klucz
 	 */
-	protected function _markToDelete($key) {
+	protected function _broadcastDelete($key) {
 		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_distributedCache ? $this->_distributedCache->save(time(), self::DISTRIBUTED_PREFIX . $key) : null;
+		$this->_distributedCache ? $this->_distributedCache->save($time = time(), $cacheKey = self::DISTRIBUTED_PREFIX . $key) : null;
+		//lokalnie już usunięte - zapis do bufora
+		$this->_cache->save($time, $cacheKey, 0);
 	}
 
 }

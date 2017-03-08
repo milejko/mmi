@@ -48,10 +48,10 @@ class ApcHandler extends DistributedCacheHandlerAbstract {
 	 * @return boolean
 	 */
 	public function delete($key) {
-		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_markToDelete($key);
 		//usunięcie z apc
 		\apcu_delete($this->_namespace . $key);
+		//rozgłoszenie informacji o usunięciu klucza do bufora Db
+		$this->_broadcastDelete($key);
 		return true;
 	}
 
@@ -60,7 +60,7 @@ class ApcHandler extends DistributedCacheHandlerAbstract {
 	 */
 	public function deleteAll() {
 		//czyszczenie bufora apc
-		return \apcu_clear_cache();
+		\apcu_clear_cache();
 	}
 
 }

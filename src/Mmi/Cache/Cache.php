@@ -103,7 +103,7 @@ class Cache {
 			$lifetime = $lifetime === null ? $this->_config->lifetime : self::MAXLIFETIME;
 		}
 		//dodanie losowej wartości do długości bufora
-		$lifetime += rand(0, 5);
+		//$lifetime += rand(0, 10);
 		//zapis w rejestrze
 		$this->getRegistry()->setOption($key, $data);
 		//zapis w handlerzie

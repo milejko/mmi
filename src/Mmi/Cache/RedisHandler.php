@@ -105,7 +105,7 @@ class RedisHandler implements CacheHandlerInterface {
 	 * Kasuje wszystkie dane
 	 */
 	public function deleteAll() {
-		return $this->_server->flushDB();
+		$this->_server->flushDB();
 	}
 
 }

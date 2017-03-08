@@ -10,6 +10,8 @@
 
 namespace Mmi\Cache;
 
+use \Mmi\App\KernelException;
+
 /**
  * Plikowy backend bufora
  */
@@ -25,10 +27,11 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 			//nie usuwamy pliku (strata wydajności)
 			return;
 		}
-		//plik istnieje
-		if (file_exists($this->_cache->getConfig()->path . '/' . $key)) {
-			//odczyt pliku
+		//próba odczytu pliku
+		try {
 			return file_get_contents($this->_cache->getConfig()->path . '/' . $key);
+		} catch (KernelException $e) {
+			//brak akcji
 		}
 	}
 
@@ -51,13 +54,14 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 	 * @param string $key klucz
 	 */
 	public function delete($key) {
-		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_markToDelete($key);
-		//jeśli plik istnieje
-		if (file_exists($this->_cache->getConfig()->path . '/' . $key)) {
-			//usuwanie pliku
+		//próba usunięcia pliku
+		try {
 			unlink($this->_cache->getConfig()->path . '/' . $key);
+		} catch (KernelException $e) {
+			//brak akcji
 		}
+		//rozgłoszenie informacji o usunięciu klucza do bufora Db
+		$this->_broadcastDelete($key);
 		return true;
 	}
 
@@ -66,10 +70,14 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 	 */
 	public function deleteAll() {
 		//iteracja po plikach
-		foreach (glob($this->_cache->getConfig()->path . '/*') as $fileName) {
+		foreach (glob($this->_cache->getConfig()->path . '/*') as $filename) {
+			//bez usuwania katalogu
+			if (is_dir($filename)) {
+				continue;
+			}
 			//usuwanie pliku
-			unlink($fileName);
+			unlink($filename);
 		}
 	}
-
+	
 }

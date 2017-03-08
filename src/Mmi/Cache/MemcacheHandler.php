@@ -102,11 +102,11 @@ class MemcacheHandler implements CacheHandlerInterface {
 	 */
 	public function deleteAll() {
 		try {
-			return $this->_server->flush();
+			$this->_server->flush();
 		} catch (\Exception $e) {
 			//zerwane połączenie
 			$this->_connect();
-			return $this->_server->flush();
+			$this->_server->flush();
 		}
 	}
 
