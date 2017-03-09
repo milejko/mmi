@@ -16,7 +16,7 @@ use \Mmi\Orm;
  * Klasa obsługi sesji w bazie danych
  */
 class DbHandler implements \SessionHandlerInterface {
-	
+
 	/**
 	 * Dane w sesji
 	 * @var mixed
@@ -39,6 +39,10 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return mixed
 	 */
 	public function read($id) {
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
+			return '';
+		}
 		//wyszukiwanie rekordu
 		if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
 			//nie może zwracać null
@@ -57,6 +61,10 @@ class DbHandler implements \SessionHandlerInterface {
 	public function write($id, $data) {
 		//dane nie uległy zmianie
 		if ($data == $this->_data) {
+			return true;
+		}
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
 			return true;
 		}
 		//wyszukiwanie rekordu
@@ -92,6 +100,10 @@ class DbHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function destroy($id) {
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
+			return true;
+		}
 		//brak rekordu
 		if ((null === $record = (new Orm\SessionQuery)->findPk($id))) {
 			return true;
@@ -110,6 +122,16 @@ class DbHandler implements \SessionHandlerInterface {
 		//uproszczone usuwanie - jednym zapytaniem
 		\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp < :time', [':time' => (time() - $maxLifetime)]);
 		return true;
+	}
+
+	/**
+	 * Walidacja poprawności identyfikatora sesji
+	 * @param string $id
+	 * @return boolean
+	 */
+	private function _validate($id) {
+		//litery i cyfry długości 8-128 znaków
+		return preg_match('/^[a-z0-9]{8,128}$/', $id);
 	}
 
 }

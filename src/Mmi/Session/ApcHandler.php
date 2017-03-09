@@ -43,6 +43,10 @@ class ApcHandler implements \SessionHandlerInterface {
 	 * @return mixed
 	 */
 	public function read($id) {
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
+			return '';
+		}
 		//pobieranie z apcu
 		if (!($data = \apcu_fetch($this->_namespace . $id))) {
 			//nie może zwracać null
@@ -61,6 +65,10 @@ class ApcHandler implements \SessionHandlerInterface {
 	public function write($id, $data) {
 		//dane nie uległy zmianie
 		if ($data == $this->_data) {
+			return true;
+		}
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
 			return true;
 		}
 		//puste dane
@@ -88,6 +96,10 @@ class ApcHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function destroy($id) {
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
+			return true;
+		}
 		//usuwanie danych
 		\apcu_delete($this->_namespace . $id);
 		return true;
@@ -100,6 +112,16 @@ class ApcHandler implements \SessionHandlerInterface {
 	 */
 	public function gc($maxLifetime) {
 		return true;
+	}
+
+	/**
+	 * Walidacja poprawności identyfikatora sesji
+	 * @param string $id
+	 * @return boolean
+	 */
+	private function _validate($id) {
+		//litery i cyfry długości 8-128 znaków
+		return preg_match('/^[a-z0-9]{8,128}$/', $id);
 	}
 
 }
