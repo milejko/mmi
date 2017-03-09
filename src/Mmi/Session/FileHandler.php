@@ -43,8 +43,18 @@ class FileHandler implements \SessionHandlerInterface {
 	 * @return mixed
 	 */
 	public function read($id) {
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
+			return '';
+		}
 		//pobieranie z pliku i zapis do rejestru
-		return ($this->_data = (file_exists($this->_namespace . $id) ? file_get_contents($this->_namespace . $id) : ''));
+		try {
+			return ($this->_data = file_get_contents($this->_namespace . $id));
+		} catch (\Exception $e) {
+			//nic
+		}
+		//pusta sesja
+		return '';
 	}
 
 	/**
@@ -58,10 +68,18 @@ class FileHandler implements \SessionHandlerInterface {
 		if ($data == $this->_data) {
 			return true;
 		}
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
+			return true;
+		}
 		//puste dane
 		if (!$data) {
-			//czyszczenie jeśli plik znaleziony
-			file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
+			//próba czyszczenie jeśli plik znaleziony
+			try {
+				file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
+			} catch (\Exception $e) {
+				//nic
+			}
 			return true;
 		}
 		//zapis danych
@@ -83,11 +101,19 @@ class FileHandler implements \SessionHandlerInterface {
 	 * @return boolean
 	 */
 	public function destroy($id) {
-		//usuwanie danych
-		file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
+		//niepoprawne ID
+		if (!$this->_validate($id)) {
+			return true;
+		}
+		//próba usunięcia danych
+		try {
+			file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
+		} catch (\Exception $e) {
+			//nic
+		}
 		return true;
 	}
-
+	
 	/**
 	 * Garbage collector
 	 * @param integer $maxLifetime
@@ -103,6 +129,16 @@ class FileHandler implements \SessionHandlerInterface {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Walidacja poprawności identyfikatora sesji
+	 * @param string $id
+	 * @return boolean
+	 */
+	private function _validate($id) {
+		//litery i cyfry długości 8-128 znaków
+		return preg_match('/^[a-z0-9]{8,128}$/', $id);
 	}
 
 }
