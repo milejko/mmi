@@ -37,7 +37,7 @@ class RedisHandler implements CacheHandlerInterface {
 	 * Ustawia obiekt Memcache
 	 * @param \Mmi\Cache\Cache $cache obiekt bufora
 	 */
-	public function __construct(\Mmi\Cache\Cache $cache) {
+	public function __construct(Cache $cache) {
 		$this->_namespace = crc32(BASE_PATH);
 		$this->_config = $cache->getConfig();
 		$this->_connect();

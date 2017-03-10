@@ -34,14 +34,9 @@ class Cache {
 	private $_registry;
 	
 	/**
-	 * Wiadomość przeterminowanego bufora
-	 */
-	CONST CACHE_INVALID = '@#0-mmi-cache-invalid-entry-0#@';
-	
-	/**
 	 * Maksymalna długość bufora
 	 */
-	CONST MAXLIFETIME = 2505600;
+	CONST MAX_LIFETIME = 2592000;
 
 	/**
 	 * Konstruktor, wczytuje konfigurację i ustawia handler
@@ -74,14 +69,7 @@ class Cache {
 		if ($this->getRegistry()->issetOption($key)) {
 			return $this->getRegistry()->getOption($key);
 		}
-		//cache nieważny
-		if (self::CACHE_INVALID === $data = $this->_getValidCacheData($this->_handler->load($key))) {
-			return;
-		}
-		//zapis danych do rejestru
-		$this->getRegistry()->setOption($key, $data);
-		//zwrot danych
-		return $data;
+		return $this->validateAndPrepareBackendData($key, $this->_handler->load($key));
 	}
 
 	/**
@@ -100,10 +88,8 @@ class Cache {
 		//brak podanego klucza (użycie domyślnego z cache)
 		if (!$lifetime) {
 			//jeśli null - użycie domyślnego, jeśli zero lub false to maksymalny
-			$lifetime = $lifetime === null ? $this->_config->lifetime : self::MAXLIFETIME;
+			$lifetime = $lifetime === null ? $this->_config->lifetime : self::MAX_LIFETIME;
 		}
-		//dodanie losowej wartości do długości bufora
-		$lifetime += rand(0, 5);
 		//zapis w rejestrze
 		$this->getRegistry()->setOption($key, $data);
 		//zapis w handlerzie
@@ -185,19 +171,21 @@ class Cache {
 	 * @param mixed $data dane
 	 * @return mixed
 	 */
-	protected function _getValidCacheData($data) {
+	public function validateAndPrepareBackendData($key, $data) {
 		//niepoprawna serializacja
 		if (!($data = \unserialize($data))) {
-			return self::CACHE_INVALID;
+			return;
 		}
 		//dane niepoprawne
-		if (!array_key_exists('e', $data) || !isset($data['d'])) {
-			return self::CACHE_INVALID;
+		if (!array_key_exists('e', $data) || !array_key_exists('d', $data)) {
+			return;
 		}
 		//dane wygasłe
 		if ($data['e'] <= time()) {
-			return self::CACHE_INVALID;
+			return;
 		}
+		//zapis danych do rejestru
+		$this->getRegistry()->setOption($key, $data['d']);
 		//zwrot danych
 		return $data['d'];
 	}

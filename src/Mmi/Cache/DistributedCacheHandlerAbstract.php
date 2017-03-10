@@ -4,7 +4,7 @@
  * Mmi Framework (https://github.com/milejko/mmi.git)
  * 
  * @link       https://github.com/milejko/mmi.git
- * @copyright  Copyright (c) 2010-2016 Mariusz Miłejko (http://milejko.com)
+ * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (http://milejko.com)
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
@@ -34,15 +34,20 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	protected $_distributedCache;
 
 	/**
-	 * Prefiks bufora dystrybuowanego
+	 * Prefiks bufora rozproszonego
 	 */
-	CONST DISTRIBUTED_PREFIX = 'mmi-cache-delete-';
-
+	CONST DEL_PREFIX = 'mmi-cdel-';
+	
+	/**
+	 * Klucz zbuforowanego rozproszonego bufora
+	 */
+	CONST STORAGE_KEY = 'mmi-cache-distributed-storage';
+	
 	/**
 	 * Kostruktor
 	 * @param \Mmi\Cache\Cache $cache obiekt bufora
 	 */
-	public function __construct(\Mmi\Cache\Cache $cache) {
+	public function __construct(Cache $cache) {
 		//namespace
 		$this->_namespace = crc32(BASE_PATH) . '-';
 		//przypisanie obiektu bufora
@@ -51,13 +56,22 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 		if (!$cache->getConfig()->distributed || !$cache->getConfig()->active) {
 			return;
 		}
+		//ustawienie bufora rozproszonego 
+		$this->_distributedCache = $this->_getDistributedCache($cache);
+	}
+	
+	/**
+	 * Ustawienie bufora rozproszonego
+	 * @param \Mmi\Cache\Cache $cache
+	 * @return \Mmi\Cache\Cache
+	 */
+	protected function _getDistributedCache(Cache $cache) {
 		//konfiguracja bufora rozproszonego
-		$distributedCache = new CacheConfig();
-		$distributedCache->lifetime = $cache->getConfig()->lifetime;
-		$distributedCache->active = true;
-		$distributedCache->handler = 'db';
-		//tworzenie klasy bufora rozproszonego
-		$this->_distributedCache = new Cache($distributedCache);
+		$config = new CacheConfig;
+		$config->lifetime = $cache->getConfig()->lifetime;
+		$config->handler = 'db';
+		//zapis lokalnym buforze
+		return new Cache($config);
 	}
 
 	/**
@@ -71,7 +85,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			return false;
 		}
 		//brak bufora do usunięcia (pobranie ze zdalnego bufora)
-		if (null === $remoteTime = $this->_distributedCache->load($cacheKey = self::DISTRIBUTED_PREFIX . $key)) {
+		if (null === $remoteTime = $this->_distributedCache->load($cacheKey = self::DEL_PREFIX . $key)) {
 			return false;
 		}
 		//pobranie z lokalnego bufora
@@ -96,7 +110,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			return;
 		}
 		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_distributedCache->save($time = time(), $cacheKey = self::DISTRIBUTED_PREFIX . $key);
+		$this->_distributedCache->save($time = time(), $cacheKey = self::DEL_PREFIX . $key);
 		//lokalnie już usunięte - zapis do bufora
 		$this->_cache->save($time, $cacheKey, 0);
 	}

@@ -19,7 +19,7 @@ class DummyHandler implements CacheHandlerInterface {
 	 * Kostruktor
 	 * @param \Mmi\Cache\Cache $cache obiekt bufora
 	 */
-	public function __construct(\Mmi\Cache\Cache $cache) {
+	public function __construct(Cache $cache) {
 		
 	}
 

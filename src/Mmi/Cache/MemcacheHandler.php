@@ -37,7 +37,7 @@ class MemcacheHandler implements CacheHandlerInterface {
 	 * Ustawia obiekt Memcache
 	 * @param \Mmi\Cache\Cache $cache objekt bufora
 	 */
-	public function __construct(\Mmi\Cache\Cache $cache) {
+	public function __construct(Cache $cache) {
 		$this->_namespace = crc32(BASE_PATH);
 		$this->_config = $cache->getConfig();
 		$this->_connect();
@@ -62,13 +62,7 @@ class MemcacheHandler implements CacheHandlerInterface {
 	 * @param string $key klucz
 	 */
 	public function load($key) {
-		try {
-			return $this->_server->get($this->_namespace . '_' . $key);
-		} catch (\Exception $e) {
-			//zerwane połączenie
-			$this->_connect();
-			return $this->_server->get($this->_namespace . '_' . $key);
-		}
+		return $this->_server->get($this->_namespace . '_' . $key);
 	}
 
 	/**
@@ -101,13 +95,7 @@ class MemcacheHandler implements CacheHandlerInterface {
 	 * Kasuje wszystkie dane
 	 */
 	public function deleteAll() {
-		try {
-			$this->_server->flush();
-		} catch (\Exception $e) {
-			//zerwane połączenie
-			$this->_connect();
-			$this->_server->flush();
-		}
+		$this->_server->flush();
 	}
 
 	/**

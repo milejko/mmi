@@ -25,20 +25,21 @@ class DbHandler implements CacheHandlerInterface {
 
 	/**
 	 * Prefiks kluczy systemowych
-	 * @var array
+	 * @var string
 	 */
 	CONST SYSTEM_CACHE_PREFIX = 'mmi-';
 
 	/**
-	 * Prefiks bufora pośredniego
+	 * Prefiks kluczy systemowych
+	 * @var string
 	 */
-	CONST REGISTRY_PREFIX = 'intermediate-db-cache-';
+	CONST SYSTEM_DATA_KEY = 'mmi-system-keys';
 
 	/**
-	 * Prefiks rekordu bufora pośredniego
+	 * Czas odświeżania bufora rozproszonego
 	 */
-	CONST REGISTRY_RECORD_PREFIX = 'intermediate-db-cache-record-';
-	
+	CONST REFRESH_TIME = 3;
+
 	/**
 	 * 1/x prawdopodobieństwo uruchomienia garbage collectora
 	 */
@@ -54,28 +55,43 @@ class DbHandler implements CacheHandlerInterface {
 		if ($cache->getConfig()->distributed) {
 			throw new CacheException('DB handler doesn\'t allow distributed mode');
 		}
-		//bufor systemowy już zarejestrowany
-		if ($cache->getRegistry()->issetOption($intermediateKey = self::REGISTRY_PREFIX . '-init')) {
-			return;
-		}
 		//garbage collector
 		if (rand(1, self::GARBAGE_COLLECTOR_DIVISOR) == 1) {
 			//uproszczone usuwanie - jednym zapytaniem
 			\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\CacheQuery)->getTableName(), 'WHERE ttl < :ttl', ['ttl' => time()]);
 		}
-		//nowe zapytanie
-		$systemCacheQuery = (new Orm\CacheQuery)
+		//wczytanie danych
+		$this->_initializeSystemData($cache);
+	}
+
+	/**
+	 * Inicjalizacja danych systemowych
+	 * @param \Mmi\Cache\Cache $cache
+	 */
+	protected function _initializeSystemData(Cache $cache) {
+		//inicjalizacja tymczasowego bufora
+		$tmpConfig = new CacheConfig;
+		$tmpConfig->path = sys_get_temp_dir();
+		$tmpConfig->lifetime = self::REFRESH_TIME;
+		$tmpCache = new Cache($tmpConfig);
+
+		//wczytanie danych z bufora
+		if (null === $systemEntries = $tmpCache->load(self::SYSTEM_DATA_KEY)) {
+			$tmpCache->save($systemEntries = (new Orm\CacheQuery)
 				->whereTtl()->greater(time())
-				->whereId()->like(self::SYSTEM_CACHE_PREFIX . '%');
-		//iteracja po kolekcji bufora systemowego
-		foreach ($systemCacheQuery->find() as $cacheRecord) {
-			//ustawianie bufora pośredniego w rejestrze (wraz z oryginalnym rekordem)
-			$cache->getRegistry()
-				->setOption(self::REGISTRY_RECORD_PREFIX . $cacheRecord->id, $cacheRecord)
-				->setOption(self::REGISTRY_PREFIX . $cacheRecord->id, json_decode($cacheRecord->data));
+				->whereId()->like(self::SYSTEM_CACHE_PREFIX . '%')
+				->find(), self::SYSTEM_DATA_KEY);
 		}
-		//informacja o wstępnej inicjalizacji bufora
-		$cache->getRegistry()->setOption($intermediateKey, true);
+		//iteracja po kolekcji aktywnego bufora systemowego
+		foreach ($systemEntries as $cacheRecord) {
+			//próba rozkodowania danych
+			try {
+				//walidacja i zapis danych do rejestru
+				$cache->validateAndPrepareBackendData($cacheRecord->id, \json_decode($cacheRecord->data));
+			} catch (\Exception $e) {
+				//błąd json
+			}
+		}
 	}
 
 	/**
@@ -83,12 +99,8 @@ class DbHandler implements CacheHandlerInterface {
 	 * @param string $key klucz
 	 */
 	public function load($key) {
-		//sprawdzanie w buforze pośrednim
-		if ($this->_cache->getRegistry()->issetOption(self::REGISTRY_PREFIX . $key)) {
-			//zwrot z bufora pośredniego
-			return $this->_cache->getRegistry()->getOption(self::REGISTRY_PREFIX . $key);
-		}
-		//bufor systemowy, brak w rejestrze
+		//zapytanie przepuszczone przez obiekt Cache
+		//bufor systemowy był wczytany - brak w rejestrze
 		if (substr($key, 0, strlen(self::SYSTEM_CACHE_PREFIX)) == self::SYSTEM_CACHE_PREFIX) {
 			return;
 		}
@@ -97,7 +109,7 @@ class DbHandler implements CacheHandlerInterface {
 			return;
 		}
 		//zwrot danych
-		return json_decode($cacheRecord->data);
+		return \json_decode($cacheRecord->data);
 	}
 
 	/**
@@ -114,15 +126,15 @@ class DbHandler implements CacheHandlerInterface {
 			$cacheRecord->id = $key;
 		}
 		$cacheRecord->data = json_encode($data);
-		$cacheRecord->ttl = time() + $lifeTime + 1;
+		$cacheRecord->ttl = time() + $lifeTime + 1 + self::REFRESH_TIME;
 		//próba zapisu
 		try {
 			//zapis rekordu
 			return $cacheRecord->save();
 		} catch (\Exception $e) {
-			//zwrot nieudanego zapisu
-			return false;
+			//slam?
 		}
+		return true;
 	}
 
 	/**
