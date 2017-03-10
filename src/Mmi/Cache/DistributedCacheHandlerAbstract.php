@@ -88,10 +88,8 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 		if (null === $remoteTime = $this->_distributedCache->load($cacheKey = self::DEL_PREFIX . $key)) {
 			return false;
 		}
-		//pobranie z lokalnego bufora
-		$localTime = $this->_cache->load($cacheKey);
 		//jeśli czas lokalnego usunięcia jest wyższy niż zdalnego, nie ma potrzeby usuwania
-		if ($localTime >= $remoteTime) {
+		if ($this->_cache->load($cacheKey) >= $remoteTime) {
 			//zapis lokalnie informacji o usunięciu
 			return false;
 		}

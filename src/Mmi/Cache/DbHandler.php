@@ -43,22 +43,18 @@ class DbHandler implements CacheHandlerInterface {
 	/**
 	 * 1/x prawdopodobieństwo uruchomienia garbage collectora
 	 */
-	CONST GARBAGE_COLLECTOR_DIVISOR = 1000;
+	CONST GARBAGE_COLLECTOR_DIVISOR = 500;
 
 	/**
 	 * Kostruktor
 	 * @param \Mmi\Cache\Cache $cache obiekt bufora
 	 */
 	public function __construct(\Mmi\Cache\Cache $cache) {
+		//ustawienie obiektu bufora
 		$this->_cache = $cache;
-		//handler plikowy nie obsługuje trybu rozproszonego
+		//handler bazodanowy nie obsługuje trybu rozproszonego
 		if ($cache->getConfig()->distributed) {
 			throw new CacheException('DB handler doesn\'t allow distributed mode');
-		}
-		//garbage collector
-		if (rand(1, self::GARBAGE_COLLECTOR_DIVISOR) == 1) {
-			//uproszczone usuwanie - jednym zapytaniem
-			\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\CacheQuery)->getTableName(), 'WHERE ttl < :ttl', ['ttl' => time()]);
 		}
 		//wczytanie danych
 		$this->_initializeSystemData($cache);
@@ -72,15 +68,16 @@ class DbHandler implements CacheHandlerInterface {
 		//inicjalizacja tymczasowego bufora
 		$tmpConfig = new CacheConfig;
 		$tmpConfig->path = sys_get_temp_dir();
-		$tmpConfig->lifetime = self::REFRESH_TIME;
 		$tmpCache = new Cache($tmpConfig);
-
 		//wczytanie danych z bufora
 		if (null === $systemEntries = $tmpCache->load(self::SYSTEM_DATA_KEY)) {
+			//garbage collector
+			$this->_gc();
+			//zapis do tymczasowego bufora
 			$tmpCache->save($systemEntries = (new Orm\CacheQuery)
 				->whereTtl()->greater(time())
 				->whereId()->like(self::SYSTEM_CACHE_PREFIX . '%')
-				->find(), self::SYSTEM_DATA_KEY);
+				->find(), self::SYSTEM_DATA_KEY, self::REFRESH_TIME);
 		}
 		//iteracja po kolekcji aktywnego bufora systemowego
 		foreach ($systemEntries as $cacheRecord) {
@@ -91,6 +88,17 @@ class DbHandler implements CacheHandlerInterface {
 			} catch (\Exception $e) {
 				//błąd json
 			}
+		}
+	}
+
+	/**
+	 * Garbage collector
+	 */
+	protected function _gc() {
+		//garbage collector
+		if (rand(1, self::GARBAGE_COLLECTOR_DIVISOR) == 1) {
+			//uproszczone usuwanie - jednym zapytaniem
+			\Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\CacheQuery)->getTableName(), 'WHERE ttl < :ttl', ['ttl' => time()]);
 		}
 	}
 
@@ -130,7 +138,7 @@ class DbHandler implements CacheHandlerInterface {
 		//próba zapisu
 		try {
 			//zapis rekordu
-			return $cacheRecord->save();
+			$cacheRecord->save();
 		} catch (\Exception $e) {
 			//slam?
 		}
@@ -148,8 +156,7 @@ class DbHandler implements CacheHandlerInterface {
 			return true;
 		}
 		//usuwanie rekordu
-		$cacheRecord->delete();
-		return true;
+		return $cacheRecord->delete() || true;
 	}
 
 	/**

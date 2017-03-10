@@ -26,13 +26,13 @@ class Cache {
 	 * @var HandlerInterface
 	 */
 	private $_handler;
-	
+
 	/**
 	 * Rejestr bufora
 	 * @var CacheRegistry
 	 */
 	private $_registry;
-	
+
 	/**
 	 * Maksymalna długość bufora
 	 */
@@ -42,11 +42,12 @@ class Cache {
 	 * Konstruktor, wczytuje konfigurację i ustawia handler
 	 */
 	public function __construct(CacheConfig $config) {
+		//ustawienie configu
 		$this->_config = $config;
 		//powoływanie rejestru
 		$this->_registry = new CacheRegistry;
 	}
-	
+
 	/**
 	 * Pobiera konfigurację
 	 * @return CacheConfig
@@ -69,6 +70,7 @@ class Cache {
 		if ($this->getRegistry()->issetOption($key)) {
 			return $this->getRegistry()->getOption($key);
 		}
+		//zwrot zwalidowanych danych
 		return $this->validateAndPrepareBackendData($key, $this->_handler->load($key));
 	}
 
@@ -88,12 +90,12 @@ class Cache {
 		//brak podanego klucza (użycie domyślnego z cache)
 		if (!$lifetime) {
 			//jeśli null - użycie domyślnego, jeśli zero lub false to maksymalny
-			$lifetime = $lifetime === null ? $this->_config->lifetime : self::MAX_LIFETIME;
+			$lifetime = $lifetime === null ? $this->_config->lifetime : ($lifetime == 0 ? self::MAX_LIFETIME : $lifetime);
 		}
 		//zapis w rejestrze
 		$this->getRegistry()->setOption($key, $data);
 		//zapis w handlerzie
-		return (bool)$this->_handler->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
+		return (bool) $this->_handler->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
 	}
 
 	/**
@@ -109,7 +111,7 @@ class Cache {
 		//usunięcie z rejestru
 		$this->getRegistry()->unsetOption($key);
 		//usunięcie handlerem
-		return (bool)$this->_handler->delete($key);
+		return (bool) $this->_handler->delete($key);
 	}
 
 	/**
@@ -139,7 +141,7 @@ class Cache {
 		$this->_setupHandler();
 		return true;
 	}
-	
+
 	/**
 	 * Zwraca rejestr bufora
 	 * @return CacheRegistry
@@ -155,7 +157,7 @@ class Cache {
 	 * @return string
 	 */
 	protected function _setCacheData($data, $expire) {
-		return \serialize(['e' => $expire, 'd' => $data]);
+		return \serialize(['d' => $data, 'e' => $expire]);
 	}
 
 	/**
@@ -199,14 +201,15 @@ class Cache {
 		if (null !== $this->_handler) {
 			return;
 		}
-		//określanie klasy handlera
-		$handlerClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Handler';
+		//próba powołania handlera
 		try {
+			//określanie klasy handlera
+			$handlerClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Handler';
 			//powoływanie obiektu handlera
 			$this->_setHandler(new $handlerClassName($this));
 		} catch (\Exception $e) {
-			\Mmi\App\FrontController::getInstance()->getLogger()->addWarning('Cache handler could not be initialized, DummyHandler used instead ' . $e->getMessage());
-			$this->_setHandler(new DummyHandler($this));
+			//błąd powołania handlera
+			throw new CacheException('Unable to initialize handler: ' . $e->getMessage());
 		}
 	}
 

@@ -26,7 +26,7 @@ class CacheConfig {
 
 	/**
 	 * Nazwa handlera obsługującego bufor:
-	 * apc | file | memcache | redis | db
+	 * apc | file | redis | db | memcache
 	 * @var string
 	 */
 	public $handler = 'file';

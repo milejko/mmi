@@ -22,7 +22,9 @@ class Deployer {
 	 * @throws DbException
 	 */
 	public function deploy() {
-		//wyłączenie cache
+		//wyłączenie bufora lokalnego
+		\App\Registry::$config->localCache->active = false;
+		//wyłączenie bufora aplikacji
 		\App\Registry::$config->cache->active = false;
 		$incrementals = [];
 		//iteracja po modułach aplikacji
