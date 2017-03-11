@@ -55,22 +55,21 @@ class Dispatcher {
 		//wpięcie dla pluginów przed routingiem
 		$this->routeStartup();
 		$fc = FrontController::getInstance();
-		FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: plugins route startup');
+		$fc->getProfiler()->event('Mvc\Dispatcher: plugins route startup');
 		//stosowanie routingu jeśli request jest pusty
 		if (!$fc->getRequest()->getModuleName()) {
 			$fc->getRouter()->processRequest($fc->getRequest());
 		}
-		//new relic
-		extension_loaded('newrelic') ? newrelic_name_transaction($fc->getRequest()->module . '/' . $fc->getRequest()->controller . '/' . $fc->getRequest()->action) : null;
-		FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: routing applied');
+		//informacja o zakończeniu ustawiania routingu
+		$fc->getProfiler()->event('Mvc\Dispatcher: routing applied');
 		//wpięcie dla pluginów przed dispatchem
 		$this->preDispatch();
-		FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: plugins pre-dispatch');
+		$fc->getProfiler()->event('Mvc\Dispatcher: plugins pre-dispatch');
 		//wybór i uruchomienie kontrolera akcji
 		$content = \Mmi\Mvc\ActionHelper::getInstance()->action($fc->getRequest()->toArray());
 		//wpięcie dla pluginów po dispatchu
 		$this->postDispatch();
-		FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: plugins post-dispatch');
+		$fc->getProfiler()->event('Mvc\Dispatcher: plugins post-dispatch');
 		return $content;
 	}
 

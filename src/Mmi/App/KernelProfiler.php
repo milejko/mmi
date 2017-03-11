@@ -16,7 +16,7 @@ use Mmi\Log\LoggerHelper,
 /**
  * Klasa profilera aplikacji
  */
-class KernelProfiler {
+class KernelProfiler implements KernelProfilerInterface {
 
 	/**
 	 * Dane profilera

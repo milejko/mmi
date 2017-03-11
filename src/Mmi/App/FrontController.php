@@ -240,7 +240,7 @@ class FrontController {
 		if ($this->_profiler) {
 			return $this->_profiler;
 		}
-		return new DummyKernelProfiler;
+		return new NullKernelProfiler;
 	}
 
 	/**
@@ -305,6 +305,8 @@ class FrontController {
 				->setPlaceholder('content', $content)
 				->renderLayout($this->getRequest());
 		}
+		//informacja do profilera o wysyłaniu odpowiedzi
+		FrontController::getInstance()->getProfiler()->event('App\FrontController: sending response');
 		//wysłanie odpowiedzi
 		$this->getResponse()
 			->setContent($content)

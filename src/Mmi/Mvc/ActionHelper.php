@@ -146,6 +146,8 @@ class ActionHelper {
 	 * @throws MvcNotFoundException
 	 */
 	private function _invoke(Request $request) {
+		//informacja do profilera o rozpoczęciu wykonywania akcji
+		FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' start');
 		//pobranie struktury
 		$structure = FrontController::getInstance()->getStructure('module');
 		//brak w strukturze
@@ -164,6 +166,7 @@ class ActionHelper {
 		$actionMethodName = $request->getActionName() . 'Action';
 		//wywołanie akcji
 		$content = (new $controllerClassName($request))->$actionMethodName();
+		//informacja o zakończeniu wykonywania akcji do profilera
 		FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' done');
 		return $content;
 	}
