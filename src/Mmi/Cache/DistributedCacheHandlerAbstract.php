@@ -49,7 +49,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	 */
 	public function __construct(Cache $cache) {
 		//namespace
-		$this->_namespace = crc32(BASE_PATH) . '-';
+		$this->_namespace = BASE_PATH;
 		//przypisanie obiektu bufora
 		$this->_cache = $cache;
 		//bufor nierozproszony

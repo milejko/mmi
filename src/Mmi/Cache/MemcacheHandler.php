@@ -38,7 +38,7 @@ class MemcacheHandler implements CacheHandlerInterface {
 	 * @param \Mmi\Cache\Cache $cache objekt bufora
 	 */
 	public function __construct(Cache $cache) {
-		$this->_namespace = crc32(BASE_PATH);
+		$this->_namespace = BASE_PATH;
 		$this->_config = $cache->getConfig();
 		$this->_connect();
 	}

@@ -14,7 +14,7 @@ namespace Mmi\Cache;
  * Handler bufora w APC
  */
 class ApcHandler extends DistributedCacheHandlerAbstract {
-
+	
 	/**
 	 * Ładuje dane o podanym kluczu
 	 * @param string $key klucz
