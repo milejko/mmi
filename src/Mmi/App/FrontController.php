@@ -306,7 +306,7 @@ class FrontController {
 				->renderLayout($this->getRequest());
 		}
 		//informacja do profilera o wysyłaniu odpowiedzi
-		FrontController::getInstance()->getProfiler()->event('App\FrontController: sending response');
+		$this->getProfiler()->event('App\FrontController: sending response');
 		//wysłanie odpowiedzi
 		$this->getResponse()
 			->setContent($content)

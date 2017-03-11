@@ -37,25 +37,13 @@ class KernelProfiler implements KernelProfilerInterface {
 	protected $_elapsed = 0;
 
 	/**
-	 * Odcisk wywołania
-	 * @var string
-	 */
-	protected $_runtimeStamp;
-
-	/**
 	 * Dodaje zdarzenie
 	 * @param string $name nazwa
 	 * @param string $elapsed opcjonalnie czas operacji
 	 */
 	public function event($name) {
-		//profiler wyłączony
-		if (LoggerHelper::getLevel() != Logger::DEBUG) {
-			return;
-		}
 		//znacznik czasu
 		$time = microtime(true);
-		//obliczanie timestampu uruchomienia
-		$this->_runtimeStamp = !$this->_runtimeStamp ? substr(md5($time . rand(0, 10000)), 6, 6) : $this->_runtimeStamp;
 		//obliczanie czasu trwania
 		$elapsed = isset($this->_data[$this->_counter - 1]) ? ($time - $this->_data[$this->_counter - 1]['time']) : 0;
 		//zapis rekordu
@@ -64,7 +52,7 @@ class KernelProfiler implements KernelProfilerInterface {
 			'time' => $time,
 			'elapsed' => $elapsed,
 		];
-		FrontController::getInstance()->getLogger()->addDebug('{' . $this->_runtimeStamp . '} (' . number_format($elapsed, 6) . 's) ' . $name);
+		FrontController::getInstance()->getLogger()->addDebug($name . ' ' . number_format($elapsed, 6) . 's)');
 		$this->_elapsed += $elapsed;
 		$this->_counter++;
 	}
