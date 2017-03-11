@@ -27,8 +27,7 @@ class PdoBindHelper {
 	 */
 	public static function generateBindKey() {
 		//generowanie kolejnego klucza bind
-		return str_replace([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], self::$_bindIndex++
-		);
+		return str_replace([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], self::$_bindIndex++);
 	}
 
 }

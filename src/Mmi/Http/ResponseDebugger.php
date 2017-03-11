@@ -118,6 +118,10 @@ class ResponseDebugger {
 		//profiler aplikacji
 		$html .= '<p style="margin: 0px;">Kernel Profiler: </p>';
 		$html .= self::PRE_OPEN . ResponseDebugger\Part::getProfilerHtml() . '</pre>';
+		
+		//profiler bazy danych
+		$html .= '<p style="margin: 0px;">Database Profiler: </p>';
+		$html .= self::PRE_OPEN . ResponseDebugger\Part::getDbProfilerHtml() . '</pre>';
 
 		//opcache lub APC
 		$html .= '<p style="margin: 0px;">Precompiler</p>';

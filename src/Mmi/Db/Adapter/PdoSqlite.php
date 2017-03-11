@@ -41,8 +41,6 @@ class PdoSqlite extends PdoAbstract {
 	 * Tworzy połączenie z bazą danych
 	 */
 	public function connect() {
-		//event połączenia
-		\Mmi\App\FrontController::getInstance()->getProfiler()->event('CONNECT WITH: ' . get_class($this), 0);
 		//pdo do zapisu
 		$this->_upstreamPdo = new \PDO(
 			$this->_config->driver . ':' . $this->_config->host, null, null, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]

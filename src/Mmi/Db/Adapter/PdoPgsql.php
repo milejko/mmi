@@ -45,9 +45,6 @@ class PdoPgsql extends PdoAbstract {
 	 * Tworzy połączenie z bazą danych
 	 */
 	public function connect() {
-		//jeśli profiler włączony
-		\Mmi\App\FrontController::getInstance()->getProfiler()->event('CONNECT WITH: ' . get_called_class(), 0);
-
 		//domyślny port
 		$this->_config->port = $this->_config->port ? $this->_config->port : 5432;
 

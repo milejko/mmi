@@ -34,7 +34,7 @@ class LdapClient extends \Mmi\OptionObject {
 	 */
 	public function __construct(LdapConfig $config) {
 		//brak modułu LDAP
-		if (!function_exists('ldap_connect')) {
+		if (!\extension_loaded('ldap')) {
 			throw new LdapException('LDAP extension not installed');
 		}
 		$this->_config = $config;

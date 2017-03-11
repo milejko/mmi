@@ -42,6 +42,7 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 	 * @param int $lifeTime wygaśnięcie danych w buforze (informacja dla bufora)
 	 */
 	public function save($key, $data, $lifeTime) {
+		//$lifeTime nie jest używany w tym backendzie
 		//zapis pliku
 		if (file_put_contents($this->_cache->getConfig()->path . '/' . $key, $data) === false) {
 			return false;

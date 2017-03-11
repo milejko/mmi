@@ -98,7 +98,7 @@ class FileSystem {
 	 * @return string
 	 */
 	public static function mimeType($fileAddress) {
-		if (!function_exists('finfo_open')) {
+		if (!\extension_loaded('fileinfo')) {
 			throw new \Mmi\App\KernelException('Fileinfo plugin not installed');
 		}
 		return finfo_file(finfo_open(FILEINFO_MIME_TYPE), $fileAddress);

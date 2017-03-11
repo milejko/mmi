@@ -30,7 +30,7 @@ class Opcache {
 	
 	protected static function _getOpcacheStatus() {
 		//brak Opcache
-		if (!function_exists('opcache_get_configuration') || !function_exists('opcache_get_status')) {
+		if (!extension_loaded('Zend OPcache')) {
 			return;
 		}
 		//opcache nie udostępnia API

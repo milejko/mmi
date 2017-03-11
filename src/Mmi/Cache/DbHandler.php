@@ -65,10 +65,7 @@ class DbHandler implements CacheHandlerInterface {
 	 * @param \Mmi\Cache\Cache $cache
 	 */
 	protected function _initializeSystemData(Cache $cache) {
-		//inicjalizacja tymczasowego bufora
-		$tmpConfig = new CacheConfig;
-		$tmpConfig->path = sys_get_temp_dir();
-		$tmpCache = new Cache($tmpConfig);
+		$tmpCache = $this->_getTmpCache();
 		//wczytanie danych z bufora
 		if (null === $systemEntries = $tmpCache->load(self::SYSTEM_DATA_KEY)) {
 			//garbage collector
@@ -89,6 +86,19 @@ class DbHandler implements CacheHandlerInterface {
 				//błąd json
 			}
 		}
+	}
+
+	/**
+	 * Pobranie podręcznego bufora
+	 * @return \Mmi\Cache\Cache
+	 */
+	protected function _getTmpCache() {
+		//inicjalizacja tymczasowego bufora
+		$tmpConfig = new CacheConfig;
+		//jeśli dostępny jest apc - preferowany
+		\extension_loaded('apcu') ? $tmpConfig->handler = 'apc' : $tmpConfig->path = sys_get_temp_dir();
+		//zwrot obiektu bufora
+		return new Cache($tmpConfig);
 	}
 
 	/**

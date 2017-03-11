@@ -47,7 +47,7 @@ class FrontController {
 
 	/**
 	 * Profiler aplikacji
-	 * @var \Mmi\App\KernelProfiler 
+	 * @var \Mmi\App\KernelProfilerInterface
 	 */
 	private $_profiler;
 
@@ -91,8 +91,6 @@ class FrontController {
 		$this->_response = new \Mmi\Http\Response;
 		//nowe środowisko
 		$this->_environment = new \Mmi\Http\HttpServerEnv;
-		//profiler aplikacji
-		$this->_profiler = new \Mmi\App\KernelProfiler;
 		//logger - monolog
 		$this->_logger = \Mmi\Log\LoggerHelper::getLogger();
 	}
@@ -137,6 +135,16 @@ class FrontController {
 	 */
 	public function setRequest(\Mmi\Http\Request $request) {
 		$this->_request = $request;
+		return $this;
+	}
+	
+	/**
+	 * Ustawia profiler
+	 * @param \Mmi\App\KernelProfilerInterface $profiler
+	 * @return \Mmi\App\FrontController
+	 */
+	public function setProfiler(\Mmi\App\KernelProfilerInterface $profiler) {
+		$this->_profiler = $profiler;
 		return $this;
 	}
 
@@ -229,7 +237,10 @@ class FrontController {
 	 * @return \Mmi\App\KernelProfiler
 	 */
 	public function getProfiler() {
-		return $this->_profiler;
+		if ($this->_profiler) {
+			return $this->_profiler;
+		}
+		return new DummyKernelProfiler;
 	}
 
 	/**

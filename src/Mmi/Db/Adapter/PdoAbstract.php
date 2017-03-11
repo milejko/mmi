@@ -36,6 +36,12 @@ abstract class PdoAbstract {
 	protected $_config;
 
 	/**
+	 * Profiler
+	 * @var \Mmi\Db\DbProfiler
+	 */
+	protected $_profiler;
+
+	/**
 	 * Stan połączenia
 	 * @var boolean
 	 */
@@ -144,9 +150,6 @@ abstract class PdoAbstract {
 	 * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
 	 */
 	public function connect() {
-		//event łączenia
-		\Mmi\App\FrontController::getInstance()->getProfiler()->event(get_called_class() . ': connect', 0);
-
 		//nowy obiekt PDO do odczytu danych
 		$this->_downstreamPdo = new \PDO(
 			$this->_config->driver . ':host=' . $this->_config->host . ';port=' . $this->_config->port . ';dbname=' . $this->_config->name . ';charset=utf8', $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
@@ -241,7 +244,7 @@ abstract class PdoAbstract {
 			throw new DbException(get_called_class() . ': ' . $error . ' --- ' . $sql);
 		}
 		//jeśli profiler włączony, dodanie eventu
-		\Mmi\App\FrontController::getInstance()->getProfiler()->eventQuery($statement, $bind, microtime(true) - $start);
+		$this->_profiler ? $this->_profiler->event($statement, $bind, microtime(true) - $start) : null;
 		return $statement;
 	}
 
@@ -457,6 +460,24 @@ abstract class PdoAbstract {
 		}
 		//sam limit
 		return 'LIMIT ' . intval($limit);
+	}
+
+	/**
+	 * Ustawia profiler
+	 * @param \Mmi\Db\DbProfiler $profiler
+	 * @return \Mmi\Db\Adapter\PdoAbstract
+	 */
+	public function setProfiler(\Mmi\Db\DbProfiler $profiler) {
+		$this->_profiler = $profiler;
+		return $this;
+	}
+
+	/**
+	 * Zwraca profiler
+	 * @return \Mmi\Db\DbProfiler
+	 */
+	public function getProfiler() {
+		return $this->_profiler;
 	}
 
 	/**

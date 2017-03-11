@@ -126,8 +126,18 @@ class Bootstrap implements BootstrapInterface {
 		if (null === \App\Registry::$config->db->driver) {
 			return $this;
 		}
-		//uzupełnienie rejestru
-		\App\Registry::$db = \Mmi\Db\DbHelper::getAdapter(\App\Registry::$config->db);
+		//obliczanie nazwy drivera
+		$driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst(\App\Registry::$config->db->driver);
+		try {
+			\App\Registry::$db = new $driver(\App\Registry::$config->db);
+		} catch (\Exception $e) {
+			throw new \Mmi\Db\DbException('Driver unsupported: ' . $driver . ' ' . $e->getMessage());
+		}
+		//jeśli aplikacja w trybie debug
+		if (\App\Registry::$config->debug) {
+			//wstrzyknięcie profilera do adaptera bazodanowego
+			\App\Registry::$db->setProfiler(new \Mmi\Db\DbProfiler);
+		}
 		//wstrzyknięcie do ORM
 		\Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
 		return $this;

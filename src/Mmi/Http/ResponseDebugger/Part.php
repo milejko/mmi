@@ -59,6 +59,26 @@ class Part {
 		}
 		return $html;
 	}
+	
+	/**
+	 * Profiler DB
+	 * @return string
+	 */
+	public static function getDbProfilerHtml() {
+		$percentSum = 0;
+		$html = '';
+		$profilerData = \App\Registry::$db->getProfiler()->get();
+		//brak zapytań
+		if (!count($profilerData)) {
+			return 'No SQL queries';
+		}
+		//pętla po profilerze
+		foreach ($profilerData as $event) {
+			$percentSum += $event['percent'];
+			$html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; width: 450px; margin-right: 20px; font-size: 10px; word-wrap: break-word; white-space: pre-wrap;">' . $event['sql'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
+		}
+		return $html;
+	}
 
 	/**
 	 * Kolorowanie wartości procentowej (0-100) w odcieniach czerwieni

@@ -25,14 +25,8 @@ class Image {
 		if (gettype($input) == 'resource') {
 			return $input;
 		}
-		try {
-			//jeśli krótki content zakłada że to ścieżka pliku
-			return imagecreatefromstring((strlen($input) < 1024) ? file_get_contents($input) : $input);
-		} catch (\Exception $e) {
-			//logujemy potencjalne błędy
-			\Mmi\App\FrontController::getInstance()->getLogger()->addCritical($e->getMessage());
-			return;
-		}
+		//jeśli krótki content zakłada że to ścieżka pliku
+		return imagecreatefromstring((strlen($input) < 1024) ? file_get_contents($input) : $input);
 	}
 
 	/**
