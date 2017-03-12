@@ -67,9 +67,9 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 	}
 
 	/**
-	 * Kasuje wszystkie dane
+	 * Kasuje bufor bez rozgłaszania
 	 */
-	public function deleteAll() {
+	protected function _deleteAllNoBroadcasting() {
 		//iteracja po plikach
 		foreach (glob($this->_cache->getConfig()->path . '/*') as $filename) {
 			//bez usuwania katalogu
@@ -80,5 +80,5 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 			unlink($filename);
 		}
 	}
-	
+
 }

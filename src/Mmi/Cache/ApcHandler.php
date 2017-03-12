@@ -56,9 +56,9 @@ class ApcHandler extends DistributedCacheHandlerAbstract {
 	}
 
 	/**
-	 * Kasuje wszystkie dane
+	 * Kasuje bufor bez rozgłaszania
 	 */
-	public function deleteAll() {
+	protected function _deleteAllNoBroadcasting() {
 		//czyszczenie bufora apc
 		\apcu_clear_cache();
 	}
