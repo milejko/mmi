@@ -54,14 +54,14 @@ class HeadLink extends HeadAbstract {
 				$html .= '<!--[if ' . $conditional . ']>';
 			}
 			$html .= '	<link ';
-			$crc = isset($link['crc']) ? $link['crc'] : 0;
-			unset($link['crc']);
+			$ts = isset($link['ts']) ? $link['ts'] : 0;
+			unset($link['ts']);
 			foreach ($link as $key => $value) {
-				if ($key == 'href' && $crc != 0) {
+				if ($key == 'href' && $ts != 0) {
 					if (strpos($value, '?')) {
-						$value .= '&crc=' . $crc;
+						$value .= '&ts=' . $ts;
 					} else {
-						$value .= '?crc=' . $crc;
+						$value .= '?ts=' . $ts;
 					}
 				}
 				$html .= $key . '="' . $value . '" ';
@@ -105,7 +105,7 @@ class HeadLink extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function appendAlternate($href, $type, $title, $media = null, $conditional = '') {
-		return $this->_setAlternate($href, $type, $title, $media = null, true, $conditional);
+		return $this->_setAlternate($href, $type, $title, $media, true, $conditional);
 	}
 
 	/**
@@ -118,7 +118,7 @@ class HeadLink extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	public function prependAlternate($href, $type, $title, $media = null, $conditional = '') {
-		return $this->_setAlternate($href, $type, $title, $media = null, false, $conditional);
+		return $this->_setAlternate($href, $type, $title, $media, false, $conditional);
 	}
 
 	/**
@@ -148,8 +148,8 @@ class HeadLink extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	protected function _setStylesheet($href, $media = null, $prepend = false, $conditional = '') {
-		$crc = $this->_getCrc($href);
-		$params = ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $crc > 0 ? $this->_getPublicSrc($href) :  $href, 'crc' => $crc];
+		$ts = $this->_getLocationTimestamp($href);
+		$params = ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $ts > 0 ? $this->_getPublicSrc($href) :  $href, 'ts' => $ts];
 		if ($media) {
 			$params['media'] = $media;
 		}
@@ -177,7 +177,7 @@ class HeadLink extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadLink
 	 */
 	protected function _setAlternate($href, $type, $title, $media = null, $prepend = false, $conditional = '') {
-		$params = ['rel' => 'alternate', 'type' => $type, 'title' => $title, 'href' => $href, $crc = $this->_getCrc($href)];
+		$params = ['rel' => 'alternate', 'type' => $type, 'title' => $title, 'href' => $href];
 		if ($media) {
 			$params['media'] = $media;
 		}

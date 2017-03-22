@@ -63,14 +63,14 @@ class HeadScript extends HeadAbstract {
 				$html .= '<!--[if ' . $conditional . ']>';
 			}
 			$html .= '	<script ';
-			$crc = isset($script['crc']) ? $script['crc'] : 0;
-			unset($script['crc']);
+			$ts = isset($script['ts']) ? $script['ts'] : 0;
+			unset($script['ts']);
 			foreach ($script as $key => $value) {
-				if ($key == 'src' && $crc != 0) {
+				if ($key == 'src' && $ts != 0) {
 					if (strpos($value, '?')) {
-						$value .= '&crc=' . $crc;
+						$value .= '&ts=' . $ts;
 					} else {
-						$value .= '?crc=' . $crc;
+						$value .= '?ts=' . $ts;
 					}
 				}
 				$html .= htmlspecialchars($key) . '="' . htmlspecialchars($value) . '" ';
@@ -123,8 +123,8 @@ class HeadScript extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function setFile($src, $type = 'text/javascript', array $params = [], $prepend = false, $conditional = '') {
-		$crc = $this->_getCrc($src);
-		return $this->headScript(array_merge($params, ['type' => $type, 'src' => $crc > 0 ? $this->_getPublicSrc($src) :  $src, 'crc' => $crc]), $prepend, $conditional);
+		$ts = $this->_getLocationTimestamp($src);
+		return $this->headScript(array_merge($params, ['type' => $type, 'src' => $ts > 0 ? $this->_getPublicSrc($src) :  $src, 'ts' => $ts]), $prepend, $conditional);
 	}
 
 	/**
@@ -161,7 +161,7 @@ class HeadScript extends HeadAbstract {
 	 * @return \Mmi\Mvc\ViewHelper\HeadScript
 	 */
 	public function setScript($script, $type = 'text/javascript', array $params = [], $prepend = false, $conditional = '') {
-		return $this->headScript(array_merge($params, ['type' => $type, 'script' => $script, 'crc' => 0]), $prepend, $conditional);
+		return $this->headScript(array_merge($params, ['type' => $type, 'script' => $script]), $prepend, $conditional);
 	}
 
 }
