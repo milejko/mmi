@@ -52,15 +52,6 @@ class DistributedStorage extends \Mmi\OptionObject {
 	}
 
 	/**
-	 * Ładuje dane o podanym kluczu
-	 * @param string $key klucz
-	 */
-	public function load($key) {
-		//zwrot z wczytanych danych
-		return $this->getOption($key);
-	}
-
-	/**
 	 * Zapisuje dane pod podanym kluczem
 	 * @param string $data
 	 * @param string $key klucz
