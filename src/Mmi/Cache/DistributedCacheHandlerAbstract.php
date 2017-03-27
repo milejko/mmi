@@ -127,7 +127,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			$this->_undistributedCache->save(time(), self::DEL_PREFIX . self::FLUSH_MESSAGE, 0);
 		}
 		//czyszczenie pojedynczych kluczy
-		foreach ($this->_distributedStorage->getOptions() as $key) {
+		foreach ($this->_distributedStorage->getOptions() as $key => $ts) {
 			//jeśli klucz powinien zostać usunięty
 			if ($this->_keyShouldBeDeleted($key)) {
 				//usuwanie klucza - bez rozgłaszania
@@ -161,11 +161,11 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			return false;
 		}
 		//brak informacji o usunięciu klucza
-		if (null === $remoteTime = $this->_distributedStorage->getOption($cacheKey = self::DEL_PREFIX . $key)) {
+		if (null === $remoteTime = $this->_distributedStorage->getOption($key)) {
 			return false;
 		}
 		//jeśli czas lokalnego usunięcia jest wyższy niż zdalnego, nie wolno usuwać
-		if ($this->_undistributedCache->load($cacheKey) >= $remoteTime) {
+		if ($this->_undistributedCache->load($cacheKey = self::DEL_PREFIX . $key) >= $remoteTime) {
 			return false;
 		}
 		//zapis lokalnie informacji o czasie usunięcia
@@ -184,8 +184,8 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			return true;
 		}
 		//rozgłoszenie informacji o usunięciu klucza do bufora Db i zapis o lokalnym usunięciu
-		return $this->_distributedStorage->save($time = time(), $cacheKey = self::DEL_PREFIX . $key) &&
-			$this->_undistributedCache->save($time, $cacheKey, 0);
+		return $this->_distributedStorage->save($time = time(), $key) &&
+			$this->_undistributedCache->save($time, self::DEL_PREFIX . $key, 0);
 	}
 
 	/**
@@ -197,8 +197,8 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			return;
 		}
 		//rozgłoszenie informacji o usunięciu bufora i zapis o lokalnym czyszczeniu
-		$this->_distributedStorage->save($time = time(), $cacheKey = self::DEL_PREFIX . self::FLUSH_MESSAGE) &&
-			$this->_undistributedCache->save($time, $cacheKey, 0);
+		$this->_distributedStorage->save($time = time(), self::FLUSH_MESSAGE) &&
+			$this->_undistributedCache->save($time, self::DEL_PREFIX . self::FLUSH_MESSAGE, 0);
 	}
 
 }
