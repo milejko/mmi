@@ -22,11 +22,6 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 	 * @param string $key klucz
 	 */
 	public function load($key) {
-		//czy klucz powinien zostać usunięty
-		if ($this->_keyShouldBeDeleted($key)) {
-			//nie usuwamy pliku (strata wydajności)
-			return;
-		}
 		//próba odczytu pliku
 		try {
 			return file_get_contents($this->_cache->getConfig()->path . '/' . $key);
@@ -53,16 +48,15 @@ class FileHandler extends DistributedCacheHandlerAbstract {
 	/**
 	 * Kasuje dane o podanym kluczu
 	 * @param string $key klucz
+	 * @return boolean
 	 */
-	public function delete($key) {
+	protected function _deleteNoBroadcasting($key) {
 		//próba usunięcia pliku
 		try {
 			unlink($this->_cache->getConfig()->path . '/' . $key);
 		} catch (KernelException $e) {
 			//brak akcji
 		}
-		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_broadcastDelete($key);
 		return true;
 	}
 

@@ -20,11 +20,6 @@ class ApcHandler extends DistributedCacheHandlerAbstract {
 	 * @param string $key klucz
 	 */
 	public function load($key) {
-		//czy klucz powinien zostać usunięty
-		if ($this->_keyShouldBeDeleted($key)) {
-			//nie usuwamy z bufora APC (strata wydajności)
-			return;
-		}
 		//rozgłoszenie informacji o usunięciu klucza do bufora Db
 		return \apcu_fetch($this->_namespace . $key);
 	}
@@ -43,18 +38,16 @@ class ApcHandler extends DistributedCacheHandlerAbstract {
 	}
 
 	/**
-	 * Kasuje dane o podanym kluczu
-	 * @param string $key klucz
+	 * Kasuje klucz bez rozgłaszania
+	 * @param strings $key klucz
 	 * @return boolean
 	 */
-	public function delete($key) {
+	protected function _deleteNoBroadcasting($key) {
 		//usunięcie z apc
 		\apcu_delete($this->_namespace . $key);
-		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_broadcastDelete($key);
 		return true;
 	}
-
+	
 	/**
 	 * Kasuje bufor bez rozgłaszania
 	 */
@@ -62,5 +55,5 @@ class ApcHandler extends DistributedCacheHandlerAbstract {
 		//czyszczenie bufora apc
 		\apcu_clear_cache();
 	}
-
+	
 }

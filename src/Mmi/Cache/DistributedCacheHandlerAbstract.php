@@ -60,6 +60,12 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	CONST DISTRIBUTED_REFRESH_INTERVAL = 2;
 
 	/**
+	 * Usunięcie klucza bez rozgłoszenia
+	 * @return boolean
+	 */
+	abstract protected function _deleteNoBroadcasting($key);
+
+	/**
 	 * Usunięcie bufora bez rozgłoszenia
 	 */
 	abstract protected function _deleteAllNoBroadcasting();
@@ -79,6 +85,16 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 		}
 		//bufor aktywny i rozproszony - inicjalizacja
 		$this->_initDistributedStorage($cache);
+	}
+
+	/**
+	 * Kasuje dane o podanym kluczu
+	 * @param string $key klucz
+	 * @return boolean
+	 */
+	public final function delete($key) {
+		//usunięcie klucza i rozgłoszenie informacji o usunięciu klucza do bufora Db
+		return $this->_deleteNoBroadcasting($key) && $this->_broadcastDelete($key);
 	}
 
 	/**
@@ -110,6 +126,14 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			//zapis lokalnie informacji o usunięciu
 			$this->_undistributedCache->save(time(), self::DEL_PREFIX . self::FLUSH_MESSAGE, 0);
 		}
+		//czyszczenie pojedynczych kluczy
+		foreach ($this->_distributedStorage->getOptions() as $key) {
+			//jeśli klucz powinien zostać usunięty
+			if ($this->_keyShouldBeDeleted($key)) {
+				//usuwanie klucza - bez rozgłaszania
+				$this->_deleteNoBroadcasting($key);
+			}
+		}
 	}
 
 	/**
@@ -117,7 +141,9 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	 * @return \Mmi\Cache\Cache
 	 */
 	protected final function _getDistributedStorage() {
+		//ładowanie rozproszonego bufora z bufora lokalnego
 		if (null === $distributedStorage = $this->_undistributedCache->load(self::STORAGE_KEY)) {
+			//zapis z krótkim, zdefiniowanym odświeżaniem
 			$this->_undistributedCache->save($distributedStorage = new DistributedStorage(), self::STORAGE_KEY, self::DISTRIBUTED_REFRESH_INTERVAL);
 		}
 		//zapis lokalnym buforze
@@ -150,16 +176,16 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 	/**
 	 * Rozgłoszenie o skasowaniu klucza
 	 * @param string $key klucz
+	 * @return boolean
 	 */
 	protected final function _broadcastDelete($key) {
 		//brak rozproszonego bufora
 		if (!$this->_distributedStorage) {
-			return;
+			return true;
 		}
-		//rozgłoszenie informacji o usunięciu klucza do bufora Db
-		$this->_distributedStorage->save($time = time(), $cacheKey = self::DEL_PREFIX . $key);
-		//lokalnie już usunięte - zapis do bufora
-		$this->_undistributedCache->save($time, $cacheKey, 0);
+		//rozgłoszenie informacji o usunięciu klucza do bufora Db i zapis o lokalnym usunięciu
+		return $this->_distributedStorage->save($time = time(), $cacheKey = self::DEL_PREFIX . $key) &&
+			$this->_undistributedCache->save($time, $cacheKey, 0);
 	}
 
 	/**
@@ -170,10 +196,9 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 		if (!$this->_distributedStorage) {
 			return;
 		}
-		//rozgłoszenie informacji o usunięciu bufora
-		$this->_distributedStorage->save($time = time(), $cacheKey = self::DEL_PREFIX . self::FLUSH_MESSAGE);
-		//lokalnie już wyczyszczony - zapis do bufora
-		$this->_undistributedCache->save($time, $cacheKey, 0);
+		//rozgłoszenie informacji o usunięciu bufora i zapis o lokalnym czyszczeniu
+		$this->_distributedStorage->save($time = time(), $cacheKey = self::DEL_PREFIX . self::FLUSH_MESSAGE) &&
+			$this->_undistributedCache->save($time, $cacheKey, 0);
 	}
 
 }

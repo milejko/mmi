@@ -26,7 +26,7 @@ class DistributedStorage extends \Mmi\OptionObject {
 	/**
 	 * Maksymalny czas rozgłaszania
 	 */
-	CONST DEFAULT_TTL = 600;
+	CONST DEFAULT_TTL = 300;
 
 	/**
 	 * Kostruktor
