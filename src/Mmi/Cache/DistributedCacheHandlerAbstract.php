@@ -127,12 +127,10 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 			$this->_undistributedCache->save(time(), self::DEL_PREFIX . self::FLUSH_MESSAGE, 0);
 		}
 		//czyszczenie pojedynczych kluczy
-		foreach ($this->_distributedStorage->getOptions() as $key => $ts) {
-			//jeśli klucz powinien zostać usunięty
-			if ($this->_keyShouldBeDeleted($key)) {
-				//usuwanie klucza - bez rozgłaszania
+		foreach ($this->_distributedStorage->getOptions() as $key => $timestamp) {
+			//jeśli klucz powinien zostać usunięty usuwa bez dalszego rozgłaszania
+			$this->_keyShouldBeDeleted($key) &&
 				$this->_deleteNoBroadcasting($key);
-			}
 		}
 	}
 
@@ -190,11 +188,12 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface 
 
 	/**
 	 * Rozgłoszenie o usunięciu bufora
+	 * @return boolean
 	 */
 	protected final function _broadcastDeleteAll() {
 		//brak rozproszonego bufora, lub flush został już rozgłoszony
 		if (!$this->_distributedStorage) {
-			return;
+			return true;
 		}
 		//rozgłoszenie informacji o usunięciu bufora i zapis o lokalnym czyszczeniu
 		$this->_distributedStorage->save($time = time(), self::FLUSH_MESSAGE) &&
