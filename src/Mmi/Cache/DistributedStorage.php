@@ -28,7 +28,7 @@ class DistributedStorage extends \Mmi\OptionObject {
 	 * czas w którym musi odezwać się każdy node
 	 */
 	CONST DEFAULT_TTL = 60;
-
+	
 	/**
 	 * Kostruktor
 	 */
@@ -53,24 +53,18 @@ class DistributedStorage extends \Mmi\OptionObject {
 	 * @param string $key klucz
 	 */
 	public function save($data, $key) {
-		//wyszukiwanie rekordu
-		if (null === $cacheRecord = (new CacheQuery)->findPk($key)) {
-			//tworzenie nowego rekordu
-			$cacheRecord = new CacheRecord;
-			$cacheRecord->id = $key;
-		}
-		//przypisanie danych
+		//tworzenie nowego rekordu
+		$cacheRecord = new CacheRecord;
+		$cacheRecord->clearModified();
+		//nadawanie identyfikatora
+		$cacheRecord->id = $key;
+		//ustawianie danych
 		$cacheRecord->data = $data;
 		//ustawienie ttl
 		$cacheRecord->ttl = time() + self::DEFAULT_TTL;
 		//aktualizacja w rejestrze
 		$this->setOption($key, $data);
-		//próba zapisu
-		try {
-			$cacheRecord->save();
-		} catch (\Exception $e) {
-			//slam, próba zapisu z wielu nodów itp.?
-		}
+		return $cacheRecord->save();
 	}
-
+	
 }
