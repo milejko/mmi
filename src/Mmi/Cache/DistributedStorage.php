@@ -21,33 +21,29 @@ class DistributedStorage extends \Mmi\OptionObject {
 	/**
 	 * 1/x prawdopodobieństwo uruchomienia garbage collectora
 	 */
-	CONST GARBAGE_COLLECTOR_DIVISOR = 500;
+	CONST GARBAGE_COLLECTOR_DIVISOR = 1000;
 
 	/**
 	 * Maksymalny czas rozgłaszania
+	 * czas w którym musi odezwać się każdy node
 	 */
-	CONST DEFAULT_TTL = 300;
+	CONST DEFAULT_TTL = 60;
 
 	/**
 	 * Kostruktor
 	 */
 	public function __construct() {
 		//garbage collector
-		if (rand(1, self::GARBAGE_COLLECTOR_DIVISOR) == 1) {
+		if (rand(0, self::GARBAGE_COLLECTOR_DIVISOR) == 1) {
 			//uproszczone usuwanie - jedynm zapytaniem
 			\Mmi\Orm\DbConnector::getAdapter()->delete((new CacheQuery)->getTableName());
 		}
-		//iteracja po kolekcji aktywnego bufora systemowego
+		//iteracja po parach klucz+dane storage w mmi_cache
 		foreach ((new CacheQuery)
 			->whereTtl()->greater(time())
-			->find() as $cacheRecord) {
-			//próba rozkodowania danych
-			try {
-				//zapis danych do rejestru
-				$this->setOption($cacheRecord->id, $cacheRecord->data);
-			} catch (\Exception $e) {
-				//błąd json
-			}
+			->findPairs('id', 'data') as $id => $data) {
+			//zapis danych do rejestru
+			$this->setOption($id, $data);
 		}
 	}
 
@@ -63,16 +59,17 @@ class DistributedStorage extends \Mmi\OptionObject {
 			$cacheRecord = new CacheRecord;
 			$cacheRecord->id = $key;
 		}
+		//przypisanie danych
 		$cacheRecord->data = $data;
+		//ustawienie ttl
 		$cacheRecord->ttl = time() + self::DEFAULT_TTL;
 		//aktualizacja w rejestrze
 		$this->setOption($key, $data);
 		//próba zapisu
 		try {
-			//zapis rekordu
 			$cacheRecord->save();
 		} catch (\Exception $e) {
-			//slam?
+			//slam, próba zapisu z wielu nodów itp.?
 		}
 	}
 
