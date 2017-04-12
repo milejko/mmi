@@ -395,7 +395,7 @@ abstract class Form extends \Mmi\OptionObject {
 	public final function start() {
 		//zwrot HTML
 		return '<form ' . ($this->getOption('action') ? ('action="' . $this->getOption('action') . '"') : '') .
-			'" method="' . $this->getOption('method') .
+			'  method="' . $this->getOption('method') .
 			'" enctype="' . $this->getOption('enctype') .
 			'" class="' . $this->getOption('class') .
 			'" data-class="' . get_class($this) .
