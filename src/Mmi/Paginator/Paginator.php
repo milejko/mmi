@@ -22,7 +22,16 @@ class Paginator extends \Mmi\OptionObject {
 			->setPreviousLabel('&#171;')
 			->setNextLabel('&#187;')
 			->setHashHref('')
-			->setPageVariable('p');
+			->setPageVariable('p')
+			->setRequest(\Mmi\App\FrontController::getInstance()->getView()->request); //domyślny request
+	}
+	
+	/**
+	 * Zwraca obiekt requesta używany przez Paginator
+	 * @return \Mmi\Http\Request
+	 */
+	public function getRequest() {
+		return $this->getOption('request');
 	}
 
 	/**
@@ -41,7 +50,7 @@ class Paginator extends \Mmi\OptionObject {
 		if ($this->getOption('page')) {
 			return $this->getOption('page');
 		}
-		$requestPage = \Mmi\App\FrontController::getInstance()->getView()->request->__get($this->getOption('pageVariable'));
+		$requestPage = $this->getRequest()->__get($this->getOption('pageVariable'));
 		$page = ($requestPage > 0) ? $requestPage : 1;
 		$this->setOption('page', $page);
 		return $page;
@@ -54,7 +63,16 @@ class Paginator extends \Mmi\OptionObject {
 	public function getOffset() {
 		return $this->getOption('rowsPerPage') * ($this->getPage() - 1);
 	}
-
+	
+	/**
+	 * Ustawia obiekt requesta używany przez Paginator
+	 * @param \Mmi\Http\Request $request
+	 * @return \Mmi\Paginator\Paginator
+	 */
+	public function setRequest(\Mmi\Http\Request $request) {
+		return $this->setOption('request', $request);
+	}
+	
 	/**
 	 * Ustawia ilość danych do stronnicowania
 	 * @param integer $count
@@ -172,6 +190,13 @@ class Paginator extends \Mmi\OptionObject {
 		$previousLabel = $this->getOption('previousLabel');
 		$nextLabel = $this->getOption('nextLabel');
 		$hashHref = $this->getOption('hashHref');
+		
+		//moduł, kontroler, akcja na podstawie requesta
+		$modCtrlAct = [
+			'module' => $this->getRequest()->getModuleName(),
+			'controller' => $this->getRequest()->getControllerName(),
+			'action' => $this->getRequest()->getActionName()
+		];
 
 		//generowanie HTML
 		$html = '<div class="paginator">';
@@ -179,7 +204,7 @@ class Paginator extends \Mmi\OptionObject {
 		//generowanie guzika wstecz
 		if ($page > 1) {
 			$firstPage = (($page - 1) > 1) ? ($page - 1) : null;
-			$previousUrl = $view->url([$pageVariable => $firstPage]) . $hashHref;
+			$previousUrl = $view->url($modCtrlAct + [$pageVariable => $firstPage]) . $hashHref;
 			$view->headLink(['rel' => 'prev', 'href' => $previousUrl]);
 			$html .= '<span class="previous page"><a data-page="' . $firstPage . '" href="' . $previousUrl . ' ">' . $previousLabel . '</a></span>';
 		} else {
@@ -190,7 +215,7 @@ class Paginator extends \Mmi\OptionObject {
 		if (1 == $page) {
 			$html .= '<span class="current page">1</span>';
 		} else {
-			$html .= '<span class="page"><a data-page="" href="' . $view->url([$pageVariable => null]) . $hashHref . '">1</a></span>';
+			$html .= '<span class="page"><a data-page="" href="' . $view->url($modCtrlAct + [$pageVariable => null]) . $hashHref . '">1</a></span>';
 		}
 
 		//obliczanie zakresów
@@ -207,7 +232,7 @@ class Paginator extends \Mmi\OptionObject {
 
 		//pierwsza strona w zakresie
 		if ($rangeBegin > 2) {
-			$html .= '<span class="dots page"><a data-page="' . floor((1 + $rangeBegin) / 2) . '" href="' . $view->url([$pageVariable => floor((1 + $rangeBegin) / 2)]) . $this->_options['hashHref'] . '">...</a></span>';
+			$html .= '<span class="dots page"><a data-page="' . floor((1 + $rangeBegin) / 2) . '" href="' . $view->url($modCtrlAct + [$pageVariable => floor((1 + $rangeBegin) / 2)]) . $hashHref . '">...</a></span>';
 		}
 
 		//generowanie stron w zakresie
@@ -215,25 +240,25 @@ class Paginator extends \Mmi\OptionObject {
 			if ($i == $page) {
 				$html .= '<span class="current page">' . $i . '</span>';
 			} else {
-				$html .= '<span class="page"><a data-page="' . $i . '" href="' . $view->url([$pageVariable => $i]) . $hashHref . '">' . $i . '</a></span>';
+				$html .= '<span class="page"><a data-page="' . $i . '" href="' . $view->url($modCtrlAct + [$pageVariable => $i]) . $hashHref . '">' . $i . '</a></span>';
 			}
 		}
 
 		//ostatnia strona w zakresie
 		if ($rangeEnd < $pagesCount - 1) {
-			$html .= '<span class="dots page"><a data-page="' . ceil(($rangeEnd + $pagesCount) / 2) . '" href="' . $view->url([$pageVariable => ceil(($rangeEnd + $pagesCount) / 2)]) . $hashHref . '">...</a></span>';
+			$html .= '<span class="dots page"><a data-page="' . ceil(($rangeEnd + $pagesCount) / 2) . '" href="' . $view->url($modCtrlAct + [$pageVariable => ceil(($rangeEnd + $pagesCount) / 2)]) . $hashHref . '">...</a></span>';
 		}
 
 		//ostatnia strona w ogóle
 		if ($pagesCount == $page) {
 			$html .= '<span class="last current page">' . $pagesCount . '</span>';
 		} else {
-			$html .= '<span class="last page"><a data-page="' . $pagesCount . '" href="' . $view->url([$pageVariable => $pagesCount]) . $hashHref . '">' . $pagesCount . '</a></span>';
+			$html .= '<span class="last page"><a data-page="' . $pagesCount . '" href="' . $view->url($modCtrlAct + [$pageVariable => $pagesCount]) . $hashHref . '">' . $pagesCount . '</a></span>';
 		}
 
 		//generowanie guzika następny
 		if ($page < $pagesCount) {
-			$nextUrl = $view->url([$pageVariable => $page + 1]) . $hashHref;
+			$nextUrl = $view->url($modCtrlAct + [$pageVariable => $page + 1]) . $hashHref;
 			$view->headLink(['rel' => 'next', 'href' => $nextUrl]);
 			$html .= '<span class="next page"><a data-page="' . ($page + 1) . '" href="' . $nextUrl . '">' . $nextLabel . '</a></span>';
 		} else {
