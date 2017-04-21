@@ -28,12 +28,14 @@ class Template extends HelperAbstract {
 		 * komentarzy
 		 */
 		$input = str_replace([
+			'{{$',
 			'{{',
 			'}}',
 			"\r\n",
 			'{*',
 			'*}',
 			], [
+			'__-angular-controller-__',
 			'__-angular-start-__',
 			'__-angular-end-__',
 			"\n",
@@ -122,9 +124,11 @@ class Template extends HelperAbstract {
 		 * odzyskuje klamry
 		 */
 		$input = str_replace([
+			'__-angular-controller-__',
 			'__-angular-start-__',
 			'__-angular-end-__',
 			], [
+			'{{$',
 			'{{',
 			'}}',
 			], $input);
