@@ -13,23 +13,25 @@ namespace Mmi\Filter;
 /**
  * Bada długość ciągu lub tabeli
  */
-class Length extends \Mmi\Filter\FilterAbstract {
+class Length extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zliczanie długości
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return int
-	 */
-	public function filter($value) {
-		//string lub numer
-		if (is_string($value) || is_numeric($value)) {
-			return mb_strlen((string) $value, mb_detect_encoding($value));
-		}
-		//array
-		if (is_array($value) || $value instanceof \ArrayObject) {
-			return count($value);
-		}
-	}
+    /**
+     * Zliczanie długości
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return int
+     */
+    public function filter($value)
+    {
+        //string lub numer
+        if (is_string($value) || is_numeric($value)) {
+            return mb_strlen((string) $value, mb_detect_encoding($value));
+        }
+        //array
+        if (is_array($value) || $value instanceof \ArrayObject) {
+            return count($value);
+        }
+    }
 
 }

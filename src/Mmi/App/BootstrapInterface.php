@@ -10,16 +10,17 @@
 
 namespace Mmi\App;
 
-interface BootstrapInterface {
+interface BootstrapInterface
+{
 
-	/**
-	 * Parametryzowanie bootstrapa
-	 * @param string $env nazwa środowiska
-	 */
-	public function __construct();
+    /**
+     * Parametryzowanie bootstrapa
+     * @param string $env nazwa środowiska
+     */
+    public function __construct();
 
-	/**
-	 * Uruchomienie bootstrapa
-	 */
-	public function run();
+    /**
+     * Uruchomienie bootstrapa
+     */
+    public function run();
 }

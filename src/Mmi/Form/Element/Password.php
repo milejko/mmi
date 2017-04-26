@@ -13,14 +13,16 @@ namespace Mmi\Form\Element;
 /**
  * Pole hasło
  */
-class Password extends ElementAbstract {
+class Password extends ElementAbstract
+{
 
-	/**
-	 * Buduje pole
-	 * @return string
-	 */
-	public function fetchField() {
-		return '<input type="password" ' . $this->_getHtmlOptions() . '/>';
-	}
+    /**
+     * Buduje pole
+     * @return string
+     */
+    public function fetchField()
+    {
+        return '<input type="password" ' . $this->_getHtmlOptions() . '/>';
+    }
 
 }

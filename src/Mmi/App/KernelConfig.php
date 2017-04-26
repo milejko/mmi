@@ -13,98 +13,99 @@ namespace Mmi\App;
 /**
  * Klasa konfiguracji aplikacji
  */
-abstract class KernelConfig {
-	
-	/**
-	 * Konfiguracja bufora lokalnego
-	 * @var \Mmi\Cache\CacheConfig
-	 */
-	public $localCache;
-	
-	/**
-	 * Konfiguracja bufora
-	 * @var \Mmi\Cache\CacheConfig
-	 */
-	public $cache;
+abstract class KernelConfig
+{
 
-	/**
-	 * Konfiguracji bazy danych
-	 * @var \Mmi\Db\DbConfig
-	 */
-	public $db;
+    /**
+     * Konfiguracja bufora lokalnego
+     * @var \Mmi\Cache\CacheConfig
+     */
+    public $localCache;
 
-	/**
-	 * Konfiguracja loggera
-	 * @var \Mmi\Log\LogConfig
-	 */
-	public $log;
+    /**
+     * Konfiguracja bufora
+     * @var \Mmi\Cache\CacheConfig
+     */
+    public $cache;
 
-	/**
-	 * Konfiguracja routera
-	 * @var \Mmi\Mvc\RouterConfig
-	 */
-	public $router;
+    /**
+     * Konfiguracji bazy danych
+     * @var \Mmi\Db\DbConfig
+     */
+    public $db;
 
-	/**
-	 * Konfiguracja sesji
-	 * @var \Mmi\Session\SessionConfig
-	 */
-	public $session;
+    /**
+     * Konfiguracja loggera
+     * @var \Mmi\Log\LogConfig
+     */
+    public $log;
 
-	/**
-	 * Charset
-	 * @var string
-	 */
-	public $charset = 'utf-8';
+    /**
+     * Konfiguracja routera
+     * @var \Mmi\Mvc\RouterConfig
+     */
+    public $router;
 
-	/**
-	 * Tryb debugowania
-	 * @var boolean
-	 */
-	public $debug = false;
-	
-	/**
-	 * Bezwarunkowa kompilacja
-	 * @var boolean
-	 */
-	public $compile = false;
+    /**
+     * Konfiguracja sesji
+     * @var \Mmi\Session\SessionConfig
+     */
+    public $session;
 
-	/**
-	 * Strefa czasowa
-	 * @var string
-	 */
-	public $timeZone = 'Europe/Warsaw';
+    /**
+     * Charset
+     * @var string
+     */
+    public $charset = 'utf-8';
 
-	/**
-	 * Globalna sól aplikacji
-	 * @var string
-	 */
-	public $salt = 'change-this-value';
+    /**
+     * Tryb debugowania
+     * @var boolean
+     */
+    public $debug = false;
 
-	/**
-	 * Języki obsługiwane przez aplikację
-	 * np. pl, en, fr
-	 * @var array
-	 */
-	public $languages = [];
+    /**
+     * Bezwarunkowa kompilacja
+     * @var boolean
+     */
+    public $compile = false;
 
-	/**
-	 * Pluginy włączone w aplikacji
-	 * np. MmiTest\Controller\Plugin
-	 * @var array
-	 */
-	public $plugins = [];
+    /**
+     * Strefa czasowa
+     * @var string
+     */
+    public $timeZone = 'Europe/Warsaw';
 
-	/**
-	 * Domyślny host, jeśli nie ustawiony
-	 * @var string
-	 */
-	public $host = 'localhost';
-	
-	/**
-	 * Adres CDN
-	 * @var string 
-	 */
-	public $cdn;
+    /**
+     * Globalna sól aplikacji
+     * @var string
+     */
+    public $salt = 'change-this-value';
+
+    /**
+     * Języki obsługiwane przez aplikację
+     * np. pl, en, fr
+     * @var array
+     */
+    public $languages = [];
+
+    /**
+     * Pluginy włączone w aplikacji
+     * np. MmiTest\Controller\Plugin
+     * @var array
+     */
+    public $plugins = [];
+
+    /**
+     * Domyślny host, jeśli nie ustawiony
+     * @var string
+     */
+    public $host = 'localhost';
+
+    /**
+     * Adres CDN
+     * @var string 
+     */
+    public $cdn;
 
 }

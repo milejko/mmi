@@ -13,15 +13,17 @@ namespace Mmi\Form\Element;
 /**
  * Element pole tekstowe
  */
-class Text extends ElementAbstract {
+class Text extends ElementAbstract
+{
 
-	/**
-	 * Rendering pola tekstowego
-	 * @return string
-	 */
-	public function fetchField() {
-		$this->setValue((new \Mmi\Filter\Input)->filter($this->getValue()));
-		return '<input type="text" ' . $this->_getHtmlOptions() . '/>';
-	}
+    /**
+     * Rendering pola tekstowego
+     * @return string
+     */
+    public function fetchField()
+    {
+        $this->setValue((new \Mmi\Filter\Input)->filter($this->getValue()));
+        return '<input type="text" ' . $this->_getHtmlOptions() . '/>';
+    }
 
 }

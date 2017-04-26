@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
  * 
@@ -17,15 +16,17 @@ require_once 'CommandAbstract.php';
 /**
  * Całkowicie usuwa cache
  */
-class FlushCache extends CommandAbstract {
-	
-	public function run() {
-		//czyszczenie bufora systemowego
-		\Mmi\App\FrontController::getInstance()->getLocalCache()->flush();
-		//czyszczenie bufora aplikacyjnego
-		\App\Registry::$cache->flush();
-	}
-	
+class FlushCache extends CommandAbstract
+{
+
+    public function run()
+    {
+        //czyszczenie bufora systemowego
+        \Mmi\App\FrontController::getInstance()->getLocalCache()->flush();
+        //czyszczenie bufora aplikacyjnego
+        \App\Registry::$cache->flush();
+    }
+
 }
 
 //nowy obiekt usuwający cache

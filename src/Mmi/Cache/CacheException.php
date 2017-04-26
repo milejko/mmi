@@ -13,6 +13,7 @@ namespace Mmi\Cache;
 /**
  * Klasa wyjątku bufora
  */
-class CacheException extends \Mmi\App\KernelException {
-	
+class CacheException extends \Mmi\App\KernelException
+{
+    
 }

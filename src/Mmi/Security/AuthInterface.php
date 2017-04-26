@@ -10,23 +10,24 @@
 
 namespace Mmi\Security;
 
-interface AuthInterface {
+interface AuthInterface
+{
 
-	/**
-	 * Autoryzacja z podaniem identyfikatora i hasła
-	 * @param string $identity identyfikator
-	 * @param string $credential hasło
-	 */
-	public static function authenticate($identity, $credential);
+    /**
+     * Autoryzacja z podaniem identyfikatora i hasła
+     * @param string $identity identyfikator
+     * @param string $credential hasło
+     */
+    public static function authenticate($identity, $credential);
 
-	/**
-	 * Zaufana autoryzacja z podaniem identyfikatora
-	 * @param string $identity identyfikator
-	 */
-	public static function idAuthenticate($identity);
+    /**
+     * Zaufana autoryzacja z podaniem identyfikatora
+     * @param string $identity identyfikator
+     */
+    public static function idAuthenticate($identity);
 
-	/**
-	 * Niszczy autoryzację
-	 */
-	public static function deauthenticate();
+    /**
+     * Niszczy autoryzację
+     */
+    public static function deauthenticate();
 }

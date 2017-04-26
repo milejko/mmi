@@ -10,6 +10,7 @@
 
 namespace Mmi\Db;
 
-class DbException extends \Mmi\App\KernelException {
-	
+class DbException extends \Mmi\App\KernelException
+{
+    
 }

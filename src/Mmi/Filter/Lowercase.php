@@ -13,16 +13,18 @@ namespace Mmi\Filter;
 /**
  * Konwersja do małych liter
  */
-class Lowercase extends \Mmi\Filter\FilterAbstract {
+class Lowercase extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zmniejsza wszystkie litery w ciągu
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return mb_strtolower($value, mb_detect_encoding($value));
-	}
+    /**
+     * Zmniejsza wszystkie litery w ciągu
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return mb_strtolower($value, mb_detect_encoding($value));
+    }
 
 }

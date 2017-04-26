@@ -13,21 +13,23 @@ namespace Mmi\Db\Adapter;
 /**
  * Klasa generująca kolejne klucze bind
  */
-class PdoBindHelper {
+class PdoBindHelper
+{
 
-	/**
-	 * Indeks powiązań
-	 * @var integer
-	 */
-	private static $_bindIndex = 1000000;
+    /**
+     * Indeks powiązań
+     * @var integer
+     */
+    private static $_bindIndex = 1000000;
 
-	/**
-	 * Zwraca kolejny klucz do binda
-	 * @return string
-	 */
-	public static function generateBindKey() {
-		//generowanie kolejnego klucza bind
-		return str_replace([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], self::$_bindIndex++);
-	}
+    /**
+     * Zwraca kolejny klucz do binda
+     * @return string
+     */
+    public static function generateBindKey()
+    {
+        //generowanie kolejnego klucza bind
+        return str_replace([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], self::$_bindIndex++);
+    }
 
 }

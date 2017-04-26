@@ -13,12 +13,13 @@ namespace Mmi\Orm;
 /**
  * Zapytanie dla rekordów cache
  */
-class CacheQuery extends \Mmi\Orm\Query {
+class CacheQuery extends \Mmi\Orm\Query
+{
 
-	/**
-	 * Nazwa tabeli
-	 * @var string
-	 */
-	protected $_tableName = 'mmi_cache';
+    /**
+     * Nazwa tabeli
+     * @var string
+     */
+    protected $_tableName = 'mmi_cache';
 
 }

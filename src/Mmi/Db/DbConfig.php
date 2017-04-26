@@ -10,73 +10,74 @@
 
 namespace Mmi\Db;
 
-class DbConfig {
+class DbConfig
+{
 
-	/**
-	 * Silnik bazy danych
-	 * pgsql | mysql | sqlite
-	 * @var string
-	 */
-	public $driver;
+    /**
+     * Silnik bazy danych
+     * pgsql | mysql | sqlite
+     * @var string
+     */
+    public $driver;
 
-	/**
-	 * Host bazy danych (lub ścieżka sqlite)
-	 * @var string
-	 */
-	public $host;
+    /**
+     * Host bazy danych (lub ścieżka sqlite)
+     * @var string
+     */
+    public $host;
 
-	/**
-	 * Port bazy danych
-	 * @var integer
-	 */
-	public $port;
-	
-	/**
-	 * Host tylko do zapisu w clusterze
-	 * @var string
-	 */
-	public $upstreamHost;
+    /**
+     * Port bazy danych
+     * @var integer
+     */
+    public $port;
 
-	/**
-	 * Port tylko do zapisu w clusterze
-	 * @var integer
-	 */
-	public $upstreamPort;
+    /**
+     * Host tylko do zapisu w clusterze
+     * @var string
+     */
+    public $upstreamHost;
 
-	/**
-	 * Nazwa bazy
-	 * @var string
-	 */
-	public $name;
+    /**
+     * Port tylko do zapisu w clusterze
+     * @var integer
+     */
+    public $upstreamPort;
 
-	/**
-	 * Schemat
-	 * @var string
-	 */
-	public $schema;
+    /**
+     * Nazwa bazy
+     * @var string
+     */
+    public $name;
 
-	/**
-	 * Nazwa użytkownika
-	 * @var string
-	 */
-	public $user;
+    /**
+     * Schemat
+     * @var string
+     */
+    public $schema;
 
-	/**
-	 * Hasło
-	 * @var string
-	 */
-	public $password;
+    /**
+     * Nazwa użytkownika
+     * @var string
+     */
+    public $user;
 
-	/**
-	 * Kodowanie znaków
-	 * @var string
-	 */
-	public $charset = 'utf8';
+    /**
+     * Hasło
+     * @var string
+     */
+    public $password;
 
-	/**
-	 * Połączenie trwałe
-	 * @var boolean
-	 */
-	public $persistent = false;
+    /**
+     * Kodowanie znaków
+     * @var string
+     */
+    public $charset = 'utf8';
+
+    /**
+     * Połączenie trwałe
+     * @var boolean
+     */
+    public $persistent = false;
 
 }

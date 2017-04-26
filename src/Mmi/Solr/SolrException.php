@@ -13,6 +13,7 @@ namespace Mmi\Solr;
 /**
  * Wyjątek Solr
  */
-class SolrException extends \Mmi\App\KernelException {
-	
+class SolrException extends \Mmi\App\KernelException
+{
+    
 }

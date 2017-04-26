@@ -16,29 +16,32 @@ namespace Mmi\Filter;
  * @method self setExtras($extras)
  * @method string getExtras()
  */
-class StringTrim extends \Mmi\Filter\FilterAbstract {
+class StringTrim extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setExtras(current($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setExtras(current($options));
+    }
 
-	/**
-	 * Usuwa spacę z końców ciągu znaków
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		$chars = ' ';
-		if ($this->getExtras()) {
-			$chars .= $this->getExtras();
-		}
-		return trim($value, $chars);
-	}
+    /**
+     * Usuwa spacę z końców ciągu znaków
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        $chars = ' ';
+        if ($this->getExtras()) {
+            $chars .= $this->getExtras();
+        }
+        return trim($value, $chars);
+    }
 
 }

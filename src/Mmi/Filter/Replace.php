@@ -17,26 +17,29 @@ namespace Mmi\Filter;
  * @method self setReplace($replace)
  * @method string getReplace()
  */
-class Replace extends \Mmi\Filter\FilterAbstract {
+class Replace extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setSearch(current($options))
-				->setReplace(next($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setSearch(current($options))
+                ->setReplace(next($options));
+    }
 
-	/**
-	 * Zamienia znaki
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return str_replace($this->getSearch(), $this->getReplace(), $value);
-	}
+    /**
+     * Zamienia znaki
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return str_replace($this->getSearch(), $this->getReplace(), $value);
+    }
 
 }

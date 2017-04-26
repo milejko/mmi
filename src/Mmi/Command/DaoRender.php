@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
  * 
@@ -17,23 +16,25 @@ require_once 'CommandAbstract.php';
 /**
  * Renderer DAO, rekordów, zapytań itd.
  */
-class DaoRenderer extends CommandAbstract {
+class DaoRenderer extends CommandAbstract
+{
 
-	/**
-	 * Metoda uruchamiająca
-	 */
-	public function run() {
+    /**
+     * Metoda uruchamiająca
+     */
+    public function run()
+    {
 
-		//odbudowanie wszystkich DAO/Record/Query/Field/Join
-		foreach (\App\Registry::$db->tableList(\App\Registry::$config->db->schema) as $tableName) {
-			//bez generowania dla DB_CHANGELOG i DB_CACHE
-			if (substr(strtoupper($tableName), 0, 3) == 'DB_') {
-				continue;
-			}
-			//buduje struktruę dla tabeli
-			\Mmi\Orm\Builder::buildFromTableName($tableName);
-		}
-	}
+        //odbudowanie wszystkich DAO/Record/Query/Field/Join
+        foreach (\App\Registry::$db->tableList(\App\Registry::$config->db->schema) as $tableName) {
+            //bez generowania dla DB_CHANGELOG i DB_CACHE
+            if (substr(strtoupper($tableName), 0, 3) == 'DB_') {
+                continue;
+            }
+            //buduje struktruę dla tabeli
+            \Mmi\Orm\Builder::buildFromTableName($tableName);
+        }
+    }
 
 }
 

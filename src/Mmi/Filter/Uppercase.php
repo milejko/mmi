@@ -13,16 +13,18 @@ namespace Mmi\Filter;
 /**
  * Wielkie litery
  */
-class Uppercase extends \Mmi\Filter\FilterAbstract {
+class Uppercase extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zwiększa wszystkie litery w ciągu
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return mb_strtoupper($value, mb_detect_encoding($value));
-	}
+    /**
+     * Zwiększa wszystkie litery w ciągu
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return mb_strtoupper($value, mb_detect_encoding($value));
+    }
 
 }

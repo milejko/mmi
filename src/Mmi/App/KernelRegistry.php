@@ -14,24 +14,25 @@ namespace Mmi\App;
  * Abstrakcyjna klasa rejestru aplikacji
  * powinna być rozszerzona przez \App\Registry
  */
-abstract class KernelRegistry {
+abstract class KernelRegistry
+{
 
-	/**
-	 * Konfiguracja aplikacji
-	 * @var \App\Config
-	 */
-	public static $config;
-	
-	/**
-	 * Obiekt bufora
-	 * @var \Mmi\Cache\Cache
-	 */
-	public static $cache;
+    /**
+     * Konfiguracja aplikacji
+     * @var \App\Config
+     */
+    public static $config;
 
-	/**
-	 * Obiekt adaptera bazodanowego
-	 * @var \Mmi\Db\Adapter\PdoAbstract
-	 */
-	public static $db;
+    /**
+     * Obiekt bufora
+     * @var \Mmi\Cache\Cache
+     */
+    public static $cache;
+
+    /**
+     * Obiekt adaptera bazodanowego
+     * @var \Mmi\Db\Adapter\PdoAbstract
+     */
+    public static $db;
 
 }

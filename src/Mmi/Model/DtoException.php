@@ -10,6 +10,7 @@
 
 namespace Mmi\Model;
 
-class DtoException extends \Mmi\App\KernelException {
-	
+class DtoException extends \Mmi\App\KernelException
+{
+    
 }

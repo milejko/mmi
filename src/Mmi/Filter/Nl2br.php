@@ -13,16 +13,18 @@ namespace Mmi\Filter;
 /**
  * Br zamiast nowej linii
  */
-class Nl2br extends \Mmi\Filter\FilterAbstract {
+class Nl2br extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zwraca ciąg z <br /> zamiast \n i \r\n
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return nl2br($value);
-	}
+    /**
+     * Zwraca ciąg z <br /> zamiast \n i \r\n
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return nl2br($value);
+    }
 
 }

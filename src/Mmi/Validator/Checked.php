@@ -11,34 +11,37 @@ namespace Mmi\Validator;
  * @method string getElement() pobiera wartość bazową
  * @method string getMessage() pobiera wiadomość
  */
-class Checked extends ValidatorAbstract {
+class Checked extends ValidatorAbstract
+{
 
-	/**
-	 * Treść wiadomości
-	 */
-	const INVALID = 'Pole wymaga zaznaczenia';
+    /**
+     * Treść wiadomości
+     */
+    const INVALID = 'Pole wymaga zaznaczenia';
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setElement(current($options))
-				->setMessage(next($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setElement(current($options))
+                ->setMessage(next($options));
+    }
 
-	/**
-	 * Walidacja zaznaczenia
-	 * @param mixed $value wartość
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		//jeśli niezaznaczony
-		if (!$this->getElement()->isChecked()) {
-			return $this->_error(self::INVALID);
-		}
-		return true;
-	}
+    /**
+     * Walidacja zaznaczenia
+     * @param mixed $value wartość
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        //jeśli niezaznaczony
+        if (!$this->getElement()->isChecked()) {
+            return $this->_error(self::INVALID);
+        }
+        return true;
+    }
 
 }

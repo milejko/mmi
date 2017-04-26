@@ -13,12 +13,13 @@ namespace Mmi\Orm;
 /**
  * Zapytanie dla rekordów sesji
  */
-class SessionQuery extends \Mmi\Orm\Query {
+class SessionQuery extends \Mmi\Orm\Query
+{
 
-	/**
-	 * Nazwa tabeli
-	 * @var string
-	 */
-	protected $_tableName = 'mmi_session';
+    /**
+     * Nazwa tabeli
+     * @var string
+     */
+    protected $_tableName = 'mmi_session';
 
 }

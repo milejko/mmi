@@ -13,24 +13,25 @@ namespace Mmi\Orm;
 /**
  * Rekord sesji
  */
-class SessionRecord extends \Mmi\Orm\Record {
+class SessionRecord extends \Mmi\Orm\Record
+{
 
-	/**
-	 * Klucz
-	 * @var string
-	 */
-	public $id;
-	
-	/**
-	 * Dane (mediumtext)
-	 * @var string
-	 */
-	public $data;
-	
-	/**
-	 * Timestamp
-	 * @var integer
-	 */
-	public $timestamp;
+    /**
+     * Klucz
+     * @var string
+     */
+    public $id;
+
+    /**
+     * Dane (mediumtext)
+     * @var string
+     */
+    public $data;
+
+    /**
+     * Timestamp
+     * @var integer
+     */
+    public $timestamp;
 
 }

@@ -13,15 +13,18 @@ namespace Mmi;
 /**
  * Kontroler powitalny
  */
-class IndexController extends Mvc\Controller {
+class IndexController extends Mvc\Controller
+{
 
-	public function indexAction() {
-		
-	}
+    public function indexAction()
+    {
+        
+    }
 
-	public function errorAction() {
-		$this->getResponse()
-			->setCodeNotFound();
-	}
+    public function errorAction()
+    {
+        $this->getResponse()
+            ->setCodeNotFound();
+    }
 
 }

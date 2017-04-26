@@ -24,111 +24,125 @@ use Monolog\Logger;
  * @method string getToken() pobiera token
  * @method LogConfigInstance setToken($path) ustawia token
  */
-class LogConfigInstance extends \Mmi\OptionObject {
+class LogConfigInstance extends \Mmi\OptionObject
+{
 
-	/**
-	 * Domyślne ustawienia
-	 */
-	public function __construct() {
-		$this->setLevelDebug()
-			->setPath(BASE_PATH . '/var/log/app.log')
-			->setHandler('stream');
-	}
+    /**
+     * Domyślne ustawienia
+     */
+    public function __construct()
+    {
+        $this->setLevelDebug()
+            ->setPath(BASE_PATH . '/var/log/app.log')
+            ->setHandler('stream');
+    }
 
-	/**
-	 * Poziom na debug
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelDebug() {
-		return $this->setOption('level', Logger::DEBUG);
-	}
+    /**
+     * Poziom na debug
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelDebug()
+    {
+        return $this->setOption('level', Logger::DEBUG);
+    }
 
-	/**
-	 * Poziom na Info
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelInfo() {
-		return $this->setOption('level', Logger::INFO);
-	}
+    /**
+     * Poziom na Info
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelInfo()
+    {
+        return $this->setOption('level', Logger::INFO);
+    }
 
-	/**
-	 * Poziom na Notice
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelNotice() {
-		return $this->setOption('level', Logger::NOTICE);
-	}
+    /**
+     * Poziom na Notice
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelNotice()
+    {
+        return $this->setOption('level', Logger::NOTICE);
+    }
 
-	/**
-	 * Poziom na Warning
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelWarning() {
-		return $this->setOption('level', Logger::WARNING);
-	}
+    /**
+     * Poziom na Warning
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelWarning()
+    {
+        return $this->setOption('level', Logger::WARNING);
+    }
 
-	/**
-	 * Poziom na Error
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelError() {
-		return $this->setOption('level', Logger::ERROR);
-	}
+    /**
+     * Poziom na Error
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelError()
+    {
+        return $this->setOption('level', Logger::ERROR);
+    }
 
-	/**
-	 * Poziom na Alert
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelAlert() {
-		return $this->setOption('level', Logger::ALERT);
-	}
+    /**
+     * Poziom na Alert
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelAlert()
+    {
+        return $this->setOption('level', Logger::ALERT);
+    }
 
-	/**
-	 * Poziom na Critical
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelCritical() {
-		return $this->setOption('level', Logger::CRITICAL);
-	}
+    /**
+     * Poziom na Critical
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelCritical()
+    {
+        return $this->setOption('level', Logger::CRITICAL);
+    }
 
-	/**
-	 * Poziom na Emergency
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setLevelEmergency() {
-		return $this->setOption('level', Logger::EMERGENCY);
-	}
+    /**
+     * Poziom na Emergency
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelEmergency()
+    {
+        return $this->setOption('level', Logger::EMERGENCY);
+    }
 
-	/**
-	 * Ustawia handler na stream
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setHandlerStream() {
-		return $this->setOption('handler', 'stream');
-	}
+    /**
+     * Ustawia handler na stream
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setHandlerStream()
+    {
+        return $this->setOption('handler', 'stream');
+    }
 
-	/**
-	 * Ustawia handler na slack
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setHandlerSlack() {
-		return $this->setOption('handler', 'slack');
-	}
+    /**
+     * Ustawia handler na slack
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setHandlerSlack()
+    {
+        return $this->setOption('handler', 'slack');
+    }
 
-	/**
-	 * Ustawia handler na stream
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setHandlerConsole() {
-		return $this->setOption('handler', 'console');
-	}
+    /**
+     * Ustawia handler na stream
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setHandlerConsole()
+    {
+        return $this->setOption('handler', 'console');
+    }
 
-	/**
-	 * Ustawia handler na gelf
-	 * @return \Mmi\Log\LogConfigInstance
-	 */
-	public function setHandlerGelf() {
-		return $this->setOption('handler', 'gelf');
-	}
+    /**
+     * Ustawia handler na gelf
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setHandlerGelf()
+    {
+        return $this->setOption('handler', 'gelf');
+    }
 
 }

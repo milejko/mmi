@@ -24,38 +24,41 @@ namespace Mmi\Filter;
  * @method self setTrimLeaveZeros($leave) ilość zer po przecinku
  * @method integer getTrimLeaveZeros()
  */
-class NumberFormat extends \Mmi\Filter\FilterAbstract {
+class NumberFormat extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setDigits(current($options) ? (int) current($options) : 2)
-				->setSeparator(next($options) ? current($options) : ',')
-				->setThousands(next($options) ? current($options) : ' ')
-				->setTrimZeros(next($options) ? (bool) current($options) : false)
-				->setTrimLeaveZeros(next($options) ? current($options) : 2);
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setDigits(current($options) ? (int) current($options) : 2)
+                ->setSeparator(next($options) ? current($options) : ',')
+                ->setThousands(next($options) ? current($options) : ' ')
+                ->setTrimZeros(next($options) ? (bool) current($options) : false)
+                ->setTrimLeaveZeros(next($options) ? current($options) : 2);
+    }
 
-	/**
-	 * Filtruje zmienne numeryczne
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		$value = number_format($value, $this->getDigits(), $this->getSeparator(), $this->getThousands());
-		if ($this->getTrimZeros() && strpos($value, $this->getSeparator())) {
-			$tmp = rtrim($value, '0');
-			//iteracja po brakujących zerach
-			for ($i = 0, $missing = $this->getTrimLeaveZeros() - ($this->getDigits() - (strlen($value) - strlen($tmp))); $i < $missing; $i++) {
-				$tmp .= '0';
-			}
-			$value = rtrim($tmp, '.,');
-		}
-		return str_replace('-', '- ', $value);
-	}
+    /**
+     * Filtruje zmienne numeryczne
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        $value = number_format($value, $this->getDigits(), $this->getSeparator(), $this->getThousands());
+        if ($this->getTrimZeros() && strpos($value, $this->getSeparator())) {
+            $tmp = rtrim($value, '0');
+            //iteracja po brakujących zerach
+            for ($i = 0, $missing = $this->getTrimLeaveZeros() - ($this->getDigits() - (strlen($value) - strlen($tmp))); $i < $missing; $i++) {
+                $tmp .= '0';
+            }
+            $value = rtrim($tmp, '.,');
+        }
+        return str_replace('-', '- ', $value);
+    }
 
 }

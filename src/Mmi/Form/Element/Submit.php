@@ -13,28 +13,31 @@ namespace Mmi\Form\Element;
 /**
  * Element submit
  */
-class Submit extends ElementAbstract {
+class Submit extends ElementAbstract
+{
 
-	/**
-	 * Konstruktor, ustawia nazwę pola i opcje
-	 * @param string $name nazwa
-	 */
-	public function __construct($name) {
-		parent::__construct($name);
-		$this->setIgnore()
-			->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
-	}
+    /**
+     * Konstruktor, ustawia nazwę pola i opcje
+     * @param string $name nazwa
+     */
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this->setIgnore()
+            ->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
+    }
 
-	/**
-	 * Buduje pole
-	 * @return string
-	 */
-	public function fetchField() {
-		//labelka jako value
-		if ($this->getLabel()) {
-			$this->setValue($this->getLabel());
-		}
-		return '<input type="submit" ' . $this->_getHtmlOptions() . '/>';
-	}
+    /**
+     * Buduje pole
+     * @return string
+     */
+    public function fetchField()
+    {
+        //labelka jako value
+        if ($this->getLabel()) {
+            $this->setValue($this->getLabel());
+        }
+        return '<input type="submit" ' . $this->_getHtmlOptions() . '/>';
+    }
 
 }

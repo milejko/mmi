@@ -10,24 +10,26 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
-class Widget extends HelperAbstract {
+class Widget extends HelperAbstract
+{
 
-	/**
-	 * Metoda główna, renderuje widget o zadanych parametrach
-	 * @param string $module moduł
-	 * @param string $controller kontroler
-	 * @param string $action akcja
-	 * @param array $params parametry
-	 * @return string
-	 */
-	public function widget($module, $controller = 'index', $action = 'index', array $params = []) {
-		$isLayoutDisabled = $this->view->isLayoutDisabled();
-		$params['module'] = $module;
-		$params['controller'] = $controller;
-		$params['action'] = $action;
-		$actionResult = \Mmi\Mvc\ActionHelper::getInstance()->action($params);
-		$this->view->setLayoutDisabled($isLayoutDisabled);
-		return $actionResult;
-	}
+    /**
+     * Metoda główna, renderuje widget o zadanych parametrach
+     * @param string $module moduł
+     * @param string $controller kontroler
+     * @param string $action akcja
+     * @param array $params parametry
+     * @return string
+     */
+    public function widget($module, $controller = 'index', $action = 'index', array $params = [])
+    {
+        $isLayoutDisabled = $this->view->isLayoutDisabled();
+        $params['module'] = $module;
+        $params['controller'] = $controller;
+        $params['action'] = $action;
+        $actionResult = \Mmi\Mvc\ActionHelper::getInstance()->action($params);
+        $this->view->setLayoutDisabled($isLayoutDisabled);
+        return $actionResult;
+    }
 
 }

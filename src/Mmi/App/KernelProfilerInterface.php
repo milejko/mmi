@@ -13,32 +13,31 @@ namespace Mmi\App;
 /**
  * Klasa profilera aplikacji
  */
-interface KernelProfilerInterface {
+interface KernelProfilerInterface
+{
 
+    /**
+     * Dodaje zdarzenie
+     * @param string $name nazwa
+     * @param string $elapsed opcjonalnie czas operacji
+     */
+    public function event($name);
 
-	/**
-	 * Dodaje zdarzenie
-	 * @param string $name nazwa
-	 * @param string $elapsed opcjonalnie czas operacji
-	 */
-	public function event($name);
+    /**
+     * Pobiera dane z profilera
+     * @return array
+     */
+    public function get();
 
-	/**
-	 * Pobiera dane z profilera
-	 * @return array
-	 */
-	public function get();
+    /**
+     * Zwraca ilość zdarzeń w profilerze
+     * @return int
+     */
+    public function count();
 
-	/**
-	 * Zwraca ilość zdarzeń w profilerze
-	 * @return int
-	 */
-	public function count();
-
-	/**
-	 * Pobiera sumaryczny czas wszystkich zdarzeń
-	 * @return int
-	 */
-	public function elapsed();
-
+    /**
+     * Pobiera sumaryczny czas wszystkich zdarzeń
+     * @return int
+     */
+    public function elapsed();
 }

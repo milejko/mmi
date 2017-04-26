@@ -17,50 +17,55 @@ namespace Mmi\Log;
  * @method LogConfigInstance current()
  * @method LogConfigInstance rewind()
  */
-class LogConfig extends \Mmi\DataObject {
+class LogConfig extends \Mmi\DataObject
+{
 
-	/**
-	 * Nazwa loggera
-	 * @var string
-	 */
-	public $_name = 'App';
+    /**
+     * Nazwa loggera
+     * @var string
+     */
+    public $_name = 'App';
 
-	/**
-	 * Dodaje element nawigatora
-	 * @param LogConfigInstance $instance
-	 * @return \Mmi\Log\LogConfig
-	 */
-	public function addInstance(LogConfigInstance $instance) {
-		$this->_data[] = $instance;
-		return $this;
-	}
+    /**
+     * Dodaje element nawigatora
+     * @param LogConfigInstance $instance
+     * @return \Mmi\Log\LogConfig
+     */
+    public function addInstance(LogConfigInstance $instance)
+    {
+        $this->_data[] = $instance;
+        return $this;
+    }
 
-	/**
-	 * Zablokowany setter
-	 * @param string $key
-	 * @param mixed $value
-	 * @throws LoggerException
-	 */
-	public function __set($key, $value) {
-		throw new LoggerException('Unable to set: {' . $key . '} to value = ' . $value);
-	}
+    /**
+     * Zablokowany setter
+     * @param string $key
+     * @param mixed $value
+     * @throws LoggerException
+     */
+    public function __set($key, $value)
+    {
+        throw new LoggerException('Unable to set: {' . $key . '} to value = ' . $value);
+    }
 
-	/**
-	 * Nazwa loggera
-	 * @param string $name
-	 * @return \Mmi\Log\Config
-	 */
-	public function setName($name) {
-		$this->_name = $name;
-		return $this;
-	}
+    /**
+     * Nazwa loggera
+     * @param string $name
+     * @return \Mmi\Log\Config
+     */
+    public function setName($name)
+    {
+        $this->_name = $name;
+        return $this;
+    }
 
-	/**
-	 * Pobiera nazwę loggera
-	 * @return string
-	 */
-	public function getName() {
-		return $this->_name;
-	}
+    /**
+     * Pobiera nazwę loggera
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
 
 }

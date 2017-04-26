@@ -13,30 +13,33 @@ namespace Mmi\Orm;
 /**
  * Klasa konwersji
  */
-class Convert {
+class Convert
+{
 
-	/**
-	 * Konwertuje podkreślenia na camelcase
-	 * @param string $value
-	 * @return string
-	 */
-	public static final function underscoreToCamelcase($value) {
-		//używa callbacku
-		return preg_replace_callback('/\_([a-z0-9])/', function ($matches) {
-			return ucfirst($matches[1]);
-		}, $value);
-	}
+    /**
+     * Konwertuje podkreślenia na camelcase
+     * @param string $value
+     * @return string
+     */
+    public static final function underscoreToCamelcase($value)
+    {
+        //używa callbacku
+        return preg_replace_callback('/\_([a-z0-9])/', function ($matches) {
+            return ucfirst($matches[1]);
+        }, $value);
+    }
 
-	/**
-	 * Konwertuje camelcase na podkreślenia
-	 * @param string $value
-	 * @return string
-	 */
-	public static final function camelcaseToUnderscore($value) {
-		//używa callbacku
-		return preg_replace_callback('/([A-Z])/', function ($matches) {
-			return '_' . lcfirst($matches[1]);
-		}, $value);
-	}
+    /**
+     * Konwertuje camelcase na podkreślenia
+     * @param string $value
+     * @return string
+     */
+    public static final function camelcaseToUnderscore($value)
+    {
+        //używa callbacku
+        return preg_replace_callback('/([A-Z])/', function ($matches) {
+            return '_' . lcfirst($matches[1]);
+        }, $value);
+    }
 
 }

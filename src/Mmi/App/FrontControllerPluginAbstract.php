@@ -10,30 +10,34 @@
 
 namespace Mmi\App;
 
-class FrontControllerPluginAbstract {
+class FrontControllerPluginAbstract
+{
 
-	/**
-	 * Metoda wykona się przed routingiem
-	 * @param \Mmi\Http\Request $request 
-	 */
-	public function routeStartup(\Mmi\Http\Request $request) {
-		
-	}
+    /**
+     * Metoda wykona się przed routingiem
+     * @param \Mmi\Http\Request $request 
+     */
+    public function routeStartup(\Mmi\Http\Request $request)
+    {
+        
+    }
 
-	/**
-	 * Metoda wykona się przed dispatchowaniem
-	 * @param \Mmi\Http\Request $request
-	 */
-	public function preDispatch(\Mmi\Http\Request $request) {
-		
-	}
+    /**
+     * Metoda wykona się przed dispatchowaniem
+     * @param \Mmi\Http\Request $request
+     */
+    public function preDispatch(\Mmi\Http\Request $request)
+    {
+        
+    }
 
-	/**
-	 * Metoda wykona się po dispatchowaniu
-	 * @param \Mmi\Http\Request $request
-	 */
-	public function postDispatch(\Mmi\Http\Request $request) {
-		
-	}
+    /**
+     * Metoda wykona się po dispatchowaniu
+     * @param \Mmi\Http\Request $request
+     */
+    public function postDispatch(\Mmi\Http\Request $request)
+    {
+        
+    }
 
 }

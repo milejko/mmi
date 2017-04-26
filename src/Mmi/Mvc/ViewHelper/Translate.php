@@ -10,22 +10,25 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
-class Translate extends HelperAbstract {
+class Translate extends HelperAbstract
+{
 
-	/**
-	 * Metoda główna, zwraca swoją instancję
-	 * @return \Mmi\Mvc\ViewHelper\Translate
-	 */
-	public function translate() {
-		return $this;
-	}
+    /**
+     * Metoda główna, zwraca swoją instancję
+     * @return \Mmi\Mvc\ViewHelper\Translate
+     */
+    public function translate()
+    {
+        return $this;
+    }
 
-	/**
-	 * Tłumaczy wejściowy ciąg znaków
-	 * @return string
-	 */
-	public function _($key) {
-		return $this->view->getTranslate()->_($key);
-	}
+    /**
+     * Tłumaczy wejściowy ciąg znaków
+     * @return string
+     */
+    public function _($key)
+    {
+        return $this->view->getTranslate()->_($key);
+    }
 
 }

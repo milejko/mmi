@@ -13,16 +13,18 @@ namespace Mmi\Filter;
 /**
  * Zwraca pustość wartości
  */
-class IsEmpty extends \Mmi\Filter\FilterAbstract {
+class IsEmpty extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zamienia pusty ciąg znaków na null
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return empty($value);
-	}
+    /**
+     * Zamienia pusty ciąg znaków na null
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return empty($value);
+    }
 
 }

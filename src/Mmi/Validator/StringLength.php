@@ -21,45 +21,48 @@ namespace Mmi\Validator;
  * @method integer getTo() pobiera do
  * @method string getMessage() pobiera wiadomość
  */
-class StringLength extends ValidatorAbstract {
+class StringLength extends ValidatorAbstract
+{
 
-	/**
-	 * Komunikat niedostatecznej długości
-	 */
-	const SHORT = 'Tekst jest zbyt krótki';
+    /**
+     * Komunikat niedostatecznej długości
+     */
+    const SHORT = 'Tekst jest zbyt krótki';
 
-	/**
-	 * Komunikat nadmiernej długości
-	 */
-	const LONG = 'Tekst jest zbyt długi';
+    /**
+     * Komunikat nadmiernej długości
+     */
+    const LONG = 'Tekst jest zbyt długi';
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setFrom(current($options))
-				->setTo(next($options))
-				->setMessage(next($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setFrom(current($options))
+                ->setTo(next($options))
+                ->setMessage(next($options));
+    }
 
-	/**
-	 * Waliduje długość ciągu, długość zadana jest w opcjach (przy konstruktorze)
-	 * w tabeli postaci array(minimum, maksimum)
-	 * @param string $value
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		//za krótki
-		if ($this->getFrom() && mb_strlen($value) < $this->getFrom()) {
-			return $this->_error(self::SHORT);
-		}
-		//za długi
-		if ($this->getTo() && mb_strlen($value) > $this->getTo()) {
-			return $this->_error(self::LONG);
-		}
-		return true;
-	}
+    /**
+     * Waliduje długość ciągu, długość zadana jest w opcjach (przy konstruktorze)
+     * w tabeli postaci array(minimum, maksimum)
+     * @param string $value
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        //za krótki
+        if ($this->getFrom() && mb_strlen($value) < $this->getFrom()) {
+            return $this->_error(self::SHORT);
+        }
+        //za długi
+        if ($this->getTo() && mb_strlen($value) > $this->getTo()) {
+            return $this->_error(self::LONG);
+        }
+        return true;
+    }
 
 }

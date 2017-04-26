@@ -13,6 +13,7 @@ namespace Mmi\JsonRpc;
 /**
  * Klasa wyjątku JsonRpc
  */
-class JsonException extends \Mmi\App\KernelException {
-	
+class JsonException extends \Mmi\App\KernelException
+{
+    
 }

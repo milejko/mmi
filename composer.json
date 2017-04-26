@@ -1,45 +1,45 @@
 {
-	"name": "mmi/mmi",
-	"type": "library",
-	"description": "MMi Framework Library",
-	"keywords": ["mmi", "framework"],
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Mariusz Miłejko",
-			"email": "mariusz@milejko.pl"
-		},
-		{
-			"name": "Bartłomiej Wołos",
-			"email": "funfel@onet.pl"
-		},
-		{
-			"name": "Maciej Pawłowski",
-			"email": "mac@macu.eu"
-		}
-	],
-	"require": {
-		"php": ">=5.6.0",
-		"monolog/monolog": "1.*",
-		"graylog2/gelf-php": "1.4.*"
-	},
-	"require-dev": {
-		"php-console/php-console": "~3.1"
-	},
-	"autoload": {
-		"psr-4": {
-			"Mmi\\": "src/Mmi",
-			"": "src/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Mmi\\": "tests/Mmi"
-		}
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "3.4-dev"
-		}
-	}
+    "name": "mmi/mmi",
+    "type": "library",
+    "description": "MMi Framework Library",
+    "keywords": ["mmi", "framework"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mariusz Miłejko",
+            "email": "mariusz@milejko.pl"
+        },
+        {
+            "name": "Bartłomiej Wołos",
+            "email": "funfel@onet.pl"
+        },
+        {
+            "name": "Maciej Pawłowski",
+            "email": "mac@macu.eu"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "monolog/monolog": "1.*",
+        "graylog2/gelf-php": "1.4.*"
+    },
+    "require-dev": {
+        "php-console/php-console": "~3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mmi\\": "src/Mmi",
+            "": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mmi\\": "tests/Mmi"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.4-dev"
+        }
+    }
 }

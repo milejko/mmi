@@ -13,6 +13,7 @@ namespace Mmi\Validator;
 /**
  * Klasa wyjątku walidatora
  */
-class ValidatorException extends \Mmi\App\KernelException {
-	
+class ValidatorException extends \Mmi\App\KernelException
+{
+    
 }

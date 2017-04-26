@@ -13,16 +13,18 @@ namespace Mmi\Filter;
 /**
  * Filtr alfanumeryczny
  */
-class Alnum extends \Mmi\Filter\FilterAbstract {
+class Alnum extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zwraca przefiltrowaną wartość
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return preg_replace('/[^\p{L}\p{N}]/u', '', $value);
-	}
+    /**
+     * Zwraca przefiltrowaną wartość
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return preg_replace('/[^\p{L}\p{N}]/u', '', $value);
+    }
 
 }

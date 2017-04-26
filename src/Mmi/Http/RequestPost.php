@@ -13,22 +13,25 @@ namespace Mmi\Http;
 /**
  * Klasa zapytania post
  */
-class RequestPost extends \Mmi\DataObject {
-	
-	/**
-	 * Konstruktor
-	 * @param array $post dane z POST
-	 */
-	public function __construct(array $post = []) {
-		$this->_data = $post;
-	}
-	
-	/**
-	 * Sprawdza pustość post
-	 * @return boolean
-	 */
-	public function isEmpty() {
-		return empty($this->_data);
-	}
-	
+class RequestPost extends \Mmi\DataObject
+{
+
+    /**
+     * Konstruktor
+     * @param array $post dane z POST
+     */
+    public function __construct(array $post = [])
+    {
+        $this->_data = $post;
+    }
+
+    /**
+     * Sprawdza pustość post
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return empty($this->_data);
+    }
+
 }

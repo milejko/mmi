@@ -15,25 +15,28 @@ namespace Mmi\Filter;
  * @method self setExceptions($exception)
  * @method string getExceptions()
  */
-class StripTags extends \Mmi\Filter\FilterAbstract {
+class StripTags extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setExceptions(current($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setExceptions(current($options));
+    }
 
-	/**
-	 * Kasuje html'a
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return strip_tags($value, $this->getExceptions() ? $this->getExceptions() : '');
-	}
+    /**
+     * Kasuje html'a
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return strip_tags($value, $this->getExceptions() ? $this->getExceptions() : '');
+    }
 
 }

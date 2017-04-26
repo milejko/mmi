@@ -10,6 +10,7 @@
 
 namespace Mmi\Mvc;
 
-class MvcException extends \Mmi\App\KernelException {
-	
+class MvcException extends \Mmi\App\KernelException
+{
+    
 }

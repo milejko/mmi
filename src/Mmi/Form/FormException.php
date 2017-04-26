@@ -13,6 +13,7 @@ namespace Mmi\Form;
 /**
  * Klasa wyjątku formularza
  */
-class FormException extends \Mmi\App\KernelException {
-	
+class FormException extends \Mmi\App\KernelException
+{
+    
 }

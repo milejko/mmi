@@ -13,6 +13,7 @@ namespace Mmi\Log;
 /**
  * Klasa wyjątku loggera
  */
-class LoggerException extends \Mmi\App\KernelException {
-	
+class LoggerException extends \Mmi\App\KernelException
+{
+    
 }

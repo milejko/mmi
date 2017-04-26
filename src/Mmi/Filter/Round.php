@@ -15,25 +15,28 @@ namespace Mmi\Filter;
  * @method self setPrecision($precision)
  * @method integer getPrecision()
  */
-class Round extends \Mmi\Filter\FilterAbstract {
+class Round extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setPrecision((int) current($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setPrecision((int) current($options));
+    }
 
-	/**
-	 * Zaokrągla liczby
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return round($value, $this->getPrecision());
-	}
+    /**
+     * Zaokrągla liczby
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return round($value, $this->getPrecision());
+    }
 
 }

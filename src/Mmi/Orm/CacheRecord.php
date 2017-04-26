@@ -15,44 +15,46 @@ use Mmi\Db\DbException;
 /**
  * Rekord cache
  */
-class CacheRecord extends \Mmi\Orm\Record {
+class CacheRecord extends \Mmi\Orm\Record
+{
 
-	/**
-	 * Klucz
-	 * @var string
-	 */
-	public $id;
+    /**
+     * Klucz
+     * @var string
+     */
+    public $id;
 
-	/**
-	 * Dane (longblob)
-	 * @var string
-	 */
-	public $data;
+    /**
+     * Dane (longblob)
+     * @var string
+     */
+    public $data;
 
-	/**
-	 * TTL
-	 * @var integer
-	 */
-	public $ttl;
+    /**
+     * TTL
+     * @var integer
+     */
+    public $ttl;
 
-	/**
-	 * Zapis to próba wstawienia, przy niepowodzeniu - update
-	 * @return boolean
-	 */
-	public function save() {
-		//próba wstawienia - częstsza operacja
-		try {
-			//insert
-			return $this->_insert();
-		} catch (DbException $e) {
-			//próba aktualizacji
-			try {
-				//update
-				return $this->_update();
-			} catch (DbException $e) {
-				return false;
-			}
-		}
-	}
+    /**
+     * Zapis to próba wstawienia, przy niepowodzeniu - update
+     * @return boolean
+     */
+    public function save()
+    {
+        //próba wstawienia - częstsza operacja
+        try {
+            //insert
+            return $this->_insert();
+        } catch (DbException $e) {
+            //próba aktualizacji
+            try {
+                //update
+                return $this->_update();
+            } catch (DbException $e) {
+                return false;
+            }
+        }
+    }
 
 }

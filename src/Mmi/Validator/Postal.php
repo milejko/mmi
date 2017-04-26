@@ -13,24 +13,26 @@ namespace Mmi\Validator;
 /**
  * Walidator kodu pocztowego
  */
-class Postal extends ValidatorAbstract {
+class Postal extends ValidatorAbstract
+{
 
-	/**
-	 * Komunikat błędnego kodu
-	 */
-	const ERROR = 'Wprowadzono niepoprawny kod pocztowy';
+    /**
+     * Komunikat błędnego kodu
+     */
+    const ERROR = 'Wprowadzono niepoprawny kod pocztowy';
 
-	/**
-	 * Sprawdza czy tekst jest e-mailem
-	 * @param string $value
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		//błąd
-		if (preg_match('/^[0-9]{2}-[0-9]{3}$/', $value)) {
-			return true;
-		}
-		return $this->_error(self::ERROR);
-	}
+    /**
+     * Sprawdza czy tekst jest e-mailem
+     * @param string $value
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        //błąd
+        if (preg_match('/^[0-9]{2}-[0-9]{3}$/', $value)) {
+            return true;
+        }
+        return $this->_error(self::ERROR);
+    }
 
 }

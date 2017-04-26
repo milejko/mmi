@@ -13,6 +13,7 @@ namespace Mmi\Ldap;
 /**
  * Klasa wyjątku LDAP
  */
-class LdapException extends \Mmi\App\KernelException {
-	
+class LdapException extends \Mmi\App\KernelException
+{
+    
 }

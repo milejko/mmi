@@ -15,62 +15,67 @@ use Mmi\App\FrontController;
 /**
  * Klasa dispatchera
  */
-class Dispatcher {
+class Dispatcher
+{
 
-	/**
-	 * Uruchamianie metody routeStartup na zarejestrowanych pluginach
-	 */
-	public function routeStartup() {
-		foreach (FrontController::getInstance()->getPlugins() as $plugin) {
-			//wykonywanie routeStartup() na kolejnych pluginach
-			$plugin->routeStartup(FrontController::getInstance()->getRequest());
-		}
-	}
+    /**
+     * Uruchamianie metody routeStartup na zarejestrowanych pluginach
+     */
+    public function routeStartup()
+    {
+        foreach (FrontController::getInstance()->getPlugins() as $plugin) {
+            //wykonywanie routeStartup() na kolejnych pluginach
+            $plugin->routeStartup(FrontController::getInstance()->getRequest());
+        }
+    }
 
-	/**
-	 * Uruchamianie metody preDispatch na zarejestrowanych pluginach
-	 */
-	public function preDispatch() {
-		foreach (FrontController::getInstance()->getPlugins() as $plugin) {
-			//wykonywanie preDispatch() na kolejnych pluginach
-			$plugin->preDispatch(FrontController::getInstance()->getRequest());
-		}
-	}
+    /**
+     * Uruchamianie metody preDispatch na zarejestrowanych pluginach
+     */
+    public function preDispatch()
+    {
+        foreach (FrontController::getInstance()->getPlugins() as $plugin) {
+            //wykonywanie preDispatch() na kolejnych pluginach
+            $plugin->preDispatch(FrontController::getInstance()->getRequest());
+        }
+    }
 
-	/**
-	 * Uruchamianie metody postDispatch na zarejestrowanych pluginach
-	 */
-	public function postDispatch() {
-		foreach (FrontController::getInstance()->getPlugins() as $plugin) {
-			//wykonywanie postDispatch() na kolejnych pluginach
-			$plugin->postDispatch(FrontController::getInstance()->getRequest());
-		}
-	}
+    /**
+     * Uruchamianie metody postDispatch na zarejestrowanych pluginach
+     */
+    public function postDispatch()
+    {
+        foreach (FrontController::getInstance()->getPlugins() as $plugin) {
+            //wykonywanie postDispatch() na kolejnych pluginach
+            $plugin->postDispatch(FrontController::getInstance()->getRequest());
+        }
+    }
 
-	/**
-	 * Dispatcher
-	 * @return string
-	 */
-	public function dispatch() {
-		//wpięcie dla pluginów przed routingiem
-		$this->routeStartup();
-		$fc = FrontController::getInstance();
-		$fc->getProfiler()->event('Mvc\Dispatcher: plugins route startup');
-		//stosowanie routingu jeśli request jest pusty
-		if (!$fc->getRequest()->getModuleName()) {
-			$fc->getRouter()->processRequest($fc->getRequest());
-		}
-		//informacja o zakończeniu ustawiania routingu
-		$fc->getProfiler()->event('Mvc\Dispatcher: routing applied');
-		//wpięcie dla pluginów przed dispatchem
-		$this->preDispatch();
-		$fc->getProfiler()->event('Mvc\Dispatcher: plugins pre-dispatch');
-		//wybór i uruchomienie kontrolera akcji
-		$content = \Mmi\Mvc\ActionHelper::getInstance()->action($fc->getRequest()->toArray());
-		//wpięcie dla pluginów po dispatchu
-		$this->postDispatch();
-		$fc->getProfiler()->event('Mvc\Dispatcher: plugins post-dispatch');
-		return $content;
-	}
+    /**
+     * Dispatcher
+     * @return string
+     */
+    public function dispatch()
+    {
+        //wpięcie dla pluginów przed routingiem
+        $this->routeStartup();
+        $fc = FrontController::getInstance();
+        $fc->getProfiler()->event('Mvc\Dispatcher: plugins route startup');
+        //stosowanie routingu jeśli request jest pusty
+        if (!$fc->getRequest()->getModuleName()) {
+            $fc->getRouter()->processRequest($fc->getRequest());
+        }
+        //informacja o zakończeniu ustawiania routingu
+        $fc->getProfiler()->event('Mvc\Dispatcher: routing applied');
+        //wpięcie dla pluginów przed dispatchem
+        $this->preDispatch();
+        $fc->getProfiler()->event('Mvc\Dispatcher: plugins pre-dispatch');
+        //wybór i uruchomienie kontrolera akcji
+        $content = \Mmi\Mvc\ActionHelper::getInstance()->action($fc->getRequest()->toArray());
+        //wpięcie dla pluginów po dispatchu
+        $this->postDispatch();
+        $fc->getProfiler()->event('Mvc\Dispatcher: plugins post-dispatch');
+        return $content;
+    }
 
 }

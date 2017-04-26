@@ -21,48 +21,51 @@ namespace Mmi\Validator;
  * @method integer getTo() pobiera do
  * @method string getMessage() pobiera wiadomość 
  */
-class NumberBetween extends ValidatorAbstract {
+class NumberBetween extends ValidatorAbstract
+{
 
-	/**
-	 * Treść błędu 
-	 */
-	const INVALID = 'Wprowadzona wartość nie mieści się w wymaganym przedziale';
-	
-	/**
-	 * Treść błędu, jeśli nie jest liczbą
-	 */
-	const NUMERIC = 'Wprowadzona wartość nie jest liczbą';
+    /**
+     * Treść błędu 
+     */
+    const INVALID = 'Wprowadzona wartość nie mieści się w wymaganym przedziale';
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setFrom(current($options))
-				->setTo(next($options))
-				->setMessage(next($options));
-	}
+    /**
+     * Treść błędu, jeśli nie jest liczbą
+     */
+    const NUMERIC = 'Wprowadzona wartość nie jest liczbą';
 
-	/**
-	 * Walidacja liczb od-do
-	 * @param mixed $value wartość
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		//czy liczba
-		if (!is_numeric($value)) {
-			return $this->_error(self::NUMERIC);
-		}
-		//sprawdzamy dolny zakres
-		if ($this->getFrom() !== null && $value < $this->getFrom()) {
-			return $this->_error(self::INVALID);
-		}
-		//sprawdzamy górny zakres
-		if ($this->getTo() !== null && $value > $this->getTo()) {
-			return $this->_error(self::INVALID);
-		}
-		return true;
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setFrom(current($options))
+                ->setTo(next($options))
+                ->setMessage(next($options));
+    }
+
+    /**
+     * Walidacja liczb od-do
+     * @param mixed $value wartość
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        //czy liczba
+        if (!is_numeric($value)) {
+            return $this->_error(self::NUMERIC);
+        }
+        //sprawdzamy dolny zakres
+        if ($this->getFrom() !== null && $value < $this->getFrom()) {
+            return $this->_error(self::INVALID);
+        }
+        //sprawdzamy górny zakres
+        if ($this->getTo() !== null && $value > $this->getTo()) {
+            return $this->_error(self::INVALID);
+        }
+        return true;
+    }
 
 }

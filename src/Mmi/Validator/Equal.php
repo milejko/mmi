@@ -19,34 +19,37 @@ namespace Mmi\Validator;
  * @method string getValue() pobiera wartość bazową
  * @method string getMessage() pobiera wiadomość
  */
-class Equal extends ValidatorAbstract {
+class Equal extends ValidatorAbstract
+{
 
-	/**
-	 * Treść wiadomości
-	 */
-	const INVALID = 'Wprowadzona wartość nie jest poprawna';
+    /**
+     * Treść wiadomości
+     */
+    const INVALID = 'Wprowadzona wartość nie jest poprawna';
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setValue(current($options))
-				->setMessage(next($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setValue(current($options))
+                ->setMessage(next($options));
+    }
 
-	/**
-	 * Walidacja porówniania wartości
-	 * @param mixed $value wartość
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		//wartość nierówna
-		if ($this->getValue() != $value) {
-			return $this->_error(self::INVALID);
-		}
-		return true;
-	}
+    /**
+     * Walidacja porówniania wartości
+     * @param mixed $value wartość
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        //wartość nierówna
+        if ($this->getValue() != $value) {
+            return $this->_error(self::INVALID);
+        }
+        return true;
+    }
 
 }

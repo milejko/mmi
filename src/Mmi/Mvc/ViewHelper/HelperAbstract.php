@@ -10,27 +10,30 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
-class HelperAbstract {
+class HelperAbstract
+{
 
-	/**
-	 * Referencja do widoku
-	 * @var \Mmi\Mvc\View
-	 */
-	public $view;
+    /**
+     * Referencja do widoku
+     * @var \Mmi\Mvc\View
+     */
+    public $view;
 
-	/**
-	 * Metoda programisty końcowego, wykonuje się na końcu konstruktora
-	 */
-	public function init() {
-		
-	}
+    /**
+     * Metoda programisty końcowego, wykonuje się na końcu konstruktora
+     */
+    public function init()
+    {
+        
+    }
 
-	/**
-	 * Konstruktor, ustawia widok
-	 */
-	public function __construct() {
-		$this->view = \Mmi\App\FrontController::getInstance()->getView();
-		$this->init();
-	}
+    /**
+     * Konstruktor, ustawia widok
+     */
+    public function __construct()
+    {
+        $this->view = \Mmi\App\FrontController::getInstance()->getView();
+        $this->init();
+    }
 
 }

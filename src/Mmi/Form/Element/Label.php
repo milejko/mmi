@@ -13,23 +13,26 @@ namespace Mmi\Form\Element;
 /**
  * Element label
  */
-class Label extends ElementAbstract {
+class Label extends ElementAbstract
+{
 
-	/**
-	 * Konstruktor usuwa labelpostfix
-	 * @param string $name
-	 */
-	public function __construct($name) {
-		parent::__construct($name);
-		$this->setLabelPostfix('');
-	}
+    /**
+     * Konstruktor usuwa labelpostfix
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this->setLabelPostfix('');
+    }
 
-	/**
-	 * Buduje pole
-	 * @return string
-	 */
-	public function fetchField() {
-		return '';
-	}
+    /**
+     * Buduje pole
+     * @return string
+     */
+    public function fetchField()
+    {
+        return '';
+    }
 
 }

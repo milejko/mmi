@@ -13,6 +13,7 @@ namespace Mmi\Orm;
 /**
  * Klasa wyjątku DAO
  */
-class OrmException extends \Mmi\App\KernelException {
-	
+class OrmException extends \Mmi\App\KernelException
+{
+    
 }

@@ -13,9 +13,10 @@ namespace Mmi\Orm;
 /**
  * Rekord incrementala bazy danych
  */
-class ChangelogRecord extends \Mmi\Orm\Record {
+class ChangelogRecord extends \Mmi\Orm\Record
+{
 
-	public $filename;
-	public $md5;
+    public $filename;
+    public $md5;
 
 }

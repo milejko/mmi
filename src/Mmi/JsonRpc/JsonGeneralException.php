@@ -13,8 +13,9 @@ namespace Mmi\JsonRpc;
 /**
  * Klasa wyjątków ogólnych serwera JSON-RPC
  */
-class JsonGeneralException extends JsonException {
+class JsonGeneralException extends JsonException
+{
 
-	protected $code = 250;
+    protected $code = 250;
 
 }

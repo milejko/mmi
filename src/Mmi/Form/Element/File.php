@@ -80,54 +80,59 @@ namespace Mmi\Form\Element;
  * @method self addFilterUrlencode() filtr urlencode
  * @method self addFilterZeroToNull() filtr zero do null'a
  */
-class File extends ElementAbstract {
+class File extends ElementAbstract
+{
 
-	/**
-	 * Informacje o zuploadowanym pliku
-	 * @var \Mmi\Http\RequestFile[]
-	 */
-	private $_files = [];
+    /**
+     * Informacje o zuploadowanym pliku
+     * @var \Mmi\Http\RequestFile[]
+     */
+    private $_files = [];
 
-	/**
-	 * Buduje pole
-	 * @return string
-	 */
-	public function fetchField() {
-		return '<input type="file" ' . $this->_getHtmlOptions() . '/>';
-	}
+    /**
+     * Buduje pole
+     * @return string
+     */
+    public function fetchField()
+    {
+        return '<input type="file" ' . $this->_getHtmlOptions() . '/>';
+    }
 
-	public function setForm(\Mmi\Form\Form $form) {
-		parent::setForm($form);
-		//nazwa pola
-		$namespace = $form->getBaseName();
-		$fieldName = $this->getName();
-		$files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles();
-		//brak pliku
-		if (!isset($files->{$namespace}->{$fieldName})) {
-			return $this;
-		}
-		$this->_files = $files->{$namespace}->{$fieldName};
-		//opakowanie w array jeśli plik jest jeden
-		if ($this->_files instanceof \Mmi\Http\RequestFile) {
-			$this->_files = [$this->_files];
-		}
-		return $this;
-	}
+    public function setForm(\Mmi\Form\Form $form)
+    {
+        parent::setForm($form);
+        //nazwa pola
+        $namespace = $form->getBaseName();
+        $fieldName = $this->getName();
+        $files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles();
+        //brak pliku
+        if (!isset($files->{$namespace}->{$fieldName})) {
+            return $this;
+        }
+        $this->_files = $files->{$namespace}->{$fieldName};
+        //opakowanie w array jeśli plik jest jeden
+        if ($this->_files instanceof \Mmi\Http\RequestFile) {
+            $this->_files = [$this->_files];
+        }
+        return $this;
+    }
 
-	/**
-	 * Pobiera informacje o wgranym pliku (jeśli istnieje)
-	 * @return \Mmi\Http\RequestFile[]
-	 */
-	public function getFiles() {
-		return $this->_files;
-	}
+    /**
+     * Pobiera informacje o wgranym pliku (jeśli istnieje)
+     * @return \Mmi\Http\RequestFile[]
+     */
+    public function getFiles()
+    {
+        return $this->_files;
+    }
 
-	/**
-	 * Zwraca czy plik został zuploadowany do tego pola
-	 * @return boolean
-	 */
-	public function isUploaded() {
-		return !empty($this->_files);
-	}
+    /**
+     * Zwraca czy plik został zuploadowany do tego pola
+     * @return boolean
+     */
+    public function isUploaded()
+    {
+        return !empty($this->_files);
+    }
 
 }

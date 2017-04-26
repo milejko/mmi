@@ -13,16 +13,18 @@ namespace Mmi\Filter;
 /**
  * Filtr "sufit"
  */
-class Ceil extends \Mmi\Filter\FilterAbstract {
+class Ceil extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zaokrągla liczby
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return ceil($value);
-	}
+    /**
+     * Zaokrągla liczby
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return ceil($value);
+    }
 
 }

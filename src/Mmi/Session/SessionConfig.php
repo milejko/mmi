@@ -13,67 +13,68 @@ namespace Mmi\Session;
 /**
  * Klasa konfiguracji sesji
  */
-class SessionConfig {
+class SessionConfig
+{
 
-	/**
-	 * Nazwa sesji
-	 * @var string
-	 */
-	public $name;
+    /**
+     * Nazwa sesji
+     * @var string
+     */
+    public $name;
 
-	/**
-	 * Czas życia cookie w sekundach (0 - bez limitu)
-	 * @var int
-	 */
-	public $cookieLifetime = 0;
+    /**
+     * Czas życia cookie w sekundach (0 - bez limitu)
+     * @var int
+     */
+    public $cookieLifetime = 0;
 
-	/**
-	 * Czas wygasania cache w sekundach
-	 * @var int
-	 */
-	public $cacheExpire = 14400;
+    /**
+     * Czas wygasania cache w sekundach
+     * @var int
+     */
+    public $cacheExpire = 14400;
 
-	/**
-	 * Mnożnik GC
-	 * @var int
-	 */
-	public $gcDivisor = 1000;
+    /**
+     * Mnożnik GC
+     * @var int
+     */
+    public $gcDivisor = 1000;
 
-	/**
-	 * Czas życia GC
-	 * @var int
-	 */
-	public $gcMaxLifetime = 28800;
+    /**
+     * Czas życia GC
+     * @var int
+     */
+    public $gcMaxLifetime = 28800;
 
-	/**
-	 * Prawdopodobnieństwo zadziałania GC
-	 * @var int
-	 */
-	public $gcProbability = 1;
+    /**
+     * Prawdopodobnieństwo zadziałania GC
+     * @var int
+     */
+    public $gcProbability = 1;
 
-	/**
-	 * Backend obsługujący sesje
-	 * files | memcache
-	 * @var string
-	 */
-	public $handler = 'files';
+    /**
+     * Backend obsługujący sesje
+     * files | memcache
+     * @var string
+     */
+    public $handler = 'files';
 
-	/**
-	 * Ścieżka zapisu sesji
-	 * @var tmp
-	 */
-	public $path = '/tmp';
+    /**
+     * Ścieżka zapisu sesji
+     * @var tmp
+     */
+    public $path = '/tmp';
 
-	/**
-	 * Orm autoryzacyjny
-	 * @var string
-	 */
-	public $authModel;
+    /**
+     * Orm autoryzacyjny
+     * @var string
+     */
+    public $authModel;
 
-	/**
-	 * Czas pamiętania użytkownika
-	 * @var int
-	 */
-	public $authRemember = 31536000;
+    /**
+     * Czas pamiętania użytkownika
+     * @var int
+     */
+    public $authRemember = 31536000;
 
 }

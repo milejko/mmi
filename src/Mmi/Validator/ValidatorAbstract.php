@@ -16,53 +16,58 @@ namespace Mmi\Validator;
  * @method self setMessage($message) ustawia własną wiadomość walidatora
  * @method string getMessage() pobiera wiadomość
  */
-abstract class ValidatorAbstract extends \Mmi\OptionObject {
-	
-	/**
-	 * Wiadomość
-	 * @var string
-	 */
-	protected $_error;
+abstract class ValidatorAbstract extends \Mmi\OptionObject
+{
 
-	/**
-	 * Konstruktor ustawia opcje
-	 * @param array $options
-	 */
-	public final function __construct(array $options = []) {
-		$this->setOptions($options);
-	}
-	
-	/**
-	 * Ustawia opcje (domyślnie wiadomość)
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setMessage(current($options));
-	}
+    /**
+     * Wiadomość
+     * @var string
+     */
+    protected $_error;
 
-	/**
-	 * Abstrakcyjna funkcja sprawdzająca poprawność wartości
-	 * @param mixed $value wartość
-	 */
-	public abstract function isValid($value);
+    /**
+     * Konstruktor ustawia opcje
+     * @param array $options
+     */
+    public final function __construct(array $options = [])
+    {
+        $this->setOptions($options);
+    }
 
-	/**
-	 * Pobiera błąd
-	 * @return string
-	 */
-	public final function getError() {
-		return $this->_error;
-	}
+    /**
+     * Ustawia opcje (domyślnie wiadomość)
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setMessage(current($options));
+    }
 
-	/**
-	 * Ustawia błąd
-	 * @param string $message
-	 * @retur boolean false
-	 */
-	protected final function _error($message) {
-		$this->_error = $message;
-		return false;
-	}
+    /**
+     * Abstrakcyjna funkcja sprawdzająca poprawność wartości
+     * @param mixed $value wartość
+     */
+    public abstract function isValid($value);
+
+    /**
+     * Pobiera błąd
+     * @return string
+     */
+    public final function getError()
+    {
+        return $this->_error;
+    }
+
+    /**
+     * Ustawia błąd
+     * @param string $message
+     * @retur boolean false
+     */
+    protected final function _error($message)
+    {
+        $this->_error = $message;
+        return false;
+    }
 
 }

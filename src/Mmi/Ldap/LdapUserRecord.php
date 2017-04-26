@@ -13,54 +13,55 @@ namespace Mmi\Ldap;
 /**
  * Rekord użytkownika LDAP
  */
-class LdapUserRecord {
+class LdapUserRecord
+{
 
-	/**
-	 * Distinguished Name
-	 * @var string
-	 */
-	public $dn;
+    /**
+     * Distinguished Name
+     * @var string
+     */
+    public $dn;
 
-	/**
-	 * Nazwa wspólna (commonName)
-	 * @var string
-	 */
-	public $cn;
+    /**
+     * Nazwa wspólna (commonName)
+     * @var string
+     */
+    public $cn;
 
-	/**
-	 * Login użytkownika
-	 * @var string
-	 */
-	public $sAMAccountname;
+    /**
+     * Login użytkownika
+     * @var string
+     */
+    public $sAMAccountname;
 
-	/**
-	 * Imię
-	 * @var string 
-	 */
-	public $givenName;
+    /**
+     * Imię
+     * @var string 
+     */
+    public $givenName;
 
-	/**
-	 * Nazwisko (surname)
-	 * @var string
-	 */
-	public $sn;
+    /**
+     * Nazwisko (surname)
+     * @var string
+     */
+    public $sn;
 
-	/**
-	 * Mail
-	 * @var string
-	 */
-	public $mail;
+    /**
+     * Mail
+     * @var string
+     */
+    public $mail;
 
-	/**
-	 * Lista grup
-	 * @var array
-	 */
-	public $memberOf = [];
-	
-	/**
-	 * Identyfikator użytkownika (uid)
-	 * @var string
-	 */
-	public $uid;
+    /**
+     * Lista grup
+     * @var array
+     */
+    public $memberOf = [];
+
+    /**
+     * Identyfikator użytkownika (uid)
+     * @var string
+     */
+    public $uid;
 
 }

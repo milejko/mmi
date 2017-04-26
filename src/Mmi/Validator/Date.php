@@ -13,24 +13,26 @@ namespace Mmi\Validator;
 /**
  * Walidator daty
  */
-class Date extends ValidatorAbstract {
+class Date extends ValidatorAbstract
+{
 
-	/**
-	 * Treść wiadomości
-	 */
-	const INVALID = 'Wprowadzona wartość nie jest poprawną datą';
+    /**
+     * Treść wiadomości
+     */
+    const INVALID = 'Wprowadzona wartość nie jest poprawną datą';
 
-	/**
-	 * Walidacja daty
-	 * @param mixed $value wartość
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		//data niepoprawna
-		if (!strtotime($value)) {
-			return $this->_error(self::INVALID);
-		}
-		return true;
-	}
+    /**
+     * Walidacja daty
+     * @param mixed $value wartość
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        //data niepoprawna
+        if (!strtotime($value)) {
+            return $this->_error(self::INVALID);
+        }
+        return true;
+    }
 
 }

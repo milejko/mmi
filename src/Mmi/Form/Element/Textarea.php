@@ -13,16 +13,18 @@ namespace Mmi\Form\Element;
 /**
  * Element textarea
  */
-class Textarea extends ElementAbstract {
+class Textarea extends ElementAbstract
+{
 
-	/**
-	 * Buduje pole
-	 * @return string
-	 */
-	public function fetchField() {
-		$value = (new \Mmi\Filter\Input)->filter($this->getValue());
-		$this->unsetOption('value');
-		return '<textarea ' . $this->_getHtmlOptions() . '>' . $value . '</textarea>';
-	}
+    /**
+     * Buduje pole
+     * @return string
+     */
+    public function fetchField()
+    {
+        $value = (new \Mmi\Filter\Input)->filter($this->getValue());
+        $this->unsetOption('value');
+        return '<textarea ' . $this->_getHtmlOptions() . '>' . $value . '</textarea>';
+    }
 
 }

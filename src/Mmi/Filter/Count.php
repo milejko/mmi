@@ -13,16 +13,18 @@ namespace Mmi\Filter;
 /**
  * Filtr zliczający
  */
-class Count extends \Mmi\Filter\FilterAbstract {
+class Count extends \Mmi\Filter\FilterAbstract
+{
 
-	/**
-	 * Zlicza elementy
-	 * @param mixed $value wartość
-	 * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
-	 * @return mixed
-	 */
-	public function filter($value) {
-		return count($value);
-	}
+    /**
+     * Zlicza elementy
+     * @param mixed $value wartość
+     * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe
+     * @return mixed
+     */
+    public function filter($value)
+    {
+        return count($value);
+    }
 
 }

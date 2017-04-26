@@ -75,41 +75,46 @@ namespace Mmi\Form\Element;
  * @method self addFilterUrlencode() filtr urlencode
  * @method self addFilterZeroToNull() filtr zero do null'a
  */
-class Checkbox extends ElementAbstract {
+class Checkbox extends ElementAbstract
+{
 
-	/**
-	 * Konstruktor ustawia kolejność i opcje
-	 * @param string $name
-	 */
-	public function __construct($name) {
-		parent::__construct($name);
-		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchLabel', 'fetchDescription', 'fetchErrors', 'fetchEnd'])
-			->setLabelPostfix('')
-			->setValue(1);
-	}
+    /**
+     * Konstruktor ustawia kolejność i opcje
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchLabel', 'fetchDescription', 'fetchErrors', 'fetchEnd'])
+            ->setLabelPostfix('')
+            ->setValue(1);
+    }
 
-	/**
-	 * Render pola
-	 * @return string
-	 */
-	public function fetchField() {
-		return '<input type="checkbox" ' . $this->_getHtmlOptions() . '/>';
-	}
+    /**
+     * Render pola
+     * @return string
+     */
+    public function fetchField()
+    {
+        return '<input type="checkbox" ' . $this->_getHtmlOptions() . '/>';
+    }
 
-	/**
-	 * Ustawia zaznaczenie
-	 * @return \Mmi\Form\Element\Checkbox
-	 */
-	public function setChecked($checked = true) {
-		return $checked ? $this->setOption('checked', '') : $this->unsetOption('checked');
-	}
+    /**
+     * Ustawia zaznaczenie
+     * @return \Mmi\Form\Element\Checkbox
+     */
+    public function setChecked($checked = true)
+    {
+        return $checked ? $this->setOption('checked', '') : $this->unsetOption('checked');
+    }
 
-	/**
-	 * Czy zaznaczone
-	 * @return \Mmi\Form\Element\Checkbox
-	 */
-	public function isChecked() {
-		return $this->issetOption('checked');
-	}
-	
+    /**
+     * Czy zaznaczone
+     * @return \Mmi\Form\Element\Checkbox
+     */
+    public function isChecked()
+    {
+        return $this->issetOption('checked');
+    }
+
 }

@@ -16,21 +16,23 @@ require_once 'CommandAbstract.php';
 /**
  * Wdrożenie bazy danych
  */
-class DbDeploy extends CommandAbstract {
+class DbDeploy extends CommandAbstract
+{
 
-	/**
-	 * Uruchomienie deployera
-	 */
-	public function run() {
-		//próba usunięcia buforowania wyjścia
-		try {
-			ob_end_flush();
-		} catch (\Exception $e) {
-			//nic
-		}
+    /**
+     * Uruchomienie deployera
+     */
+    public function run()
+    {
+        //próba usunięcia buforowania wyjścia
+        try {
+            ob_end_flush();
+        } catch (\Exception $e) {
+            //nic
+        }
 
-		(new \Mmi\Db\Deployer)->deploy();
-	}
+        (new \Mmi\Db\Deployer)->deploy();
+    }
 
 }
 

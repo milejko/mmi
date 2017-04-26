@@ -13,6 +13,7 @@ namespace Mmi\Http;
 /**
  * Klasa wyjątku http
  */
-class HttpException extends \Mmi\App\KernelException {
-	
+class HttpException extends \Mmi\App\KernelException
+{
+    
 }

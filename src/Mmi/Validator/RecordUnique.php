@@ -23,50 +23,53 @@ namespace Mmi\Validator;
  * @method integer getId() pobiera ID
  * @method string getMessage() pobiera własną wiadomość walidatora
  */
-class RecordUnique extends ValidatorAbstract {
+class RecordUnique extends ValidatorAbstract
+{
 
-	/**
-	 * Komunikat istnienia pola
-	 */
-	const EXISTS = 'Pole o takiej wartości już istnieje';
+    /**
+     * Komunikat istnienia pola
+     */
+    const EXISTS = 'Pole o takiej wartości już istnieje';
 
-	/**
-	 * Ustawia opcje
-	 * @param array $options
-	 * @return self
-	 */
-	public function setOptions(array $options = [], $reset = false) {
-		return $this->setQuery(current($options))
-				->setField(next($options))
-				->setId(next($options))
-				->setMessage(next($options));
-	}
+    /**
+     * Ustawia opcje
+     * @param array $options
+     * @return self
+     */
+    public function setOptions(array $options = [], $reset = false)
+    {
+        return $this->setQuery(current($options))
+                ->setField(next($options))
+                ->setId(next($options))
+                ->setMessage(next($options));
+    }
 
-	/**
-	 * Walidacja unikalności rekordu z użyciem Query
-	 * @param mixed $value wartość
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		//niepoprawna quera
-		if (!($this->getQuery() instanceof \Mmi\Orm\Query)) {
-			throw new ValidatorException('No query class supplied.');
-		}
-		//brak pola
-		if (!$this->getField()) {
-			throw new ValidatorException('No field name supplied.');
-		}
-		$q = $this->getQuery();
-		/* @var $q \Mmi\Orm\Query */
-		$q->where($this->getField())->equals($value);
-		if ($this->getId()) {
-			$q->andField('id')->notEquals(intval($this->getId()));
-		}
-		//rekord istnieje
-		if ($q->count() > 0) {
-			return $this->_error(self::EXISTS);
-		}
-		return true;
-	}
+    /**
+     * Walidacja unikalności rekordu z użyciem Query
+     * @param mixed $value wartość
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        //niepoprawna quera
+        if (!($this->getQuery() instanceof \Mmi\Orm\Query)) {
+            throw new ValidatorException('No query class supplied.');
+        }
+        //brak pola
+        if (!$this->getField()) {
+            throw new ValidatorException('No field name supplied.');
+        }
+        $q = $this->getQuery();
+        /* @var $q \Mmi\Orm\Query */
+        $q->where($this->getField())->equals($value);
+        if ($this->getId()) {
+            $q->andField('id')->notEquals(intval($this->getId()));
+        }
+        //rekord istnieje
+        if ($q->count() > 0) {
+            return $this->_error(self::EXISTS);
+        }
+        return true;
+    }
 
 }

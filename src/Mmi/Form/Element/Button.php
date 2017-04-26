@@ -13,27 +13,30 @@ namespace Mmi\Form\Element;
 /**
  * Klasa guzika
  */
-class Button extends ElementAbstract {
+class Button extends ElementAbstract
+{
 
-	/**
-	 * Ignorowanie tego pola, inna kolejnośc renderowania
-	 */
-	public function __construct($name) {
-		parent::__construct($name);
-		$this->setIgnore();
-		$this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
-	}
+    /**
+     * Ignorowanie tego pola, inna kolejnośc renderowania
+     */
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this->setIgnore();
+        $this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
+    }
 
-	/**
-	 * Buduje pole
-	 * @return string
-	 */
-	public function fetchField() {
-		//labelka jako value
-		if ($this->getLabel()) {
-			$this->setValue($this->getLabel());
-		}
-		return '<input type="button" ' . $this->_getHtmlOptions() . '/>';
-	}
+    /**
+     * Buduje pole
+     * @return string
+     */
+    public function fetchField()
+    {
+        //labelka jako value
+        if ($this->getLabel()) {
+            $this->setValue($this->getLabel());
+        }
+        return '<input type="button" ' . $this->_getHtmlOptions() . '/>';
+    }
 
 }

@@ -13,6 +13,7 @@ namespace Mmi\Cache;
 /**
  * Klasa rejestru lokalnego bufora
  */
-class CacheRegistry extends \Mmi\OptionObject {
-	
+class CacheRegistry extends \Mmi\OptionObject
+{
+    
 }

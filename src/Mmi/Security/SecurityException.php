@@ -13,6 +13,7 @@ namespace Mmi\Security;
 /**
  * Klasa wyjątku bezpieczeństwa
  */
-class SecurityException extends \Mmi\App\KernelException {
-	
+class SecurityException extends \Mmi\App\KernelException
+{
+    
 }
