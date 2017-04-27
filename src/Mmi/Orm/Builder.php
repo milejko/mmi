@@ -180,11 +180,11 @@ class Builder
         //ścieżka
         $path = self::_mkdirRecursive(self::_getPathPrefix($tableName)) . '/' . $className . '.php';
         //kod zapytania
-        $queryCode = '{'
-            . "\n\n" . self::INDENT
-            . 'protected $_tableName = \''
-            . $tableName . '\';'
-            . "\n\n}";
+        $queryCode = "\n{" .
+            "\n\n" . self::INDENT .
+            'protected $_tableName = \'' .
+            $tableName . '\';' .
+            "\n\n}";
         //wczytanie istniejącego rekordu
         if (file_exists($path)) {
             $queryCode = file_get_contents($path);
@@ -235,7 +235,7 @@ class Builder
             ' * @method ' . $recordClassName . '[] find()' . "\n" .
             ' * @method ' . $recordClassName . ' findFirst()' . "\n" .
             ' * @method ' . $recordClassName . ' findPk($value)' . "\n" .
-            ' */' . "\n" . '//</editor-fold>' . "\n" . 'class ' . $className . ' extends \Mmi\Orm\Query ';
+            ' */' . "\n" . '//</editor-fold>' . "\n" . 'class ' . $className . ' extends \Mmi\Orm\Query';
         $queryCode = $queryHead . substr($queryCode, strpos($queryCode, '{'));
         file_put_contents($path, $queryCode);
     }
