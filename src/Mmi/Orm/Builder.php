@@ -50,7 +50,8 @@ class Builder
         //kod rekordu
         $recordCode = '<?php' . "\n\n" .
             'namespace ' . self::_getNamespace($tableName) . ";\n\n" .
-            'class ' . ($className = self::_getNamePrefix($tableName) . 'Record') . ' extends \Mmi\Orm\Record {' .
+            'class ' . ($className = self::_getNamePrefix($tableName) . 'Record') . ' extends \Mmi\Orm\Record' .
+            "\n{" .
             "\n\n" .
             '}' . "\n";
         //ścieżka do pliku
@@ -83,7 +84,7 @@ class Builder
             }
             return;
         }
-        $recordCode = preg_replace('/(class ' . $className . ' extends [\\a-zA-Z0-9]+\s\{?\r?\n?)/', '$1' . $variableString, $recordCode);
+        $recordCode = preg_replace('/(class ' . $className . ' extends [\\a-zA-Z0-9]+\n\{?\r?\n?)/', '$1' . $variableString, $recordCode);
         //zapis pliku
         file_put_contents($path, $recordCode);
     }
@@ -130,7 +131,8 @@ class Builder
             ' * @method \\' . $queryClassName . ' between($from, $to)' . "\n" .
             $methods .
             ' */' . "\n" .
-            'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryField') . ' extends \Mmi\Orm\QueryHelper\QueryField {' .
+            'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryField') . ' extends \Mmi\Orm\QueryHelper\QueryField' .
+            "\n{" .
             "\n\n" .
             '}' . "\n";
         //zapis pliku
@@ -151,7 +153,8 @@ class Builder
             '/**' . "\n" .
             ' * @method \\' . $queryClassName . ' on($localKeyName, $joinedKeyName = \'id\')' . "\n" .
             ' */' . "\n" .
-            'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryJoin') . ' extends \Mmi\Orm\QueryHelper\QueryJoin {' .
+            'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryJoin') . ' extends \Mmi\Orm\QueryHelper\QueryJoin' .
+            "\n{" .
             "\n\n" .
             '}' . "\n";
         //zapis pliku
