@@ -16,7 +16,7 @@ namespace Mmi\Orm;
 class Builder
 {
 
-    CONST INDENT = "\s\s\s\s";
+    CONST INDENT = "    ";
     
     /**
      * Renderuje DAO, Record i Query dla podanej nazwy tabeli
@@ -180,8 +180,7 @@ class Builder
         //ścieżka
         $path = self::_mkdirRecursive(self::_getPathPrefix($tableName)) . '/' . $className . '.php';
         //kod zapytania
-        $queryCode = "\n{" .
-            "\n\n" . self::INDENT .
+        $queryCode = "{\n\n" . self::INDENT .
             'protected $_tableName = \'' .
             $tableName . '\';' .
             "\n\n}";
@@ -236,7 +235,7 @@ class Builder
             ' * @method ' . $recordClassName . ' findFirst()' . "\n" .
             ' * @method ' . $recordClassName . ' findPk($value)' . "\n" .
             ' */' . "\n" . '//</editor-fold>' . "\n" . 'class ' . $className . ' extends \Mmi\Orm\Query';
-        $queryCode = $queryHead . substr($queryCode, strpos($queryCode, '{'));
+        $queryCode = $queryHead . "\n" . substr($queryCode, strpos($queryCode, '{'));
         file_put_contents($path, $queryCode);
     }
 
