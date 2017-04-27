@@ -65,6 +65,7 @@ class Template extends HelperAbstract
 
         //obsługa tagów Mmi
         $input = preg_replace([
+            '/\s+/',
             '/\$([a-z0-9_-]+)/i', //$zmienna -> $this->zmienna
             '/\{\/(if|for|foreach|while)\}/', //końcówki struktur językowych
             '/\{(break|continue)\}/', //break continue
@@ -88,6 +89,7 @@ class Template extends HelperAbstract
             '/([a-z0-9)\]\'\+\-])}/i', //obsługa zamknięcia
             '/\{\$\$this->([a-z0-9_-]+)/i', //$nazwa -> $this->{$this->nazwa}
             ], [
+            ' ',
             '$this->${1}',
             '<?php end${1}; ?>',
             '<?php ${1}; ?>',

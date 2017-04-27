@@ -16,6 +16,8 @@ namespace Mmi\Orm;
 class Builder
 {
 
+    CONST INDENT = "\s\s\s\s";
+    
     /**
      * Renderuje DAO, Record i Query dla podanej nazwy tabeli
      * @param string $tableName
@@ -67,10 +69,10 @@ class Builder
         //generowanie pól rekordu
         foreach ($structure as $fieldName => $fieldDetails) {
             $variables[] = Convert::underscoreToCamelcase($fieldName);
-            $variableString .= "\t" . 'public $' . Convert::underscoreToCamelcase($fieldName) . ";\n";
+            $variableString .= self::INDENT . 'public $' . Convert::underscoreToCamelcase($fieldName) . ";\n";
         }
         //sprawdzanie istnienia pól rekordu
-        if (preg_match_all('/\tpublic \$([a-zA-Z0-9\_]+)[\;|\s\=]/', $recordCode, $codeVariables) && isset($codeVariables[1])) {
+        if (preg_match_all('/' . self::INDENT . 'public \$([a-zA-Z0-9\_]+)[\;|\s\=]/', $recordCode, $codeVariables) && isset($codeVariables[1])) {
             //za dużo względem bazy
             $diffRecord = array_diff($codeVariables[1], $variables);
             //brakujące względem DB
@@ -176,7 +178,7 @@ class Builder
         $path = self::_mkdirRecursive(self::_getPathPrefix($tableName)) . '/' . $className . '.php';
         //kod zapytania
         $queryCode = '{'
-            . "\n\n\t"
+            . "\n\n" . self::INDENT
             . 'protected $_tableName = \''
             . $tableName . '\';'
             . "\n\n}";
