@@ -433,17 +433,20 @@ class Query
      */
     protected final function _prepareField($fieldName, $forcedTableName = null)
     {
+        //funkcja sortująca rand()
+        if ($fieldName == 'RAND()') {
+            return 'RAND()';
+        }
+        //nazwa tabeli
         $tableName = ($forcedTableName === null) ? $this->_tableName : $forcedTableName;
-        //tabela
+        //przygotowany prefix tabeli
         $tablePrefix = DbConnector::getAdapter()->prepareTable($tableName);
-        //jeśli pole występuje w tabeli, bądź jest funkcją RAND()
-        if (DbConnector::fieldInTable($fieldName, $tableName) || $fieldName == 'RAND()') {
+        //pole występuje w tabeli (jeden do jednego bez żadnych konwersji)
+        if (DbConnector::fieldInTable($fieldName, $tableName)) {
             return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField($fieldName);
         }
-        /* @var $db \Mmi\Db\Adapter\Pdo\PdoAbstract */
-        //konwersja camelcase do podkreślników (przechowywanych w bazie)
-        $convertedFieldName = Convert::camelcaseToUnderscore($fieldName);
-        return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField($convertedFieldName);
+        //konwersja camelcase na podkreślenia
+        return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField(Convert::camelcaseToUnderscore($fieldName));
     }
 
     /**
