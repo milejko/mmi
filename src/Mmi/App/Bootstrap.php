@@ -193,6 +193,7 @@ class Bootstrap implements BootstrapInterface
                 ->setAlwaysCompile(\App\Registry::$config->compile)
                 ->setTranslate($translate)
                 ->setCdn(\App\Registry::$config->cdn)
+                ->setRequest(FrontController::getInstance()->getRequest())
                 ->setBaseUrl($router->getBaseUrl());
     }
 
