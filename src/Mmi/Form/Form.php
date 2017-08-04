@@ -33,6 +33,7 @@ use Mmi\Form\Element;
  * @method Element\Text addElementText($name) dodaje element text
  * @method Element\Textarea addElementTextarea($name) dodaje element textarea
  * @method Element\Csrf addElementCsrf($name) dodaje element zabezpieczający CSRF
+ * @method Element\Email addElementEmail($name) dodaje element email
  */
 abstract class Form extends \Mmi\OptionObject
 {
