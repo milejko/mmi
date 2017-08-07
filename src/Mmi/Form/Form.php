@@ -415,7 +415,7 @@ abstract class Form extends \Mmi\OptionObject
      * kalkuluje zmienne kontrolne
      * @return string
      */
-    public final function start()
+    public function start()
     {
         //zwrot HTML
         return '<form ' . ($this->getOption('action') ? ('action="' . $this->getOption('action') . '"') : '') .
@@ -433,7 +433,7 @@ abstract class Form extends \Mmi\OptionObject
      * Renderer stopki formularza
      * @return string
      */
-    public final function end()
+    public function end()
     {
         return '</form>';
     }
