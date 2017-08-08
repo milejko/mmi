@@ -78,9 +78,9 @@ class Part
             return 'No SQL queries';
         }
         //pętla po profilerze
-        foreach ($profilerData as $event) {
+        foreach ($profilerData as $index => $event) {
             $percentSum += $event['percent'];
-            $html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; width: 450px; margin-right: 20px; font-size: 10px; word-wrap: break-word; white-space: pre-wrap;">' . $event['sql'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
+            $html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; width: 450px; margin-right: 20px; font-size: 10px; word-wrap: break-word; white-space: pre-wrap;">' . ($index + 1) . '. '. $event['sql'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
         }
         return $html;
     }

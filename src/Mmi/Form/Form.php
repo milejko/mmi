@@ -67,6 +67,12 @@ abstract class Form extends \Mmi\OptionObject
      * @var boolean
      */
     protected $_valid;
+    
+    //szablon rozpoczynający formularz
+    CONST TEMPLATE_START = 'mmi/form/start';
+    
+    //szablon kończący formularz
+    CONST TEMPLATE_END = 'mmi/form/end';
 
     /**
      * Konstruktor
@@ -417,16 +423,8 @@ abstract class Form extends \Mmi\OptionObject
      */
     public function start()
     {
-        //zwrot HTML
-        return '<form ' . ($this->getOption('action') ? ('action="' . $this->getOption('action') . '"') : '') .
-            '  method="' . $this->getOption('method') .
-            '" enctype="' . $this->getOption('enctype') .
-            '" class="' . $this->getOption('class') .
-            '" data-class="' . get_class($this) .
-            '" data-record-class="' . $this->getRecordClass() .
-            '" data-record-id="' . ($this->hasNotEmptyRecord() ? $this->getRecord()->getPk() : '') .
-            '" accept-charset="' . $this->getOption('accept-charset') .
-            '">';
+        \Mmi\App\FrontController::getInstance()->getView()->form = $this;
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_START);
     }
 
     /**
@@ -435,7 +433,7 @@ abstract class Form extends \Mmi\OptionObject
      */
     public function end()
     {
-        return '</form>';
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate('mmi/form/end');
     }
 
     /**

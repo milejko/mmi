@@ -61,8 +61,9 @@ class Structure
         self::_parseAdditions($components['translate'], $module, $path . '/Resource/i18n');
         //kontrolery
         self::_parseControllers($components['module'], lcfirst($module), $path);
-        //kontrolery
-        self::_parseTemplates($components['template'], lcfirst($module), $path . '/Resource/template');
+        //szablony
+        $components['template'][lcfirst($module)] = [];
+        self::_parseTemplates($components['template'][lcfirst($module)], $path . '/Resource/template');
         return $components;
     }
 
@@ -72,7 +73,7 @@ class Structure
      * @param string $moduleName
      * @param string $path
      */
-    private static function _parseTemplates(array &$components, $moduleName, $path)
+    private static function _parseTemplates(array &$components, $path)
     {
         if (!file_exists($path)) {
             return;
@@ -82,30 +83,12 @@ class Structure
                 continue;
             }
             if ($template->isFile()) {
-                $components[$moduleName][substr($template->getFilename(), 0, -4)] = $template->getPathname();
+                $components[substr($template->getFilename(), 0, -4)] = $template->getPathname();
                 continue;
             }
-            if (!$template->isDir()) {
-                continue;
-            }
-            foreach (new \DirectoryIterator($template->getPathname()) as $action) {
-                if ($action->isDot()) {
-                    continue;
-                }
-                if ($action->isDir()) {
-                    foreach (new \DirectoryIterator($action->getPathname()) as $partial) {
-                        if ($partial->isDot()) {
-                            continue;
-                        }
-                        $components[$moduleName][$template->getFilename()][$action->getFilename() . '/' . substr($partial->getFilename(), 0, -4)] = $partial->getPathname();
-                    }
-                    continue;
-                }
-                if ($action->isFile()) {
-                    $components[$moduleName][$template->getFilename()][substr($action->getFilename(), 0, -4)] = $action->getPathname();
-                    continue;
-                }
-                $components[$moduleName][$template->getFilename()][substr($action->getFilename(), 0, -4)] = $action->getPathname();
+            if ($template->isDir()) {
+                $components[$template->getFilename()] = [];
+                self::_parseTemplates($components[$template->getFilename()], $template->getPathname());
             }
         }
     }

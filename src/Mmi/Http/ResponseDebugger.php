@@ -156,13 +156,13 @@ class ResponseDebugger
         if (isset($_COOKIE) && count($_COOKIE) > 0) {
             $html .= '<p style="margin: 0px;">Cookie Variables: </p>';
             $html .= self::PRE_OPEN;
-            $html .= ResponseDebugger\Colorify::colorify(print_r($_COOKIE, true)) . '</pre>';
+            $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($_COOKIE), true)) . '</pre>';
         }
         //zmienne sesji
         if (isset($_SESSION) && count($_SESSION) > 0) {
             $html .= '<p style="margin: 0px;">Session Variables: </p>';
             $html .= self::PRE_OPEN;
-            $html .= ResponseDebugger\Colorify::colorify(print_r($_SESSION, true)) . '</pre>';
+            $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($_SESSION), true)) . '</pre>';
         }
         $html .= '</pre>';
         $html .= '</td></tr></table></div>';
@@ -174,7 +174,7 @@ class ResponseDebugger
      * @param array $vars
      * @return array
      */
-    protected function _simplifyVarArray($vars)
+    protected function _simplifyVarArray($vars, $depth = 0)
     {
         //jeśli nie jest tablicą
         if (!is_array($vars)) {
@@ -190,7 +190,7 @@ class ResponseDebugger
             }
             //jeśli jest tablicą - rekurencyjne zejście
             if (is_array($varValue)) {
-                $simplifiedVars[$varName] = $this->_simplifyVarArray($varValue);
+                ($depth < 2 && count($varValue) < 10) ? $simplifiedVars[$varName] = $this->_simplifyVarArray($varValue, $depth + 1) : $simplifiedVars[$varName] = 'Array(...)';
                 continue;
             }
             //jeśli jest zwykłą zmienną - bez zmian

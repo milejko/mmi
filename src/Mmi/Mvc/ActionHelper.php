@@ -91,15 +91,14 @@ class ActionHelper
         //wywołanie akcji
         if (null !== $actionContent = $this->_invoke($request)) {
             //reset requestu i wyłączenie layoutu
-            FrontController::getInstance()->getView()->setRequest($originalRequest)
-                ->setLayoutDisabled();
+            FrontController::getInstance()->getView()->setRequest($originalRequest);
             return $actionContent;
         }
         //rendering szablonu jeśli akcja zwraca null
-        $content = FrontController::getInstance()->getView()->renderTemplate($request);
+        $actionContent = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
         //reset requestu
         FrontController::getInstance()->getView()->setRequest($originalRequest);
-        return $content;
+        return $actionContent;
     }
 
     /**
@@ -121,14 +120,15 @@ class ActionHelper
         }
         //wywołanie akcji
         if (null !== $actionContent = $this->_invoke($request)) {
-            //wyłączenie layout
-            FrontController::getInstance()->getView()->setLayoutDisabled();
             //zwrot jeśli akcja zwraca wynik
             return $actionContent;
         }
-        return FrontController::getInstance()->getView()
-                ->setPlaceholder('content', FrontController::getInstance()->getView()->renderTemplate($request))
-                ->renderLayout($request);
+        //renderowanie szablonu
+        $actionContent = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+        //jeśli layout jest wyłączony - zwrot szablonu, jeśli nie - layoutu
+        return FrontController::getInstance()->getView()->isLayoutDisabled() ? $actionContent : FrontController::getInstance()->getView()
+                ->setPlaceholder('content', $actionContent)
+                ->renderTemplate($this->_getLayout($request));
     }
 
     /**
@@ -177,6 +177,30 @@ class ActionHelper
         //informacja o zakończeniu wykonywania akcji do profilera
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
+    }
+
+    /**
+     * Pobiera dostępny layout
+     * @param \Mmi\Http\Request $request
+     * @return string
+     * @throws \Mmi\Mvc\MvcException brak layoutów
+     */
+    private function _getLayout(\Mmi\Http\Request $request)
+    {
+        //test layoutu dla modułu i kontrolera
+        if (null !== FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/' . $request->getControllerName() . '/layout')) {
+            return $request->getModuleName() . '/' . $request->getControllerName() . '/layout';
+        }
+        //test layoutu dla modułu
+        if (null !== FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/layout')) {
+            return $request->getModuleName() . '/layout';
+        }
+        //test layoutu dla modułu
+        if (null !== FrontController::getInstance()->getView()->getTemplateByPath('app/layout')) {
+            return 'app/layout';
+        }
+        //brak layoutu
+        throw new \Mmi\Mvc\MvcException('Layout not found.');
     }
 
 }

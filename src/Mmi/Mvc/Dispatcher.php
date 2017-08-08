@@ -23,10 +23,13 @@ class Dispatcher
      */
     public function routeStartup()
     {
+        //iteracja po pluginach
         foreach (FrontController::getInstance()->getPlugins() as $plugin) {
             //wykonywanie routeStartup() na kolejnych pluginach
             $plugin->routeStartup(FrontController::getInstance()->getRequest());
         }
+        //profiler
+        FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: plugins route startup');
     }
 
     /**
@@ -34,10 +37,13 @@ class Dispatcher
      */
     public function preDispatch()
     {
+        //iteracja po pluginach
         foreach (FrontController::getInstance()->getPlugins() as $plugin) {
             //wykonywanie preDispatch() na kolejnych pluginach
             $plugin->preDispatch(FrontController::getInstance()->getRequest());
         }
+        //profiler
+        FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: plugins pre-dispatch');
     }
 
     /**
@@ -45,10 +51,13 @@ class Dispatcher
      */
     public function postDispatch()
     {
+        //iteracja po pluginach
         foreach (FrontController::getInstance()->getPlugins() as $plugin) {
             //wykonywanie postDispatch() na kolejnych pluginach
             $plugin->postDispatch(FrontController::getInstance()->getRequest());
         }
+        //profiler
+        FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: plugins post-dispatch');
     }
 
     /**
@@ -59,22 +68,17 @@ class Dispatcher
     {
         //wpięcie dla pluginów przed routingiem
         $this->routeStartup();
-        $fc = FrontController::getInstance();
-        $fc->getProfiler()->event('Mvc\Dispatcher: plugins route startup');
-        //stosowanie routingu jeśli request jest pusty
-        if (!$fc->getRequest()->getModuleName()) {
-            $fc->getRouter()->processRequest($fc->getRequest());
-        }
+        $frontController = FrontController::getInstance();
+        //stosowanie routingu
+        $frontController->getRouter()->processRequest($frontController->getRequest());
         //informacja o zakończeniu ustawiania routingu
-        $fc->getProfiler()->event('Mvc\Dispatcher: routing applied');
+        $frontController->getProfiler()->event('Mvc\Dispatcher: routing applied');
         //wpięcie dla pluginów przed dispatchem
         $this->preDispatch();
-        $fc->getProfiler()->event('Mvc\Dispatcher: plugins pre-dispatch');
         //wybór i uruchomienie kontrolera akcji
-        $content = \Mmi\Mvc\ActionHelper::getInstance()->action($fc->getRequest()->toArray());
+        $content = \Mmi\Mvc\ActionHelper::getInstance()->forward($frontController->getRequest());
         //wpięcie dla pluginów po dispatchu
         $this->postDispatch();
-        $fc->getProfiler()->event('Mvc\Dispatcher: plugins post-dispatch');
         return $content;
     }
 

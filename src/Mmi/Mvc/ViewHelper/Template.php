@@ -10,6 +10,9 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
+/**
+ * Helper kompilacji szablonów
+ */
 class Template extends HelperAbstract
 {
 
@@ -20,9 +23,8 @@ class Template extends HelperAbstract
      */
     public function template($input)
     {
-
         //buforowanie renderowanie szablonu
-        $input = preg_replace_callback('/\{\'([a-zA-Z\-]+)\/([a-zA-Z]+)\/?([a-zA-Z\/]+)?\'\}/', [&$this, '_render'], $input);
+        $input = preg_replace_callback('/\{\'([a-zA-Z\-\/]+)\'\}/', [&$this, '_render'], $input);
 
         /**
          * obsługa klamr
@@ -65,7 +67,6 @@ class Template extends HelperAbstract
 
         //obsługa tagów Mmi
         $input = preg_replace([
-            '/\s+/',
             '/\$([a-z0-9_-]+)/i', //$zmienna -> $this->zmienna
             '/\{\/(if|for|foreach|while)\}/', //końcówki struktur językowych
             '/\{(break|continue)\}/', //break continue
@@ -89,7 +90,6 @@ class Template extends HelperAbstract
             '/([a-z0-9)\]\'\+\-])}/i', //obsługa zamknięcia
             '/\{\$\$this->([a-z0-9_-]+)/i', //$nazwa -> $this->{$this->nazwa}
             ], [
-            ' ',
             '$this->${1}',
             '<?php end${1}; ?>',
             '<?php ${1}; ?>',
@@ -137,9 +137,7 @@ class Template extends HelperAbstract
             '}}',
             ], $input);
 
-        /**
-         * fix dla funkcji JS'owych - badanie krótkich pod-ciągów
-         */
+        //fix dla funkcji JS'owych - badanie krótkich pod-ciągów
         $output = '';
         $php = false;
         for ($i = 0, $length = strlen($input); $i < $length; $i++) {
@@ -215,20 +213,13 @@ class Template extends HelperAbstract
      */
     private function _render(array $matches)
     {
-        $structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
-        //brak w strukturze
-        if (count($matches) == 4) {
-            if (!isset($structure[$matches[1]][$matches[2]][$matches[3]])) {
-                return '';
-            }
-            $template = is_array($structure[$matches[1]][$matches[2]][$matches[3]]) ? $structure[$matches[1]][$matches[2]][$matches[3]][0] : $structure[$matches[1]][$matches[2]][$matches[3]];
-        } elseif (count($matches) == 3) {
-            if (!isset($structure[$matches[1]][$matches[2]])) {
-                return '';
-            }
-            $template = is_array($structure[$matches[1]][$matches[2]]) ? $structure[$matches[1]][$matches[2]][0] : $structure[$matches[1]][$matches[2]];
+        //wyszukiwanie szablonu
+        if (null === $template = $this->view->getTemplateByPath($matches[1])) {
+            //brak szablonu
+            return;
         }
-        return preg_replace_callback('/\{\'([a-zA-Z\-]+)\/([a-zA-Z]+)\/?([a-zA-Z\/]+)?\'\}/', [&$this, '_render'], file_get_contents($template));
+        //rekurencyjne zastąpienie (gdyż wstawienia mogą być zagnieżdżone)
+        return preg_replace_callback('/\{\'([a-zA-Z\-\/]+)\'\}/', [&$this, '_render'], file_get_contents($template));
     }
 
     /**
@@ -239,9 +230,11 @@ class Template extends HelperAbstract
      */
     private function _translate(array $matches)
     {
+        //brak tłumaczenia
         if ($this->view->getTranslate() === null) {
             return $matches[1];
         }
+        //tłumaczenie
         return $this->view->getTranslate()->_($matches[1]);
     }
 

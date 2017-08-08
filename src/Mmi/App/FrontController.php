@@ -318,20 +318,10 @@ class FrontController
      */
     public function run()
     {
-        //dispatcher
-        $content = (new \Mmi\Mvc\Dispatcher)->dispatch();
-        //jeśli layout nie jest wyłączony
-        if (!$this->getView()->isLayoutDisabled()) {
-            //renderowanie layoutu
-            $content = $this->getView()
-                ->setPlaceholder('content', $content)
-                ->renderLayout($this->getRequest());
-        }
-        //informacja do profilera o wysyłaniu odpowiedzi
         $this->getProfiler()->event('App\FrontController: sending response');
         //wysłanie odpowiedzi
         $this->getResponse()
-            ->setContent($content)
+            ->setContent((new \Mmi\Mvc\Dispatcher)->dispatch())
             ->send();
     }
 

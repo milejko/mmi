@@ -89,18 +89,18 @@ class View extends \Mmi\DataObject
 
     /**
      * Magicznie wywołuje metodę na widoku
-     * przekierowuje wywołanie na odpowiedni helper
+     * przekierowuje wywołanie na odpowiedni helper lub placeholder
      * @param string $name nazwa metody
      * @param array $params parametry
      * @return mixed
      */
     public function __call($name, array $params = [])
     {
-        $helper = $this->getHelper($name);
-        //poprawny helper
-        if ($helper instanceof \Mmi\Mvc\ViewHelper\HelperAbstract) {
+        //znaleziony helper
+        if (null !== $helper = $this->getHelper($name)) {
             return call_user_func_array([$helper, $name], $params);
         }
+        //rollback do placeholdera
         return $this->getPlaceholder($name);
     }
 
@@ -112,8 +112,6 @@ class View extends \Mmi\DataObject
     public function setRequest(\Mmi\Http\Request $request)
     {
         $this->request = $request;
-        $this->module = $request->getModuleName();
-        $this->lang = $request->lang;
         return $this;
     }
 
@@ -197,24 +195,20 @@ class View extends \Mmi\DataObject
      */
     public function getHelper($name)
     {
-        $structure = \Mmi\App\FrontController::getInstance()->getStructure('helper');
-        //położenie helpera w strukturze
-        foreach ($structure as $namespace => $helpers) {
+        //wyszukiwanie helpera w strukturze
+        foreach (\Mmi\App\FrontController::getInstance()->getStructure('helper') as $namespace => $helpers) {
             if (!isset($helpers[$name])) {
                 continue;
             }
+            //helper znaleziony
             $className = '\\' . $namespace . '\\Mvc\\ViewHelper\\' . ucfirst($name);
         }
         //brak helpera
         if (!isset($className)) {
-            return false;
+            return;
         }
-        //helper już zarejestrowany
-        if (isset($this->_helpers[$className])) {
-            return $this->_helpers[$className];
-        }
-        //zwrot nowej klasy
-        return $this->_helpers[$className] = new $className;
+        //zwrot helpera z rejestru, lub tworzenie nowego + rejestracja
+        return isset($this->_helpers[$className]) ? $this->_helpers[$className] : ($this->_helpers[$className] = new $className);
     }
 
     /**
@@ -224,20 +218,20 @@ class View extends \Mmi\DataObject
      */
     public function getFilter($name)
     {
-        $structure = \Mmi\App\FrontController::getInstance()->getStructure('filter');
-        foreach ($structure as $namespace => $filters) {
+        //wyszukiwanie filtra w strukturze
+        foreach (\Mmi\App\FrontController::getInstance()->getStructure('filter') as $namespace => $filters) {
             if (!isset($filters[$name])) {
                 continue;
             }
+            //filtr znaleziony
             $className = '\\' . $namespace . '\\Filter\\' . ucfirst($name);
         }
+        //brak filtra
         if (!isset($className)) {
             throw new \Mmi\Mvc\MvcException('Filter not found: ' . $name);
         }
-        if (isset($this->_filters[$className])) {
-            return $this->_filters[$className];
-        }
-        return $this->_filters[$className] = new $className;
+        //zwrot zarejestrowanego filtra, lub tworzenie nowego + rejestracja
+        return isset($this->_filters[$className]) ? $this->_filters[$className] : ($this->_filters[$className] = new $className);
     }
 
     /**
@@ -272,53 +266,6 @@ class View extends \Mmi\DataObject
     }
 
     /**
-     * Renderuje i zwraca wynik wykonania template
-     * @param \Mmi\Http\Request $request
-     * @param bool $fetch przekaż wynik wywołania w zmiennej
-     */
-    public function renderTemplate(\Mmi\Http\Request $request)
-    {
-        return $this->render($this->_getTemplate($request));
-    }
-
-    /**
-     * Generowanie kodu PHP z kodu szablonu w locie
-     * @param string $input kod szablonu
-     * @return string kod PHP
-     */
-    public function renderDirectly($input)
-    {
-        //przechwytywanie zawartości bufora
-        $hash = md5($input);
-        $inputBuffer = ob_get_contents();
-        ob_clean();
-        //ustawianie języka z translate'a
-        if (!$this->_locale && $this->_translate !== null) {
-            $this->_locale = $this->_translate->getLocale();
-        }
-        $destFile = BASE_PATH . '/var/compile/' . $this->_locale . '_direct_' . $hash . '.php';
-        //jeśli włączona kompilacja za każdym razem, nadpisanie pliku
-        if ($this->_alwaysCompile) {
-            file_put_contents($destFile, $this->template($input, $destFile));
-        }
-        //próba załadowania kompilanta
-        try {
-            include $destFile;
-        } catch (\Exception $e) {
-            //zapis nowego kompilanta jeśli brak
-            file_put_contents($destFile, $this->template($input, $destFile));
-            include $destFile;
-        }
-        //przejęcie bufora
-        $data = ob_get_contents();
-        ob_clean();
-        echo $inputBuffer;
-        //zwrot z bufora
-        FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $hash . ' rendered');
-        return $data;
-    }
-
-    /**
      * Ustawia wyłączenie layoutu
      * @param boolean $disabled wyłączony
      * @return \Mmi\Mvc\View
@@ -339,91 +286,112 @@ class View extends \Mmi\DataObject
     }
 
     /**
-     * Renderuje layout
-     * @param \Mmi\Http\Request $request
-     * @return string
+     * Pobranie szablonu po ścieżce np. module/controller/action
+     * @param string $path
+     * @return string|null
      */
-    public function renderLayout(\Mmi\Http\Request $request)
+    public function getTemplateByPath($path)
     {
-        //renderowanie layoutu
-        return $this->render($this->_getLayout($request));
+        //ścieżka nie jest stringiem
+        if (!is_string($path)) {
+            throw new \Mmi\Mvc\MvcException('Template path invalid.');
+        }
+        //pobranie struktury szablonów
+        $structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
+        //wyszukiwanie ścieżki w strukturze
+        foreach (explode('/', $path) as $dir) {
+            if (!isset($structure[$dir])) {
+                return;
+            }
+            //obcinanie struktury
+            $structure = $structure[$dir];
+        }
+        //szablon znaleziony
+        if (is_string($structure)) {
+            return $structure;
+        }
+        //szablon nadpisany w projekcie (istniała wersja domyślna w vendorach)
+        if (is_array($structure) && isset($structure[0]) && is_string($structure[0])) {
+            return $structure[0];
+        }
     }
 
     /**
-     * Renderuje szablon z pliku
-     * @param string $fileName nazwa pliku szablonu
-     * @return string zwraca efekt renderowania
+     * Renderuje i zwraca wynik wykonania template
+     * @param string $path ścieżka np. news/index/index
+     * @param bool $fetch przekaż wynik wywołania w zmiennej
      */
-    public function render($fileName)
+    public function renderTemplate($path)
     {
-        $inputBuffer = ob_get_contents();
-        ob_clean();
-        if (!$this->_locale && $this->_translate !== null) {
+        //wyszukiwanie template
+        if (null === $template = $this->getTemplateByPath($path)) {
+            //brak template
+            throw new \Mmi\Mvc\MvcException('Template not found: ' . $path);
+        }
+        //inicjalizacja języka
+        $this->_initLocale();
+        //kompilacja szablonu
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->_locale . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+    }
+
+    /**
+     * Generowanie kodu PHP z kodu szablonu w locie
+     * @param string $templateCode kod szablonu
+     * @return string kod PHP
+     */
+    public function renderDirectly($templateCode)
+    {
+        //inicjalizacja języka
+        $this->_initLocale();
+        //kompilacja szablonu
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->_locale . '_direct_' . md5($templateCode) . '.php');
+    }
+
+    /**
+     * Inicjalizacja lokalizacji / języka
+     */
+    private function _initLocale()
+    {
+        //sprawdzanie lokalizacji (języka)
+        if (!$this->_locale && null !== $this->_translate) {
+            //ustawianie lokalizacji
             $this->_locale = $this->_translate->getLocale();
         }
-        //ustalenie adresu kompilanta
-        $destFile = BASE_PATH . '/var/compile/' . $this->_locale . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($fileName, strrpos($fileName, '/src') + 5, -4) . '.php');
+    }
+
+    /**
+     * Uruchomienie szablonu
+     * @param string $templateCode kod szablonu
+     * @param string $compilationFile adres kompilanta
+     * @return string
+     */
+    private function _compileTemplate($templateCode, $compilationFile)
+    {
+        //pobranie bufora wyrenderowanego do tego momentu
+        $inputBuffer = ob_get_contents();
+        //czyszczenie bufora
+        ob_clean();
+        //wymuszona kompilacja
         if ($this->_alwaysCompile) {
-            file_put_contents($destFile, $this->template(file_get_contents($fileName), $destFile));
+            file_put_contents($compilationFile, $this->template($templateCode));
         }
+        //próba włączenia skompilowanego pliku
         try {
             //włączenie kompilanta do kodu
-            include $destFile;
+            include $compilationFile;
         } catch (\Exception $e) {
-            //zapis i włączenie
-            file_put_contents($destFile, $this->template(file_get_contents($fileName), $destFile));
-            include $destFile;
+            //kompilacja i zapis i włączenie kompilanta do kodu
+            file_put_contents($compilationFile, $this->template($templateCode));
+            include $compilationFile;
         }
-        //przechwycenie danych
+        //przechwycenie danych z bufora
         $data = ob_get_contents();
+        //czyszczenie bufora
         ob_clean();
+        //zwrot bufora
         echo $inputBuffer;
-        FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . basename($fileName) . ' rendered');
+        FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . basename($compilationFile) . ' rendered');
         return $data;
-    }
-
-    /**
-     * Pobiera dostępny layout
-     * @param \Mmi\Http\Request $request
-     * @return string
-     * @throws \Mmi\Mvc\MvcException brak layoutów
-     */
-    private function _getLayout(\Mmi\Http\Request $request)
-    {
-        $structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
-        //layout dla modułu i kontrolera
-        if (isset($structure[$request->getModuleName()][$request->getControllerName()]['layout'])) {
-            //pobieranie pierwszego jeśli vendor -> local
-            return is_array($structure[$request->getModuleName()][$request->getControllerName()]['layout']) ? $structure[$request->getModuleName()][$request->getControllerName()]['layout'][0] : $structure[$request->getModuleName()][$request->getControllerName()]['layout'];
-        }
-        //layout dla modułu
-        if (isset($structure[$request->getModuleName()]['layout'])) {
-            //pobieranie pierwszego jeśli jest i w vendor i src
-            return is_array($structure[$request->getModuleName()]['layout']) ? $structure[$request->getModuleName()]['layout'][0] : $structure[$request->getModuleName()]['layout'];
-        }
-        //layout aplikacyjny app
-        if (isset($structure['app']['layout'])) {
-            return $structure['app']['layout'];
-        }
-        //brak layoutu
-        throw new \Mmi\Mvc\MvcException('Layout not found.');
-    }
-
-    /**
-     * Pobiera dostępny template
-     * @param \Mmi\Http\Request $request
-     * @return string
-     * @throws \Mmi\Mvc\MvcException brak templatów
-     */
-    private function _getTemplate(\Mmi\Http\Request $request)
-    {
-        $structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
-        if (isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-            //pobieranie pierwszego jeśli jest i w vendor i src
-            return is_array($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()]) ? $structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()][0] : $structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()];
-        }
-        //brak template
-        throw new \Mmi\Mvc\MvcException('Template not found.');
     }
 
 }
