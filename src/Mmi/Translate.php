@@ -41,20 +41,6 @@ class Translate
     private $_defaultLocale;
 
     /**
-     * Konstruktor, dodający opcjonalnie tłumaczenie
-     * @param string $sourceFile ścieżka do pliku
-     * @param string $locale wersja językowa podanego pliku
-     */
-    public function __construct($sourceFile = null, $locale = null)
-    {
-        if (null !== $sourceFile && null !== $locale) {
-            $this->addTranslation($sourceFile, $locale);
-        } elseif (null !== $locale) {
-            $this->setLocale($locale);
-        }
-    }
-
-    /**
      * Dodaje tłumaczenie
      * @param string $sourceFile ścieżka do pliku
      * @param string $locale wersja językowa podanego pliku
@@ -62,17 +48,21 @@ class Translate
      */
     public function addTranslation($sourceFile, $locale)
     {
-        //jeśli brak locale - zwrot
-        if ($locale === null) {
+        //jeśli brak locale
+        if (!$locale) {
+            //zwraca siebie
             return $this;
         }
         //parser pliku tłumaczeń
         $data = $this->_parseTranslationFile($sourceFile, $locale == $this->_defaultLocale);
+        //dodawanie języka
         $this->_languages[$locale] = $sourceFile;
-        //łączenie tłumaczeń
+        //istnieje tłumaczenie
         if (isset($this->_data[$locale])) {
+            //łączenie tłumaczeń
             $data = array_merge($this->_data[$locale], $data);
         }
+        //dodanie tłumaczenia
         $this->_data[$locale] = $data;
         return $this;
     }
@@ -102,6 +92,7 @@ class Translate
      */
     public function setLocale($locale)
     {
+        //ustawia locale
         $this->_locale = $locale;
         return $this;
     }
@@ -113,18 +104,9 @@ class Translate
      */
     public function setDefaultLocale($locale)
     {
+        //domyślne locale
         $this->_defaultLocale = $locale;
         return $this;
-    }
-
-    /**
-     * Alias metody _ (podkreślenie)
-     * @see \Mmi\Translate::_()
-     * @return string
-     */
-    public function translate($key)
-    {
-        return $this->_($key);
     }
 
     /**
@@ -142,10 +124,8 @@ class Translate
         if (isset($this->_data[$this->_locale][$key])) {
             return $this->_data[$this->_locale][$key];
         }
-        //logowanie nieprzetłumaczonego
-        $this->_logUntranslated($key);
-        //zwrot klucza
-        return $key;
+        //logowanie braku tłumaczenia i zwrot klucza
+        return $this->_returnKeyAndLogUntranslated($key);
     }
 
     /**
@@ -161,18 +141,23 @@ class Translate
         $output = [];
         //parsowanie linii
         foreach ($data as $line) {
-            if (strlen($line) > 0) {
-                $line = explode(" = ", $line);
-                if (isset($line[0])) {
-                    $key = trim($line[0]);
-                    if ($isDefaultLocale) {
-                        $output[$key] = isset($line[1]) ? trim($line[1]) : $key;
-                    } else {
-                        $output[$key] = isset($line[1]) ? trim($line[1]) : null;
-                    }
-                }
+            //pusta linia
+            if (!strlen($line)) {
+                continue;
             }
+            //parsowanie linii
+            $line = explode(" = ", $line);
+            //wyznaczanie klucza
+            $key = trim($line[0]);
+            //domyślny język
+            if ($isDefaultLocale) {
+                $output[$key] = isset($line[1]) ? trim($line[1]) : $key;
+                continue;
+            }
+            //tłumaczenie
+            $output[$key] = isset($line[1]) ? trim($line[1]) : null;
         }
+        //zwrot tablicy tłumaczeń
         return $output;
     }
 
@@ -180,14 +165,17 @@ class Translate
      * Loguje nieprzetłumaczone teksty do pliku
      * @param string $key klucz
      */
-    private function _logUntranslated($key)
+    private function _returnKeyAndLogUntranslated($key)
     {
         //otwieranie loga
         $log = fopen(BASE_PATH . '/var/log/error.translation.log', 'a');
         $requestUri = \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri;
         //zapis zdarzenia
         fwrite($log, date('Y-m-d H:i:s') . ' ' . $requestUri . ' [' . $this->_locale . '] {#' . $key . "#}\n");
+        //zamknięcie logu
         fclose($log);
+        //zwrot klucza
+        return $key;
     }
 
 }
