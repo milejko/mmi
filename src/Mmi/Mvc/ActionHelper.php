@@ -43,11 +43,8 @@ class ActionHelper
      */
     public static function getInstance()
     {
-        //jeśli nie istnieje instancja tworzenie nowej
-        if (null === self::$_instance) {
-            self::$_instance = new self;
-        }
-        return self::$_instance;
+        //zwrot instancji, lub utworzenie nowej
+        return self::$_instance ? self::$_instance : (self::$_instance = new self);
     }
 
     /**
@@ -74,31 +71,19 @@ class ActionHelper
 
     /**
      * Uruchamia akcję z kontrolera ze sprawdzeniem ACL
-     * @param array $params parametry
+     * @param \Mmi\Http\Request $request
      * @return mixed
      */
-    public function action(array $params = [])
+    public function action(Request $request, $main = false)
     {
-        $originalRequest = FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request;
-        //ustawienie nowego requestu
-        $request = new Request($params);
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
             //logowanie zablokowania akcji
             FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
             return;
         }
-        //wywołanie akcji
-        if (null !== $actionContent = $this->_invoke($request)) {
-            //reset requestu i wyłączenie layoutu
-            FrontController::getInstance()->getView()->setRequest($originalRequest);
-            return $actionContent;
-        }
         //rendering szablonu jeśli akcja zwraca null
-        $actionContent = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
-        //reset requestu
-        FrontController::getInstance()->getView()->setRequest($originalRequest);
-        return $actionContent;
+        return $this->_renderAction($request, (FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request), $main);
     }
 
     /**
@@ -109,26 +94,57 @@ class ActionHelper
      */
     public function forward(Request $request)
     {
-        //reset requesta frontcontrollera
-        FrontController::getInstance()
-            ->setRequest($request)
-            ->getView()->setRequest($request);
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
             //wyjątek niedozwolonej akcji
             throw new MvcForbiddenException('Action ' . $request->getAsColonSeparatedString() . ' blocked');
         }
+        //zmiana requestu front-controllera
+        FrontController::getInstance()->setRequest($request);
+        //render layoutu
+        return $this->layout($this->_renderAction($request, $request, true), $request);
+    }
+
+    /**
+     * Umieszcza content w layoucie
+     * @param string $content
+     * @param Request $request
+     * @return string
+     */
+    public function layout($content, Request $request)
+    {
+        //jeśli layout jest wyłączony - zwrot szablonu, jeśli nie - layoutu
+        return FrontController::getInstance()->getView()->isLayoutDisabled() ? $content : FrontController::getInstance()->getView()
+                ->setPlaceholder('content', $content)
+                ->renderTemplate($this->_getLayout($request));
+    }
+
+    /**
+     * Renderuje akcję (zwraca content akcji, lub template)
+     * @param Request $request
+     * @param Request $resetRequest request przekazywany do widoku po zakończeniu renderingu
+     * @param boolean $main określa czy akcja jest akcją główną (2 przypadki - gdy wywołana z front-controllera, lub forward)
+     * @return string
+     */
+    private function _renderAction(Request $request, Request $resetRequest, $main)
+    {
+        $resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
         //wywołanie akcji
-        if (null !== $actionContent = $this->_invoke($request)) {
+        if (null !== $actionContent = $this->_invokeAction($request)) {
+            //reset requestu i dla akcji głównej wyłączenie layoutu
+            FrontController::getInstance()->getView()->setRequest($resetRequest)
+                ->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
             //zwrot jeśli akcja zwraca wynik
             return $actionContent;
         }
-        //renderowanie szablonu
-        $actionContent = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
-        //jeśli layout jest wyłączony - zwrot szablonu, jeśli nie - layoutu
-        return FrontController::getInstance()->getView()->isLayoutDisabled() ? $actionContent : FrontController::getInstance()->getView()
-                ->setPlaceholder('content', $actionContent)
-                ->renderTemplate($this->_getLayout($request));
+        //zwrot wyrenderowanego szablonu
+        $content = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+        //reset requestu i przywracanie layoutu (jeśli nie jest akcją główną)
+        FrontController::getInstance()->getView()
+            ->setRequest($resetRequest)
+            ->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
+        FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $request->getAsColonSeparatedString() . ' rendered');
+        return $content;
     }
 
     /**
@@ -152,7 +168,7 @@ class ActionHelper
      * @return string
      * @throws MvcNotFoundException
      */
-    private function _invoke(Request $request)
+    private function _invokeAction(Request $request)
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' start');

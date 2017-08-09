@@ -1,0 +1,1 @@
+<li id="item-{$_menuItem.id}" class="{$_menuItem.class}"><a href="{$_menuItem.uri}" {if !$_menuItem.follow}rel="nofollow"{/if} {if $_menuItem.blank}target="_blank"{/if}>{$_menuItem.label}</a>{$_menuItem.subMenu}</li>

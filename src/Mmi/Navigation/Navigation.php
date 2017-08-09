@@ -49,6 +49,7 @@ class Navigation
         $activatedTree = $this->_setupActive($this->_config->build, $request->toArray());
         //uzupełnia breadcrumbs na podstawie aktywnych
         if (isset($activatedTree['tree'][0]['children'])) {
+            //ustawia breadcrumby
             $this->_setupBreadcrumbs($activatedTree['tree'][0]['children']);
         }
         return $this;
@@ -61,6 +62,7 @@ class Navigation
      */
     public function seek($id)
     {
+        //wyszukanie
         return $this->_config->findById($id);
     }
 
@@ -81,35 +83,31 @@ class Navigation
      */
     private function _setupActive(&$tree, $params)
     {
+        //domyślnie zakładamy, że gałąź jest nieaktywna
         $branchActive = false;
+        //iteracja po drzewie
         foreach ($tree as $key => $item) {
-            $active = true;
-            if (!isset($item['request'])) {
-                $active = false;
-            } else {
-                foreach ($item['request'] as $name => $param) {
-                    if (!isset($params[$name]) || $params[$name] != $param) {
-                        $active = false;
-                        break;
-                    }
-                }
-            }
+            //posiada request zgodny z poszukiwanym
+            $active = isset($item['request']) && ([] == array_diff($item['request'], $params));
+            //ustawianie aktywności liścia
             $tree[$key]['active'] = $active;
-            if ($active) {
-                $branchActive = true;
-            }
+            //jeśli aktywny - ustawiamy aktywność gałęzi, jeśli nie - bez zmian
+            $branchActive = $active ? true : $branchActive;
+            //jeśli element posiada dzieci
             if (isset($item['children'])) {
+                //zejście rekurencyjne
                 $branch = $this->_setupActive($item['children'], $params);
                 $tree[$key]['children'] = $branch['tree'];
-                if ($branch['active']) {
-                    $tree[$key]['active'] = true;
-                }
+                //jeśli gałąź aktywna - aktywacja, jeśli nie - bez zmian
+                $tree[$key]['active'] = $branch['active'] ? true : $tree[$key]['active'];
             }
+            //optymalizacja wydajności
             if ($tree[$key]['active']) {
                 unset($item['children']);
                 $branchActive = true;
             }
         }
+        //zwrot gałęzi z określeniem czy aktywna
         return ['tree' => $tree, 'active' => $branchActive];
     }
 
@@ -119,16 +117,19 @@ class Navigation
      */
     private function _setupBreadcrumbs($tree)
     {
+        //iteracja po drzewie
         foreach ($tree as $item) {
             //jeśli nieaktywny przechodzi do następnego
             if (!$item['active']) {
                 continue;
             }
             $this->_breadcrumbs[] = $item;
-            //jeśli dzieci - schodzenie rekurencyjne
+            //jeśli dzieci
             if (isset($item['children'])) {
+                //zejście rekurencyjne
                 $this->_setupBreadcrumbs($item['children']);
             }
+            //optymalizacja wydajności
             break;
         }
         //brak breadcrumbs

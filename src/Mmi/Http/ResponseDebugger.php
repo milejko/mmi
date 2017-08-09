@@ -41,16 +41,6 @@ class ResponseDebugger
                 //ustawianie contentu z debuggerem
                 $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
                 return;
-            //json
-            case 'json':
-                try {
-                    if (strpos($response->getContent(), '}')) {
-                        $lastBracket = strrpos($response->getContent(), '}');
-                        $response->setContent(substr($response->getContent(), 0, $lastBracket) . ',"debugger":' . json_encode($this->getSummaryArray()) . substr($response->getContent(), $lastBracket));
-                    }
-                } catch (\Exception $e) {
-                    return;
-                }
         }
     }
 
@@ -60,10 +50,8 @@ class ResponseDebugger
      */
     public function getSummaryArray()
     {
-        return [
-            'elapsed' => $this->_getElapsed(),
-            'memory' => $this->_getPeakMemory()
-        ];
+        //zwrot tablicy
+        return ['elapsed' => $this->_getElapsed(), 'memory' => $this->_getPeakMemory()];
     }
 
     /**
@@ -90,12 +78,14 @@ class ResponseDebugger
      */
     public function getHtml()
     {
+        //pobranie widoku
         $view = \Mmi\App\FrontController::getInstance()->getView();
         if ($view->getCache() === null || !$view->getCache()->isActive()) {
             $cacheInfo = '<span style="color: #f22;">no cache</span>';
         } else {
             $cacheInfo = '<span style="color: #99ff99;">cache on</span>';
         }
+        //czasy i pamięci w wykonaniu
         $html = "\n";
         $html .= '<style>div#MmiPanel pre, div#MmiPanel table, div#MmiPanel table tr, div#MmiPanel table td, div#MmiPanel div, div#MmiPanel p {font: normal 11px Monospace!important;}</style><div id="MmiPanelBar" onclick="document.getElementById(\'MmiPanel\').style.display=\'block\'; window.scrollTo(0,document.getElementById(\'MmiPanel\').offsetTop);" style="';
         $html .= 'text-align: center; position: fixed; padding: 0 10px; margin: 0; line-height: 0; background: #999; border-radius: 5px 5px 0 0; font: bold 10px Arial!important; color: #000; bottom: 0px; left: 45%; text-transform: none;">' . $this->_getElapsed() . ', ' . $this->_getPeakMemory() . ' - ' . $cacheInfo . '</div>';
@@ -103,6 +93,7 @@ class ResponseDebugger
         if (null === $view->_exception) {
             $html .= 'display: none; ';
         }
+        //rozszerzony podgląd
         $html .= 'position: relative; text-align: left; padding: 20px 10px 5px 10px; background: #ccc; color: #000; font: normal 11px Monospace!important;">';
         if (null !== $view->_exception) {
             $html .= '<h2 style="color: #bb0000; margin: 0px; font-size: 14px; text-transform: none;">' . get_class($view->_exception) . ': ' . $view->_exception->getMessage() . '</h2>';
@@ -110,7 +101,6 @@ class ResponseDebugger
             $html .= '<pre>' . $view->_trace . '</pre><br />';
         }
         $html .= '<table cellspacing="0" cellpadding="0" border="0" style="width: 100%; padding: 0px; margin: 0px;"><tr><td style="vertical-align: top; padding-right: 5px;">';
-
 
         //środowisko
         $html .= '<p style="margin: 0px;">Environment:</p>';
@@ -196,6 +186,7 @@ class ResponseDebugger
             //jeśli jest zwykłą zmienną - bez zmian
             $simplifiedVars[$varName] = $varValue;
         }
+        //zwrot wartości
         return $simplifiedVars;
     }
 

@@ -46,10 +46,14 @@ class Response
     /**
      * Ustawia debugowanie
      * @param type $debug
+     * @return \Mmi\Http\Response
      */
     public function setDebug($debug = true)
     {
+        //ustawianie debugowania
         $this->_debug = (bool) $debug;
+        //zwrot siebie
+        return $this;
     }
 
     /**
@@ -63,6 +67,7 @@ class Response
     {
         //wysłanie nagłówka
         header($name . ($value ? ': ' . $value : ''), $replace);
+        //zwrot siebie
         return $this;
     }
 
@@ -75,11 +80,11 @@ class Response
     public function setCode($code, $replace = false)
     {
         //jeśli znaleziono kod
-        if (null !== ($message = ResponseTypes::getMessageByCode($code))) {
-            //wysłanie nagłówka z kodem
-            return $this->setHeader('HTTP/1.1 ' . $code . ' ' . $message, null, $replace);
+        if (null === ($message = ResponseTypes::getMessageByCode($code))) {
+            return $this;
         }
-        return $this;
+        //wysłanie nagłówka z kodem
+        return $this->setHeader('HTTP/1.1 ' . $code . ' ' . $message, null, $replace);
     }
 
     /**
@@ -89,6 +94,7 @@ class Response
      */
     public function setCodeNotFound($replace = false)
     {
+        //404
         return $this->setCode(404, $replace);
     }
 
@@ -99,6 +105,7 @@ class Response
      */
     public function setCodeOk($replace = false)
     {
+        //200
         return $this->setCode(200, $replace);
     }
 
@@ -109,6 +116,7 @@ class Response
      */
     public function setCodeError($replace = false)
     {
+        //500
         return $this->setCode(500, $replace);
     }
 
@@ -119,6 +127,7 @@ class Response
      */
     public function setCodeUnauthorized($replace = false)
     {
+        //401
         return $this->setCode(401, $replace);
     }
 
@@ -129,6 +138,7 @@ class Response
      */
     public function setCodeForbidden($replace = false)
     {
+        //403
         return $this->setCode(403, $replace);
     }
 
@@ -140,32 +150,19 @@ class Response
      */
     public function setType($type, $replace = false)
     {
-        //nazwa małymi literami
-        $normalizedType = strtolower($type);
-        //skrócona forma
-        if (null !== ($mimeType = ResponseTypes::getTypeByExtension($normalizedType))) {
-            //ustawienie wewnętrznego typu
-            $this->_type = $mimeType;
-            //wysłanie nagłówka
-            return $this->setHeader('Content-type', $this->_type, $replace);
-        }
-        //forma pełna
-        if (null !== ResponseTypes::getExtensionByType($normalizedType)) {
-            //ustawienie wewnętrznego typu
-            $this->_type = $normalizedType;
-            //wysłanie nagłówka
-            return $this->setHeader('Content-type', $this->_type, $replace);
-        }
-        //typ nieodnaleziony
-        throw new HttpException('Type not found');
+        //usuwanie typu odpowiedzi
+        $this->_type = ResponseTypes::searchType($type);
+        //wysłanie nagłówka
+        return $this->setHeader('Content-type', $this->_type, $replace);
     }
 
     /**
-     * Zwraca typ zwrotu
+     * Zwraca typ odpowiedzi
      * @return string
      */
     public function getType()
     {
+        //zwrot typu
         return $this->_type;
     }
 
@@ -176,6 +173,7 @@ class Response
      */
     public function setTypeHtml($replace = false)
     {
+        //html
         return $this->setType('html', $replace);
     }
 
@@ -186,6 +184,7 @@ class Response
      */
     public function setTypeJson($replace = false)
     {
+        //json
         return $this->setType('json', $replace);
     }
 
@@ -196,6 +195,7 @@ class Response
      */
     public function setTypeJs($replace = false)
     {
+        //js
         return $this->setType('js', $replace);
     }
 
@@ -206,6 +206,7 @@ class Response
      */
     public function setTypePlain($replace = false)
     {
+        //txt
         return $this->setType('txt', $replace);
     }
 
@@ -216,6 +217,7 @@ class Response
      */
     public function setTypeXml($replace = false)
     {
+        //xml
         return $this->setType('xml', $replace);
     }
 
@@ -226,6 +228,7 @@ class Response
      */
     public function setTypePng($replace = false)
     {
+        //png
         return $this->setType('png', $replace);
     }
 
@@ -236,6 +239,7 @@ class Response
      */
     public function setTypeJpeg($replace = false)
     {
+        //jpeg
         return $this->setType('jpeg', $replace);
     }
 
@@ -246,6 +250,7 @@ class Response
      */
     public function setTypeGzip($replace = false)
     {
+        //gzip
         return $this->setType('gz', $replace);
     }
 
@@ -267,18 +272,6 @@ class Response
     public function getContent()
     {
         return $this->_content;
-    }
-
-    /**
-     * Dodaje content do istniejącego
-     * @param string $content zawartość
-     * @return \Mmi\Http\Response
-     */
-    public function appendContent($content)
-    {
-        //doklejenie contentu
-        $this->_content .= $content;
-        return $this;
     }
 
     /**
@@ -324,6 +317,7 @@ class Response
         }
         //ustawienie modułu
         $params['module'] = $module;
+        //przekierowanie na routę
         $this->redirectToRoute($params);
     }
 
@@ -333,6 +327,7 @@ class Response
      */
     public function redirectToRoute(array $params = [])
     {
+        //przekierowanie na url
         $this->redirectToUrl(\Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params));
     }
 

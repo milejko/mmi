@@ -44,22 +44,16 @@ class Image
         if (!($input = self::inputToResource($input))) {
             return;
         }
+        //badanie rozmiaru obrazu
         $width = imagesx($input);
         $height = imagesy($input);
-
+        //obliczanie skali
         $scale = max($y / $height, $x / $width);
+        //obliczanie zeskalowanych wymiarów
         $sx = round($width * $scale);
         $sy = round($height * $scale);
-
-        $tmp = imagecreatetruecolor($sx, $sy);
-        self::_saveAlpha($tmp);
-        imagecopyresampled($tmp, $input, 0, 0, 0, 0, $sx, $sy, $width, $height);
-        $input = $tmp;
-
-        $tmp = imagecreatetruecolor($x, $y);
-        self::_saveAlpha($tmp);
-        imagecopyresized($tmp, $input, 0, 0, abs($sx - $x) / 2, abs($sy - $y) / 2, $x, $y, $x, $y);
-        return $tmp;
+        //cropowanie zeskalowanego obrazu
+        return self::crop(self::scale($input, $sx, $sy), abs($sx - $x) / 2, abs($sy - $y) / 2, $x, $y);
     }
 
     /**
@@ -74,12 +68,17 @@ class Image
         if (!($input = self::inputToResource($input))) {
             return;
         }
+        //badanie rozmiarów obrazu
         $width = imagesx($input);
         $height = imagesy($input);
+        //obliczanie rozmiarów po skalowaniu
         $sx = round($width * $percent / 100);
         $sy = round($height * $percent / 100);
+        //tworzenie tymczasowego zasobu
         $tmp = imagecreatetruecolor($sx, $sy);
+        //zapis przeźroczystości
         self::_saveAlpha($tmp);
+        //skalowanie
         imagecopyresampled($tmp, $input, 0, 0, 0, 0, $sx, $sy, $width, $height);
         return $tmp;
     }
@@ -97,25 +96,31 @@ class Image
         if (!($input = self::inputToResource($input))) {
             return;
         }
+        //badanie rozmiaru obrazu
         $width = imagesx($input);
         $height = imagesy($input);
-
-        if (is_null($maxDimY)) {
-            if ($width - $maxDimX > $height - $maxDimX) {
+        //nie podano wysokości
+        if (null === $maxDimY) {
+            //obraz jest szerszy niż wyższy
+            if ($width > $height) {
+                //skalowanie do maksymalnego X-a
                 return self::scalex($input, $maxDimX);
             }
+            //obraz jest wyższy niż szerszy, skalowanie do maksymalnego Y-ka
             return self::scaley($input, $maxDimX);
         }
         //obliczanie współczynników
         $ratioX = $maxDimX / $width;
         $ratioY = $maxDimY / $height;
-
+        //skalowanie proporcjonalne ze współczynnikiem X
         if ($ratioX < $ratioY && $ratioX < 1) {
             return self::scaleProportional($input, $ratioX * 100);
         }
+        //skalowanie proporcjonalne ze współczynnikiem Y
         if ($ratioY <= $ratioX && $ratioY < 1) {
             return self::scaleProportional($input, $ratioY * 100);
         }
+        //zwrot obrazu
         return $input;
     }
 
@@ -154,57 +159,15 @@ class Image
         if (!($input = self::inputToResource($input))) {
             return;
         }
+        //badanie rozmiarów obrazu
         $width = imagesx($input);
         $height = imagesy($input);
-        //skalowanie do maksymalnego y
-        if (($horizontal ? $width : $height) > $maxDim) {
-            $scale = $maxDim / ($horizontal ? $width : $height);
-            $sx = round($width * $scale);
-            $sy = round($height * $scale);
-            $tmp = imagecreatetruecolor($sx, $sy);
-            self::_saveAlpha($tmp);
-            imagecopyresampled($tmp, $input, 0, 0, 0, 0, $sx, $sy, $width, $height);
-            $input = $tmp;
+        //obraz jest już prawidłowy
+        if (($horizontal ? $width : $height) <= $maxDim) {
+            return $input;
         }
-        return $input;
-    }
-
-    /**
-     * Obraca obrazek o dany kąt wyrażony w stopniach
-     * @param mixed $input wejście
-     * @param int $pivot kąt obrotu
-     * @return resource obrazek
-     */
-    public static function rotate($input, $pivot)
-    {
-        //brak zasobu
-        if (!($input = self::inputToResource($input))) {
-            return;
-        }
-        $x = imagesx($input);
-        $y = imagesy($input);
-        switch (round(intval($pivot)) % 4) {
-            case '0': return $input;
-                break;
-            case '1':
-                $output = imagecreatetruecolor($y, $x);
-                for ($i = 0; $i < $x; $i++)
-                    for ($j = 0; $j < $y; $j++)
-                        imagesetpixel($output, $j, $x - $i - 1, imagecolorat($input, $i, $j));
-                break;
-            case '2':
-                $output = imagecreatetruecolor($x, $y);
-                self::_saveAlpha($output);
-                imagecopyresampled($output, $input, 0, 0, $x - 1, $y - 1, $x, $y, 0 - $x, 0 - $y);
-                break;
-            case '3':
-                $output = imagecreatetruecolor($y, $x);
-                for ($i = 0; $i < $x; $i++)
-                    for ($j = 0; $j < $y; $j++)
-                        imagesetpixel($output, $y - $j - 1, $i, imagecolorat($input, $i, $j));
-                break;
-        }
-        return $output;
+        //obliczanie proporcji i skalowanie proporcjonalne
+        return self::scaleProportional($input, ($maxDim / ($horizontal ? $width : $height)) * 100);
     }
 
     /**
@@ -222,17 +185,21 @@ class Image
         if (!($input = self::inputToResource($input))) {
             return;
         }
-        //obliczanie nowych wartości x i y
+        //obliczanie nowej szerokości
         if (imagesx($input) < $newWidth + $x) {
             $newWidth = imagesx($input) - $x;
         }
+        //obliczanie nowej wysokości
         if (imagesy($input) < $newHeight + $y) {
             $newHeight = imagesy($input) - $y;
         }
         //wycinanie obrazka
         $destination = imagecreatetruecolor($newWidth, $newHeight);
+        //zapis przeźroczystości
         self::_saveAlpha($destination);
+        //przycinanie
         imagecopy($destination, $input, 0, 0, $x, $y, $newWidth, $newHeight);
+        //zwrot
         return $destination;
     }
 

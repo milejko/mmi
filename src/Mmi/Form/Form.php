@@ -423,7 +423,9 @@ abstract class Form extends \Mmi\OptionObject
      */
     public function start()
     {
-        \Mmi\App\FrontController::getInstance()->getView()->form = $this;
+        //form do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_form = $this;
+        //render szablonu
         return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_START);
     }
 
@@ -433,6 +435,9 @@ abstract class Form extends \Mmi\OptionObject
      */
     public function end()
     {
+        //form do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_form = $this;
+        //render szablonu
         return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate('mmi/form/end');
     }
 

@@ -106,6 +106,9 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     protected static $_auth;
 
+    //szablon menu
+    CONST TEMPLATE = 'mmi/mvc/view-helper/navigation/menu-item';
+
     /**
      * Ustawia obiekt nawigatora
      * @param \Mmi\Navigation\Navigation $navigation
@@ -113,6 +116,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public static function setNavigation(\Mmi\Navigation\Navigation $navigation)
     {
+        //ustawienie nawigatora
         return self::$_navigation = $navigation;
     }
 
@@ -123,6 +127,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public static function setAcl(\Mmi\Security\Acl $acl)
     {
+        //acl
         return self::$_acl = $acl;
     }
 
@@ -133,6 +138,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public static function setAuth(\Mmi\Security\Auth $auth)
     {
+        //auth
         return self::$_auth = $auth;
     }
 
@@ -145,7 +151,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
     protected function _modifyBreadcrumbData($index, $field, $value)
     {
         //brak wartości
-        if (null === $value) {
+        if (!$value) {
             return;
         }
         //ustawienie wartości
@@ -159,8 +165,9 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     protected function _checkAcl(array $leaf)
     {
-        //sprawdzanie na acl jeśli auth i acl włączone
+        //sprawdzanie czy auth i acl włączone
         if ($this->_allowedOnly && self::$_auth && self::$_acl) {
+            //sprawdzenie na acl
             return self::$_acl->isAllowed(self::$_auth->getRoles(), strtolower($leaf['module'] . ':' . $leaf['controller'] . ':' . $leaf['action']));
         }
         return true;
@@ -176,16 +183,18 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
         if (null === self::$_navigation) {
             return $this;
         }
+        //pobieranie breadcrumbów
         $data = $this->getBreadcrumbsData();
         //błędny format danych
         if (!is_array($data)) {
             return $this;
         }
+        //inicjalizacja zmiennych
         $title = [];
         $breadcrumbs = [];
         $descriptions = [];
-        $count = count($data);
         $i = 0;
+        //iteracja po odwróconej tablicy breadcrumbów
         foreach (array_reverse($data) as $breadcrumb) {
             $i++;
             //dodawanie breadcrumbów (ostatni nie ma linku)
@@ -209,6 +218,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
         //ustawianie pól
         return $this->setTitle(trim(implode($this->_metaSeparator, $title)))
                 ->setDescription(trim(implode($this->_metaSeparator, $descriptions)))
+                //breadcrumby muszą zostać odwrócone
                 ->setBreadcrumbs(trim(implode($this->_separator, array_reverse($breadcrumbs))));
     }
 
@@ -218,58 +228,48 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      * @param int $depth głębokość
      * @return string
      */
-    protected function _getHtml($tree, $depth = 0)
+    public function _getHtml($tree, $depth = 0)
     {
         //brak drzewa
         if (empty($tree) || !isset($tree['children'])) {
             return '';
         }
+        //pobieranie menu
         $menu = $tree['children'];
         //przygotowanie menu do wyświetlenia: usunięcie niedozwolonych i nieaktywnych elementów
-        foreach ($menu as $key => $leaf) {
-            $leaf['module'] = $leaf['module'] ? : 'mmi';
+        foreach ($menu as $key => $menuItem) {
             //usuwanie modułu
-            if ($leaf['disabled'] || !$this->_checkAcl($leaf)) {
+            if ($menuItem['disabled'] || !$this->_checkAcl($menuItem)) {
                 unset($menu[$key]);
             }
         }
+        //inicjalizacja zmiennych
         $html = '';
         $index = 0;
         $count = count($menu);
         $childHtml = '';
-
         //pętla po menu
-        foreach ($menu as $leaf) {
-            $subHtml = '';
+        foreach ($menu as $menuItem) {
+            $menuItem['subMenu'] = '';
             $recurse = true;
-            if ($this->_activeBranch && isset($leaf['active'])) {
-                $recurse = $leaf['active'];
+            if ($this->_activeBranch && isset($menuItem['active'])) {
+                $recurse = $menuItem['active'];
             }
             //jeśli liść ma dzieci i nie osiągnięto maksymalnej głębokości
-            if (isset($leaf['children']) && $depth < $this->_maxDepth && $recurse) {
+            if (isset($menuItem['children']) && $depth < $this->_maxDepth && $recurse) {
                 //schodzenie rekurencyjne o 1 poziom w dół
-                $subHtml = $this->_getHtml($leaf, $depth + 1);
-                $childHtml .= $subHtml;
+                $menuItem['subMenu'] = $this->_getHtml($menuItem, $depth + 1);
+                $childHtml .= $menuItem['subMenu'];
             }
             //nadawanie klas html
-            $class = (isset($leaf['active']) && $leaf['active']) ? 'active current ' : '';
-            $class .= ($index == 0) ? 'first ' : '';
-            $class .= ($index == ($count - 1)) ? 'last ' : '';
-            //jeśli nadano klasę ustawianie
-            if ($class) {
-                $class = ' class="' . rtrim($class) . '"';
-            }
-            $extras = '';
-            //opcja blank
-            if ($leaf['blank']) {
-                $extras .= ' target="_blank"';
-            }
-            //opcja nofollow
-            if (!$leaf['follow']) {
-                $extras .= ' rel="nofollow"';
-            }
-            //generowanie li
-            $html .= '<li id="item-' . $leaf['id'] . '" ' . $class . '><span class="item-begin"></span><a href="' . htmlspecialchars($leaf['uri']) . '"' . $extras . '>' . $leaf['label'] . '</a>' . $subHtml . '<span class="item-end"></span></li>';
+            $menuItem['class'] = (isset($menuItem['active']) && $menuItem['active']) ? 'active current ' : '';
+            //$menuItem['class'] .= ($index == 0) ? 'first ' : '';
+            //$menuItem['class'] .= ($index == ($count - 1)) ? 'last ' : '';
+            //obiekt do widoku
+            $this->view->_menuItem = $menuItem;
+            //render itemu
+            $html .= $this->view->renderTemplate(self::TEMPLATE);
+            //podwyższanie licznika
             $index++;
         }
         //jeśli renderowanie od minimalnej głębokości
@@ -277,10 +277,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
             return $childHtml;
         }
         //jeśli wyrenderowano HTML
-        if ($html) {
-            return '<ul class="menu depth-' . $depth . '" id="menu-' . $tree['id'] . '">' . $html . '</ul>';
-        }
-        return '';
+        return $html ? '<ul class="menu depth-' . $depth . '" id="menu-' . $tree['id'] . '">' . $html . '</ul>' : '';
     }
 
     /**
@@ -290,6 +287,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function setMaxDepth($depth = 1000)
     {
+        //ustawianie głębokości
         $this->_maxDepth = $depth;
         return $this;
     }
@@ -301,6 +299,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function setMinDepth($depth = 0)
     {
+        //ustawianie minimalnej głębokości
         $this->_minDepth = $depth;
         return $this;
     }
@@ -334,8 +333,9 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function setRoot($key = 'root')
     {
-        $this->setMinDepth();
-        $this->setMaxDepth();
+        //ustawianie zmiennych domyślnych
+        $this->setMinDepth()
+            ->setMaxDepth();
         $this->_root = $key;
         return $this;
     }
@@ -374,22 +374,14 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
     }
 
     /**
-     * Linkuj ostatni breadcrumb w ścieżce
-     * @param bool $link linkuj
-     */
-    public function setLinkLastBreadcrumb($link = true)
-    {
-        $this->_linkLastBreadcrumb = $link;
-        return $this;
-    }
-
-    /**
      * Zwraca bieżącą głębokość w menu
      * @return int
      */
     public function getCurrentDepth()
     {
+        //obliczenie głębokości
         $depth = count($this->_breadcrumbsData) - 1;
+        //zwraca tylko dodatnie
         return ($depth > 0) ? $depth : 0;
     }
 
@@ -408,12 +400,8 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function getBreadcrumbsData()
     {
-        //breadcrumby zbudowane
-        if (is_array($this->_breadcrumbsData)) {
-            return $this->_breadcrumbsData;
-        }
         //ustawianie danych breadcrumbów
-        return $this->_breadcrumbsData = self::$_navigation->getBreadcrumbs();
+        return is_array($this->_breadcrumbsData) ? $this->_breadcrumbsData : ($this->_breadcrumbsData = self::$_navigation->getBreadcrumbs());
     }
 
     /**
@@ -422,6 +410,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function title()
     {
+        //usuwanie html
         return strip_tags($this->_title);
     }
 
@@ -431,6 +420,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function description()
     {
+        //trimowanie i zamiana ó, usuwanie html
         return trim(str_replace(['&amp;nbsp;', '&amp;oacute;', '-  -'], [' ', 'ó', '-'], strip_tags($this->_description)), ' -');
     }
 
@@ -445,11 +435,10 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
             return $this->_buildBreadcrumbs();
         }
         //ustawienia domyślne
-        $this->_maxDepth = 1000;
-        $this->_minDepth = 0;
-        $this->_activeBranch = false;
-        $this->_allowedOnly = true;
-        return $this;
+        return $this->setMaxDepth()
+                ->setMinDepth()
+                ->setActiveBranchOnly(false)
+                ->setAllowedOnly(true);
     }
 
     /**
@@ -513,6 +502,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function modifyLastBreadcrumb($label, $uri = null, $title = null, $description = null)
     {
+        //modyfikacja + przebudowa
         return $this->modifyBreadcrumb(count($this->_breadcrumbsData) - 1, $label, $uri, $title, $description);
     }
 
@@ -527,12 +517,8 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function createBreadcrumb($label, $uri = null, $title = null, $description = null, $unshift = false)
     {
-        $breadcrumb = [
-            'label' => $label,
-            'uri' => $uri,
-            'title' => $title,
-            'description' => $description,
-        ];
+        //składanie breadcrumba
+        $breadcrumb = ['label' => $label, 'uri' => $uri, 'title' => $title, 'description' => $description];
         //wstawienie przed
         if ($unshift) {
             array_unshift($this->_breadcrumbsData, $breadcrumb);
@@ -554,6 +540,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function appendBreadcrumb($label, $uri = null, $title = null, $description = null)
     {
+        //append, przebudowa, zwraca siebie
         return $this->createBreadcrumb($label, $uri, $title, $description, false);
     }
 
@@ -567,6 +554,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function prependBreadcrumb($label, $uri = null, $title = null, $description = null)
     {
+        //prepend, przebudowa, zwraca siebie
         return $this->createBreadcrumb($label, $uri, $title, $description, true);
     }
 
@@ -576,6 +564,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function removeLastBreadcrumb()
     {
+        //obliczanie indeksu ostatniego breadcrumba
         $index = count($this->_breadcrumbsData) - 1;
         //brak breadcrumba
         if (!isset($this->_breadcrumbsData[$index])) {
@@ -583,7 +572,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
         }
         //usuwanie
         unset($this->_breadcrumbsData[$index]);
-        //przebudowa
+        //przebudowa breadcrumbów
         return $this->_buildBreadcrumbs();
     }
 
@@ -593,14 +582,8 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     public function menu()
     {
-        if (null === self::$_navigation) {
-            return '';
-        }
-        $tree = null;
-        if ($this->_root) {
-            $tree = self::$_navigation->seek($this->_root);
-        }
-        return $this->_getHtml($tree);
+        //buduje menu jeśli podano root i jest nawigator
+        return $this->_getHtml(($this->_root && self::$_navigation) ? self::$_navigation->seek($this->_root) : []);
     }
 
 }

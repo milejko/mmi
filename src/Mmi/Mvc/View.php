@@ -176,7 +176,8 @@ class View extends \Mmi\DataObject
      */
     public function getTranslate()
     {
-        return ($this->_translate !== null) ? $this->_translate : new \Mmi\Translate;
+        //próba załadowania translate, lub utworzenie i zbuforowanie nowego translate
+        return ($this->_translate !== null) ? $this->_translate : ($this->_translate = new \Mmi\Translate);
     }
 
     /**
@@ -262,7 +263,18 @@ class View extends \Mmi\DataObject
      */
     public function getAllVariables()
     {
-        return $this->_data;
+        //pobranie danych widoku
+        $data = $this->_data;
+        //iteracja po danych
+        foreach ($data as $key => $value) {
+            //kasowanie danych prywatnych mmi (zaczynają się od _)
+            if ($key[0] == '_') {
+                //usuwanie klucza
+                unset($data[$key]);
+            }
+        }
+        //zwrot danych
+        return $data;
     }
 
     /**
@@ -390,7 +402,6 @@ class View extends \Mmi\DataObject
         ob_clean();
         //zwrot bufora
         echo $inputBuffer;
-        FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . basename($compilationFile) . ' rendered');
         return $data;
     }
 

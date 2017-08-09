@@ -76,10 +76,11 @@ class Dispatcher
         //wpięcie dla pluginów przed dispatchem
         $this->preDispatch();
         //wybór i uruchomienie kontrolera akcji
-        $content = \Mmi\Mvc\ActionHelper::getInstance()->forward($frontController->getRequest());
+        $content = \Mmi\Mvc\ActionHelper::getInstance()->action($frontController->getRequest(), true);
         //wpięcie dla pluginów po dispatchu
         $this->postDispatch();
-        return $content;
+        //zwrot contentu z layoutem
+        return \Mmi\Mvc\ActionHelper::getInstance()->layout($content, $frontController->getRequest());
     }
 
 }

@@ -10,8 +10,14 @@
 
 namespace Mmi\Paginator;
 
+/**
+ * Klasa paginatora
+ */
 class Paginator extends \Mmi\OptionObject
 {
+    
+    //ścieżka szablonu
+    const TEMPLATE = 'mmi/paginator/paginator';
 
     /**
      * Konstruktor, przyjmuje opcje, ustawia wartości domyślne
@@ -191,101 +197,13 @@ class Paginator extends \Mmi\OptionObject
             return '';
         }
         //jeśli mniej niż 2 strony - brak paginatora
-        $pagesCount = $this->getPagesCount();
-        if ($pagesCount < 2) {
+        if (2 > $this->getPagesCount()) {
             return '';
         }
-        $view = \Mmi\App\FrontController::getInstance()->getView();
-        /* if (!$this->getPage()) {
-          $this->getOffset();
-          } */
-
-        //ustawienie wartości do generowania HTML
-        $showPages = (($this->getOption('showPages') > 2) ? $this->getOption('showPages') : 2) - 2;
-        $halfPages = floor($showPages / 2);
-        $pageVariable = $this->getOption('pageVariable');
-        $page = $this->getPage();
-        $previousLabel = $this->getOption('previousLabel');
-        $nextLabel = $this->getOption('nextLabel');
-        $hashHref = $this->getOption('hashHref');
-
-        //moduł, kontroler, akcja na podstawie requesta
-        $modCtrlAct = [
-            'module' => $this->getRequest()->getModuleName(),
-            'controller' => $this->getRequest()->getControllerName(),
-            'action' => $this->getRequest()->getActionName()
-        ];
-
-        //generowanie HTML
-        $html = '<div class="paginator">';
-
-        //generowanie guzika wstecz
-        if ($page > 1) {
-            $firstPage = (($page - 1) > 1) ? ($page - 1) : null;
-            $previousUrl = $view->url($modCtrlAct + [$pageVariable => $firstPage]) . $hashHref;
-            $view->headLink(['rel' => 'prev', 'href' => $previousUrl]);
-            $html .= '<span class="previous page"><a data-page="' . $firstPage . '" href="' . $previousUrl . ' ">' . $previousLabel . '</a></span>';
-        } else {
-            $html .= '<span class="previous page">' . $previousLabel . '</span>';
-        }
-
-        //generowanie strony pierwszej
-        if (1 == $page) {
-            $html .= '<span class="current page">1</span>';
-        } else {
-            $html .= '<span class="page"><a data-page="" href="' . $view->url($modCtrlAct + [$pageVariable => null]) . $hashHref . '">1</a></span>';
-        }
-
-        //obliczanie zakresów
-        $rangeBegin = (($page - $halfPages) > 2) ? ($page - $halfPages) : 2;
-        $rangeBeginExcess = $halfPages - ($page - 2);
-        $rangeBeginExcess = ($rangeBeginExcess > 0) ? $rangeBeginExcess : 0;
-
-        $rangeEnd = (($page + $halfPages) < $pagesCount) ? ($page + $halfPages) : $pagesCount - 1;
-        $rangeEndExcess = $halfPages - ($pagesCount - $page - 1);
-        $rangeEndExcess = ($rangeEndExcess > 0) ? $rangeEndExcess : 0;
-
-        $rangeEnd = (($rangeEnd + $rangeBeginExcess) < $pagesCount) ? ($rangeEnd + $rangeBeginExcess) : $pagesCount - 1;
-        $rangeBegin = (($rangeBegin - $rangeEndExcess) > 2) ? ($rangeBegin - $rangeEndExcess) : 2;
-
-        //pierwsza strona w zakresie
-        if ($rangeBegin > 2) {
-            $html .= '<span class="dots page"><a data-page="' . floor((1 + $rangeBegin) / 2) . '" href="' . $view->url($modCtrlAct + [$pageVariable => floor((1 + $rangeBegin) / 2)]) . $hashHref . '">...</a></span>';
-        }
-
-        //generowanie stron w zakresie
-        for ($i = $rangeBegin; $i <= $rangeEnd; $i++) {
-            if ($i == $page) {
-                $html .= '<span class="current page">' . $i . '</span>';
-            } else {
-                $html .= '<span class="page"><a data-page="' . $i . '" href="' . $view->url($modCtrlAct + [$pageVariable => $i]) . $hashHref . '">' . $i . '</a></span>';
-            }
-        }
-
-        //ostatnia strona w zakresie
-        if ($rangeEnd < $pagesCount - 1) {
-            $html .= '<span class="dots page"><a data-page="' . ceil(($rangeEnd + $pagesCount) / 2) . '" href="' . $view->url($modCtrlAct + [$pageVariable => ceil(($rangeEnd + $pagesCount) / 2)]) . $hashHref . '">...</a></span>';
-        }
-
-        //ostatnia strona w ogóle
-        if ($pagesCount == $page) {
-            $html .= '<span class="last current page">' . $pagesCount . '</span>';
-        } else {
-            $html .= '<span class="last page"><a data-page="' . $pagesCount . '" href="' . $view->url($modCtrlAct + [$pageVariable => $pagesCount]) . $hashHref . '">' . $pagesCount . '</a></span>';
-        }
-
-        //generowanie guzika następny
-        if ($page < $pagesCount) {
-            $nextUrl = $view->url($modCtrlAct + [$pageVariable => $page + 1]) . $hashHref;
-            $view->headLink(['rel' => 'next', 'href' => $nextUrl]);
-            $html .= '<span class="next page"><a data-page="' . ($page + 1) . '" href="' . $nextUrl . '">' . $nextLabel . '</a></span>';
-        } else {
-            $html .= '<span class="next page">' . $nextLabel . '</span>';
-        }
-        $html .= '</div>';
-
-        //zwrot html
-        return $html;
+        //paginator do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_paginator = $this;
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE);
     }
 
 }

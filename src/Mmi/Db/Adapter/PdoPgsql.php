@@ -20,9 +20,11 @@ class PdoPgsql extends PdoAbstract
      */
     public function selectSchema($schemaName)
     {
+        //ustawienie schematu
         $this->_config->schema = $schemaName;
         //ustawienie zmiennej środowiskowej search_path
         $this->query('SET search_path TO "' . $schemaName . '"');
+        //zwrot siebie
         return $this;
     }
 
@@ -32,6 +34,7 @@ class PdoPgsql extends PdoAbstract
      */
     public function setDefaultImportParams()
     {
+        //timeout 0
         $this->query('SET statement_timeout = 0;');
         $this->query('SET standard_conforming_strings = on;');
         //sprawdzanie treści funkcji wyłączone
@@ -51,20 +54,16 @@ class PdoPgsql extends PdoAbstract
     {
         //domyślny port
         $this->_config->port = $this->_config->port ? $this->_config->port : 5432;
-
         //nowy obiekt PDO do odczytu danych
         $this->_downstreamPdo = new \PDO(
             $this->_config->driver . ':host=' . $this->_config->host . ';port=' . $this->_config->port . ';dbname=' . $this->_config->name, $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
-
         //nowy obiekt pdo do zapisu danych
         $this->_upstreamPdo = new \PDO(
             $this->_config->driver . ':host=' . ($this->_config->upstreamHost ? $this->_config->upstreamHost : $this->_config->host) . ';port=' . ($this->_config->upstreamPort ? $this->_config->upstreamPort : $this->_config->port) . ';dbname=' . $this->_config->name, $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
-
         //zmiana stanu na połączony
         $this->_connected = true;
-
         //ustawianie schematu
         if ($this->_config->schema) {
             $this->selectSchema($this->_config->schema);
@@ -84,6 +83,7 @@ class PdoPgsql extends PdoAbstract
     {
         //dla postgresql "
         if (strpos($fieldName, '"') === false) {
+            //"
             return '"' . str_replace('.', '"."', $fieldName) . '"';
         }
         return $fieldName;

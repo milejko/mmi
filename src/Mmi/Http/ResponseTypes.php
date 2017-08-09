@@ -137,23 +137,23 @@ class ResponseTypes
     }
 
     /**
-     * Pobiera mime/type po rozszerzeniu
-     * @param string $extension
+     * Zwraca typ mime
+     * @param string $search typ lub rozszerzenie
      * @return string
+     * @throws HttpException
      */
-    public static function getTypeByExtension($extension)
+    public static function searchType($search)
     {
-        return isset(self::$_contentTypes[$extension]) ? self::$_contentTypes[$extension] : null;
-    }
-
-    /**
-     * Pobiera rozszerzenie po mime/type
-     * @param string $type
-     * @return string
-     */
-    public static function getExtensionByType($type)
-    {
-        return array_keys(self::$_contentTypes, $type);
+        //typ podany explicit
+        if (!empty(array_keys(self::$_contentTypes, $search))) {
+            return $search;
+        }
+        //typ znaleziony na podstawie rozszerzenia
+        if (isset(self::$_contentTypes[$search])) {
+            return self::$_contentTypes[$search];
+        }
+        //typ nieodnaleziony
+        throw new HttpException('Type not found');
     }
 
 }

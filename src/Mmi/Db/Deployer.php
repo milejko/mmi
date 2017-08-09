@@ -28,6 +28,7 @@ class Deployer
         \App\Registry::$config->localCache->active = false;
         //wyłączenie bufora aplikacji
         \App\Registry::$config->cache->active = false;
+        //inicjalizacja tablicy inkrementali
         $incrementals = [];
         //iteracja po modułach aplikacji
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
@@ -37,14 +38,18 @@ class Deployer
             }
             //iteracja po incrementalach
             foreach (glob($module . '/Resource/incremental/' . \App\Registry::$config->db->driver . '/*.sql') as $file) {
+                //dodawanie incrementala do tablicy
                 $incrementals[basename($file)] = $file;
             }
         }
-        //sortowanie plików
+        //sortowanie plików po nazwach
         ksort($incrementals);
         //przywracanie incrementali
         foreach ($incrementals as $incremental) {
+            //importowanie incrementala
             $this->_importIncremental($incremental);
+            //flush wyniku na ekran
+            flush();
         }
     }
 
@@ -56,13 +61,10 @@ class Deployer
     {
         //nazwa pliku
         $baseFileName = basename($file);
-
         //hash pliku
         $md5file = md5_file($file);
-
         //ustawianie domyślnych parametrów importu
         \App\Registry::$db->setDefaultImportParams();
-
         //pobranie rekordu
         try {
             $dc = (new Orm\ChangelogQuery)->byFilename(basename($file))->findFirst();
@@ -70,34 +72,29 @@ class Deployer
             echo 'INITIAL IMPORT.' . "\n";
             $dc = null;
         }
-
         //restore istnieje md5 zgodne
-        if ($dc !== null && $dc->md5 == $md5file) {
+        if ($dc && $dc->md5 == $md5file) {
             echo 'INCREMENTAL PRESENT: ' . $baseFileName . "\n";
-            flush();
             return;
         }
-
         //restore istnieje md5 niezgodne - plik się zmienił - przerwanie importu
-        if ($dc !== null) {
+        if ($dc) {
             die('INVALID MD5: ' . $baseFileName . ' --- VALID: ' . $md5file . " --- IMPORT TERMINATED!\n");
         }
         //import danych
         $this->_importSql($file);
-
         //resetowanie struktur tabeli
         \Mmi\Orm\DbConnector::resetTableStructures();
-
         //brak restore - zakłada nowy rekord
         $newDc = new Orm\ChangelogRecord;
         //zapis informacji o incrementalu
         $newDc->filename = $baseFileName;
+        //wstawienie md5
         $newDc->md5 = $md5file;
+        //zapis rekordu
         $newDc->save();
-
         //informacja na ekran
         echo 'RESTORE INCREMENTAL: ' . $baseFileName . "\n";
-        flush();
     }
 
     /**
@@ -119,18 +116,22 @@ class Deployer
      */
     protected function _performQuery($query)
     {
-        if (!trim($query)) {
+        //brak query
+        if (!$query) {
             return;
         }
         //start transakcji
         \App\Registry::$db->beginTransaction();
-
         //quera jeśli błędna rollback i die, jeśli poprawna commit
         try {
+            //wykonanie zapytania
             \App\Registry::$db->query($query);
+            //commit
             \App\Registry::$db->commit();
         } catch (\Mmi\Db\DbException $e) {
+            //rollback
             \App\Registry::$db->rollBack();
+            //wiadomość o niepowodzeniu
             die($e->getMessage() . "\n");
         }
     }

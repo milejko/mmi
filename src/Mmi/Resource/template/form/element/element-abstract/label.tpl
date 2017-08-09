@@ -1,0 +1,1 @@
+<label{if $_element->getId()} for="{$_element->getId()}-label"{/if}>{$_element->getLabel()}{$_element->getOption('data-labelPostfix')}{if $_element->getRequired()} <span class="required">{$_element->getOption('data-requiredAsterisk')}</span>{/if}</label>

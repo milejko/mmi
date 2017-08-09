@@ -103,12 +103,8 @@ class FrontController
      */
     public static function getInstance()
     {
-        //jeśli nie istnieje instancja tworzenie nowej
-        if (null === self::$_instance) {
-            self::$_instance = new self;
-        }
-        //zwrot instancji
-        return self::$_instance;
+        //zwrot instancji, lub utworzenie nowej
+        return self::$_instance ? self::$_instance : (self::$_instance = new self);
     }
 
     /**
@@ -118,7 +114,9 @@ class FrontController
      */
     public function registerPlugin(\Mmi\App\FrontControllerPluginAbstract $plugin)
     {
+        //dodawanie pluginu
         $this->_plugins[] = $plugin;
+        //zwrot siebie
         return $this;
     }
 
@@ -129,7 +127,9 @@ class FrontController
      */
     public function setStructure(array $structure = [])
     {
+        //ustawianie struktury
         $this->_structure = $structure;
+        //zwrot siebie
         return $this;
     }
 
@@ -140,7 +140,9 @@ class FrontController
      */
     public function setRequest(\Mmi\Http\Request $request)
     {
+        //ustawianie requestu
         $this->_request = $request;
+        //zwrot siebie
         return $this;
     }
 
@@ -151,7 +153,9 @@ class FrontController
      */
     public function setProfiler(\Mmi\App\KernelProfilerInterface $profiler)
     {
+        //ustawianie profilera
         $this->_profiler = $profiler;
+        //zwrot siebie
         return $this;
     }
 
@@ -162,7 +166,9 @@ class FrontController
      */
     public function setResponse(\Mmi\Http\Response $response)
     {
+        //ustawianie odpowiedzi
         $this->_response = $response;
+        //zwrot siebie
         return $this;
     }
 
@@ -173,7 +179,9 @@ class FrontController
      */
     public function setRouter(\Mmi\Mvc\Router $router)
     {
+        //ustawienie routera
         $this->_router = $router;
+        //zwrot siebie
         return $this;
     }
 
@@ -184,7 +192,9 @@ class FrontController
      */
     public function setLocalCache(\Mmi\Cache\Cache $cache)
     {
+        //ustawianie lokalnego bufora
         $this->_cache = $cache;
+        //zwrot siebie
         return $this;
     }
 
@@ -195,7 +205,9 @@ class FrontController
      */
     public function setView(\Mmi\Mvc\View $view)
     {
+        //ustawianie widoku
         $this->_view = $view;
+        //zwrot siebie
         return $this;
     }
 
@@ -205,6 +217,7 @@ class FrontController
      */
     public function getRequest()
     {
+        //pobiera żądanie
         return $this->_request;
     }
 
@@ -214,6 +227,7 @@ class FrontController
      */
     public function getResponse()
     {
+        //pobieranie odpowiedzi
         return $this->_response;
     }
 
@@ -224,9 +238,10 @@ class FrontController
     public function getRouter()
     {
         //brak routera
-        if ($this->_router === null) {
+        if (!$this->_router) {
             throw new KernelException('\Mmi\Mvc\Router should be specified in \Mmi\App\FrontController');
         }
+        //zwrot routera
         return $this->_router;
     }
 
@@ -236,6 +251,7 @@ class FrontController
      */
     public function getEnvironment()
     {
+        //zwrot obiektu środowiskowego
         return $this->_environment;
     }
 
@@ -245,6 +261,7 @@ class FrontController
      */
     public function getPlugins()
     {
+        //zwrot pluginów
         return $this->_plugins;
     }
 
@@ -254,10 +271,8 @@ class FrontController
      */
     public function getProfiler()
     {
-        if ($this->_profiler) {
-            return $this->_profiler;
-        }
-        return new NullKernelProfiler;
+        //zwrot profilera lub tworzenie nowego, lekkiego profilera
+        return $this->_profiler ? $this->_profiler : ($this->_profiler = new NullKernelProfiler);
     }
 
     /**
@@ -266,6 +281,7 @@ class FrontController
      */
     public function getLogger()
     {
+        //zwraca logger
         return $this->_logger;
     }
 
@@ -276,9 +292,10 @@ class FrontController
     public function getLocalCache()
     {
         //brak bufora
-        if (null === $this->_cache) {
+        if (!$this->_cache) {
             throw new KernelException('Missing localCache configuration section');
         }
+        //zwrot lokalnego bufora
         return $this->_cache;
     }
 
@@ -289,9 +306,10 @@ class FrontController
     public function getView()
     {
         //brak widoku
-        if ($this->_view === null) {
+        if (!$this->_view) {
             throw new KernelException('\Mmi\Mvc\View should be specified in \Mmi\App\FrontController');
         }
+        //zwrot widoku
         return $this->_view;
     }
 
@@ -303,14 +321,19 @@ class FrontController
     public function getStructure($part = null)
     {
         //brak struktury
-        if ($this->_structure === null) {
-            throw new KernelException('\Mmi\App\FrontController structure not found');
+        if (!$this->_structure) {
+            throw new KernelException('\Mmi\App\FrontController: structure not found');
+        }
+        //pobranie całej struktury
+        if (!$part) {
+            return $this->_structure;
         }
         //struktura nieprawidłowa (brak części)
-        if ($part !== null && !isset($this->_structure[$part])) {
-            throw new KernelException('\Mmi\App\FrontController structure invalid');
+        if (!isset($this->_structure[$part])) {
+            throw new KernelException('\Mmi\App\FrontController: structure invalid');
         }
-        return (null === $part) ? $this->_structure : $this->_structure[$part];
+        //zwrot części struktury
+        return $this->_structure[$part];
     }
 
     /**
@@ -318,10 +341,11 @@ class FrontController
      */
     public function run()
     {
-        $this->getProfiler()->event('App\FrontController: sending response');
-        //wysłanie odpowiedzi
+        //pobranie odpowiedzi
         $this->getResponse()
+            //ustawienie contentu
             ->setContent((new \Mmi\Mvc\Dispatcher)->dispatch())
+            //wysyłka
             ->send();
     }
 

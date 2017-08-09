@@ -112,6 +112,17 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     protected $_renderingOrder = ['fetchBegin', 'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchEnd'];
 
+    //szablon początku pola
+    CONST TEMPLATE_BEGIN = 'mmi/form/element/element-abstract/begin';
+    //szablon opisu
+    CONST TEMPLATE_DESCRIPTION = 'mmi/form/element/element-abstract/description';
+    //szablon końca pola
+    CONST TEMPLATE_END = 'mmi/form/element/element-abstract/end';
+    //szablon błędów
+    CONST TEMPLATE_ERRORS = 'mmi/form/element/element-abstract/errors';
+    //szablon etykiety
+    CONST TEMPLATE_LABEL = 'mmi/form/element/element-abstract/label';
+    
     /**
      * Konstruktor
      * @param string $name nazwa
@@ -442,11 +453,16 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     public final function fetchBegin()
     {
         $class = get_class($this);
+        //dodawanie klasy z klasą forma
         $this->addClass(strtolower(substr($class, strrpos($class, '\\') + 1)));
+        //dodawanie klasy błędu jeśli wystąpiły
         if ($this->getErrors()) {
             $this->addClass('error');
         }
-        return '<div' . ($this->getId() ? ' id="' . $this->getId() . '-container"' : '') . ' class="' . $this->getOption('class') . '">';
+        //element do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_BEGIN);
     }
 
     /**
@@ -455,7 +471,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public final function fetchEnd()
     {
-        return '<div class="clear"></div></div>';
+        //element do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_END);
     }
 
     /**
@@ -467,15 +486,14 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         if (!$this->getLabel()) {
             return;
         }
-        $forHtml = $this->getId() ? ' for="' . $this->getId() . '" id="' . $this->getId() . '-label"' : '';
-        $requiredClass = '';
-        $required = '';
+        //dodawanie klasy wymagalności
         if ($this->getRequired()) {
-            $requiredClass = ' class="required"';
-            $required = '<span class="required">' . $this->getOption('data-requiredAsterisk') . '</span>';
+            $this->addClass('required');
         }
-        //zwrot html
-        return '<label' . $forHtml . $requiredClass . '>' . $this->getLabel() . $this->getOption('data-labelPostfix') . $required . '</label>';
+        //element do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_LABEL);
     }
 
     /**
@@ -494,9 +512,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         if (!$this->getDescription()) {
             return;
         }
-        $id = $this->getId() ? ' id="' . $this->getId() . '-description"' : '';
-        $description = $this->getDescription();
-        return '<div' . $id . ' class="description">' . $description . '</div>';
+        //element do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_DESCRIPTION);
     }
 
     /**
@@ -505,20 +524,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public final function fetchErrors()
     {
-        $idHtml = $this->getId() ? ' id="' . $this->getId() . '-errors"' : '';
-        $html = '<div class="errors"' . $idHtml . '>';
-        if ($this->getErrors()) {
-            $html .= '<span class="marker"></span>'
-                . '<ul>'
-                . '<li class="point first"></li>';
-            foreach ($this->_errors as $error) {
-                $html .= '<li class="notice error"><i class="icon-remove-sign icon-large"></i>' . $error . '</li>';
-            }
-            $html .= '<li class="close last"></li>'
-                . '</ul>';
-        }
-        $html .= '<div class="clear"></div></div>';
-        return $html;
+        //element do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_ERRORS);
     }
 
     /**

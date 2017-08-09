@@ -28,6 +28,7 @@ class PdoSqlite extends PdoAbstract
      */
     public function selectSchema($schemaName)
     {
+        //w sqlite nic nie robi
         return $this;
     }
 
@@ -37,6 +38,7 @@ class PdoSqlite extends PdoAbstract
      */
     public function setDefaultImportParams()
     {
+        //w sqlite nic nie robi
         return $this;
     }
 
@@ -51,7 +53,9 @@ class PdoSqlite extends PdoAbstract
         );
         //odczyt identycznie
         $this->_downstreamPdo = $this->_upstreamPdo;
+        //połączono
         $this->_connected = true;
+        //włączenie funkcjonalności kluczy obcych - domyślnie
         $this->query('PRAGMA foreign_keys = ON');
     }
 
@@ -68,18 +72,23 @@ class PdoSqlite extends PdoAbstract
         $fieldsCompleted = false;
         $values = '';
         $bind = [];
+        //iteracja po danych
         foreach ($data as $row) {
+            //brak wiersza
             if (empty($row)) {
                 continue;
             }
             $cur = '';
+            //iteracja po danych w wierszu
             foreach ($row as $key => $value) {
+                //tworzenie pól
                 if (!$fieldsCompleted) {
                     $fields .= $this->prepareField($key) . ', ';
                 }
                 $cur .= '?, ';
                 $bind[] = $value;
             }
+            //tworzenie zapytania
             if (!$fieldsCompleted) {
                 $values .= ' SELECT ' . rtrim($cur, ', ') . "\n";
             } else {
@@ -87,8 +96,8 @@ class PdoSqlite extends PdoAbstract
             }
             $fieldsCompleted = true;
         }
-        $sql = 'INSERT INTO ' . $this->prepareTable($table) . ' (' . rtrim($fields, ', ') . ') ' . $values;
-        return $this->query($sql, $bind)->rowCount();
+        //wykonanie wstawienia
+        return $this->query('INSERT INTO ' . $this->prepareTable($table) . ' (' . rtrim($fields, ', ') . ') ' . $values, $bind)->rowCount();
     }
 
     /**
@@ -100,6 +109,7 @@ class PdoSqlite extends PdoAbstract
     {
         //dla sqlite "
         if (strpos($fieldName, '"') === false) {
+            //"
             return '"' . str_replace('.', '"."', $fieldName) . '"';
         }
         return $fieldName;
@@ -135,8 +145,10 @@ class PdoSqlite extends PdoAbstract
      */
     public function tableList($schema = null)
     {
+        //pobranie listy tabel
         $list = $this->fetchAll('SELECT name FROM sqlite_master WHERE type=\'table\'');
         $tables = [];
+        //itaracja po tabelach
         foreach ($list as $row) {
             $tables[] = $row['name'];
         }
@@ -151,10 +163,8 @@ class PdoSqlite extends PdoAbstract
      */
     public function prepareNullCheck($fieldName, $positive = true)
     {
-        if ($positive) {
-            return '(' . $fieldName . ' is null OR ' . $fieldName . ' = ' . $this->quote('') . ')';
-        }
-        return $fieldName . ' is not null';
+        //sprawdzanie czy null lub nie null
+        return $positive ? ('(' . $fieldName . ' is null OR ' . $fieldName . ' = ' . $this->quote('') . ')') : ($fieldName . ' is not null');
     }
 
     /**
@@ -164,6 +174,7 @@ class PdoSqlite extends PdoAbstract
      */
     public function prepareIlike($fieldName)
     {
+        //ilike jak like
         return $fieldName . ' LIKE';
     }
 
@@ -175,7 +186,9 @@ class PdoSqlite extends PdoAbstract
     protected function _associateTableMeta(array $meta)
     {
         $associativeMeta = [];
+        //iteracja po metadanych
         foreach ($meta as $column) {
+            //konwersja do wspólnego formatu mmi
             $associativeMeta[$column['name']] = [
                 'dataType' => $column['type'],
                 'maxLength' => null,

@@ -70,6 +70,7 @@ class Template extends HelperAbstract
             '/\$([a-z0-9_-]+)/i', //$zmienna -> $this->zmienna
             '/\{\/(if|for|foreach|while)\}/', //końcówki struktur językowych
             '/\{(break|continue)\}/', //break continue
+            '/\{return\}/', //wyjście
             '/\{(if|elseif|foreach|for|while)([^\}]+)\}/', //struktury językowe
             '/([a-z0-9_-]+)\(/i', //funkcja( -> $this->funkcja(
             '/\$this->(array)\(/', //naprawianie array
@@ -93,6 +94,7 @@ class Template extends HelperAbstract
             '$this->${1}',
             '<?php end${1}; ?>',
             '<?php ${1}; ?>',
+            '<?php return; ?>',
             '<?php ${1} (${2}): ?>',
             '$this->${1}(',
             '${1}(',

@@ -99,4 +99,17 @@ class Messenger
         return count($this->_session->messages);
     }
 
+    /**
+     * Przygotowuje przetłumaczoną wiadomość
+     * @param array $message
+     * @return string
+     */
+    public function prepareTranslatedMessage(array $message = [])
+    {
+        $view = \Mmi\App\FrontController::getInstance()->getView();
+        $translatedMessage = ($view->getTranslate() !== null) ? $view->getTranslate()->_($message['message']) : $message['message'];
+        array_unshift($message['vars'], $translatedMessage);
+        return call_user_func_array('sprintf', $message['vars']);
+    }
+
 }
