@@ -28,19 +28,19 @@ class HeadLink extends HeadAbstract
      */
     public function headLink(array $params = [], $prepend = false, $conditional = '')
     {
-        if (!empty($params)) {
-            $params['conditional'] = $conditional;
-            if (array_search($params, $this->_data) !== false) {
-                return '';
-            }
-            if ($prepend) {
-                array_unshift($this->_data, $params);
-            } else {
-                array_push($this->_data, $params);
-            }
+        //brak parametrów - render
+        if (empty($params)) {
+            return $this;
+        }
+        //dokładanie warunku
+        $params['conditional'] = $conditional;
+        //link już dodany
+        if (array_search($params, $this->_data) !== false) {
             return '';
         }
-        return $this;
+        //wybór prepend / append
+        $prepend ? array_unshift($this->_data, $params) : array_push($this->_data, $params);
+        return '';
     }
 
     /**
@@ -49,31 +49,35 @@ class HeadLink extends HeadAbstract
      */
     public function __toString()
     {
+        //pusty html
         $html = '';
+        //iteracja po danych
         foreach ($this->_data as $link) {
             $conditional = $link['conditional'];
             unset($link['conditional']);
-            if ($conditional) {
-                $html .= '<!--[if ' . $conditional . ']>';
-            }
+            //początek conditional
+            $html .= $conditional ? '<!--[if ' . $conditional . ']>' : '';
+            //rozpoczęcie linku
             $html .= '	<link ';
+            //timestamp
             $ts = isset($link['ts']) ? $link['ts'] : 0;
             unset($link['ts']);
+            //iteracja po linkach
             foreach ($link as $key => $value) {
+                //klucz to href
                 if ($key == 'href' && $ts != 0) {
-                    if (strpos($value, '?')) {
-                        $value .= '&ts=' . $ts;
-                    } else {
-                        $value .= '?ts=' . $ts;
-                    }
+                    //jeśli znaleziono ? - dokładanie &
+                    $value .= strpos($value, '?') ? '&ts=' . $ts : '?ts=' . $ts;
                 }
+                //sklejanie html
                 $html .= $key . '="' . $value . '" ';
             }
+            //zakończenie linku
             $html .= '/>';
-            if ($conditional) {
-                $html .= '<![endif]-->';
-            }
+            //zakończenie conditional
+            $html .= $conditional ? '<![endif]-->' : '';
         }
+        //zwrot html
         return $html;
     }
 
@@ -158,7 +162,9 @@ class HeadLink extends HeadAbstract
      */
     protected function _setStylesheet($href, $media = null, $prepend = false, $conditional = '')
     {
+        //obliczanie timestampa
         $ts = $this->_getLocationTimestamp($href);
+        //określanie parametrów
         $params = ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $ts > 0 ? $this->_getPublicSrc($href) : $href, 'ts' => $ts];
         if ($media) {
             $params['media'] = $media;
@@ -189,6 +195,7 @@ class HeadLink extends HeadAbstract
      */
     protected function _setAlternate($href, $type, $title, $media = null, $prepend = false, $conditional = '')
     {
+        //określanie parametrów
         $params = ['rel' => 'alternate', 'type' => $type, 'title' => $title, 'href' => $href];
         if ($media) {
             $params['media'] = $media;

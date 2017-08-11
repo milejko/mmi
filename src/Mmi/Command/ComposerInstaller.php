@@ -38,8 +38,11 @@ class ComposerInstaller
      */
     public static function postUpdate(Event $event)
     {
+        //inicjalizacja autoloadera
         self::_initAutoload($event);
+        //linkowanie zasobów web
         self::_linkModuleWebResources();
+        //kopiowanie binariów z modułów
         self::_copyModuleBinaries();
     }
 
@@ -49,9 +52,13 @@ class ComposerInstaller
      */
     public static function postInstall(Event $event)
     {
+        //inicjalizacja autoloadera
         self::_initAutoload($event);
+        //kopiowanie plików z dystrybucji
         self::_copyDistFiles();
+        //linkowanie zasobów web
         self::_linkModuleWebResources();
+        //kopiowanie binariów z modułów
         self::_copyModuleBinaries();
     }
 
@@ -94,6 +101,7 @@ class ComposerInstaller
         foreach (self::$_distFiles as $src => $dest) {
             //kalkulacja ścieżki
             $source = BASE_PATH . $src;
+            //brak pliku
             if (!file_exists($source)) {
                 continue;
             }
@@ -113,6 +121,7 @@ class ComposerInstaller
     {
         //iteracja po modułach
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
+            //kalkulacja ścieżki linku
             $linkName = BASE_PATH . '/web/resource/' . lcfirst(basename($module));
             //link istnieje
             if (is_link($linkName)) {
@@ -120,10 +129,12 @@ class ComposerInstaller
             }
             //czyszczenie katalogu który ma być linkiem
             if (file_exists($linkName)) {
+                //usuwanie kaskadowe
                 \Mmi\FileSystem::rmdirRecursive($linkName);
             }
             //istnieje resource web
             if (file_exists($module . '/Resource/web')) {
+                //tworzenie linku
                 symlink(realpath($module . '/Resource/web'), $linkName);
             }
         }
@@ -138,11 +149,13 @@ class ComposerInstaller
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
             //istnieje resource web
             if (file_exists($module . '/Command')) {
+                //kopiowanie kaskadowe
                 \Mmi\FileSystem::copyRecursive($module . '/Command', BASE_PATH . '/bin');
             }
         }
         //iteracja po binarkach
         foreach (new \DirectoryIterator(BASE_PATH . '/bin') as $file) {
+            //katalog (lub wyjście wyżej)
             if ($file->isDot() || $file->isDir()) {
                 continue;
             }

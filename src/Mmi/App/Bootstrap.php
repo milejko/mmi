@@ -26,11 +26,14 @@ class Bootstrap implements BootstrapInterface
         //inicjalizacja tłumaczeń
         $translate = $this->_setupTranslate();
         //ustawienie front controllera, sesji i bazy danych
-        $this
-            ->_setupDatabase()
+        $this->_setupDatabase()
+            //konfiguracja lokalnego bufora
             ->_setupLocalCache()
+            //konfiguracja front controllera
             ->_setupFrontController($router = $this->_setupRouter($translate->getLocale()), $this->_setupView($translate, $router))
+            //konfiguracja cache
             ->_setupCache()
+            //konfiguracja sesji
             ->_setupSession();
     }
 
@@ -39,6 +42,7 @@ class Bootstrap implements BootstrapInterface
      */
     public function run()
     {
+        //uruchomienie front controllera
         FrontController::getInstance()->run();
     }
 
@@ -49,6 +53,7 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupRouter($language)
     {
+        //powołanie routera z konfiguracją
         return new \Mmi\Mvc\Router(\App\Registry::$config->router, $language);
     }
 
@@ -58,6 +63,7 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupTranslate()
     {
+        //utworzenie obiektu tłumaczenia
         $translate = new \Mmi\Translate;
         //domyślny język
         $translate->setDefaultLocale(isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null);
@@ -87,7 +93,9 @@ class Bootstrap implements BootstrapInterface
         }
         //własna sesja, oparta na obiekcie implementującym SessionHandlerInterface
         if (strtolower(\App\Registry::$config->session->handler) == 'user') {
+            //nazwa klasy sesji
             $sessionClass = \App\Registry::$config->session->path;
+            //ustawienie handlera
             session_set_save_handler(new $sessionClass);
         }
         //uruchomienie sesji
@@ -101,7 +109,8 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupLocalCache()
     {
-        if (null === \App\Registry::$config->localCache) {
+        //brak konfiguracji cache
+        if (!\App\Registry::$config->localCache) {
             return $this;
         }
         //ustawienie bufora systemowy aplikacji
@@ -117,7 +126,8 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupCache()
     {
-        if (null === \App\Registry::$config->cache) {
+        //brak konfiguracji cache
+        if (!\App\Registry::$config->cache) {
             return $this;
         }
         //cache użytkownika
@@ -131,15 +141,17 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupDatabase()
     {
-        //połączenie do bazy danych i konfiguracja DAO
-        if (null === \App\Registry::$config->db->driver) {
+        //brak konfiguracji bazy
+        if (!\App\Registry::$config->db->driver) {
             return $this;
         }
         //obliczanie nazwy drivera
         $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst(\App\Registry::$config->db->driver);
+        //próba powołania drivera
         try {
             \App\Registry::$db = new $driver(\App\Registry::$config->db);
         } catch (\Exception $e) {
+            //błędny driver DB
             throw new \Mmi\Db\DbException('Driver unsupported: ' . $driver . ' ' . $e->getMessage());
         }
         //jeśli aplikacja w trybie debug
@@ -168,8 +180,11 @@ class Bootstrap implements BootstrapInterface
         }
         //konfiguracja frontu
         FrontController::getInstance()->setStructure($frontStructure)
+            //ustawienie routera
             ->setRouter($router)
+            //ustawienie widoku
             ->setView($view)
+            //włączenie (lub nie) debugera
             ->getResponse()->setDebug(\App\Registry::$config->debug);
         //rejestracja pluginów
         foreach (\App\Registry::$config->plugins as $plugin) {
@@ -186,14 +201,17 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupView(\Mmi\Translate $translate, \Mmi\Mvc\Router $router)
     {
-        //powołanie widoku
-        $view = new \Mmi\Mvc\View;
-        //ustawienie widoku
-        return $view->setCache(FrontController::getInstance()->getLocalCache())
+        //powołanie i konfiguracja widoku
+        return (new \Mmi\Mvc\View)->setCache(FrontController::getInstance()->getLocalCache())
+                //opcja kompilacji
                 ->setAlwaysCompile(\App\Registry::$config->compile)
+                //ustawienie translator
                 ->setTranslate($translate)
+                //ustawienie cdn
                 ->setCdn(\App\Registry::$config->cdn)
+                //ustawienie requestu
                 ->setRequest(FrontController::getInstance()->getRequest())
+                //ustawienie baseUrl
                 ->setBaseUrl($router->getBaseUrl());
     }
 

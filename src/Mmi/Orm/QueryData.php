@@ -39,6 +39,7 @@ class QueryData
     {
         //wykonanie zapytania zliczającego na adapter
         $result = \Mmi\Orm\DbConnector::getAdapter()->select('COUNT(' . ($column === '*' ? '*' : \Mmi\Orm\DbConnector::getAdapter()->prepareField($column)) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, '', null, null, $this->_query->getQueryCompile()->bind);
+        //pobieranie rezultatu
         return isset($result[0]) ? current($result[0]) : 0;
     }
 
@@ -48,22 +49,19 @@ class QueryData
      */
     public final function find()
     {
-        //odpytanie adaptera o rekordy
-        $result = \Mmi\Orm\DbConnector::getAdapter()->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind);
         //ustalenie klasy rekordu
         $recordName = $this->_query->getRecordName();
-        $records = [];
-        //tworzenie rekordów
-        foreach ($result as $row) {
-            $record = new $recordName;
-            /* @var $record \Mmi\Orm\Record */
-            $record->setFromArray($row)->clearModified();
-            $records[] = $record;
-        }
         //ustalenie klasy kolekcji rekordów
         $collectionName = $this->_query->getCollectionName();
+        //tworznie pustej kolekcji
+        $collection = new $collectionName();
+        //iteracja po danych z bazy
+        foreach (\Mmi\Orm\DbConnector::getAdapter()->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
+            //tworzenie i dodawanie rekordu
+            $collection->append((new $recordName)->setFromArray($row)->clearModified());
+        }
         //zwrot kolekcji
-        return new $collectionName($records);
+        return $collection;
     }
 
     /**
@@ -95,16 +93,14 @@ class QueryData
      */
     public final function findPairs($keyName, $valueName)
     {
-        //odpytanie adaptera o rekordy
-        $data = \Mmi\Orm\DbConnector::getAdapter()->select(\Mmi\Orm\DbConnector::getAdapter()->prepareField($keyName) . ', ' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($valueName), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind);
+        //inicjalizacja pustej tablicy
         $kv = [];
-        foreach ($data as $line) {
+        //iteracja po danych
+        foreach (\Mmi\Orm\DbConnector::getAdapter()->select(\Mmi\Orm\DbConnector::getAdapter()->prepareField($keyName) . ', ' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($valueName), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
             //przy wybieraniu tych samych pól tabela ma tylko jeden wiersz
-            if (count($line) == 1) {
-                $line = current($line);
-            }
+            $row = (count($row) == 1) ? current($row) : $row;
             //klucz to pierwszy element, wartość - drugi
-            $kv[current($line)] = next($line);
+            $kv[current($row)] = next($row);
         }
         return $kv;
     }
@@ -152,12 +148,12 @@ class QueryData
      */
     public final function findUnique($keyName)
     {
-        //odpytanie adaptera o rekordy
-        $data = \Mmi\Orm\DbConnector::getAdapter()->select('DISTINCT(' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, null, null, $this->_query->getQueryCompile()->bind);
+        //inicjalizacja pustej tabeli
         $result = [];
-        //dodaje kolejne wartości do tablicy
-        foreach ($data as $line) {
-            $result[] = current($line);
+        //iteracja po danych
+        foreach (\Mmi\Orm\DbConnector::getAdapter()->select('DISTINCT(' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, null, null, $this->_query->getQueryCompile()->bind) as $row) {
+            //dodawanie kolumny
+            $result[] = current($row);
         }
         return $result;
     }
@@ -175,15 +171,18 @@ class QueryData
         $fields = '';
         //pobranie struktury tabeli
         $mainStructure = \Mmi\Orm\DbConnector::getTableStructure($this->_query->getTableName());
+        //przygotowanie tabeli
         $table = \Mmi\Orm\DbConnector::getAdapter()->prepareTable($this->_query->getTableName());
-        //pola z tabeli głównej
+        //iteracja po polach tabeli głównej
         foreach ($mainStructure as $fieldName => $info) {
+            //dodawanie pola
             $fields .= $table . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($fieldName) . ', ';
         }
         //pola z tabel dołączonych
         foreach ($this->_query->getQueryCompile()->joinSchema as $schema) {
             //pobranie struktury tabeli dołączonej
             $structure = \Mmi\Orm\DbConnector::getTableStructure($schema[0]);
+            //alias połączenia
             $joinAlias = isset($schema[5]) ? $schema[5] : $schema[0];
             //pola tabeli dołączonej
             foreach ($structure as $fieldName => $info) {
@@ -199,17 +198,23 @@ class QueryData
      */
     protected final function _prepareFrom()
     {
+        //przygotowanie tabeli
         $table = \Mmi\Orm\DbConnector::getAdapter()->prepareTable($this->_query->getTableName());
         //jeśli brak joinów sama tabela
         if (empty($this->_query->getQueryCompile()->joinSchema)) {
             return $table;
         }
+        //tabela do której jest łączenie
         $baseTable = $table;
         //przygotowanie joinów
         foreach ($this->_query->getQueryCompile()->joinSchema as $schema) {
+            //tabela docelowa
             $targetTable = isset($schema[3]) ? $schema[3] : $baseTable;
+            //typ połączenia (zwykłe, lewe)
             $joinType = isset($schema[4]) ? $schema[4] : 'JOIN';
+            //alias
             $joinAlias = isset($schema[5]) ? $schema[5] : $schema[0];
+            //przygotowanie sql
             $table .= ' ' . $joinType . ' ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($schema[0]) . ' AS ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinAlias) . ' ON ' .
                 \Mmi\Orm\DbConnector::getAdapter()->prepareTable($joinAlias) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($schema[1]) .
                 ' = ' . \Mmi\Orm\DbConnector::getAdapter()->prepareTable($targetTable) . '.' . \Mmi\Orm\DbConnector::getAdapter()->prepareField($schema[2]);

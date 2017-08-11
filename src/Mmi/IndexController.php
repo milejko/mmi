@@ -16,14 +16,22 @@ namespace Mmi;
 class IndexController extends Mvc\Controller
 {
 
+    /**
+     * Akcja główna
+     */
     public function indexAction()
     {
         
     }
 
+    /**
+     * Akcja błędu
+     */
     public function errorAction()
     {
+        //pobranie response
         $this->getResponse()
+            //404
             ->setCodeNotFound();
     }
 

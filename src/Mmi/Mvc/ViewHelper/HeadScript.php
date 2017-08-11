@@ -34,15 +34,12 @@ class HeadScript extends HeadAbstract
         }
         //warunek
         $params['conditional'] = $conditional;
+        //skrypt już dodany
         if (array_search($params, $this->_data) !== false) {
             return '';
         }
         //wstawienie przed lub po
-        if ($prepend) {
-            array_unshift($this->_data, $params);
-        } else {
-            array_push($this->_data, $params);
-        }
+        $prepend ? array_unshift($this->_data, $params) : array_push($this->_data, $params);
         return '';
     }
 
@@ -62,31 +59,23 @@ class HeadScript extends HeadAbstract
             //dodawanie klauzuli warunku
             $conditional = $script['conditional'];
             unset($script['conditional']);
-            if ($conditional) {
-                $html .= '<!--[if ' . $conditional . ']>';
-            }
+            $html .= $conditional ? '<!--[if ' . $conditional . ']>' : '';
             $html .= '	<script ';
             $ts = isset($script['ts']) ? $script['ts'] : 0;
             unset($script['ts']);
             foreach ($script as $key => $value) {
                 if ($key == 'src' && $ts != 0) {
-                    if (strpos($value, '?')) {
-                        $value .= '&ts=' . $ts;
-                    } else {
-                        $value .= '?ts=' . $ts;
-                    }
+                    $value .= strpos($value, '?') ? ('&ts=' . $ts) : ('?ts=' . $ts);
                 }
                 $html .= htmlspecialchars($key) . '="' . htmlspecialchars($value) . '" ';
             }
             $html .= '>';
             if (isset($scriptContent)) {
-                $html .= PHP_EOL . '		// <![CDATA[' . PHP_EOL . $scriptContent . PHP_EOL . '		// ]]>';
+                $html .= PHP_EOL . '// <![CDATA[' . PHP_EOL . $scriptContent . PHP_EOL . '// ]]>';
                 unset($scriptContent);
             }
             $html .= '</script>';
-            if ($conditional) {
-                $html .= '<![endif]-->';
-            }
+            $html .= $conditional ? '<![endif]-->' : '';
             $html .= PHP_EOL;
         }
         return $html;
@@ -129,6 +118,7 @@ class HeadScript extends HeadAbstract
      */
     public function setFile($src, $type = 'text/javascript', array $params = [], $prepend = false, $conditional = '')
     {
+        //pobieranie timestampu
         $ts = $this->_getLocationTimestamp($src);
         return $this->headScript(array_merge($params, ['type' => $type, 'src' => $ts > 0 ? $this->_getPublicSrc($src) : $src, 'ts' => $ts]), $prepend, $conditional);
     }

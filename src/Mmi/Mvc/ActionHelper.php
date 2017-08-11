@@ -10,6 +10,7 @@
 
 namespace Mmi\Mvc;
 
+//użycie front controllera i requestu
 use Mmi\App\FrontController,
     \Mmi\Http\Request;
 
@@ -54,7 +55,9 @@ class ActionHelper
      */
     public function setAcl(\Mmi\Security\Acl $acl)
     {
+        //acl
         $this->_acl = $acl;
+        //zwrot siebie
         return $this;
     }
 
@@ -65,7 +68,9 @@ class ActionHelper
      */
     public function setAuth(\Mmi\Security\Auth $auth)
     {
+        //auth
         $this->_auth = $auth;
+        //zwrot siebie
         return $this;
     }
 
@@ -79,8 +84,7 @@ class ActionHelper
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
             //logowanie zablokowania akcji
-            FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
-            return;
+            return FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
         }
         //rendering szablonu jeśli akcja zwraca null
         return $this->_renderAction($request, (FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request), $main);
@@ -115,7 +119,9 @@ class ActionHelper
     {
         //jeśli layout jest wyłączony - zwrot szablonu, jeśli nie - layoutu
         return FrontController::getInstance()->getView()->isLayoutDisabled() ? $content : FrontController::getInstance()->getView()
+                //ustawianie treści w placeholder 'content'
                 ->setPlaceholder('content', $content)
+                //renderowanie layoutu
                 ->renderTemplate($this->_getLayout($request));
     }
 
@@ -128,22 +134,28 @@ class ActionHelper
      */
     private function _renderAction(Request $request, Request $resetRequest, $main)
     {
+        //zapamiętanie stanu wyłączenia layoutu
         $resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
         //wywołanie akcji
         if (null !== $actionContent = $this->_invokeAction($request)) {
             //reset requestu i dla akcji głównej wyłączenie layoutu
             FrontController::getInstance()->getView()->setRequest($resetRequest)
+                //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
                 ->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
-            //zwrot jeśli akcja zwraca wynik
+            //zwrot danych z akcji
             return $actionContent;
         }
         //zwrot wyrenderowanego szablonu
         $content = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
-        //reset requestu i przywracanie layoutu (jeśli nie jest akcją główną)
+        //pobranie widoku
         FrontController::getInstance()->getView()
+            //reset requestu
             ->setRequest($resetRequest)
+            //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
             ->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
+        //profiler wyrenderowaniu szablonu
         FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $request->getAsColonSeparatedString() . ' rendered');
+        //zwrot wyrenderowanego szablonu
         return $content;
     }
 
@@ -154,12 +166,8 @@ class ActionHelper
      */
     private function _checkAcl(Request $request)
     {
-        //jeśli brak - dozwolone
-        if ($this->_acl === null || $this->_auth === null) {
-            return true;
-        }
-        //sprawdzenie acl
-        return $this->_acl->isAllowed($this->_auth->getRoles(), $request->getAsColonSeparatedString());
+        //brak acl lub brak auth lub dozwolone acl
+        return !$this->_acl || !$this->_auth || $this->_acl->isAllowed($this->_auth->getRoles(), $request->getAsColonSeparatedString());
     }
 
     /**
@@ -174,19 +182,23 @@ class ActionHelper
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
         $structure = FrontController::getInstance()->getStructure('module');
-        //brak w strukturze
+        //sprawdzenie w strukturze
         if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
+            //komponent nieodnaleziony
             throw new MvcNotFoundException('Component not found: ' . $request->getAsColonSeparatedString());
         }
         //ustawienie requestu w widoku
         FrontController::getInstance()->getView()->setRequest($request);
-        //powołanie kontrolera
+        //rozbijanie po myślniku
         $controllerParts = explode('-', $request->getControllerName());
+        //iteracja po częściach
         foreach ($controllerParts as $key => $controllerPart) {
+            //stosowanie camelcase
             $controllerParts[$key] = ucfirst($controllerPart);
         }
         //ustalenie klasy kontrolera
         $controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
+        //nazwa akcji
         $actionMethodName = $request->getActionName() . 'Action';
         //wywołanie akcji
         $content = (new $controllerClassName($request))->$actionMethodName();
@@ -204,15 +216,18 @@ class ActionHelper
     private function _getLayout(\Mmi\Http\Request $request)
     {
         //test layoutu dla modułu i kontrolera
-        if (null !== FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/' . $request->getControllerName() . '/layout')) {
+        if (FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/' . $request->getControllerName() . '/layout')) {
+            //zwrot layoutu moduł:kontroler
             return $request->getModuleName() . '/' . $request->getControllerName() . '/layout';
         }
         //test layoutu dla modułu
-        if (null !== FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/layout')) {
+        if (FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/layout')) {
+            //zwrot layoutu moduł
             return $request->getModuleName() . '/layout';
         }
         //test layoutu dla modułu
-        if (null !== FrontController::getInstance()->getView()->getTemplateByPath('app/layout')) {
+        if (FrontController::getInstance()->getView()->getTemplateByPath('app/layout')) {
+            //zwrot layoutu aplikacyjnego
             return 'app/layout';
         }
         //brak layoutu

@@ -57,6 +57,7 @@ class Auth
      */
     public function __construct()
     {
+        //otwieranie przestrzeni w sesji
         $this->_session = new \Mmi\Session\SessionSpace($this->_namespace);
     }
 
@@ -67,6 +68,7 @@ class Auth
      */
     public function setSalt($salt)
     {
+        //zapis soli
         $this->_salt = $salt;
         return $this;
     }
@@ -78,9 +80,11 @@ class Auth
      */
     public function getSalt()
     {
-        if ($this->_salt === null) {
+        //brak soli (lub sól pusta)
+        if (!$this->_salt) {
             throw new SecurityException('Salt not set, set the proper salt.');
         }
+        //zwrot soli
         return $this->_salt;
     }
 
@@ -90,6 +94,7 @@ class Auth
      */
     public function rememberMe($time)
     {
+        //rola zalogowana
         if ($this->hasIdentity()) {
             //ustawianie ciasteczka
             new \Mmi\Http\Cookie('remember', 'id=' . $this->getId() . '&key=' . md5($this->getSalt() . $this->getId()), null, time() + $time);
@@ -104,7 +109,9 @@ class Auth
     {
         //usuwanie ciasteczka
         $cookie = new \Mmi\Http\Cookie;
+        //wyszukiwanie ciastka
         $cookie->match('remember');
+        //usunięcie ciastka
         $cookie->delete();
         return $this;
     }
@@ -116,10 +123,7 @@ class Auth
     public function hasIdentity()
     {
         //brak tożsamości
-        if (!$this->_session->id) {
-            return false;
-        }
-        return true;
+        return (bool) $this->_session->id;
     }
 
     /**
@@ -242,6 +246,7 @@ class Auth
         //wylogowanie na modelu
         if ($this->_modelName) {
             $model = $this->_modelName;
+            //wylogowanie
             $model::deauthenticate();
         }
         //czyszczenie sesji
@@ -255,8 +260,7 @@ class Auth
      */
     public function authenticate()
     {
-        $model = $this->_modelName;
-        if (!$this->_modelName) {
+        if (!($model = $this->_modelName)) {
             return false;
         }
         //błąd logowania na modelu
@@ -278,15 +282,8 @@ class Auth
      */
     protected function _setAuthentication(\Mmi\Security\AuthRecord $record)
     {
-        $this->_session->id = $record->id;
-        $this->_session->username = $record->username;
-        $this->_session->email = $record->email;
-        $this->_session->name = $record->name;
-        $this->_session->lang = $record->lang;
-        //tablica ról
-        $this->_session->roles = $record->roles;
-        //dane dodatkowe
-        $this->_session->data = $record->data;
+        //przekazanie danych z rekordu autoryzacji do sesji
+        $this->_session->setFromArray((array) $record);
         return true;
     }
 
@@ -296,6 +293,7 @@ class Auth
      */
     public function idAuthenticate()
     {
+        //model autoryzacji
         $model = $this->_modelName;
         //autoryzacja po ID w modelu nieudana
         if (null === $record = $model::idAuthenticate($this->_identity)) {
@@ -319,7 +317,9 @@ class Auth
         //pobieranie usera i hasła ze zmiennych środowiskowych
         $this->setIdentity(\Mmi\App\FrontController::getInstance()->getEnvironment()->authUser)
             ->setCredential(\Mmi\App\FrontController::getInstance()->getEnvironment()->authPassword);
+        //model autoryzacji
         $model = $this->_modelName;
+        //autoryzacja
         $record = $model::authenticate($this->_identity, $this->_credential);
         //autoryzacja poprawna
         if ($record) {
@@ -331,6 +331,7 @@ class Auth
             ->setCodeUnauthorized()
             ->setContent($errorMessage)
             ->send();
+        //zakończenie skryptu
         exit;
     }
 
