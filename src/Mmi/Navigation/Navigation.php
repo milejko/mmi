@@ -87,9 +87,18 @@ class Navigation
         $branchActive = false;
         //iteracja po drzewie
         foreach ($tree as $key => $item) {
-            //posiada request zgodny z poszukiwanym
-            $active = isset($item['request']) && ([] == array_diff($item['request'], $params));
-            //ustawianie aktywności liścia
+            //aktywność tylko jeśli istnieje request
+            if (true === $active = isset($item['request'])) {
+                //iteracja po requescie w danym itemie
+                foreach ($item['request'] as $name => $param) {
+                    //jeśli brak zmiennej w parametrach, lub różne
+                    if (!isset($params[$name]) || $params[$name] != $param) {
+                        //nieaktywny
+                        $active = false;
+                        break;
+                    }
+                }
+            }
             $tree[$key]['active'] = $active;
             //jeśli aktywny - ustawiamy aktywność gałęzi, jeśli nie - bez zmian
             $branchActive = $active ? true : $branchActive;
