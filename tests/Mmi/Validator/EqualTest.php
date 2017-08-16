@@ -10,7 +10,7 @@
 
 namespace Mmi\Validator;
 
-class EqualTest extends \PHPUnit_Framework_TestCase
+class EqualTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testValid()
