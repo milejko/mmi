@@ -70,8 +70,8 @@ class ResponseTypes
      * @var array
      */
     private static $_contentTypes = [
-        'htm' => 'text/html',
         'html' => 'text/html',
+        'htm' => 'text/html',
         'shtml' => 'text/html',
         'txt' => 'text/plain',
         'css' => 'text/css',
@@ -137,6 +137,16 @@ class ResponseTypes
     }
 
     /**
+     * Znajduje rozszerzenie po typie mime
+     * @param string $type
+     * @return string
+     */
+    public static function getExtensionByType($type)
+    {
+        return empty($foundExtensions = array_keys(self::$_contentTypes, $type)) ? null : $foundExtensions[0];
+    }
+
+    /**
      * Zwraca typ mime
      * @param string $search typ lub rozszerzenie
      * @return string
@@ -145,7 +155,7 @@ class ResponseTypes
     public static function searchType($search)
     {
         //typ podany explicit
-        if (!empty(array_keys(self::$_contentTypes, $search))) {
+        if (self::getExtensionByType($search)) {
             return $search;
         }
         //typ znaleziony na podstawie rozszerzenia
