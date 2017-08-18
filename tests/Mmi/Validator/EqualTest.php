@@ -10,11 +10,17 @@
 
 namespace Mmi\Test\Validator;
 
+use Mmi\Validator\Equal;
+
+/**
+ * Test walidatora równości
+ */
 class EqualTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testValid()
+    public function testIsValid()
     {
+        //równe
         $this->assertTrue((new Equal)->setValue(10)
                 ->isValid(10));
         $this->assertTrue((new Equal)->setValue(true)
@@ -35,10 +41,8 @@ class EqualTest extends \PHPUnit\Framework\TestCase
                 ->isValid('test'));
         $this->assertTrue((new Equal)->setValue(new \stdClass())
                 ->isValid(new \stdClass()));
-    }
 
-    public function testInvalid()
-    {
+        //nierówne
         $this->assertFalse((new Equal)->setValue(10)
                 ->isValid(9));
         $this->assertFalse((new Equal)->setValue(true)
@@ -47,6 +51,14 @@ class EqualTest extends \PHPUnit\Framework\TestCase
                 ->isValid('test1'));
         $this->assertFalse((new Equal)->setValue(new \stdClass())
                 ->isValid(new Equal));
+    }
+
+    public function testSetOptions()
+    {
+        $customMessage = 'custom error';
+        $customErrorValidator = new Equal([true, $customMessage]);
+        $this->assertFalse($customErrorValidator->isValid(false));
+        $this->assertEquals($customMessage, $customErrorValidator->getMessage());
     }
 
 }

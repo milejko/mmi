@@ -20,8 +20,8 @@ class LoggerHelper
 {
 
     /**
-     * Monolog instance to hold and use
-     * @var \Monolog\Logger
+     * Instancja loggera
+     * @var \Psr\Log\LoggerInterface
      */
     protected static $_loggerInstance;
 
@@ -61,7 +61,7 @@ class LoggerHelper
 
     /**
      * Zwraca instancję helpera logowania
-     * @return \Monolog\Logger
+     * @return \Psr\Log\LoggerInterface
      */
     public static function getLogger()
     {
@@ -80,7 +80,8 @@ class LoggerHelper
     {
         //brak konfiguracji
         if (!self::$_config) {
-            throw new LoggerException('Configuration not loaded');
+            //tworzy pustą konfigurację
+            return new \Psr\Log\NullLogger;
         }
         //nowy obiekt loggera
         $logger = new Logger(self::$_config->getName());

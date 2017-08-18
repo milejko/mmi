@@ -54,7 +54,7 @@ class Bootstrap implements BootstrapInterface
     protected function _setupRouter($language)
     {
         //powołanie routera z konfiguracją
-        return new \Mmi\Mvc\Router(\App\Registry::$config->router, $language);
+        return new \Mmi\Mvc\Router(\App\Registry::$config->router ? \App\Registry::$config->router : new \Mmi\Mvc\RouterConfig, $language);
     }
 
     /**
@@ -88,7 +88,7 @@ class Bootstrap implements BootstrapInterface
     protected function _setupSession()
     {
         //brak sesji
-        if (!\App\Registry::$config->session->name) {
+        if (!\App\Registry::$config->session || !\App\Registry::$config->session->name) {
             return $this;
         }
         //własna sesja, oparta na obiekcie implementującym SessionHandlerInterface
@@ -142,7 +142,7 @@ class Bootstrap implements BootstrapInterface
     protected function _setupDatabase()
     {
         //brak konfiguracji bazy
-        if (!\App\Registry::$config->db->driver) {
+        if (!\App\Registry::$config->db || !\App\Registry::$config->db->driver) {
             return $this;
         }
         //obliczanie nazwy drivera

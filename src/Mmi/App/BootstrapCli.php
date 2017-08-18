@@ -21,7 +21,7 @@ class BootstrapCli extends \Mmi\App\Bootstrap
      */
     public function __construct()
     {
-        \App\Registry::$config->session->name = null;
+        \App\Registry::$config->session = null;
         parent::__construct();
     }
 

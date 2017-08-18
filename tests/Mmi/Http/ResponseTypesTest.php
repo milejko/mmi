@@ -10,6 +10,8 @@
 
 namespace Mmi\Test\Http;
 
+use Mmi\Http\ResponseTypes;
+
 class ResponseTypesTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -47,7 +49,7 @@ class ResponseTypesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('application/x-javascript', ResponseTypes::searchType('js'));
         $this->assertEquals('application/x-javascript', ResponseTypes::searchType('application/x-javascript'));
         //błędny typ (wyjątek)
-        ResponseTypes::searchType('hatemel');        
+        ResponseTypes::searchType('hatemel');
     }
 
 }

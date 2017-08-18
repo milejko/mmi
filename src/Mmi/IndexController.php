@@ -16,12 +16,24 @@ namespace Mmi;
 class IndexController extends Mvc\Controller
 {
 
+    //domyślna labelka
+    CONST DEFAULT_LABEL = 'It works!';
+
     /**
      * Akcja główna
      */
     public function indexAction()
     {
         
+    }
+
+    /**
+     * Akcja testowa
+     * @return string
+     */
+    public function testAction()
+    {
+        return self::DEFAULT_LABEL;
     }
 
     /**

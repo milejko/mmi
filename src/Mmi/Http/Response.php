@@ -35,15 +35,6 @@ class Response
     private $_type = 'html';
 
     /**
-     * Konstruktor
-     */
-    public function __construct()
-    {
-        //włączenie buforowania odpowiedzi
-        ob_start();
-    }
-
-    /**
      * Ustawia debugowanie
      * @param type $debug
      * @return \Mmi\Http\Response
@@ -286,8 +277,6 @@ class Response
         }
         //zwrot contentu
         echo $this->_content;
-        //opróżnienie bufora aplikacji
-        ob_end_flush();
     }
 
     /**

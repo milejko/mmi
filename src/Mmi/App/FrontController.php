@@ -59,8 +59,8 @@ class FrontController
     private $_cache;
 
     /**
-     * Logger - monolog
-     * @var \Monolog\Logger
+     * Logger PSR
+     * @var \Psr\Log\LoggerInterface
      */
     private $_logger;
 
@@ -87,13 +87,15 @@ class FrontController
      */
     protected function __construct()
     {
+        //włączenie buforowania odpowiedzi
+        ob_start();
         //nowe zapytanie
         $this->_request = new \Mmi\Http\Request;
         //nowy odpowiedź
         $this->_response = new \Mmi\Http\Response;
         //nowe środowisko
         $this->_environment = new \Mmi\Http\HttpServerEnv;
-        //logger - monolog
+        //logger
         $this->_logger = \Mmi\Log\LoggerHelper::getLogger();
     }
 
@@ -101,10 +103,10 @@ class FrontController
      * Pobranie instancji
      * @return \Mmi\App\FrontController
      */
-    public static function getInstance()
+    public static function getInstance($fresh = false)
     {
         //zwrot instancji, lub utworzenie nowej
-        return self::$_instance ? self::$_instance : (self::$_instance = new self);
+        return (self::$_instance && !$fresh) ? self::$_instance : (self::$_instance = new self);
     }
 
     /**
@@ -277,7 +279,7 @@ class FrontController
 
     /**
      * Zwraca logger
-     * @return \Monolog\Logger
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {

@@ -1,4 +1,4 @@
-<ul id="messenger">
+<ul id="messenger" class="specjalnie-dla-marcina">
     {foreach $_messenger->getMessages() as $message}
         {$class = 'warning'}
         {$icon = 'warning-sign'}

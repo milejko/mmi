@@ -104,7 +104,7 @@ class JsonServer
             }
             //błąd metody
             if (isset($object) && is_object($object) && method_exists($object, $method)) {
-                FrontController::getInstance()->getLogger()->addWarning($e->getMessage());
+                FrontController::getInstance()->getLogger()->warning($e->getMessage());
                 $response->error = self::_newErrorInternal([
                         'details' => 'Method "' . $method . '" failed in class "' . $className . '".'
                 ]);

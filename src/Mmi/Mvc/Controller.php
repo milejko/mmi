@@ -156,7 +156,7 @@ class Controller
 
     /**
      * Pobiera helper logowania
-     * @return \Monolog\Logger
+     * @return \Psr\Log\LoggerInterface
      */
     public final function getLogger()
     {

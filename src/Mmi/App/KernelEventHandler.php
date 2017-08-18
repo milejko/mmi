@@ -55,7 +55,7 @@ class KernelEventHandler
         //pobranie odpowiedzi z front kontrolera
         $response = \Mmi\App\FrontController::getInstance()->getResponse();
         //logowanie błędu Emergency
-        FrontController::getInstance()->getLogger()->addEmergency($error['message']);
+        FrontController::getInstance()->getLogger()->emergency($error['message']);
         //wysyłanie odpowiedzi
         return self::_sendResponse($response->setContent(self::_rawErrorResponse($response)));
     }
@@ -68,12 +68,7 @@ class KernelEventHandler
     public static function exceptionHandler($exception)
     {
         //czyszczenie bufora
-        try {
-            ob_clean();
-        } catch (\Exception $e) {
-            //brak bufora - tworzenie
-            ob_start();
-        }
+        ob_get_status() ? ob_clean() : ob_start();
         //logowanie wyjątku
         self::_logException($exception);
         $response = \Mmi\App\FrontController::getInstance()->getResponse();
@@ -107,7 +102,6 @@ class KernelEventHandler
     private static function _sendResponse(\Mmi\Http\Response $response)
     {
         $response->send();
-        return true;
     }
 
     /**
@@ -153,11 +147,11 @@ class KernelEventHandler
     {
         //logowanie wyjątku aplikacyjnego
         if ($exception instanceof \Mmi\App\KernelException) {
-            FrontController::getInstance()->getLogger()->addRecord($exception->getCode(), self::_formatException($exception));
+            FrontController::getInstance()->getLogger()->log($exception->getCode(), self::_formatException($exception));
             return;
         }
         //logowanie pozostałych wyjątków
-        FrontController::getInstance()->getLogger()->addAlert(self::_formatException($exception));
+        FrontController::getInstance()->getLogger()->alert(self::_formatException($exception));
     }
 
     /**
