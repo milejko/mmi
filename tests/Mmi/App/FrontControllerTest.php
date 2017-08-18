@@ -8,9 +8,9 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Orm;
+namespace Mmi\Test\App;
 
-class RecordNotFoundException extends \Mmi\App\KernelException
+class FrontControllerTest extends \PHPUnit\Framework\TestCase
 {
     
 }
