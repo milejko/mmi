@@ -42,9 +42,7 @@ class FileHandler extends DistributedCacheHandlerAbstract
     {
         //$lifeTime nie jest używany w tym backendzie
         //zapis pliku
-        if (file_put_contents($this->_cache->getConfig()->path . '/' . $key, $data) === false) {
-            return false;
-        }
+        file_put_contents($this->_cache->getConfig()->path . '/' . $key, $data);
         return true;
     }
 
@@ -56,11 +54,7 @@ class FileHandler extends DistributedCacheHandlerAbstract
     protected function _deleteNoBroadcasting($key)
     {
         //próba usunięcia pliku
-        try {
-            unlink($this->_cache->getConfig()->path . '/' . $key);
-        } catch (KernelException $e) {
-            //brak akcji
-        }
+        unlink($this->_cache->getConfig()->path . '/' . $key);
         return true;
     }
 

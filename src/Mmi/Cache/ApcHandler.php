@@ -22,7 +22,7 @@ class ApcHandler extends DistributedCacheHandlerAbstract
      */
     public function load($key)
     {
-        //rozgłoszenie informacji o usunięciu klucza do bufora Db
+        //pobranie danych z APC
         return \apcu_fetch($this->_namespace . $key);
     }
 

@@ -28,7 +28,7 @@ class KernelEventHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testShutdownHandler()
     {
-        $this->assertNull(KernelEventHandler::shutdownHandler());
+        $this->assertNull(KernelEventHandler::shutdownHandler(), 'Shutdown handler not returning null');
     }
 
 }

@@ -22,7 +22,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     {
         ob_start();
         (new Kernel('\Mmi\App\Bootstrap', 'DEV'))->run();
-        $this->assertEquals(\Mmi\IndexController::DEFAULT_LABEL, ob_get_clean());
+        $this->assertEquals(\Mmi\IndexController::DEFAULT_LABEL, ob_get_clean(), 'Running bootstrap does not return default label from IndexController');
     }
 
 }

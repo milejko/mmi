@@ -130,7 +130,7 @@ class Cache
             return;
         }
         //czyszczenie rejestru
-        $this->getRegistry()->setOptions([]);
+        $this->getRegistry()->setOptions([], true);
         //czyszczenie do handler
         $this->_handler->deleteAll();
     }
@@ -214,16 +214,10 @@ class Cache
         if (null !== $this->_handler) {
             return;
         }
-        //próba powołania handlera
-        try {
-            //określanie klasy handlera
-            $handlerClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Handler';
-            //powoływanie obiektu handlera
-            $this->_setHandler(new $handlerClassName($this));
-        } catch (\Exception $e) {
-            //błąd powołania handlera
-            throw new CacheException('Unable to initialize handler: ' . $e->getMessage());
-        }
+        //określanie klasy handlera
+        $handlerClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Handler';
+        //powoływanie obiektu handlera
+        $this->_setHandler(new $handlerClassName($this));
     }
 
 }

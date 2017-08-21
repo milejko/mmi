@@ -26,9 +26,9 @@ class KernelTest extends \PHPUnit\Framework\TestCase
         (new Kernel('stdClass', 'DEV'));
     }
 
-    public function testrBootstrap()
+    public function testBootstrap()
     {
-        $this->assertInstanceOf('\Mmi\App\Kernel', new Kernel('\Mmi\App\Bootstrap', 'DEV'));
+        $this->assertInstanceOf('\Mmi\App\Kernel', new Kernel('\Mmi\App\Bootstrap', 'DEV'), 'Invalid kernel class');
     }
 
 }

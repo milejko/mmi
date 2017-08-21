@@ -39,6 +39,7 @@ class ConfigDEV extends \Mmi\App\KernelConfig
         //konfiguracja bazy danych
         $this->db = new \Mmi\Db\DbConfig;
         $this->db->driver = 'sqlite';
+        $this->db->host = BASE_PATH . '/var/test-db.sqlite';
     }
 
 }

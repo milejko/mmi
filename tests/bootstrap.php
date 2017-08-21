@@ -13,6 +13,7 @@ define('BASE_PATH', __DIR__ . '/../');
 //dołączenie autoloadera
 require BASE_PATH . 'vendor/autoload.php';
 
+//powołanie konfiguracji i rejestru
 require 'App/ConfigDEV.php';
 require 'App/Registry.php';
 
@@ -21,3 +22,6 @@ foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'va
     //tworzenie katalogu
     !file_exists(BASE_PATH . '/' . $dir) ? mkdir(BASE_PATH . '/' . $dir, 0777, true) : null;
 }
+
+//kopiowanie testowej bazy danych do tmp
+copy(BASE_PATH . '/tests/test-db.sqlite', BASE_PATH . '/var/test-db.sqlite');

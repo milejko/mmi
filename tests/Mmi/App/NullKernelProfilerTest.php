@@ -20,20 +20,20 @@ class NullKernelProfilerTest extends \PHPUnit\Framework\TestCase
 
     public function testEvent()
     {
-        $this->assertNull((new NullKernelProfiler)->event('test'));
+        $this->assertNull((new NullKernelProfiler)->event('test'), 'NullProfiler event method should return null');
     }
 
     public function testProfiler()
     {
         $profiler = new NullKernelProfiler;
-        $this->assertCount(0, $profiler->get());
+        $this->assertCount(0, $profiler->get(), 'Always 0 for null profiler');
         $profiler->event('test');
-        $this->assertCount(0, $profiler->get());
+        $this->assertCount(0, $profiler->get(), 'Always 0 for null profiler');
         $profiler->event('test2');
         $profiler->event('test3');
-        $this->assertCount(0, $profiler->get());
-        $this->assertEquals(0, $profiler->count());
-        $this->assertEquals(0, $profiler->elapsed());
+        $this->assertCount(0, $profiler->get(), 'Always 0 for null profiler');
+        $this->assertEquals(0, $profiler->count(), 'Always 0 for null profiler');
+        $this->assertEquals(0, $profiler->elapsed(), 'Always 0 for null profiler');
     }
 
 }

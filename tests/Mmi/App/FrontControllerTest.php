@@ -22,15 +22,15 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     
     public function testGetInstance()
     {
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance(true));
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance(true), 'Setter does not return self');
         ob_end_clean();
     }
 
     public function testRegisterPlugin()
     {
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->registerPlugin(new \Mmi\App\FrontControllerPluginAbstract));
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->registerPlugin(new \Mmi\App\FrontControllerPluginAbstract));
-        $this->assertCount(2, FrontController::getInstance()->getPlugins());
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->registerPlugin(new \Mmi\App\FrontControllerPluginAbstract), 'Setter does not return self');
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->registerPlugin(new \Mmi\App\FrontControllerPluginAbstract), 'Setter does not return self');
+        $this->assertCount(2, FrontController::getInstance()->getPlugins(), '2 plugins should be registered');
     }
 
     /**
@@ -47,9 +47,9 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     public function testSetStructure()
     {
         $sampleArray = \Mmi\Mvc\Structure::getStructure();
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setStructure($sampleArray));
-        $this->assertSame($sampleArray, FrontController::getInstance()->getStructure());
-        $this->assertArrayHasKey('mmi', FrontController::getInstance()->getStructure('template'));
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setStructure($sampleArray), 'Setter does not return self');
+        $this->assertSame($sampleArray, FrontController::getInstance()->getStructure(), 'Structure was modified');
+        $this->assertArrayHasKey('mmi', FrontController::getInstance()->getStructure('template'), 'Structure does not contain mmi module');
         FrontController::getInstance()->getStructure('inexistent');
     }
 
@@ -64,30 +64,30 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     public function testSetRouter()
     {
         $sampleRouter = new \Mmi\Mvc\Router((new \Mmi\Mvc\RouterConfig())->setRoute('test', '', ['module' => 'mmi', 'controller' => 'index', 'action' => 'test']));
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setRouter($sampleRouter));
-        $this->assertSame($sampleRouter, FrontController::getInstance()->getRouter());
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setRouter($sampleRouter), 'Setter does not return self');
+        $this->assertSame($sampleRouter, FrontController::getInstance()->getRouter(), 'Router invalid');
     }
 
     public function testSetRequest()
     {
         $sampleRequest = new \Mmi\Http\Request(['module' => 'test']);
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setRequest($sampleRequest));
-        $this->assertSame($sampleRequest, FrontController::getInstance()->getRequest());
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setRequest($sampleRequest), 'Setter does not return self');
+        $this->assertSame($sampleRequest, FrontController::getInstance()->getRequest(), 'Request invalid');
     }
 
     public function testSetProfiler()
     {
         $sampleProfiler = new \Mmi\App\NullKernelProfiler;
-        $this->assertInstanceOf('\Mmi\App\NullKernelProfiler', FrontController::getInstance()->getProfiler());
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setProfiler($sampleProfiler));
-        $this->assertSame($sampleProfiler, FrontController::getInstance()->getProfiler());
+        $this->assertInstanceOf('\Mmi\App\NullKernelProfiler', FrontController::getInstance()->getProfiler(), 'Invalid profiler class');
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setProfiler($sampleProfiler), 'Setter does not return self');
+        $this->assertSame($sampleProfiler, FrontController::getInstance()->getProfiler(), 'Profiler invalid');
     }
 
     public function testSetResponse()
     {
         $sampleResponse = (new \Mmi\Http\Response())->setContent('test content');
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setResponse($sampleResponse));
-        $this->assertSame($sampleResponse, FrontController::getInstance()->getResponse());
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setResponse($sampleResponse), 'Setter does not return self');
+        $this->assertSame($sampleResponse, FrontController::getInstance()->getResponse(), 'Response invalid');
     }
 
     /**
@@ -101,8 +101,8 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     public function testSetLocalCache()
     {
         $sampleCache = new \Mmi\Cache\Cache(new \Mmi\Cache\CacheConfig);
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setLocalCache($sampleCache));
-        $this->assertSame($sampleCache, FrontController::getInstance()->getLocalCache());
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setLocalCache($sampleCache), 'Setter does not return self');
+        $this->assertSame($sampleCache, FrontController::getInstance()->getLocalCache(), 'Local cache invalid');
     }
 
     /**
@@ -116,18 +116,18 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     public function testSetView()
     {
         $sampleView = new \Mmi\Mvc\View();
-        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setView($sampleView));
-        $this->assertSame($sampleView, FrontController::getInstance()->getView());
+        $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance()->setView($sampleView), 'Setter does not return self');
+        $this->assertSame($sampleView, FrontController::getInstance()->getView(), 'View invalid');
     }
 
     public function testGetEnvironment()
     {
-        $this->assertInstanceOf('\Mmi\Http\HttpServerEnv', FrontController::getInstance()->getEnvironment());
+        $this->assertInstanceOf('\Mmi\Http\HttpServerEnv', FrontController::getInstance()->getEnvironment(), 'Wrong HttpServerEnv class');
     }
 
     public function testGetLogger()
     {
-        $this->assertInstanceOf('\Psr\Log\LoggerInterface', FrontController::getInstance()->getLogger());
+        $this->assertInstanceOf('\Psr\Log\LoggerInterface', FrontController::getInstance()->getLogger(), 'Logger interface invalid');
     }
 
     /**
@@ -139,7 +139,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         //założenie bufora odpowiedzi
         FrontController::getInstance()->run();
         //sprawdzenie renderingu akcji
-        $this->assertEquals(\Mmi\IndexController::DEFAULT_LABEL, ob_get_contents());
+        $this->assertEquals(\Mmi\IndexController::DEFAULT_LABEL, ob_get_contents(), 'Running f-c not returning default label from IndexController');
         ob_end_clean();
         //tu 404
         FrontController::getInstance()

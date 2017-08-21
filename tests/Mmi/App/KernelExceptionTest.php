@@ -20,7 +20,7 @@ class KernelExceptionTest extends \PHPUnit\Framework\TestCase
 
     public function testFailBootstrap()
     {
-        $this->assertStringStartsWith(' test: /home/mariusz/Serwer/mmi/tests/Mmi/App/KernelExceptionTest.php(23)', (new KernelException('test'))->getExtendedMessage());
+        $this->assertStringStartsWith(' test: /home/mariusz/Serwer/mmi/tests/Mmi/App/KernelExceptionTest.php(23)', (new KernelException('test'))->getExtendedMessage(), 'Message is not proper');
     }
 
 }
