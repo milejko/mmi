@@ -22,7 +22,7 @@ class DistributedStorage extends \Mmi\OptionObject
     /**
      * 1/x prawdopodobieństwo uruchomienia garbage collectora
      */
-    CONST GARBAGE_COLLECTOR_DIVISOR = 1000;
+    CONST GARBAGE_COLLECTOR_DIVISOR = 600;
 
     /**
      * Maksymalny czas rozgłaszania
@@ -37,8 +37,8 @@ class DistributedStorage extends \Mmi\OptionObject
     {
         //garbage collector
         if (rand(0, self::GARBAGE_COLLECTOR_DIVISOR) == 1) {
-            //uproszczone usuwanie - jedynm zapytaniem
-            \Mmi\Orm\DbConnector::getAdapter()->delete((new CacheQuery)->getTableName());
+            //garbage collector
+            $this->gc();
         }
         //iteracja po parach klucz+dane storage w mmi_cache
         foreach ((new CacheQuery)
@@ -68,6 +68,15 @@ class DistributedStorage extends \Mmi\OptionObject
         //aktualizacja w rejestrze
         $this->setOption($key, $data);
         return $cacheRecord->save();
+    }
+
+    /**
+     * Garbage collector
+     */
+    public function gc()
+    {
+        //uproszczone usuwanie - jedynm zapytaniem
+        \Mmi\Orm\DbConnector::getAdapter()->delete((new CacheQuery)->getTableName());
     }
 
 }

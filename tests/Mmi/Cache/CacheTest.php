@@ -25,7 +25,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     protected $_backends = ['file', 'apc', 'memcache', 'redis'];
 
-    public function testConstruct()
+    public function testNew()
     {
         $emptyHandlerConfig = new CacheConfig;
         $emptyHandlerConfig->handler = null;
@@ -38,16 +38,25 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->_testInactiveCache(new Cache($config));
     }
 
-    public function testFileBackend()
+    public function testFileHandlerDistributed()
     {
-        $this->assertInstanceOf('\Mmi\Cache\Cache', $fileCache = new Cache(new CacheConfig), 'Unable to create Cache with default cache handler');
-        //umieszczanie w buforze uszkodzonego pliku
-        file_put_contents((new CacheConfig)->path . '/test', self::INVALID_CACHE_DATA);
-        $this->assertNull($fileCache->load('test'), 'Broken data');
-        $this->_testActiveCache($fileCache);
+        $cacheConfig = new CacheConfig;
+        $cacheConfig->distributed = true;
+        $cache = new Cache($cacheConfig);
+        $this->_testActiveCache($cache);
     }
 
-    public function testApcBackend()
+    public function testFileHandler()
+    {
+        $cacheConfig = new CacheConfig;
+        $cache = new Cache($cacheConfig);
+        //umieszczanie w buforze uszkodzonego pliku
+        file_put_contents($cacheConfig->path . '/test', self::INVALID_CACHE_DATA);
+        $this->assertNull($cache->load('test'), 'Broken data');
+        $this->_testActiveCache($cache);
+    }
+
+    public function testApcHandler()
     {
         if (!function_exists('\apcu_fetch')) {
             return;
@@ -55,12 +64,65 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $config = new CacheConfig;
         $config->handler = 'apc';
         $config->distributed = true;
-        $apcCache = new Cache($config);
-        $this->_testActiveCache($apcCache);
+        $cache = new Cache($config);
+        $this->_testActiveCache($cache);
+    }
+
+    public function testMemcacheHandler()
+    {
+        if (!class_exists('\Memcache')) {
+            return;
+        }
+        $config = new CacheConfig;
+        $config->handler = 'memcache';
+        $config->path = '127.0.0.1:11211';
+        //próba połączenia
+        try {
+            (new Cache($config))->flush();
+        } catch (\Mmi\App\KernelException $e) {
+            return;
+        }
+        //dodanie ścieżki z opcjami
+        $config->path = ['udp://127.0.0.1:11211?timeout=5&weight=1'];
+        $cache = new Cache($config);
+        $this->_testActiveCache($cache);
+    }
+
+    public function testRedisHandler()
+    {
+        if (!class_exists('\Redis')) {
+            return;
+        }
+        $config = new CacheConfig;
+        $config->handler = 'redis';
+        $config->path = 'udp://user:pass@127.0.0.1:6379/1';
+        //próba połączenia
+        try {
+            $cache = new Cache($config);
+            //połączenie dopiero przy wywołaniu dowolnej metody
+            $cache->flush();
+        } catch (\RedisException $e) {
+            return;
+        }
+        $this->_testActiveCache($cache);
+    }
+
+    /**
+     * @expectedException \Mmi\Cache\CacheException
+     */
+    public function testRedisInvalidPath()
+    {
+        $config = new CacheConfig;
+        $config->handler = 'redis';
+        //zła ścieżka
+        $config->path = 'surely-invalid-path';
+        //tu wyjątek
+        (new Cache($config))->flush();
     }
 
     protected function _testActiveCache(Cache $cache)
     {
+        $this->assertNull($cache->flush(), 'Flush should always return null');
         //nieistniejący klucz
         $this->assertNull($cache->load('surely-inexistent-key'));
         //null
@@ -87,6 +149,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $cache->getRegistry()->setOptions([], true);
         //po 1 sekundzie znika
         $this->assertNull($cache->load(self::TEST_KEY));
+        $newCache = new Cache($cache->getConfig());
+        $this->assertNull($newCache->load(self::TEST_KEY));
     }
 
     protected function _testInactiveCache(Cache $inactiveCache)

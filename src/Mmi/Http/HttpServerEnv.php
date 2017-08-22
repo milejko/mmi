@@ -147,7 +147,6 @@ class HttpServerEnv
         $this->httpHost = filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->httpOrigin = filter_input(INPUT_SERVER, 'HTTP_ORIGIN', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->httpReferer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING);
-        $this->httpSecure = ((filter_input(INPUT_SERVER, 'HTTPS') == 'on') || (filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_PROTO') == 'https')) ? true : false;
         $this->httpUserAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->httpRange = filter_input(INPUT_SERVER, 'HTTP_RANGE', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -170,9 +169,8 @@ class HttpServerEnv
         $this->serverAddress = filter_input(INPUT_SERVER, 'SERVER_ADDR', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->serverPort = filter_input(INPUT_SERVER, 'SERVER_PORT', FILTER_SANITIZE_NUMBER_INT);
         $this->serverSoftware = filter_input(INPUT_SERVER, 'SERVER_SOFTWARE', FILTER_SANITIZE_SPECIAL_CHARS);
-        if ($this->serverPort == 443) {
-            $this->httpSecure = true;
-        }
+        
+        $this->httpSecure = ('on' == (filter_input(INPUT_SERVER, 'HTTPS')) || ('https' == filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_PROTO'))  || 443 == $this->serverPort) ? true : false;
     }
 
 }

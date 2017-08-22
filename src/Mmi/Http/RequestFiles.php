@@ -24,7 +24,7 @@ class RequestFiles extends \Mmi\DataObject
     public function __construct(array $data = [])
     {
         //obsługa uploadu plików
-        $this->setParams($this->_handleUpload($data));
+        parent::__construct($this->_handleUpload($data));
     }
 
     /**

@@ -12,40 +12,21 @@ namespace Mmi\Http;
 
 /**
  * Klasa pliku
+ * 
+ * @property string $name nazwa pliku
+ * @property string $tmpName tymczasowa ścieżka
+ * @property integer $size rozmiar pliku
+ * @property string $type mime type
  */
-class RequestFile
+class RequestFile extends \Mmi\DataObject
 {
-
-    /**
-     * Nazwa pliku
-     * @var string
-     */
-    public $name;
-
-    /**
-     * Tymczasowa ścieżka
-     * @var string 
-     */
-    public $tmpName;
-
-    /**
-     * Rozmiar pliku
-     * @var integer
-     */
-    public $size;
-
-    /**
-     * Typ mime
-     * @var string 
-     */
-    public $type;
 
     /**
      * Konstruktor
      * @throws \Mmi\Http\HttpException
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         //brak nazwy
         if (!isset($data['name'])) {
@@ -55,14 +36,16 @@ class RequestFile
         if (!isset($data['tmp_name'])) {
             throw new HttpException('RequestFile: tmp_name not specified');
         }
-        //brak rozmiaru
-        if (!isset($data['size'])) {
-            throw new HttpException('RequestFile: size not specified');
+        //brak rozmiaru i samego pliku
+        if (!isset($data['size']) && !file_exists($data['tmp_name'])) {
+            throw new HttpException('RequestFile: file not found');
         }
-        $this->name = $data['name'];
-        $this->type = \Mmi\FileSystem::mimeType($data['tmp_name']);
-        $this->tmpName = $data['tmp_name'];
-        $this->size = $data['size'];
+        parent::__construct([
+            'name' => $data['name'],
+            'type' => \Mmi\FileSystem::mimeType($data['tmp_name']),
+            'tmpName' => $data['tmp_name'],
+            'size' => isset($data['size']) ? $data['size'] : filesize($data['tmp_name'])
+        ]);
     }
 
 }

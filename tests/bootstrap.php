@@ -14,8 +14,8 @@ define('BASE_PATH', __DIR__ . '/../');
 require BASE_PATH . 'vendor/autoload.php';
 
 //powołanie konfiguracji i rejestru
-require 'App/ConfigDEV.php';
-require 'App/Registry.php';
+require 'data/test-config.php';
+require 'data/test-registry.php';
 
 //iteracja po katalogach do utworzenia
 foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'var/session'] as $dir) {
@@ -24,4 +24,4 @@ foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'va
 }
 
 //kopiowanie testowej bazy danych do tmp
-copy(BASE_PATH . '/tests/test-db.sqlite', BASE_PATH . '/var/test-db.sqlite');
+copy(BASE_PATH . '/tests/data/test-db.sqlite', BASE_PATH . '/var/test-db.sqlite');

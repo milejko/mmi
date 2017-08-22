@@ -7,7 +7,7 @@ use \Mmi\App\FrontController;
 /**
  * Plugin front kontrolera (hooki)
  */
-class FrontControllerPlugin extends \Mmi\App\FrontControllerPluginAbstract
+class TestFrontControllerPlugin extends \Mmi\App\FrontControllerPluginAbstract
 {
 
     /**

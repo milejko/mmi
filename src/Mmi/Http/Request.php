@@ -10,17 +10,15 @@
 
 namespace Mmi\Http;
 
+/**
+ * Klasa requesta
+ * 
+ * @property string $module moduł
+ * @property string $controller kontroler
+ * @property string $action akcja
+ */
 class Request extends \Mmi\DataObject
 {
-
-    /**
-     * Konstruktor, pozwala podać zmienne requestu
-     * @param array $data zmienne requestu
-     */
-    public function __construct(array $data = [])
-    {
-        $this->setParams($data);
-    }
 
     /**
      * Zwraca Content-Type żądania
@@ -93,7 +91,7 @@ class Request extends \Mmi\DataObject
      */
     public function getModuleName()
     {
-        return $this->__get('module');
+        return $this->module;
     }
 
     /**
@@ -102,7 +100,7 @@ class Request extends \Mmi\DataObject
      */
     public function getControllerName()
     {
-        return $this->__get('controller');
+        return $this->controller;
     }
 
     /**
@@ -111,7 +109,7 @@ class Request extends \Mmi\DataObject
      */
     public function getActionName()
     {
-        return $this->__get('action');
+        return $this->action;
     }
 
     /**
@@ -121,7 +119,7 @@ class Request extends \Mmi\DataObject
      */
     public function setModuleName($value)
     {
-        $this->__set('module', $value);
+        $this->module = $value;
         return $this;
     }
 
@@ -132,7 +130,7 @@ class Request extends \Mmi\DataObject
      */
     public function setControllerName($value)
     {
-        $this->__set('controller', $value);
+        $this->controller = $value;
         return $this;
     }
 
@@ -143,7 +141,7 @@ class Request extends \Mmi\DataObject
      */
     public function setActionName($value)
     {
-        $this->__set('action', $value);
+        $this->action = $value;
         return $this;
     }
 
@@ -153,7 +151,7 @@ class Request extends \Mmi\DataObject
      */
     public function getAsColonSeparatedString()
     {
-        return $this->getModuleName() . ':' . $this->getControllerName() . ':' . $this->getActionName();
+        return $this->module . ':' . $this->controller . ':' . $this->action;
     }
 
 }

@@ -20,13 +20,13 @@ class NavigationConfigBuilder
      */
     public static function build(array $data = [])
     {
-        if (($data['dateStart'] !== null && $data['dateStart'] > date('Y-m-d H:i:s')) || ($data['dateEnd'] !== null && $data['dateEnd'] < date('Y-m-d H:i:s'))) {
+        if (($data['dateStart'] && $data['dateStart'] > date('Y-m-d H:i:s')) || ($data['dateEnd'] && $data['dateEnd'] < date('Y-m-d H:i:s'))) {
             $data['disabled'] = true;
         }
         //budowanie requestu
         $data['request'] = array_merge($data['params'], ['module' => $data['module'], 'controller' => $data['controller'], 'action' => $data['action']]);
         if (!$data['uri']) {
-            $data['uri'] = \Mmi\App\FrontController::getInstance()->getView()->url($data['request'], true, $data['https']);
+            $data['uri'] = \Mmi\App\FrontController::getInstance()->getView()->url($data['request'], true, isset($data['https']) && $data['https']);
         }
         $build = $data;
         $build['children'] = [];

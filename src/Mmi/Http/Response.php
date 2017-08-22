@@ -17,6 +17,12 @@ class Response
 {
 
     /**
+     * Przechowuje nagłówki
+     * @var ResponseHeader[]
+     */
+    private $_headers = [];
+
+    /**
      * Przechowuje content
      * @var string
      */
@@ -56,8 +62,11 @@ class Response
      */
     public function setHeader($name, $value = null, $replace = false)
     {
-        //wysłanie nagłówka
-        header($name . ($value ? ': ' . $value : ''), $replace);
+        //dodawanie obiektu nagłówka
+        $this->_headers[] = (new ResponseHeader())
+            ->setName($name)
+            ->setValue($value)
+            ->setReplace((bool) $replace);
         //zwrot siebie
         return $this;
     }
@@ -266,10 +275,33 @@ class Response
     }
 
     /**
+     * Pobiera nagłówki
+     * @return ResponseHeader[]
+     */
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+
+    /**
+     * Metoda wysyłająca nagłówki
+     */
+    public function sendHeaders()
+    {
+        //iteracja po nagłówkach
+        foreach ($this->_headers as $header) {
+            //wysłanie nagłówka
+            $header->send();
+        }
+    }
+
+    /**
      * Wysyła dane do klienta
      */
     public function send()
     {
+        //wysyłanie nagłówków
+        $this->sendHeaders();
         //opcjonalne uruchomienie panelu deweloperskiego
         if ($this->_debug) {
             //debugger wykonuje appendContent()
@@ -327,9 +359,9 @@ class Response
     public function redirectToUrl($url)
     {
         //przekierowanie - header location
-        $this->setHeader('Location', $url);
-        //wyjście z aplikacji po nagłówku lokacji
-        exit;
+        (new ResponseHeader)->setName('Location')
+            ->setValue($url)
+            ->sendAndExit();
     }
 
 }

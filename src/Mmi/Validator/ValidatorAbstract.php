@@ -26,15 +26,6 @@ abstract class ValidatorAbstract extends \Mmi\OptionObject
     protected $_error;
 
     /**
-     * Konstruktor ustawia opcje
-     * @param array $options
-     */
-    public final function __construct(array $options = [])
-    {
-        $this->setOptions($options);
-    }
-
-    /**
      * Ustawia opcje (domyślnie wiadomość)
      * @param array $options
      * @return self

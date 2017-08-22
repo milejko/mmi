@@ -10,47 +10,25 @@
 
 namespace Mmi\Navigation;
 
-class NavigationConfigElement
+/**
+ * Klasa elementu konfiguracyjnego nawigatora
+ * @method integer getId() pobiera id
+ * @method array getChildren() pobiera dzieci
+ * @method \Mmi\Navigation\NavigationConfigElement setId(integer $id) ustawia id
+ * @method \Mmi\Navigation\NavigationConfigElement setLang(string $lang) ustawia lang
+ * @method \Mmi\Navigation\NavigationConfigElement setLabel(string $label) ustawia label
+ * @method \Mmi\Navigation\NavigationConfigElement setModule(string $module) ustawia moduł
+ * @method \Mmi\Navigation\NavigationConfigElement setController(string $controller) ustawia kontroler
+ * @method \Mmi\Navigation\NavigationConfigElement setAction(string $action) ustawia akcję
+ * @method \Mmi\Navigation\NavigationConfigElement setTitle(string $title) ustawia tytuł
+ * @method \Mmi\Navigation\NavigationConfigElement setDescription(string $description) ustawia opis
+ * @method \Mmi\Navigation\NavigationConfigElement setUri(string $uri) ustawia uri
+ * @method \Mmi\Navigation\NavigationConfigElement setDateStart(string $dateStart) ustawia datę startową
+ * @method \Mmi\Navigation\NavigationConfigElement setDateEnd(string $dateEnd) ustawia datę końcową
+ * 
+ */
+class NavigationConfigElement extends \Mmi\OptionObject
 {
-
-    /**
-     * Dane elementu
-     * @var array
-     */
-    protected $_data = [
-        //id
-        'id' => null,
-        //język
-        'lang' => null,
-        //wyłączony
-        'disabled' => false,
-        //labelka
-        'label' => null,
-        //moduł + kontroler + akcja + parametry
-        'module' => null,
-        'controller' => 'index',
-        'action' => 'index',
-        'params' => [],
-        //tytuł
-        'title' => null,
-        //opis
-        'description' => null,
-        //uri
-        'uri' => null,
-        //czy https
-        'https' => null,
-        //czy follow
-        'follow' => true,
-        //czy blank
-        'blank' => false,
-        'config' => null,
-        //data rozpoczęcia publikacji
-        'dateStart' => null,
-        //data wyłączenia publikacji
-        'dateEnd' => null,
-        //tabela z elementami potomnymi
-        'children' => [],
-    ];
 
     /**
      * Struktura drzewiasta
@@ -64,68 +42,28 @@ class NavigationConfigElement
      */
     public function __construct($id = null)
     {
-        $this->_data['config'] = new \Mmi\DataObject();
-        $this->_data['id'] = ($id === null) ? \Mmi\Navigation\NavigationConfig::getAutoIndex() : $id;
-    }
-
-    /**
-     * Pobiera wartość
-     * @param string $name
-     * @return mixed
-     */
-    public function get($name)
-    {
-        return isset($this->_data[$name]) ? $this->_data[$name] : null;
-    }
-
-    /**
-     * Ustawia wartość
-     * @param string $name
-     * @param string $value
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function set($name, $value)
-    {
-        $this->_data[$name] = $value;
-        return $this;
-    }
-
-    /**
-     * Pobieranie ID
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->get('id');
-    }
-
-    /**
-     * Ustawia ID
-     * @param integer $id
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setId($id)
-    {
-        return $this->set('id', $id);
-    }
-
-    /**
-     * Pobiera dzieci
-     * @return array
-     */
-    public function getChildren()
-    {
-        return $this->get('children');
-    }
-
-    /**
-     * Ustawia język
-     * @param string $lang
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setLang($lang)
-    {
-        return $this->set('lang', $lang);
+        //ustawienie danych (parent)
+        parent::__construct([
+            'id' => ($id === null) ? \Mmi\Navigation\NavigationConfig::getAutoIndex() : $id,
+            //wyłączony
+            'disabled' => false,
+            'module' => null,
+            'controller' => 'index',
+            'action' => 'index',
+            'params' => [],
+            //czy follow
+            'follow' => true,
+            //czy blank
+            'blank' => false,
+            //daty
+            'dateStart' => null,
+            'dateEnd' => null,
+            'uri' => null,
+            //tabela z elementami potomnymi
+            'children' => [],
+            //konfiguracja
+            'config' => new \Mmi\DataObject
+        ]);
     }
 
     /**
@@ -135,47 +73,7 @@ class NavigationConfigElement
      */
     public function setDisabled($disabled = true)
     {
-        return $this->set('disabled', (bool) $disabled);
-    }
-
-    /**
-     * Ustawia labelkę
-     * @param string $label
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setLabel($label)
-    {
-        return $this->set('label', $label);
-    }
-
-    /**
-     * Ustawia moduł
-     * @param string $module
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setModule($module)
-    {
-        return $this->set('module', $module);
-    }
-
-    /**
-     * Ustawia kontroler
-     * @param string $controller
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setController($controller)
-    {
-        return $this->set('controller', $controller);
-    }
-
-    /**
-     * Ustawia akcję
-     * @param string $action
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setAction($action)
-    {
-        return $this->set('action', $action);
+        return $this->setOption('disabled', (bool) $disabled);
     }
 
     /**
@@ -185,37 +83,7 @@ class NavigationConfigElement
      */
     public function setParams(array $params)
     {
-        return $this->set('params', $params);
-    }
-
-    /**
-     * Ustawia tytuł
-     * @param string $title
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setTitle($title)
-    {
-        return $this->set('title', $title);
-    }
-
-    /**
-     * Ustawia opis
-     * @param string $description
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setDescription($description)
-    {
-        return $this->set('description', $description);
-    }
-
-    /**
-     * Ustawia uri
-     * @param string $uri
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setUri($uri)
-    {
-        return $this->set('uri', $uri);
+        return $this->setOption('params', $params);
     }
 
     /**
@@ -227,10 +95,10 @@ class NavigationConfigElement
     {
         //jeśli https null (bez zmiany)
         if ($https === null) {
-            return $this->set('https', null);
+            return $this->setOption('https', null);
         }
         //w pozostałych sytuacjach wymuszamy bool
-        return $this->set('https', (bool) $https);
+        return $this->setOption('https', (bool) $https);
     }
 
     /**
@@ -240,7 +108,7 @@ class NavigationConfigElement
      */
     public function setFollow($follow = true)
     {
-        return $this->set('follow', (bool) $follow);
+        return $this->setOption('follow', (bool) $follow);
     }
 
     /**
@@ -250,7 +118,7 @@ class NavigationConfigElement
      */
     public function setBlank($blank = true)
     {
-        return $this->set('blank', (bool) $blank);
+        return $this->setOption('blank', (bool) $blank);
     }
 
     /**
@@ -260,27 +128,7 @@ class NavigationConfigElement
      */
     public function setConfig(\Mmi\DataObject $config)
     {
-        return $this->set('config', $config);
-    }
-
-    /**
-     * Ustawia datę włączenia węzła
-     * @param string $dateStart
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setDateStart($dateStart)
-    {
-        return $this->set('dateStart', $dateStart);
-    }
-
-    /**
-     * Ustawia datę wyłączenia węzła
-     * @param string $dateEnd
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setDateEnd($dateEnd)
-    {
-        return $this->set('dateEnd', $dateEnd);
+        return $this->setOption('config', $config);
     }
 
     /**
@@ -290,7 +138,7 @@ class NavigationConfigElement
      */
     public function addChild(\Mmi\Navigation\NavigationConfigElement $element)
     {
-        $this->_data['children'][$element->getId()] = $element;
+        $this->_options['children'][$element->getId()] = $element;
         return $this;
     }
 
@@ -301,7 +149,7 @@ class NavigationConfigElement
     public function build()
     {
         //korzysta z klasy buildera
-        return ($this->_build = NavigationConfigBuilder::build($this->_data));
+        return ($this->_build = NavigationConfigBuilder::build($this->_options));
     }
 
 }

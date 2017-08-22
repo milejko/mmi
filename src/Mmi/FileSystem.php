@@ -20,10 +20,15 @@ class FileSystem
      * Kopiowanie rekursywne
      * @param string $src
      * @param string $dest
+     * @return boolean
      */
     public static function copyRecursive($src, $dest, $overwrite = true)
     {
-        $dir = opendir($src);
+        try {
+            $dir = opendir($src);
+        } catch (\Mmi\App\KernelException $e) {
+            return false;
+        }
         //brak pliku
         if (!file_exists($dest)) {
             mkdir($dest);
@@ -45,18 +50,20 @@ class FileSystem
         }
         //zamknięcie katalogu
         closedir($dir);
+        return true;
     }
 
     /**
      * Kasuje pliki rekurencyjnie
      * @param string $fileName nazwa pliku
      * @param string $rootName katalog główny
+     * @return boolean
      */
     public static function unlinkRecursive($fileName, $rootName)
     {
         //brak katalogu głównego
         if (!file_exists($rootName)) {
-            return;
+            return false;
         }
         //iteracja po katalogu głównym
         foreach (new \DirectoryIterator($rootName) as $file) {
@@ -76,11 +83,13 @@ class FileSystem
                 unlink($file->getPathname());
             }
         }
+        return true;
     }
 
     /**
      * Usuwa katalog rekurencyjnie
      * @param string $dirName nazwa katalogu
+     * @return boolean
      */
     public static function rmdirRecursive($dirName)
     {
@@ -114,10 +123,6 @@ class FileSystem
      */
     public static function mimeType($fileAddress)
     {
-        //brak rozszerzenia fileinfo
-        if (!\extension_loaded('fileinfo')) {
-            throw new \Mmi\App\KernelException('Fileinfo plugin not installed');
-        }
         //zwrot informacji o mime
         return finfo_file(finfo_open(FILEINFO_MIME_TYPE), $fileAddress);
     }
@@ -129,10 +134,6 @@ class FileSystem
      */
     public static function mimeTypeBinary($binary)
     {
-        //brak rozszerzenia fileinfo
-        if (!function_exists('finfo_open')) {
-            throw new \Mmi\App\KernelException('Fileinfo plugin not installed');
-        }
         //zwrot informacji o mime binarium
         return finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $binary);
     }

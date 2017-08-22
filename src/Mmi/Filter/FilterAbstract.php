@@ -17,15 +17,6 @@ abstract class FilterAbstract extends \Mmi\OptionObject
 {
 
     /**
-     * Konstruktor ustawia opcje
-     * @param array $options
-     */
-    public final function __construct(array $options = [])
-    {
-        $this->setOptions($options);
-    }
-
-    /**
      * Zwraca przefiltrowaną wartość
      * @param mixed $value
      * @throws \Mmi\App\KernelException jeśli filtrowanie $value nie jest możliwe

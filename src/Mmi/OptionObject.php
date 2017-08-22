@@ -23,6 +23,15 @@ class OptionObject
     protected $_options = [];
 
     /**
+     * Konstruktor ustawia obiekt
+     * @param array $data tablica zmiennych
+     */
+    public function __construct(array $data = [])
+    {
+        $this->setOptions($data);
+    }
+
+    /**
      * Ustawia opcję
      * @param string $key klucz
      * @param string $value wartość

@@ -161,10 +161,6 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
      */
     protected final function _keyShouldBeDeleted($key)
     {
-        //brak rozproszonego bufora
-        if (!$this->_distributedStorage) {
-            return false;
-        }
         //brak informacji o usunięciu klucza
         if (null === $remoteTime = $this->_distributedStorage->getOption($key)) {
             return false;

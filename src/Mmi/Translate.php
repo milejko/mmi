@@ -54,7 +54,7 @@ class Translate
             return $this;
         }
         //parser pliku tłumaczeń
-        $data = $this->_parseTranslationFile($sourceFile, $locale == $this->_defaultLocale);
+        $data = $this->_parseTranslationFile($sourceFile);
         //dodawanie języka
         $this->_languages[$locale] = $sourceFile;
         //istnieje tłumaczenie
@@ -131,10 +131,9 @@ class Translate
     /**
      * Parsuje plik z tłumaczeniem
      * @param string $sourceFile plik źródłowy
-     * @param boolean $isDefaultLocale czy wersja językowa jest domyślna
      * @return array
      */
-    private function _parseTranslationFile($sourceFile, $isDefaultLocale)
+    private function _parseTranslationFile($sourceFile)
     {
         //wczytanie pliku
         $data = explode("\n", str_replace("\r\n", '\n', file_get_contents($sourceFile)));
@@ -149,11 +148,6 @@ class Translate
             $line = explode(" = ", $line);
             //wyznaczanie klucza
             $key = trim($line[0]);
-            //domyślny język
-            if ($isDefaultLocale) {
-                $output[$key] = isset($line[1]) ? trim($line[1]) : $key;
-                continue;
-            }
             //tłumaczenie
             $output[$key] = isset($line[1]) ? trim($line[1]) : null;
         }

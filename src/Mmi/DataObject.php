@@ -20,6 +20,15 @@ class DataObject implements \Iterator
     protected $_data = [];
 
     /**
+     * Konstruktor ustawia obiekt
+     * @param array $data zmienne requestu
+     */
+    public function __construct(array $data = [])
+    {
+        $this->setParams($data);
+    }
+
+    /**
      * Magicznie pobiera zmienną
      * @param string $key klucz
      * @return mixed
@@ -73,6 +82,15 @@ class DataObject implements \Iterator
             $this->__set($key, $value);
         }
         return $this;
+    }
+
+    /**
+     * Zwraca informację o pustości obiektu
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return empty($this->_data);
     }
 
     /**

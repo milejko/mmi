@@ -33,6 +33,9 @@ class MemcacheHandler implements CacheHandlerInterface
      * @var string
      */
     private $_namespace;
+    
+    //maksymalna długość cache w memcached
+    CONST MAX_LIFETIME = 2592000;
 
     /**
      * Ustawia obiekt Memcache
@@ -78,11 +81,7 @@ class MemcacheHandler implements CacheHandlerInterface
      */
     public function save($key, $data, $lifeTime)
     {
-        if ($lifeTime > 2592000) {
-            //memcache bug ta wartość nie może być większa
-            $lifeTime = 2592000;
-        }
-        $this->_server->set($this->_namespace . '_' . $key, $data, 0, $lifeTime);
+        $this->_server->set($this->_namespace . '_' . $key, $data, 0, $lifeTime > self::MAX_LIFETIME ? self::MAX_LIFETIME : $lifeTime);
         return true;
     }
 

@@ -50,28 +50,23 @@ class RedisHandler implements CacheHandlerInterface
      */
     private function _connect()
     {
+        //powoływanie serwera
         $this->_server = new \Redis;
+        //parsowanie konfiguracji
         $config = parse_url($this->_config->path);
         //format połączenie host/port
-        if (isset($config['host']) && isset($config['port'])) {
-            //łączenie host/port
-            $this->_server->pconnect($config['host'], $config['port']);
-            //autoryzacja użytkownik i hasło
-            if (isset($config['pass']) && isset($config['user'])) {
-                $this->_server->auth($config['user'] . ':' . $config['pass']);
-            }
-            //autoryzacja sam użytkownik
-            if (isset($config['user'])) {
-                $this->_server->auth($config['user']);
-            }
-            //wybór bazy
-            $this->_server->select(($config['path'] ? ltrim($config['path'], '/') : '1'));
-            return;
+        if (!isset($config['host']) || !isset($config['port'])) {
+            //błąd konfiguracji
+            throw new CacheException('Configuration path invalid');
         }
-        //połączenie po sockecie
-        $this->_server->pconnect($config['path']);
-        //baza 0
-        $this->_server->select(0);
+        //łączenie host/port
+        $this->_server->pconnect($config['host'], $config['port']);
+        //autoryzacja
+        if (isset($config['user'])) {
+            $this->_server->auth($config['user'] . (isset($config['pass']) ? ':' . $config['pass'] : ''));
+        }
+        //wybór bazy
+        $this->_server->select((isset($config['path']) ? ltrim($config['path'], '/') : '1'));
     }
 
     /**
