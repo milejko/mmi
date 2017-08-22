@@ -35,7 +35,9 @@ class RequestFiles extends \Mmi\DataObject
     protected function _handleUpload(array $data)
     {
         $files = [];
+        //iteracja po tablicy plików
         foreach ($data as $fieldName => $fieldFiles) {
+            //brak pliku o podanej nazwie
             if (!isset($files[$fieldName])) {
                 $files[$fieldName] = [];
             }
@@ -58,14 +60,13 @@ class RequestFiles extends \Mmi\DataObject
     protected function _handleSingleUpload(array $fileData)
     {
         //jeśli nazwa jest tablicą, oznacza to wielokrotny upload HTML5
-        if (is_array($fileData['name'])) {
+        if (!isset($fileData['name']) || is_array($fileData['name'])) {
             return;
         }
         //brak pliku
         if (!isset($fileData['tmp_name']) || $fileData['tmp_name'] == '') {
             return;
         }
-        $fileData['type'] = \Mmi\FileSystem::mimeType($fileData['tmp_name']);
         return new RequestFile($fileData);
     }
 
@@ -81,7 +82,7 @@ class RequestFiles extends \Mmi\DataObject
         foreach ($this->_fixFiles($fileData) as $key => $file) {
             //brak pliku
             if (!isset($file['tmp_name']) || $file['tmp_name'] == '') {
-                return;
+                continue;
             }
             //dodawanie pliku
             $files->{$key} = new RequestFile($file);
@@ -99,6 +100,9 @@ class RequestFiles extends \Mmi\DataObject
         $fixed = [];
         //iteracja po plikach
         foreach ($files as $key => $all) {
+            if (!is_array($all)) {
+                break;
+            }
             foreach ($all as $i => $val) {
                 $fixed[$i][$key] = $val;
             }
