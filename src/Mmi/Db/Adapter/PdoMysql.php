@@ -42,7 +42,16 @@ class PdoMysql extends PdoAbstract
     public function connect()
     {
         $this->_config->port = $this->_config->port ? $this->_config->port : 3306;
-        parent::connect();
+         //nowy obiekt PDO do odczytu danych
+        $this->_downstreamPdo = new \PDO(
+            $this->_config->driver . ':host=' . $this->_config->host . ';port=' . $this->_config->port . ';dbname=' . $this->_config->name . ';charset=utf8', $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
+        );
+        //nowy obiekt pdo do zapisu danych
+        $this->_upstreamPdo = new \PDO(
+            $this->_config->driver . ':host=' . ($this->_config->upstreamHost ? $this->_config->upstreamHost : $this->_config->host) . ';port=' . ($this->_config->upstreamPort ? $this->_config->upstreamPort : $this->_config->port) . ';dbname=' . $this->_config->name . ';charset=utf8', $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
+        );
+        //zmiana stanu na połączony
+        $this->_connected = true;
         return $this;
     }
 

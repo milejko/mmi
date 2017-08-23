@@ -72,7 +72,7 @@ class Part
     {
         $percentSum = 0;
         $html = '';
-        $profilerData = \App\Registry::$db->getProfiler()->get();
+        $profilerData = \App\Registry::$db && \App\Registry::$db->getProfiler() ? \App\Registry::$db->getProfiler()->get() : [];
         //brak zapytań
         if (!count($profilerData)) {
             return 'No SQL queries';

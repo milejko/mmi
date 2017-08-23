@@ -20,8 +20,9 @@ class BootstrapCliTest extends \PHPUnit\Framework\TestCase
 
     public function testStandardBootstrap()
     {
-        (new Kernel('\Mmi\App\BootstrapCli', 'DEV'))->run();
-        $this->assertEquals('', ob_get_clean(), 'Bootstrap returns value');
+        ob_start();
+        (new Kernel('\Mmi\App\BootstrapCli', 'DEFAULT'))->run();
+        $this->assertEmpty(ob_get_clean(), 'BootstrapCli buffer should be empty');
     }
 
 }

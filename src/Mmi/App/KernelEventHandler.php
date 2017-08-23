@@ -68,7 +68,11 @@ class KernelEventHandler
     public static function exceptionHandler($exception)
     {
         //czyszczenie bufora
-        ob_get_status() ? ob_clean() : ob_start();
+        try {
+            ob_clean();
+        } catch (\Exception $e) {
+            //nic
+        }
         //logowanie wyjątku
         self::_logException($exception);
         $response = \Mmi\App\FrontController::getInstance()->getResponse();
@@ -125,7 +129,6 @@ class KernelEventHandler
             //typy HTML
             case 'htm':
             case 'html':
-            case 'shtml':
                 return '<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>';
             //plaintext
             case 'txt':

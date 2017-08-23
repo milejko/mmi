@@ -45,16 +45,6 @@ class ResponseDebugger
     }
 
     /**
-     * Tablica z podsumowaniem: czas wykonania i maksymalne użycie pamięci
-     * @return array
-     */
-    public function getSummaryArray()
-    {
-        //zwrot tablicy
-        return ['elapsed' => $this->_getElapsed(), 'memory' => $this->_getPeakMemory()];
-    }
-
-    /**
      * Czas wykonania skryptu w sekundach
      * @return string
      */
@@ -118,10 +108,6 @@ class ResponseDebugger
         //profiler bazy danych
         $html .= '<p style="margin: 0px;">Database Profiler: </p>';
         $html .= self::PRE_OPEN . ResponseDebugger\Part::getDbProfilerHtml() . '</pre>';
-
-        //opcache lub APC
-        $html .= '<p style="margin: 0px;">Precompiler</p>';
-        $html .= self::PRE_OPEN . ResponseDebugger\Opcache::getHtml() . '</pre>';
 
         $html .= '</td><td style="vertical-align: top; padding-left: 5px;">';
 

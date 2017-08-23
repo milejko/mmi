@@ -24,7 +24,7 @@ class EmptyToNull extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return ($value == '') ? null : $value;
+        return empty($value) ? null : $value;
     }
 
 }

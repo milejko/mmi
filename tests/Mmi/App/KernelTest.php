@@ -23,12 +23,12 @@ class KernelTest extends \PHPUnit\Framework\TestCase
      */
     public function testFailBootstrap()
     {
-        (new Kernel('stdClass', 'DEV'));
+        (new Kernel('stdClass', 'DEFAULT'));
     }
 
     public function testBootstrap()
     {
-        $this->assertInstanceOf('\Mmi\App\Kernel', new Kernel('\Mmi\App\Bootstrap', 'DEV'), 'Invalid kernel class');
+        $this->assertInstanceOf('\Mmi\App\Kernel', new Kernel('\Mmi\App\Bootstrap', 'DEFAULT'), 'Invalid kernel class');
     }
 
 }

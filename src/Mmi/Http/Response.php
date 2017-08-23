@@ -41,6 +41,12 @@ class Response
     private $_type = 'html';
 
     /**
+     * Kod odpowiedzi
+     * @var integer
+     */
+    private $_code = 200;
+
+    /**
      * Ustawia debugowanie
      * @param type $debug
      * @return \Mmi\Http\Response
@@ -79,10 +85,12 @@ class Response
      */
     public function setCode($code, $replace = false)
     {
-        //jeśli znaleziono kod
-        if (null === ($message = ResponseTypes::getMessageByCode($code))) {
-            return $this;
+        //kod nie istnieje
+        if (!($message = ResponseTypes::getMessageByCode($code))) {
+            throw new HttpException('HTTP code not found');
         }
+        //zapis kodu
+        $this->_code = $code;
         //wysłanie nagłówka z kodem
         return $this->setHeader('HTTP/1.1 ' . $code . ' ' . $message, null, $replace);
     }
@@ -164,6 +172,16 @@ class Response
     {
         //zwrot typu
         return $this->_type;
+    }
+
+    /**
+     * Zwraca kod odpowiedzi
+     * @return string
+     */
+    public function getCode()
+    {
+        //zwrot kodu
+        return $this->_code;
     }
 
     /**
@@ -290,8 +308,13 @@ class Response
     {
         //iteracja po nagłówkach
         foreach ($this->_headers as $header) {
-            //wysłanie nagłówka
-            $header->send();
+            try {
+                //wysłanie nagłówka
+                $header->send();
+            } catch (\Mmi\App\KernelException $e) {
+                //logowanie błędu
+                \Mmi\App\FrontController::getInstance()->getLogger()->warning('Unable to send header: ' . $header->getName() . ' with value ' . $header->getValue());
+            }
         }
     }
 

@@ -13,7 +13,7 @@ namespace App;
 /**
  * Konfiguracja aplikacji DEV
  */
-class ConfigDEV extends \Mmi\App\KernelConfig
+class ConfigDEFAULT extends \Mmi\App\KernelConfig
 {
 
     public function __construct()
@@ -26,20 +26,17 @@ class ConfigDEV extends \Mmi\App\KernelConfig
         //debugger 
         $this->debug = false;
         $this->compile = true;
-        $this->languages = [];
-        $this->plugins = [];
+        $this->languages = ['pl', 'en', 'de'];
+        $this->plugins = ['App\TestFrontControllerPlugin'];
 
-        $this->localCache = new \Mmi\Cache\CacheConfig;
-        $this->localCache->handler = 'file';
-        $this->localCache->path = BASE_PATH . '/var/cache';
-
-        //ustawienia routera
-        $this->router = (new \Mmi\Mvc\RouterConfig)->setRoute('test', '', ['module' => 'mmi', 'controller' => 'index', 'action' => 'test']);
-        
         //konfiguracja bazy danych
         $this->db = new \Mmi\Db\DbConfig;
         $this->db->driver = 'sqlite';
         $this->db->host = BASE_PATH . '/var/test-db.sqlite';
+        
+        $this->log = new \Mmi\Log\LogConfig;
+        //logowanie debug
+        $this->log->addInstance((new \Mmi\Log\LogConfigInstance)->setLevelDebug());
     }
 
 }

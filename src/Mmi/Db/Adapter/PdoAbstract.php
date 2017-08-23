@@ -55,6 +55,12 @@ abstract class PdoAbstract
     protected $_transactionInProgress = false;
 
     /**
+     * Tworzy połączenie z bazą danych
+     * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
+     */
+    abstract public function connect();
+
+    /**
      * Otacza nazwę pola odpowiednimi znacznikami
      * @param string $fieldName nazwa pola
      * @return string
@@ -151,27 +157,6 @@ abstract class PdoAbstract
     }
 
     /**
-     * Tworzy połączenie z bazą danych
-     * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
-     */
-    public function connect()
-    {
-        //nowy obiekt PDO do odczytu danych
-        $this->_downstreamPdo = new \PDO(
-            $this->_config->driver . ':host=' . $this->_config->host . ';port=' . $this->_config->port . ';dbname=' . $this->_config->name . ';charset=utf8', $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
-        );
-
-        //nowy obiekt pdo do zapisu danych
-        $this->_upstreamPdo = new \PDO(
-            $this->_config->driver . ':host=' . ($this->_config->upstreamHost ? $this->_config->upstreamHost : $this->_config->host) . ';port=' . ($this->_config->upstreamPort ? $this->_config->upstreamPort : $this->_config->port) . ';dbname=' . $this->_config->name . ';charset=utf8', $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
-        );
-
-        //zmiana stanu na połączony
-        $this->_connected = true;
-        return $this;
-    }
-
-    /**
      * Zwraca opakowaną cudzysłowami wartość
      * @see \PDO::quote()
      * @see \PDO::PARAM_STR
@@ -207,7 +192,7 @@ abstract class PdoAbstract
      * @param string $sql zapytanie
      * @param array $bind tabela w formacie akceptowanym przez \PDO::prepare()
      * @throws DbException
-     * @return \PDO_Statement
+     * @return \PDOStatement
      */
     public function query($sql, array $bind = [])
     {
@@ -290,17 +275,6 @@ abstract class PdoAbstract
     public final function fetchRow($sql, array $bind = [])
     {
         return $this->query($sql, $bind)->fetch(\PDO::FETCH_NAMED);
-    }
-
-    /**
-     * Zwraca pojedynczą wartość (krotkę)
-     * @param string $sql zapytanie
-     * @param array $bind tabela w formacie akceptowanym przez \PDO::prepare()
-     * @return array
-     */
-    public final function fetchOne($sql, array $bind = [])
-    {
-        return $this->query($sql, $bind)->fetch(\PDO::FETCH_NUM);
     }
 
     /**
@@ -440,9 +414,9 @@ abstract class PdoAbstract
      */
     public final function commit()
     {
-        //łączenie jeśli niepołączony
-        if (!$this->_connected) {
-            $this->connect();
+        //brak transakcji
+        if (!$this->_transactionInProgress) {
+            return false;
         }
         //zakończenie transakcji z zatwierdzeniem
         $this->_transactionInProgress = false;
@@ -454,9 +428,9 @@ abstract class PdoAbstract
      */
     public final function rollBack()
     {
-        //łączenie jeśli niepołączony
-        if (!$this->_connected) {
-            $this->connect();
+        //brak transakcji
+        if (!$this->_transactionInProgress) {
+            return false;
         }
         //zakończenie transakcji z cofnięciem
         $this->_transactionInProgress = false;

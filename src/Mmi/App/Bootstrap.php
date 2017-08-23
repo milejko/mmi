@@ -98,8 +98,13 @@ class Bootstrap implements BootstrapInterface
             //ustawienie handlera
             session_set_save_handler(new $sessionClass);
         }
-        //uruchomienie sesji
-        \Mmi\Session\Session::start(\App\Registry::$config->session);
+        try {
+            //uruchomienie sesji
+            \Mmi\Session\Session::start(\App\Registry::$config->session);
+        } catch (\Mmi\App\KernelException $e) {
+            //błąd uruchamiania sesji
+            FrontController::getInstance()->getLogger()->error('Unable to start session');
+        }
         return $this;
     }
 
@@ -111,7 +116,8 @@ class Bootstrap implements BootstrapInterface
     {
         //brak konfiguracji cache
         if (!\App\Registry::$config->localCache) {
-            return $this;
+            \App\Registry::$config->localCache = new \Mmi\Cache\CacheConfig;
+            \App\Registry::$config->localCache->active = 0;
         }
         //ustawienie bufora systemowy aplikacji
         FrontController::getInstance()->setLocalCache(new \Mmi\Cache\Cache(\App\Registry::$config->localCache));
@@ -148,12 +154,7 @@ class Bootstrap implements BootstrapInterface
         //obliczanie nazwy drivera
         $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst(\App\Registry::$config->db->driver);
         //próba powołania drivera
-        try {
-            \App\Registry::$db = new $driver(\App\Registry::$config->db);
-        } catch (\Exception $e) {
-            //błędny driver DB
-            throw new \Mmi\Db\DbException('Driver unsupported: ' . $driver . ' ' . $e->getMessage());
-        }
+        \App\Registry::$db = new $driver(\App\Registry::$config->db);
         //jeśli aplikacja w trybie debug
         if (\App\Registry::$config->debug) {
             //wstrzyknięcie profilera do adaptera bazodanowego

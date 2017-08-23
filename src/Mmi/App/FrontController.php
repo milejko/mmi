@@ -295,7 +295,7 @@ class FrontController
     {
         //brak bufora
         if (!$this->_cache) {
-            throw new KernelException('Missing localCache configuration section');
+            throw new KernelException('\Mmi\Cache\Cache should be specified as localCache in \Mmi\App\FrontController');
         }
         //zwrot lokalnego bufora
         return $this->_cache;
