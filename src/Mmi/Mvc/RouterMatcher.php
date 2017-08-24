@@ -17,9 +17,9 @@ class RouterMatcher
 {
 
     //zmienne tymczasowe
-    protected static $_tmpMatches;
-    protected static $_tmpKey;
-    protected static $_tmpDefault;
+    protected $_tmpMatches;
+    protected $_tmpKey;
+    protected $_tmpDefault;
 
     /**
      * Stosuje istniejące trasy dla danego url
@@ -27,28 +27,26 @@ class RouterMatcher
      * @param string $url URL
      * @return array
      */
-    public static function tryRouteForUrl(\Mmi\Mvc\RouterConfigRoute $route, $url)
+    public function tryRouteForUrl(\Mmi\Mvc\RouterConfigRoute $route, $url)
     {
         $params = [];
         $matches = [];
         $matched = false;
         //sprawdzenie statyczne
         if ($route->pattern == $url) {
-            $matched = true;
-            $params = array_merge($route->default, $route->replace);
             return [
                 'matched' => true,
-                'params' => $params,
+                'params' => array_merge($route->default, $route->replace),
                 'url' => trim(substr($url, strlen($route->pattern)), ' /')
             ];
         }
         //dopasowanie wyrażeniem regularnym
-        if (self::_isPatternRegular($route->pattern) && preg_match($route->pattern, $url, $matches)) {
-            self::$_tmpMatches = $matches;
-            self::$_tmpDefault = $route->default;
+        if ($this->_isPatternRegular($route->pattern) && preg_match($route->pattern, $url, $matches)) {
+            $this->_tmpMatches = $matches;
+            $this->_tmpDefault = $route->default;
             $matched = true;
             foreach ($route->replace as $key => $value) {
-                self::$_tmpKey = $key;
+                $this->_tmpKey = $key;
                 $params[$key] = preg_replace_callback('/\$([0-9]+)/', ['\Mmi\Mvc\RouterMatcher', '_routeMatch'], $value);
                 $params[$key] = preg_replace('/\|[a-z]+/', '', $params[$key]);
             }
@@ -67,7 +65,7 @@ class RouterMatcher
      * @param array $params parametry
      * @return array
      */
-    public static function tryRouteForParams(\Mmi\Mvc\RouterConfigRoute $route, array $params)
+    public function tryRouteForParams(\Mmi\Mvc\RouterConfigRoute $route, array $params)
     {
         $matches = [];
         $matched = [];
@@ -125,7 +123,7 @@ class RouterMatcher
      * @param string $pattern pattern
      * @return bool
      */
-    protected static function _isPatternRegular($pattern)
+    protected function _isPatternRegular($pattern)
     {
         return substr($pattern, 0, 1) == '/' && (substr($pattern, -1) == '/' || substr($pattern, -2) == '/i');
     }
@@ -136,18 +134,15 @@ class RouterMatcher
      * @return mixed
      * @throws \Mmi\Mvc\MvcException
      */
-    protected static function _routeMatch($matches)
+    protected function _routeMatch($matches)
     {
-        if (!isset($matches[1])) {
-            throw new \Mmi\Mvc\MvcException('Router failed due to invalid route definition');
+        if (isset($this->_tmpMatches[$matches[1]])) {
+            return $this->_tmpMatches[$matches[1]];
         }
-        if (isset(self::$_tmpMatches[$matches[1]])) {
-            return self::$_tmpMatches[$matches[1]];
+        if (isset($this->_tmpDefault[$this->_tmpKey])) {
+            return $this->_tmpDefault[$this->_tmpKey];
         }
-        if (isset(self::$_tmpDefault[self::$_tmpKey])) {
-            return self::$_tmpDefault[self::$_tmpKey];
-        }
-        throw new \Mmi\Mvc\MvcException('Router failed due to invalid route definition - no default param for key: ' . self::$_tmpKey);
+        throw new \Mmi\Mvc\MvcException('Router failed due to invalid route definition - no default param for key: ' . $this->_tmpKey);
     }
 
 }

@@ -69,8 +69,9 @@ class Dispatcher
         //wpięcie dla pluginów przed routingiem
         $this->routeStartup();
         $frontController = FrontController::getInstance();
-        //stosowanie routingu
-        $frontController->getRouter()->processRequest($frontController->getRequest());
+        //ustawianie requestu po zdekodowaniu żądania przez router
+        $frontController->getRequest()
+            ->setParams($frontController->getRouter()->decodeUrl(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri));
         //informacja o zakończeniu ustawiania routingu
         $frontController->getProfiler()->event('Mvc\Dispatcher: routing applied');
         //wpięcie dla pluginów przed dispatchem

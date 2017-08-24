@@ -329,8 +329,8 @@ class Auth
         \Mmi\App\FrontController::getInstance()->getResponse()
             ->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
             ->setCodeUnauthorized()
-            ->setContent($errorMessage)
-            ->send();
+            ->setContent($errorMessage);
+            //->send();
         //zakończenie skryptu
         exit;
     }

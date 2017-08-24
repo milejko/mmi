@@ -71,41 +71,10 @@ class RouterConfig
     }
 
     /**
-     * Pobierz routę
-     * @param string $name nazwa lub indeks
-     * @return \Mmi\Mvc\RouterConfigRoute
-     */
-    public function getRoute($name)
-    {
-        if (!$this->isRoute($name)) {
-            return null;
-        }
-        return $this->_data[$name];
-    }
-
-    /**
      * Zwraca wszystkie skonfigurowane routy
      * @return array
      */
     public function getRoutes()
-    {
-        return $this->_data;
-    }
-
-    /**
-     * Sprawdza istnienie routy
-     * @param string $name nazwa lub indeks
-     * @return boolean
-     */
-    public function isRoute($name)
-    {
-        return isset($this->_data[$name]);
-    }
-
-    /**
-     * Zwraca tablicę routingu
-     */
-    public function toArray()
     {
         return $this->_data;
     }

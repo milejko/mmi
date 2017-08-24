@@ -24,13 +24,6 @@ class DbDeploy extends CommandAbstract
      */
     public function run()
     {
-        //próba usunięcia buforowania wyjścia
-        try {
-            ob_end_flush();
-        } catch (\Exception $e) {
-            //nic
-        }
-
         (new \Mmi\Db\Deployer)->deploy();
     }
 

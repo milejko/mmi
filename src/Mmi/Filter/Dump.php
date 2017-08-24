@@ -24,7 +24,7 @@ class Dump extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return dump($value);
+        return '<pre>' . print_r($value, true) . '</pre>';
     }
 
 }

@@ -35,6 +35,12 @@ class HttpServerEnv
     public $authPassword;
 
     /**
+     * Base url
+     * @var string
+     */
+    public $baseUrl;
+
+    /**
      *
      * @var string
      */
@@ -159,18 +165,35 @@ class HttpServerEnv
         }
         $this->remotePort = filter_input(INPUT_SERVER, 'REMOTE_PORT', FILTER_SANITIZE_NUMBER_INT);
 
-        $this->requestUri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS);
-        if ($this->requestUri === null) {
-            $this->remoteUri = '/';
-        }
-
         $this->scriptFilename = filter_input(INPUT_SERVER, 'SCRIPT_FILENAME', FILTER_SANITIZE_SPECIAL_CHARS);
+        $this->_calculateRequestUri();
 
         $this->serverAddress = filter_input(INPUT_SERVER, 'SERVER_ADDR', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->serverPort = filter_input(INPUT_SERVER, 'SERVER_PORT', FILTER_SANITIZE_NUMBER_INT);
         $this->serverSoftware = filter_input(INPUT_SERVER, 'SERVER_SOFTWARE', FILTER_SANITIZE_SPECIAL_CHARS);
-        
-        $this->httpSecure = ('on' == (filter_input(INPUT_SERVER, 'HTTPS')) || ('https' == filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_PROTO'))  || 443 == $this->serverPort) ? true : false;
+
+        $this->httpSecure = ('on' == (filter_input(INPUT_SERVER, 'HTTPS')) || ('https' == filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_PROTO')) || 443 == $this->serverPort) ? true : false;
+    }
+
+    private function _calculateRequestUri()
+    {
+        //dekodowanie url i zastąpienie
+        if (!$this->requestUri = str_replace(['&amp;', '&#38;'], '&', trim(urldecode(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS)), '/'))) {
+            return;
+        }
+        //obsługa serwisu w podkatalogu
+        $subFolderPath = substr(BASE_PATH, strrpos(BASE_PATH, '/') + 1) . '/web';
+        $position = strpos($this->requestUri, $subFolderPath);
+        $this->baseUrl = '';
+        if ($position !== false) {
+            $this->baseUrl = '/' . substr($this->requestUri, 0, strlen($subFolderPath) + $position);
+            $this->requestUri = trim(substr($this->requestUri, strlen($subFolderPath) + $position + 1), '/');
+        }
+        //wejście przez plik PHP
+        if ($this->requestUri && (false !== $scriptPosition = strpos($this->requestUri, $fileName = basename($this->scriptFilename)))) {
+            $this->requestUri = substr($this->_url, $scriptPosition + strlen($fileName) + 1);
+        }
+        $this->requestUri = rtrim($this->requestUri, '/');
     }
 
 }

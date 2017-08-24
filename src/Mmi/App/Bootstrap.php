@@ -212,8 +212,8 @@ class Bootstrap implements BootstrapInterface
                 ->setCdn(\App\Registry::$config->cdn)
                 //ustawienie requestu
                 ->setRequest(FrontController::getInstance()->getRequest())
-                //ustawienie baseUrl
-                ->setBaseUrl($router->getBaseUrl());
+                //ustawianie baseUrl
+                ->setBaseUrl(FrontController::getInstance()->getEnvironment()->baseUrl);
     }
 
 }

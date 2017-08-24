@@ -112,6 +112,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testRedisInvalidPath()
     {
+        if (!class_exists('\Redis')) {
+            throw new \Mmi\Cache\CacheException();
+        }
         $config = new CacheConfig;
         $config->handler = 'redis';
         //zła ścieżka

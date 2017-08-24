@@ -48,17 +48,17 @@ class Truncate extends \Mmi\Filter\FilterAbstract
         if (mb_strlen($value, mb_detect_encoding($value)) < $length) {
             return $value;
         }
+        //wykrycie encodingu
         $encoding = mb_detect_encoding($value);
+        //standardowe skracanie
         if ($this->getBoundary()) {
-            $value = mb_substr($value, 0, $length, $encoding) . $this->getEnding();
-        } else {
-            $value = mb_substr($value, 0, $length, $encoding);
-            if (strrpos($value, ' ') !== false) {
-                $value = mb_substr($value, 0, strrpos($value, ' '), $encoding);
-            }
-            $value .= $this->getEnding();
+            return mb_substr($value, 0, $length, $encoding) . $this->getEnding();
         }
-
+        //skracanie do słowa
+        if (false !== $lastSpace = mb_strrpos($value = mb_substr($value, 0, $length, $encoding), ' ')) {
+            $value = mb_substr($value, 0, $lastSpace, $encoding);
+        }
+        $value .= $this->getEnding();
         return $value;
     }
 

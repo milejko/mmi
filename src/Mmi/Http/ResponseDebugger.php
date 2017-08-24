@@ -29,18 +29,10 @@ class ResponseDebugger
     public function __construct()
     {
         $response = FrontController::getInstance()->getResponse();
-        //odpowiedź nie jest znakowa
-        if (!is_string($response->getContent())) {
-            return;
-        }
-        switch ($response->getType()) {
-            //html
-            case 'htm':
-            case 'html':
-            case 'shtml':
-                //ustawianie contentu z debuggerem
-                $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
-                return;
+        //html
+        if ('text/html' == $response->getType()) {
+            //ustawianie contentu z debuggerem
+            $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
         }
     }
 
@@ -150,12 +142,8 @@ class ResponseDebugger
      * @param array $vars
      * @return array
      */
-    protected function _simplifyVarArray($vars, $depth = 0)
+    protected function _simplifyVarArray(array $vars, $depth = 0)
     {
-        //jeśli nie jest tablicą
-        if (!is_array($vars)) {
-            return $vars;
-        }
         $simplifiedVars = [];
         //pętla po tablicy
         foreach ($vars as $varName => $varValue) {

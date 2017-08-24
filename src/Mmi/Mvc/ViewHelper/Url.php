@@ -34,7 +34,7 @@ class Url extends HelperAbstract
             }
         }
         //wyznaczanie url
-        $url = \Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params);
+        $url = $this->view->baseUrl . \Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params);
         //zwrot samego url (bez zmiany protokołu)
         if (null === $https) {
             return $url ? $url : '/';

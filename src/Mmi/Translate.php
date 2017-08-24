@@ -163,9 +163,8 @@ class Translate
     {
         //otwieranie loga
         $log = fopen(BASE_PATH . '/var/log/error.translation.log', 'a');
-        $requestUri = \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri;
         //zapis zdarzenia
-        fwrite($log, date('Y-m-d H:i:s') . ' ' . $requestUri . ' [' . $this->_locale . '] {#' . $key . "#}\n");
+        fwrite($log, date('Y-m-d H:i:s') . ' ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] {#' . $key . "#}\n");
         //zamknięcie logu
         fclose($log);
         //zwrot klucza

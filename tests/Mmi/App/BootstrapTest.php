@@ -27,32 +27,48 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
 
     public function testBootstrap()
     {
-        ob_start();
         \Mmi\App\FrontController::getInstance()->getEnvironment()->applicationLanguage = 'pl';
         (new Kernel('\Mmi\App\Bootstrap', 'DEFAULT'))->run();
-        $this->assertEquals(145, strpos(ob_get_clean(), \Mmi\IndexController::DEFAULT_LABEL), 'Running bootstrap does not return default label from IndexController');
+        $this->_testResponseAfterRun();
     }
 
     public function testBootstrapCache()
     {
-        ob_start();
         \Mmi\App\FrontController::getInstance()->getEnvironment()->applicationLanguage = 'fr';
         (new Kernel('\Mmi\App\Bootstrap', 'CACHE'))->run();
-        $this->assertEquals(145, strpos(ob_get_clean(), \Mmi\IndexController::DEFAULT_LABEL), 'Running bootstrap does not return default label from IndexController');
+        //dodanie do profilera
+        \App\Registry::$db->query('SELECT 1');
+        //sprawdzenie czy dodany kernelProfiler
+        $this->assertInstanceOf('\Mmi\App\KernelProfiler', \Mmi\App\FrontController::getInstance()->getProfiler());
+        $response = $this->_testResponseAfterRun();
+        ob_start();
+        $this->assertNull($response->send());
+        $html = ob_get_contents();
+        $this->assertRegExp('/' . \Mmi\IndexController::DEFAULT_LABEL . '/', $html);
+        $this->assertRegExp('/#MmiPanel/', $html);
+        $this->assertRegExp('/Database Profiler/', $html);
+        ob_end_clean();
     }
 
     public function testBootstrapNoDb()
     {
-        ob_start();
         (new Kernel('\Mmi\App\Bootstrap', 'NODB'))->run();
-        $this->assertEquals(145, strpos(ob_get_clean(), \Mmi\IndexController::DEFAULT_LABEL), 'Running bootstrap does not return default label from IndexController');
+        $this->_testResponseAfterRun();
     }
 
     public function testBootstrapSession()
     {
-        ob_start();
         (new Kernel('\Mmi\App\Bootstrap', 'SESSION'))->run();
-        $this->assertEquals(145, strpos(ob_get_clean(), \Mmi\IndexController::DEFAULT_LABEL), 'Running bootstrap does not return default label from IndexController');
+        $this->_testResponseAfterRun();
+    }
+
+    private function _testResponseAfterRun()
+    {
+        $response = \Mmi\App\FrontController::getInstance()->getResponse();
+        $this->assertRegExp('/' . \Mmi\IndexController::DEFAULT_LABEL . '/', $response->getContent());
+        $this->assertEquals(200, $response->getCode());
+        $this->assertEquals('text/html', $response->getType());
+        return $response;
     }
 
 }

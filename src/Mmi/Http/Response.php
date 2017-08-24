@@ -38,7 +38,7 @@ class Response
      * Typ odpowiedzi
      * @var string
      */
-    private $_type = 'html';
+    private $_type = 'text/html';
 
     /**
      * Kod odpowiedzi
@@ -302,9 +302,9 @@ class Response
     }
 
     /**
-     * Metoda wysyłająca nagłówki
+     * Wysyła dane do klienta
      */
-    public function sendHeaders()
+    public function send()
     {
         //iteracja po nagłówkach
         foreach ($this->_headers as $header) {
@@ -316,18 +316,9 @@ class Response
                 \Mmi\App\FrontController::getInstance()->getLogger()->warning('Unable to send header: ' . $header->getName() . ' with value ' . $header->getValue());
             }
         }
-    }
-
-    /**
-     * Wysyła dane do klienta
-     */
-    public function send()
-    {
-        //wysyłanie nagłówków
-        $this->sendHeaders();
         //opcjonalne uruchomienie panelu deweloperskiego
         if ($this->_debug) {
-            //debugger wykonuje appendContent()
+            //debugger wykonuje zmianę w contencie
             new \Mmi\Http\ResponseDebugger;
         }
         //zwrot contentu

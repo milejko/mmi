@@ -73,22 +73,26 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $response = new Response;
         $response->setContent('test content')
             ->setDebug();
+        $view = \Mmi\App\FrontController::getInstance()->getView();
+        $view->sampleVariable = ['test1' => 'test', 'test2' => ['test1' => 'test', 'test' => ['test' => 'test', 'test2' => [1]]]];
+        $view->anotherVariable = 'test';
         $this->assertEquals('test content', $response->getContent());
         ob_start();
         $this->assertNull($response->send());
-        $this->assertGreaterThan(11, ob_get_length());
+        $this->assertEquals('test content', ob_get_contents());
         ob_end_clean();
     }
 
     public function testGetSetHeaders()
     {
         $response = new Response;
-        $response->setCodeNotFound();
-        $this->assertCount(1, $response->getHeaders());
+        $response->setCodeNotFound()
+            ->setTypeGzip();
+        $this->assertCount(2, $response->getHeaders());
         foreach ($response->getHeaders() as $header) {
             $this->assertInstanceOf('\Mmi\Http\ResponseHeader', $header);
         }
-        $this->assertNull($response->sendHeaders());
+        $this->assertNull($response->send());
     }
 
     /**

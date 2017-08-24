@@ -87,8 +87,6 @@ class FrontController
      */
     protected function __construct()
     {
-        //włączenie buforowania odpowiedzi
-        ob_start();
         //nowe zapytanie
         $this->_request = new \Mmi\Http\Request;
         //nowy odpowiedź
@@ -340,15 +338,14 @@ class FrontController
 
     /**
      * Uruchamianie
+     * @return \Mmi\Http\Response
      */
     public function run()
     {
         //pobranie odpowiedzi
-        $this->getResponse()
+        return $this->getResponse()
             //ustawienie contentu
-            ->setContent((new \Mmi\Mvc\Dispatcher)->dispatch())
-            //wysyłka
-            ->send();
+            ->setContent((new \Mmi\Mvc\Dispatcher)->dispatch());
     }
 
 }

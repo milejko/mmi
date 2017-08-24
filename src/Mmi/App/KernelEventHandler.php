@@ -48,16 +48,18 @@ class KernelEventHandler
      */
     public static function shutdownHandler()
     {
-        //bez błędów
-        if (null == $error = error_get_last()) {
-            return;
-        }
         //pobranie odpowiedzi z front kontrolera
-        $response = \Mmi\App\FrontController::getInstance()->getResponse();
+        $response = FrontController::getInstance()->getResponse();
+        //przy braku błędów 
+        if (!$error = error_get_last()) {
+            //wysłanie odpowiedzi
+            return $response->send();
+        }
         //logowanie błędu Emergency
         FrontController::getInstance()->getLogger()->emergency($error['message']);
-        //wysyłanie odpowiedzi
-        return self::_sendResponse($response->setContent(self::_rawErrorResponse($response)));
+        //wysyłanie odpowiedzi z błędem
+        $response->setContent(self::_rawErrorResponse($response))
+            ->send();
     }
 
     /**
@@ -67,11 +69,11 @@ class KernelEventHandler
      */
     public static function exceptionHandler($exception)
     {
-        //czyszczenie bufora
+        //próba czyszczenie bufora
         try {
             ob_clean();
         } catch (\Exception $e) {
-            //nic
+            //nie było bufoea
         }
         //logowanie wyjątku
         self::_logException($exception);
@@ -87,35 +89,16 @@ class KernelEventHandler
             $view->_exception = $exception;
             $view->_trace = self::_formatTrace($exception);
             //błąd bez layoutu lub nie HTML
-            if ($view->isLayoutDisabled() || $response->getType() != 'html') {
+            if ($view->isLayoutDisabled() || $response->getType() != \Mmi\Http\ResponseTypes::searchType('html')) {
                 //domyślna prezentacja błędów
-                return self::_sendRawResponse($response, $exception);
+                return $response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), self::_logException($exception)));
             }
             //błąd z prezentacją HTML
-            return self::_sendResponse($response->setContent(\Mmi\Mvc\ActionHelper::getInstance()->forward(new \Mmi\Http\Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error']))));
+            $response->setContent(\Mmi\Mvc\ActionHelper::getInstance()->forward(new \Mmi\Http\Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error'])));
         } catch (\Exception $e) {
             //domyślna prezentacja błędów
-            return self::_sendRawResponse($response, $exception);
+            $response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), self::_logException($exception)));
         }
-    }
-
-    /**
-     * Wysyłanie contentu
-     * @param \Mmi\Http\Response $response
-     */
-    private static function _sendResponse(\Mmi\Http\Response $response)
-    {
-        $response->send();
-    }
-
-    /**
-     * Wysyła surowy content
-     * @param type $response
-     * @param \Exception $exception
-     */
-    private static function _sendRawResponse(\Mmi\Http\Response $response, $exception)
-    {
-        return self::_sendResponse($response->setContent(self::_rawErrorResponse($response, $exception->getMessage(), self::_logException($exception))));
     }
 
     /**
@@ -127,14 +110,13 @@ class KernelEventHandler
     {
         switch ($response->getType()) {
             //typy HTML
-            case 'htm':
-            case 'html':
+            case 'text/html':
                 return '<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>';
             //plaintext
-            case 'txt':
+            case 'text/plain':
                 return 'Error 500' . "\n" . 'Something went wrong' . "\n";
             //json
-            case 'json':
+            case 'application-x-json':
                 return json_encode([
                     'status' => 500,
                     'error' => 'something went wrong',

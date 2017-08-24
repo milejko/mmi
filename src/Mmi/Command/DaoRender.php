@@ -28,7 +28,7 @@ class DaoRenderer extends CommandAbstract
         //odbudowanie wszystkich DAO/Record/Query/Field/Join
         foreach (\App\Registry::$db->tableList(\App\Registry::$config->db->schema) as $tableName) {
             //bez generowania dla DB_CHANGELOG i DB_CACHE
-            if (substr(strtoupper($tableName), 0, 3) == 'DB_') {
+            if (substr(strtoupper($tableName), 0, 4) == 'mmi_') {
                 continue;
             }
             //buduje struktruę dla tabeli

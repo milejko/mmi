@@ -379,10 +379,8 @@ class View extends \Mmi\DataObject
      */
     private function _compileTemplate($templateCode, $compilationFile)
     {
-        //pobranie bufora wyrenderowanego do tego momentu
-        $inputBuffer = ob_get_contents();
-        //czyszczenie bufora
-        ob_clean();
+        //start bufora
+        ob_start();
         //wymuszona kompilacja
         if ($this->_alwaysCompile) {
             file_put_contents($compilationFile, $this->template($templateCode));
@@ -397,12 +395,7 @@ class View extends \Mmi\DataObject
             include $compilationFile;
         }
         //przechwycenie danych z bufora
-        $data = ob_get_contents();
-        //czyszczenie bufora
-        ob_clean();
-        //zwrot bufora
-        echo $inputBuffer;
-        return $data;
+        return ob_get_clean();
     }
 
 }

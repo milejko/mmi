@@ -23,7 +23,6 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     public function testGetInstance()
     {
         $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance(true), 'Setter does not return self');
-        ob_end_clean();
     }
 
     public function testRegisterPlugin()
@@ -135,12 +134,12 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
      */
     public function testRun()
     {
-        ob_start();
         //założenie bufora odpowiedzi
-        FrontController::getInstance()->run();
+        $this->assertInstanceOf('\Mmi\Http\Response', $response = FrontController::getInstance()->run());
         //sprawdzenie renderingu akcji
-        $this->assertEquals(\Mmi\IndexController::DEFAULT_LABEL, ob_get_contents(), 'Running f-c not returning default label from IndexController');
-        ob_end_clean();
+        $this->assertEquals(\Mmi\IndexController::DEFAULT_LABEL, $response->getContent());
+        $this->assertEquals(200, $response->getCode());
+        $this->assertEquals('text/html', $response->getType());
         //tu 404
         FrontController::getInstance()
             //podłożenie błednego routera
