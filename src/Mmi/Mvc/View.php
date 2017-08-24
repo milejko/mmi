@@ -332,13 +332,14 @@ class View extends \Mmi\DataObject
      * Renderuje i zwraca wynik wykonania template
      * @param string $path ścieżka np. news/index/index
      * @param bool $fetch przekaż wynik wywołania w zmiennej
+     * @return string
      */
     public function renderTemplate($path)
     {
         //wyszukiwanie template
         if (null === $template = $this->getTemplateByPath($path)) {
             //brak template
-            throw new \Mmi\Mvc\MvcException('Template not found: ' . $path);
+            return;
         }
         //inicjalizacja języka
         $this->_initLocale();

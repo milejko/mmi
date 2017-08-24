@@ -279,7 +279,7 @@ class Response
      */
     public function setContent($content)
     {
-        $this->_content = $content;
+        $this->_content = (string) $content;
         return $this;
     }
 

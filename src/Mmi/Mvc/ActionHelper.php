@@ -118,11 +118,11 @@ class ActionHelper
     public function layout($content, Request $request)
     {
         //jeśli layout jest wyłączony - zwrot szablonu, jeśli nie - layoutu
-        return FrontController::getInstance()->getView()->isLayoutDisabled() ? $content : FrontController::getInstance()->getView()
+        return (FrontController::getInstance()->getView()->isLayoutDisabled() || !($layout = $this->_getLayout($request))) ? $content : FrontController::getInstance()->getView()
                 //ustawianie treści w placeholder 'content'
                 ->setPlaceholder('content', $content)
                 //renderowanie layoutu
-                ->renderTemplate($this->_getLayout($request));
+                ->renderTemplate($layout);
     }
 
     /**
@@ -230,8 +230,6 @@ class ActionHelper
             //zwrot layoutu aplikacyjnego
             return 'app/layout';
         }
-        //brak layoutu
-        throw new \Mmi\Mvc\MvcException('Layout not found.');
     }
 
 }

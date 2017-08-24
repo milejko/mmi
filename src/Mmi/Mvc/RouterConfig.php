@@ -72,7 +72,7 @@ class RouterConfig
 
     /**
      * Zwraca wszystkie skonfigurowane routy
-     * @return array
+     * @return RouterConfigRoute[]
      */
     public function getRoutes()
     {
