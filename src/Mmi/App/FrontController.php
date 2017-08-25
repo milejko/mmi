@@ -343,9 +343,7 @@ class FrontController
     public function run()
     {
         //pobranie odpowiedzi
-        return $this->getResponse()
-            //ustawienie contentu
-            ->setContent((new \Mmi\Mvc\Dispatcher)->dispatch());
+        return (new \Mmi\Mvc\Dispatcher)->dispatch();
     }
 
 }

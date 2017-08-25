@@ -347,6 +347,15 @@ class View extends \Mmi\DataObject
         return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->_locale . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
+    public function renderLayout($content, \Mmi\Http\Request $request)
+    {
+        return $this->isLayoutDisabled() ? $content : $this
+                //ustawianie treści w placeholder 'content'
+                ->setPlaceholder('content', $content)
+                //renderowanie layoutu
+                ->renderTemplate($this->_getLayout($request));
+    }
+
     /**
      * Generowanie kodu PHP z kodu szablonu w locie
      * @param string $templateCode kod szablonu
@@ -397,6 +406,28 @@ class View extends \Mmi\DataObject
         }
         //przechwycenie danych z bufora
         return ob_get_clean();
+    }
+
+    /**
+     * Pobiera dostępny layout
+     * @param \Mmi\Http\Request $request
+     * @return string
+     * @throws \Mmi\Mvc\MvcException brak layoutów
+     */
+    private function _getLayout(\Mmi\Http\Request $request)
+    {
+        //test layoutu dla modułu i kontrolera
+        if ($this->getTemplateByPath($request->getModuleName() . '/' . $request->getControllerName() . '/layout')) {
+            //zwrot layoutu moduł:kontroler
+            return $request->getModuleName() . '/' . $request->getControllerName() . '/layout';
+        }
+        //test layoutu dla modułu
+        if ($this->getTemplateByPath($request->getModuleName() . '/layout')) {
+            //zwrot layoutu moduł
+            return $request->getModuleName() . '/layout';
+        }
+        //zwrot layoutu aplikacyjnego
+        return 'app/layout';
     }
 
 }

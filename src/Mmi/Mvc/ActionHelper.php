@@ -103,26 +103,10 @@ class ActionHelper
             //wyjątek niedozwolonej akcji
             throw new MvcForbiddenException('Action ' . $request->getAsColonSeparatedString() . ' blocked');
         }
-        //zmiana requestu front-controllera
-        FrontController::getInstance()->setRequest($request);
-        //render layoutu
-        return $this->layout($this->_renderAction($request, $request, true), $request);
-    }
-
-    /**
-     * Umieszcza content w layoucie
-     * @param string $content
-     * @param Request $request
-     * @return string
-     */
-    public function layout($content, Request $request)
-    {
-        //jeśli layout jest wyłączony - zwrot szablonu, jeśli nie - layoutu
-        return (FrontController::getInstance()->getView()->isLayoutDisabled() || !($layout = $this->_getLayout($request))) ? $content : FrontController::getInstance()->getView()
-                //ustawianie treści w placeholder 'content'
-                ->setPlaceholder('content', $content)
-                //renderowanie layoutu
-                ->renderTemplate($layout);
+        //zmiana requestu i render layoutu
+        return FrontController::getInstance()
+            ->setRequest($request)
+            ->getView()->renderLayout($this->_renderAction($request, $request, true), $request);
     }
 
     /**
@@ -179,7 +163,7 @@ class ActionHelper
     private function _invokeAction(Request $request)
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
-        FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' start');
+        FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
         $structure = FrontController::getInstance()->getStructure('module');
         //sprawdzenie w strukturze
@@ -203,33 +187,8 @@ class ActionHelper
         //wywołanie akcji
         $content = (new $controllerClassName($request))->$actionMethodName();
         //informacja o zakończeniu wykonywania akcji do profilera
-        FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' done');
+        FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
-    }
-
-    /**
-     * Pobiera dostępny layout
-     * @param \Mmi\Http\Request $request
-     * @return string
-     * @throws \Mmi\Mvc\MvcException brak layoutów
-     */
-    private function _getLayout(\Mmi\Http\Request $request)
-    {
-        //test layoutu dla modułu i kontrolera
-        if (FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/' . $request->getControllerName() . '/layout')) {
-            //zwrot layoutu moduł:kontroler
-            return $request->getModuleName() . '/' . $request->getControllerName() . '/layout';
-        }
-        //test layoutu dla modułu
-        if (FrontController::getInstance()->getView()->getTemplateByPath($request->getModuleName() . '/layout')) {
-            //zwrot layoutu moduł
-            return $request->getModuleName() . '/layout';
-        }
-        //test layoutu dla modułu
-        if (FrontController::getInstance()->getView()->getTemplateByPath('app/layout')) {
-            //zwrot layoutu aplikacyjnego
-            return 'app/layout';
-        }
     }
 
 }

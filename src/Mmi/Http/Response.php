@@ -47,6 +47,16 @@ class Response
     private $_code = 200;
 
     /**
+     * Rzutowanie na ciąg zwraca content
+     * @return type
+     */
+    public function __toString()
+    {
+        //zwrot contentu
+        return $this->_content;
+    }
+
+    /**
      * Ustawia debugowanie
      * @param type $debug
      * @return \Mmi\Http\Response
