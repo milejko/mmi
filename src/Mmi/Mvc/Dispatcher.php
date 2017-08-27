@@ -85,7 +85,7 @@ class Dispatcher
         //wpięcie dla pluginów po dispatchu
         $this->postDispatch();
         //zwrot contentu z layoutem
-        $frontController->getResponse()->setContent($frontController->getView()->renderLayout($content, $frontController->getRequest()));
+        return $frontController->getResponse()->setContent($frontController->getView()->renderLayout($content, $frontController->getRequest()));
     }
 
 }

@@ -41,7 +41,7 @@ namespace Mmi\Form\Element;
  * @method self addValidatorPostal($message = null) walidator kodu pocztowego
  * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null, $message = null) walidator unikalności rekordu
  * @method self addValidatorRegex($pattern, $message = null) walidator regex
- * @method self addValidatorStringLength($message = null) walidator długości ciągu
+ * @method self addValidatorStringLength($from, $to, $message = null) walidator długości ciągu
  * @method self addValidatorJson($message = null) walidator json
  * 
  * Filtry
