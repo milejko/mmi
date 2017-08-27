@@ -97,6 +97,7 @@ class Response
     {
         //kod nie istnieje
         if (!($message = ResponseTypes::getMessageByCode($code))) {
+            //wyjątek o nieistniejącym kodzie HTTP
             throw new HttpException('HTTP code not found');
         }
         //zapis kodu
@@ -284,11 +285,14 @@ class Response
 
     /**
      * Ustawia content do wysyłki
+     * dla zmiennych niemożliwych do rzutowania na string rzuca wyjątkiem
      * @param string $content zawartość
+     * @throws \Mmi\App\KernelException
      * @return \Mmi\Http\Response
      */
     public function setContent($content)
     {
+        //wymuszenie contentu
         $this->_content = (string) $content;
         return $this;
     }
@@ -299,6 +303,7 @@ class Response
      */
     public function getContent()
     {
+        //zwrot contentu
         return $this->_content;
     }
 
@@ -308,6 +313,7 @@ class Response
      */
     public function getHeaders()
     {
+        //zwrot nagłówków planowanych do wysyłki
         return $this->_headers;
     }
 
@@ -345,6 +351,7 @@ class Response
      */
     public function redirect($module, $controller = null, $action = null, array $params = [], $reset = true)
     {
+        $this->redirectToRoute($params);
         //jeśli włączone resetowanie parametrów
         if (!$reset) {
             //parametry z requestu front controllera
@@ -373,7 +380,7 @@ class Response
     public function redirectToRoute(array $params = [])
     {
         //przekierowanie na url
-        $this->redirectToUrl(\Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params));
+        $this->redirectToUrl(\Mmi\App\FrontController::getInstance()->getView()->url($params, true));
     }
 
     /**
@@ -383,8 +390,8 @@ class Response
     public function redirectToUrl($url)
     {
         //przekierowanie - header location
-        (new ResponseHeader)->setName('Location')
-            ->setValue($url)
+        (new ResponseHeader)->setName('Location')->setValue($url)
+            //wysyłka i wyjście z aplikacji
             ->sendAndExit();
     }
 

@@ -37,6 +37,7 @@ class ResponseHeader extends \Mmi\OptionObject
     public function sendAndExit()
     {
         $this->send();
+        //wyjście z aplikacji
         exit;
     }
 
