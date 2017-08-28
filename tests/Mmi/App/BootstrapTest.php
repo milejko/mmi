@@ -27,14 +27,14 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
 
     public function testBootstrap()
     {
-        \Mmi\App\FrontController::getInstance()->getEnvironment()->applicationLanguage = 'pl';
+        $_SERVER['APPLICATION_LANGUAGE'] = 'pl';
         (new Kernel('\Mmi\App\Bootstrap', 'DEFAULT'))->run();
         $this->_testResponseAfterRun();
     }
 
     public function testBootstrapCache()
     {
-        \Mmi\App\FrontController::getInstance()->getEnvironment()->applicationLanguage = 'fr';
+        $_SERVER['APPLICATION_LANGUAGE'] = 'fr';
         (new Kernel('\Mmi\App\Bootstrap', 'CACHE'))->run();
         //dodanie do profilera
         \App\Registry::$db->query('SELECT 1');
