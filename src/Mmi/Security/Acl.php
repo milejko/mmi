@@ -34,15 +34,18 @@ class Acl
     /**
      * Dodaje zasób
      * @param string $resource zasób
+     * @return \Mmi\Security\Acl
      */
     public function add($resource)
     {
         $this->_resources[strtolower($resource)] = true;
+        return $this;
     }
 
     /**
      * Sprawdza istnienie zasobu
      * @param string $resource zasób
+     * @return boolean
      */
     public function has($resource)
     {
@@ -52,17 +55,18 @@ class Acl
     /**
      * Dodaje rolę
      * @param string $role rola
+     * @return \Mmi\Security\Acl
      */
     public function addRole($role)
     {
-        if (!isset($this->_roles[$role])) {
-            $this->_roles[$role] = true;
-        }
+        $this->_roles[$role] = true;
+        return $this;
     }
 
     /**
      * Sprawdza istnienie roli
      * @param string $role rola
+     * @return boolean
      */
     public function hasRole($role)
     {
@@ -73,22 +77,28 @@ class Acl
      * Ustawia pozwolenie na dostęp roli do zasobu
      * @param string $role rola
      * @param string $resource zasób
+     * @return \Mmi\Security\Acl
      */
     public function allow($role, $resource)
     {
-        $this->addRole($role);
+        //dodawanie roli i zasobu
+        $this->add($resource)->addRole($role);
         $this->_rights[$role . ':' . strtolower($resource)] = true;
+        return $this;
     }
 
     /**
      * Ustawia zakaz dostępu roli do zasobu
      * @param string $role rola
      * @param string $resource zasób
+     * @return \Mmi\Security\Acl
      */
     public function deny($role, $resource)
     {
-        $this->addRole($role);
+        //dodawanie roli i zasobu
+        $this->add($resource)->addRole($role);
         $this->_rights[$role . ':' . strtolower($resource)] = false;
+        return $this;
     }
 
     /**

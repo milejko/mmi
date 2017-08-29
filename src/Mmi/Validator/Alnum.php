@@ -33,12 +33,8 @@ class Alnum extends ValidatorAbstract
         if (!is_string($value) && !is_int($value) && !is_float($value)) {
             return $this->_error(self::INVALID);
         }
-        //wartość filtrowana alnumem jest równa zadanej
-        if ((new \Mmi\Filter\Alnum())->filter($value) == $value) {
-            return true;
-        }
-        //w pozostałych przypadkach - błąd
-        return $this->_error(self::INVALID);
+        //wartość filtrowana alnumem jest równa zadanej, lub nie
+        return (new \Mmi\Filter\Alnum())->filter($value) == $value ? true : $this->_error(self::INVALID);
     }
 
 }

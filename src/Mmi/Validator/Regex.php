@@ -63,15 +63,13 @@ class Regex extends ValidatorAbstract
         if (!is_string($value) && !is_int($value) && !is_float($value)) {
             return $this->_error(self::INVALID);
         }
-        //błędne dopasowanie
-        if (false === $status = preg_match($this->getPattern(), $value)) {
+        try {
+            //badanie wyrażeniem
+            $status = preg_match($this->getPattern(), $value);
+        } catch (\Mmi\App\KernelException $e) {
             return $this->_error(self::ERROROUS);
         }
-        //ciąg nieodnaleziony
-        if (!$status) {
-            return $this->_error(self::NOT_MATCH);
-        }
-        return true;
+        return $status ? true : $this->_error(self::NOT_MATCH);
     }
 
 }

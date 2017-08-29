@@ -28,11 +28,8 @@ class Date extends ValidatorAbstract
      */
     public function isValid($value)
     {
-        //data niepoprawna
-        if (!strtotime($value)) {
-            return $this->_error(self::INVALID);
-        }
-        return true;
+        //data poprawna / niepoprawna
+        return strtotime($value) ? true : $this->_error(self::INVALID);
     }
 
 }

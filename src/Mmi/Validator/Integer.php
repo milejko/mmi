@@ -33,7 +33,7 @@ class Integer extends ValidatorAbstract
             return $this->_error(self::INVALID);
         }
         //wartość nie równa
-        if (!(intval($value) == $value)) {
+        if (intval($value) != $value) {
             return $this->_error(self::INVALID);
         }
         return true;

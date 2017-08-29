@@ -5,10 +5,9 @@ namespace Mmi\Validator;
 /**
  * Walidator zaznaczenia checkboxa
  * 
- * @method self setElement(\Mmi\Form\Element\Checkbox $element) ustawia checkbox do jako wartość
  * @method self setMessage($message) ustawia własną wiadomość walidatora
  * 
- * @method string getElement() pobiera wartość bazową
+ * @method \Mmi\Form\Element\Checkbox getElement() pobiera checkbox
  * @method string getMessage() pobiera wiadomość
  */
 class Checked extends ValidatorAbstract
@@ -18,6 +17,16 @@ class Checked extends ValidatorAbstract
      * Treść wiadomości
      */
     const INVALID = 'Pole wymaga zaznaczenia';
+
+    /**
+     * Ustawia element
+     * @param \Mmi\Form\Element\Checkbox $element
+     * @return self
+     */
+    public function setElement(\Mmi\Form\Element\Checkbox $element)
+    {
+        return $this->setOption('element', $element);
+    }
 
     /**
      * Ustawia opcje
@@ -35,7 +44,7 @@ class Checked extends ValidatorAbstract
      * @param mixed $value wartość
      * @return boolean
      */
-    public function isValid($value)
+    public function isValid($value = null)
     {
         //jeśli niezaznaczony
         if (!$this->getElement()->isChecked()) {

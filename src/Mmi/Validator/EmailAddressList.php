@@ -28,7 +28,7 @@ class EmailAddressList extends ValidatorAbstract
      */
     public function isValid($value)
     {
-        $emails = explode(((false !== strpos($value = urldecode($value), ',')) ? ',' : ';'), $value);
+        $emails = explode(((false !== strpos($value, ',')) ? ',' : ';'), $value);
         //iteracja po mailach
         foreach ($emails as $email) {
             //niepoprawny email

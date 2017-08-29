@@ -12,9 +12,6 @@ namespace Mmi\Test\Validator;
 
 use Mmi\Validator\Equal;
 
-/**
- * Test walidatora równości
- */
 class EqualTest extends \PHPUnit\Framework\TestCase
 {
 
