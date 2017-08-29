@@ -84,7 +84,7 @@ class Router
         //domyślny moduł
         $params['module'] = isset($params['module']) ? $params['module'] : 'mmi';
         //filtrowanie URL
-        $filteredUrl = html_entity_decode(trim($parsedUrl['path'], '/ '), ENT_HTML401 | ENT_HTML5 | ENT_QUOTES, 'UTF-8');
+        $filteredUrl = html_entity_decode(trim((isset($parsedUrl['path']) ? $parsedUrl['path'] : ''), '/ '), ENT_HTML401 | ENT_HTML5 | ENT_QUOTES, 'UTF-8');
         //próba aplikacji rout
         foreach ($this->getRoutes() as $route) {
             /* @var $route \Mmi\Mvc\RouterConfigRoute */

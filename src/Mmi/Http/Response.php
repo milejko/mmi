@@ -351,7 +351,6 @@ class Response
      */
     public function redirect($module, $controller = null, $action = null, array $params = [], $reset = true)
     {
-        $this->redirectToRoute($params);
         //jeśli włączone resetowanie parametrów
         if (!$reset) {
             //parametry z requestu front controllera
