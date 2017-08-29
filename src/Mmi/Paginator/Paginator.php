@@ -12,10 +12,22 @@ namespace Mmi\Paginator;
 
 /**
  * Klasa paginatora
+ * 
+ * @method \Mmi\Http\Request getRequest() Zwraca obiekt requesta używany przez Paginator
+ * @method \Mmi\Paginator\Paginator setRowsCount(integer $count) Ustawia ilość danych do stronnicowania
+ * @method \Mmi\Paginator\Paginator setRowsPerPage(integer $count) Ustawia ilość wierszy na stronę
+ * @method \Mmi\Paginator\Paginator setPageVariable(string $name) Ustawia nazwę zmiennej sterującej paginatorem
+ * @method \Mmi\Paginator\Paginator setShowPages(integer $pages) Ustawia ilość pokazywanych zakładek skoku (stron)
+ * @method \Mmi\Paginator\Paginator setPreviousLabel(string $label) Ustawia tekst pod linkiem poprzedniej strony
+ * @method \Mmi\Paginator\Paginator setNextLabel(integer $pages) Ustawia tekst pod linkiem następnej strony
+ * @method \Mmi\Paginator\Paginator setPage(integer $page) Ustawia aktualną stronę
+ * 
+ * @method integer getRowsCount() Zwraca aktualną ilość wierszy w paginatorze
+ * @method integer getRowsPerPageCount() Zwraca ilość wierszy na stronę
  */
 class Paginator extends \Mmi\OptionObject
 {
-    
+
     //ścieżka szablonu
     const TEMPLATE = 'mmi/paginator/paginator';
 
@@ -32,15 +44,6 @@ class Paginator extends \Mmi\OptionObject
             ->setHashHref('')
             ->setPageVariable('p')
             ->setRequest(\Mmi\App\FrontController::getInstance()->getView()->request); //domyślny request
-    }
-
-    /**
-     * Zwraca obiekt requesta używany przez Paginator
-     * @return \Mmi\Http\Request
-     */
-    public function getRequest()
-    {
-        return $this->getOption('request');
     }
 
     /**
@@ -63,7 +66,7 @@ class Paginator extends \Mmi\OptionObject
         }
         $requestPage = $this->getRequest()->__get($this->getOption('pageVariable'));
         $page = ($requestPage > 0) ? $requestPage : 1;
-        $this->setOption('page', $page);
+        $this->setPage($page);
         return $page;
     }
 
@@ -87,66 +90,6 @@ class Paginator extends \Mmi\OptionObject
     }
 
     /**
-     * Ustawia ilość danych do stronnicowania
-     * @param integer $count
-     * @return \Mmi\Paginator\Paginator
-     */
-    public function setRowsCount($count)
-    {
-        return $this->setOption('rowsCount', intval($count));
-    }
-
-    /**
-     * Ustawia ilość wierszy na stronę
-     * @param integer $count
-     * @return \Mmi\Paginator\Paginator
-     */
-    public function setRowsPerPage($count)
-    {
-        return $this->setOption('rowsPerPage', intval($count));
-    }
-
-    /**
-     * Ustawia nazwę zmiennej sterującej paginatorem
-     * @param string $name
-     * @return \Mmi\Paginator\Paginator
-     */
-    public function setPageVariable($name)
-    {
-        return $this->setOption('pageVariable', $name);
-    }
-
-    /**
-     * Ustawia ilość pokazywanych zakładek skoku (stron)
-     * @param int $pages
-     * @return \Mmi\Paginator\Paginator
-     */
-    public function setShowPages($pages)
-    {
-        return $this->setOption('showPages', intval($pages));
-    }
-
-    /**
-     * Ustawia tekst pod linkiem poprzedniej strony
-     * @param string $label
-     * @return \Mmi\Paginator\Paginator
-     */
-    public function setPreviousLabel($label)
-    {
-        return $this->setOption('previousLabel', $label);
-    }
-
-    /**
-     * Ustawia tekst pod linkiem następnej strony
-     * @param string $label
-     * @return \Mmi\Paginator\Paginator
-     */
-    public function setNextLabel($label)
-    {
-        return $this->setOption('nextLabel', $label);
-    }
-
-    /**
      * Ustawia dla każdego linku label
      * @param string $label
      * @return \Mmi\Paginator\Paginator
@@ -154,24 +97,6 @@ class Paginator extends \Mmi\OptionObject
     public function setHashHref($label)
     {
         return $this->setOption('hashHref', '#' . $label);
-    }
-
-    /**
-     * Zwraca aktualną ilość wierszy w paginatorze
-     * @return integer
-     */
-    public function getRowsCount()
-    {
-        return ($this->getOption('rowsCount') >= 0) ? $this->getOption('rowsCount') : 0;
-    }
-
-    /**
-     * Zwraca ilość wierszy na stronę
-     * @return integer
-     */
-    public function getRowsPerPage()
-    {
-        return ($this->getOption('rowsPerPage') >= 0) ? $this->getOption('rowsPerPage') : 10;
     }
 
     /**
