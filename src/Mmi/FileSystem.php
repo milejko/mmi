@@ -77,10 +77,15 @@ class FileSystem
                 self::unlinkRecursive($fileName, $file->getPathname());
                 continue;
             }
-            //szukany plik
-            if ($fileName == $file->getFilename()) {
-                //usuwanie               
+            //to nie jest szukany plik
+            if ($fileName != $file->getFilename()) {
+                continue;
+            }
+            //próba usunięcia
+            try {
                 unlink($file->getPathname());
+            } catch (\Exception $e) {
+                //nic
             }
         }
         return true;
@@ -99,7 +104,12 @@ class FileSystem
         }
         //zwykły plik
         if (is_file($dirName)) {
-            unlink($dirName);
+            try {
+                //próba usunięcia
+                unlink($dirName);
+            } catch (\Exception $e) {
+                return false;
+            }
             return true;
         }
         //iteracja po katalogu
@@ -112,7 +122,11 @@ class FileSystem
             self::rmdirRecursive($dir->getPathname());
         }
         //usunięcie pustego katalogu
-        rmdir($dirName);
+        try {
+            rmdir($dirName);
+        } catch (\Exception $e) {
+            return false;
+        }
         return true;
     }
 
