@@ -49,6 +49,7 @@ class HttpServerEnv extends \Mmi\DataObject
         $this->_data = [
             'authUser' => isset($_SERVER['PHP_AUTH_USER']) ? filter_var($_SERVER['PHP_AUTH_USER']) : null,
             'authPassword' => isset($_SERVER['PHP_AUTH_PW']) ? filter_var($_SERVER['PHP_AUTH_PW']) : null,
+            'baseUrl' => '',
             'applicationLanguage' => filter_input(INPUT_SERVER, 'APPLICATION_LANGUAGE'),
             'scriptFileName' => filter_input(INPUT_SERVER, 'SCRIPT_FILENAME', FILTER_SANITIZE_SPECIAL_CHARS),
             'remoteAddress' => $xForwarderFor ? $xForwarderFor : filter_input(INPUT_SERVER, 'REMOTE_ADDR', FILTER_SANITIZE_SPECIAL_CHARS),
