@@ -41,6 +41,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public function testFileHandlerDistributed()
     {
         $cacheConfig = new CacheConfig;
+        $cacheConfig->path = BASE_PATH . '/var/cache';
         $cacheConfig->distributed = true;
         $cache = new Cache($cacheConfig);
         $this->_testActiveCache($cache);
@@ -49,6 +50,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public function testFileHandler()
     {
         $cacheConfig = new CacheConfig;
+        $cacheConfig->path = BASE_PATH . '/var/cache';
         $cache = new Cache($cacheConfig);
         //umieszczanie w buforze uszkodzonego pliku
         file_put_contents($cacheConfig->path . '/test', self::INVALID_CACHE_DATA);
