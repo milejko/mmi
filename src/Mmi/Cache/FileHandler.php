@@ -69,13 +69,9 @@ class FileHandler extends DistributedCacheHandlerAbstract
     {
         //iteracja po plikach
         foreach (glob($this->_cache->getConfig()->path . '/*') as $filename) {
-            //bez usuwania katalogu
-            if (is_dir($filename)) {
-                continue;
-            }
             //usuwanie pliku
             try {
-            unlink($filename);
+                is_file($filename) && unlink($filename);
             } catch (\Exception $e) {
                 //nic
             }

@@ -318,12 +318,14 @@ class Response
     }
 
     /**
-     * Wysyła dane do klienta
+     * Wysyła nagłówki do klienta
      */
-    public function send()
+    public function sendHeaders()
     {
         //iteracja po nagłówkach
-        foreach ($this->_headers as $header) {
+        foreach ($this->_headers as $key => $header) {
+            //usuwanie nagłówka
+            unset($this->_headers[$key]);
             try {
                 //wysłanie nagłówka
                 $header->send();
@@ -332,6 +334,15 @@ class Response
                 \Mmi\App\FrontController::getInstance()->getLogger()->warning('Unable to send header: ' . $header->getName() . ' with value ' . $header->getValue());
             }
         }
+    }
+
+    /**
+     * Wysyła dane do klienta
+     */
+    public function send()
+    {
+        //wysłanie nagłówków
+        $this->sendHeaders();
         //opcjonalne uruchomienie panelu deweloperskiego
         if ($this->_debug) {
             //debugger wykonuje zmianę w contencie
