@@ -32,14 +32,10 @@
 		"ext-mbstring": "*",
 		"ext-pcre": "*",
 		"ext-pdo": "*",
-		"ext-pdo_sqlite": "*",
 		"ext-reflection": "*",
 		"ext-session": "*",
         "ext-shmop": "*",
-        "ext-spl": "*",
-        "ext-sqlite3": "*",
-        "monolog/monolog": "1.*",
-        "graylog2/gelf-php": "1.4.*"
+        "ext-spl": "*"
     },
     "require-dev": {
         "php-console/php-console": "~3.1"
