@@ -35,7 +35,9 @@
 		"ext-reflection": "*",
 		"ext-session": "*",
         "ext-shmop": "*",
-        "ext-spl": "*"
+        "ext-spl": "*",
+        "monolog/monolog": "1.*",
+        "graylog2/gelf-php": "1.4.*"
     },
     "require-dev": {
         "php-console/php-console": "~3.1"
