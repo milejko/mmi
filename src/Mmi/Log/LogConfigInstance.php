@@ -10,8 +10,6 @@
 
 namespace Mmi\Log;
 
-use Monolog\Logger;
-
 /**
  * Klasa konfiguracji elementu loggera
  * 
@@ -43,7 +41,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelDebug()
     {
-        return $this->setOption('level', Logger::DEBUG);
+        return $this->setOption('level', 100);
     }
 
     /**
@@ -52,7 +50,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelInfo()
     {
-        return $this->setOption('level', Logger::INFO);
+        return $this->setOption('level', 200);
     }
 
     /**
@@ -61,7 +59,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelNotice()
     {
-        return $this->setOption('level', Logger::NOTICE);
+        return $this->setOption('level', 250);
     }
 
     /**
@@ -70,7 +68,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelWarning()
     {
-        return $this->setOption('level', Logger::WARNING);
+        return $this->setOption('level', 300);
     }
 
     /**
@@ -79,7 +77,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelError()
     {
-        return $this->setOption('level', Logger::ERROR);
+        return $this->setOption('level', 400);
     }
 
     /**
@@ -88,7 +86,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelAlert()
     {
-        return $this->setOption('level', Logger::ALERT);
+        return $this->setOption('level', 550);
     }
 
     /**
@@ -97,7 +95,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelCritical()
     {
-        return $this->setOption('level', Logger::CRITICAL);
+        return $this->setOption('level', 500);
     }
 
     /**
@@ -106,7 +104,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelEmergency()
     {
-        return $this->setOption('level', Logger::EMERGENCY);
+        return $this->setOption('level', 600);
     }
 
     /**
