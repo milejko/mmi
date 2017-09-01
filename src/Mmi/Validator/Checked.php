@@ -23,7 +23,7 @@ class Checked extends ValidatorAbstract
      * @param \Mmi\Form\Element\Checkbox $element
      * @return self
      */
-    public function setElement(\Mmi\Form\Element\Checkbox $element)
+    public function setElement(\Mmi\Form\Element\Checkbox $element = null)
     {
         return $this->setOption('element', $element);
     }
@@ -35,8 +35,12 @@ class Checked extends ValidatorAbstract
      */
     public function setOptions(array $options = [], $reset = false)
     {
-        return $this->setElement(current($options))
-                ->setMessage(next($options));
+        $element = current($options);
+        //jeśli element jest ustawiony
+        if ($element instanceof \Mmi\Form\Element\Checkbox) {
+            $this->setElement($element);
+        }
+        return $this->setMessage(next($options));
     }
 
     /**
@@ -47,7 +51,7 @@ class Checked extends ValidatorAbstract
     public function isValid($value = null)
     {
         //jeśli niezaznaczony
-        if (!$this->getElement()->isChecked()) {
+        if ($this->getElement() && !$this->getElement()->isChecked()) {
             return $this->_error(self::INVALID);
         }
         return true;

@@ -205,13 +205,13 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
                 continue;
             }
             //dodawanie tytułu
-            $title[] = ($breadcrumb['title']) ? strip_tags($breadcrumb['title']) : strip_tags($breadcrumb['label']);
+            $title[] = isset($breadcrumb['title']) ? strip_tags($breadcrumb['title']) : strip_tags($breadcrumb['label']);
             //dodawanie opisów
             if (isset($breadcrumb['description'])) {
                 $descriptions[] = strip_tags($breadcrumb['description']);
             }
             //ustawiony jest tytuł - nie łączymy z poprzednikami
-            if ($breadcrumb['title']) {
+            if (isset($breadcrumb['title'])) {
                 break;
             }
         }

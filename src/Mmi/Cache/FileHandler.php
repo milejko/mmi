@@ -54,7 +54,11 @@ class FileHandler extends DistributedCacheHandlerAbstract
     protected function _deleteNoBroadcasting($key)
     {
         //próba usunięcia pliku
-        unlink($this->_cache->getConfig()->path . '/' . $key);
+        try {
+            unlink($this->_cache->getConfig()->path . '/' . $key);
+        } catch (\Exception $e) {
+            //nic
+        }
         return true;
     }
 
@@ -70,7 +74,11 @@ class FileHandler extends DistributedCacheHandlerAbstract
                 continue;
             }
             //usuwanie pliku
+            try {
             unlink($filename);
+            } catch (\Exception $e) {
+                //nic
+            }
         }
     }
 
