@@ -91,7 +91,7 @@ class ActionHelper
     }
 
     /**
-     * Przekierowuje wykonanie do akcji
+     * Przekierowuje na request zwraca wyrenderowaną akcję i layout
      * @param \Mmi\Http\Request $request
      * @return string
      * @throws \Mmi\Mvc\MvcException
@@ -103,10 +103,18 @@ class ActionHelper
             //wyjątek niedozwolonej akcji
             throw new MvcForbiddenException('Action ' . $request->getAsColonSeparatedString() . ' blocked');
         }
+        //renderowanie akcji
+        $content = $this->_renderAction($request, $request, true);
+        //iteracja po pluginach front controllera
+        foreach (FrontController::getInstance()->getPlugins() as $plugin) {
+            //post dispatch
+            $plugin->postDispatch($request);
+            FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: plugins post-dispatch');
+        }
         //zmiana requestu i render layoutu
         return FrontController::getInstance()
             ->setRequest($request)
-            ->getView()->renderLayout($this->_renderAction($request, $request, true), $request);
+            ->getView()->renderLayout($content, $request);
     }
 
     /**

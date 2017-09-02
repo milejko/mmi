@@ -47,20 +47,6 @@ class Dispatcher
     }
 
     /**
-     * Uruchamianie metody postDispatch na zarejestrowanych pluginach
-     */
-    public function postDispatch()
-    {
-        //iteracja po pluginach
-        foreach (FrontController::getInstance()->getPlugins() as $plugin) {
-            //wykonywanie postDispatch() na kolejnych pluginach
-            $plugin->postDispatch(FrontController::getInstance()->getRequest());
-        }
-        //profiler
-        FrontController::getInstance()->getProfiler()->event('Mvc\Dispatcher: plugins post-dispatch');
-    }
-
-    /**
      * Dispatcher
      * @return string
      */
@@ -71,21 +57,13 @@ class Dispatcher
         $frontController = FrontController::getInstance();
         //ustawianie requestu po zdekodowaniu żądania przez router
         $frontController->getRequest()
-            ->setParams($frontController->getRouter()->decodeUrl(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri));
+            ->setParams($frontController->getRouter()->decodeUrl($frontController->getEnvironment()->requestUri));
         //informacja o zakończeniu ustawiania routingu
         $frontController->getProfiler()->event('Mvc\Dispatcher: routing applied');
         //wpięcie dla pluginów przed dispatchem
         $this->preDispatch();
-        //wybór i uruchomienie kontrolera akcji
-        $content = \Mmi\Mvc\ActionHelper::getInstance()->action($frontController->getRequest(), true);
-        //content już ustawiony
-        if (!$content && $frontController->getResponse()->getContent()) {
-            return $this->postDispatch();
-        }
-        //wpięcie dla pluginów po dispatchu
-        $this->postDispatch();
-        //zwrot contentu z layoutem
-        return $frontController->getResponse()->setContent($frontController->getView()->renderLayout($content, $frontController->getRequest()));
+        //ustawianie contentu po wykonaniu requestu
+        return $frontController->getResponse()->setContent(\Mmi\Mvc\ActionHelper::getInstance()->forward($frontController->getRequest()));
     }
 
 }

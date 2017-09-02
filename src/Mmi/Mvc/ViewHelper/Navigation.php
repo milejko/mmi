@@ -228,7 +228,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      * @param int $depth głębokość
      * @return string
      */
-    public function _getHtml($tree, $depth = 0)
+    protected function _getHtml($tree, $depth = 0)
     {
         //brak drzewa
         if (empty($tree) || !isset($tree['children'])) {

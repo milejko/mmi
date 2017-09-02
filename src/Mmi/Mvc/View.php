@@ -347,6 +347,12 @@ class View extends \Mmi\DataObject
         return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->_locale . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
+    /**
+     * Renderuje i zwraca wynik wykonania layoutu z ustawionym contentem
+     * @param string $content
+     * @param \Mmi\Http\Request $request
+     * @return string
+     */
     public function renderLayout($content, \Mmi\Http\Request $request)
     {
         return $this->isLayoutDisabled() ? $content : $this
