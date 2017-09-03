@@ -27,7 +27,7 @@ class Builder
     {
         //pomijanie modułów z vendorów
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
-            if (strtolower(basename($module)) == explode('_', $tableName)[0] && false !== strpos(realpath($module), 'vendor')) {
+            if (strtolower(basename($module)) == explode('_', $tableName)[0] && false !== strpos($module, 'vendor')) {
                 return;
             }
         }
