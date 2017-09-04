@@ -80,7 +80,7 @@ class FileHandler implements \SessionHandlerInterface
         if (!$data) {
             //próba czyszczenie jeśli plik znaleziony
             try {
-                file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
+                unlink($this->_namespace . $id);
             } catch (\Exception $e) {
                 //nic
             }
@@ -113,7 +113,7 @@ class FileHandler implements \SessionHandlerInterface
         }
         //próba usunięcia danych
         try {
-            file_exists($this->_namespace . $id) && unlink($this->_namespace . $id);
+            unlink($this->_namespace . $id);
         } catch (\Exception $e) {
             //nic
         }
@@ -129,10 +129,23 @@ class FileHandler implements \SessionHandlerInterface
     {
         //iteracja po plikach sesyjnych
         foreach (glob($this->_namespace . '*') as $sessionFile) {
-            //usuwanie starych plików
-            if (filemtime($sessionFile) < (time() - $maxLifetime)) {
-                //usuwanie pliku
+            //próba określenia daty pliku
+            try {
+                $fileTime = filemtime($sessionFile);
+            } catch (\Exception $e) {
+                //plik już skasowany
+                continue;
+            }
+            //sprawdzenie czy plik jest stary
+            if ($fileTime > (time() - $maxLifetime)) {
+                //nie jest
+                continue;
+            }
+            //próba usunięcia pliku
+            try {
                 unlink($sessionFile);
+            } catch (\Exception $e) {
+                //nie udało się usunąć (usunięty przez inny proces)
             }
         }
         return true;
