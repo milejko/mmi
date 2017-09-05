@@ -33,4 +33,21 @@ class KernelEventHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(KernelEventHandler::shutdownHandler(), 'Shutdown handler not returning null');
     }
 
+    /**
+     * 
+     * @throws \Mmi\App\KernelException
+     */
+    public function testExceptionHandler()
+    {
+        KernelEventHandler::exceptionHandler(new \Exception('test'));
+        $this->assertEquals('<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>', \Mmi\App\FrontController::getInstance()->getResponse()->getContent());
+        \Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
+        KernelEventHandler::exceptionHandler(new \Mmi\App\KernelException);
+        $this->assertStringStartsWith('Error 500', \Mmi\App\FrontController::getInstance()->getResponse()->getContent());
+        \Mmi\App\FrontController::getInstance()->getResponse()->setTypeJson();
+        KernelEventHandler::exceptionHandler(new \Mmi\App\KernelException);
+        $this->assertEquals('{"status":500,"error":"something went wrong"}', \Mmi\App\FrontController::getInstance()->getResponse()->getContent());
+        \Mmi\App\FrontController::getInstance()->getResponse()->setContent('');
+    }
+
 }

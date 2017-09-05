@@ -48,18 +48,15 @@ class KernelEventHandler
      */
     public static function shutdownHandler()
     {
-        //pobranie odpowiedzi z front kontrolera
-        $response = FrontController::getInstance()->getResponse();
+        //wysyłka odpowiedzi
+        FrontController::getInstance()->getResponse()
+            ->send();
         //przy braku błędów 
         if (!$error = error_get_last()) {
-            //wysłanie odpowiedzi
-            return $response->send();
+            return;
         }
         //logowanie błędu Emergency
-        FrontController::getInstance()->getLogger()->emergency($error['message']);
-        //wysyłanie odpowiedzi z błędem
-        $response->setContent(self::_rawErrorResponse($response))
-            ->send();
+        FrontController::getInstance()->getLogger()->emergency(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' (' . $error['type'] . ') ' . $error['message']);
     }
 
     /**
@@ -73,7 +70,7 @@ class KernelEventHandler
         try {
             ob_clean();
         } catch (\Exception $e) {
-            //nie było bufoea
+            //nie było bufora
         }
         //logowanie wyjątku
         self::_logException($exception);
@@ -108,20 +105,20 @@ class KernelEventHandler
      */
     private static function _rawErrorResponse(\Mmi\Http\Response $response)
     {
+        //wybór typów
         switch ($response->getType()) {
-            //typy HTML
-            case 'text/html':
-                return '<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>';
             //plaintext
             case 'text/plain':
                 return 'Error 500' . "\n" . 'Something went wrong' . "\n";
             //json
-            case 'application-x-json':
+            case 'application/json':
                 return json_encode([
                     'status' => 500,
                     'error' => 'something went wrong',
                 ]);
         }
+        //domyślnie html
+        return '<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>';
     }
 
     /**
