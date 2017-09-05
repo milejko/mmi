@@ -331,7 +331,7 @@ class Response
                 $header->send();
             } catch (\Mmi\App\KernelException $e) {
                 //logowanie błędu
-                \Mmi\App\FrontController::getInstance()->getLogger()->warning('Unable to send header: ' . $header->getName() . ' with value ' . $header->getValue());
+                \Mmi\App\FrontController::getInstance()->getLogger()->warning('Unable to send header: ' . $header->getName() . ' with value ' . $header->getValue() . ' ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri);
             }
         }
     }
