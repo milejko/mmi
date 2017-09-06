@@ -96,7 +96,7 @@ class KernelEventHandler {
 	 * @param \Mmi\Http\Response $response
 	 */
 	private static function _sendResponse(\Mmi\Http\Response $response) {
-		$response->setCodeError()
+		$response->setCodeNotFound()
 			->send();
 		return true;
 	}
