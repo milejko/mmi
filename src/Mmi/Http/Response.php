@@ -319,37 +319,48 @@ class Response
 
     /**
      * Wysyła nagłówki do klienta
+     * @return \Mmi\Http\Response
      */
     public function sendHeaders()
     {
         //iteracja po nagłówkach
         foreach ($this->_headers as $key => $header) {
-            //usuwanie nagłówka
+            //usuwanie nagłówka z rejestru
             unset($this->_headers[$key]);
-            try {
-                //wysłanie nagłówka
-                $header->send();
-            } catch (\Mmi\App\KernelException $e) {
-                //logowanie błędu
-                \Mmi\App\FrontController::getInstance()->getLogger()->warning('Unable to send header: ' . $header->getName() . ' with value ' . $header->getValue());
-            }
+            //wysłanie nagłówka
+            $header->send();
         }
+        return $this;
+    }
+
+    /**
+     * Czyści nagłówki
+     * @return \Mmi\Http\Response
+     */
+    public function clearHeaders()
+    {
+        $this->_headers = [];
+        return $this;
     }
 
     /**
      * Wysyła dane do klienta
+     * @param boolean $headers send headers?
+     * @return \Mmi\Http\Response
      */
-    public function send()
+    public function send($headers = true)
     {
         //wysłanie nagłówków
-        $this->sendHeaders();
+        $headers ? $this->sendHeaders() : null;
         //opcjonalne uruchomienie panelu deweloperskiego
         if ($this->_debug) {
             //debugger wykonuje zmianę w contencie
             new \Mmi\Http\ResponseDebugger;
         }
-        //zwrot contentu
+        //zwrot zawartości
         echo $this->_content;
+        //usunięcie zawartości
+        return $this->setContent('');
     }
 
     /**

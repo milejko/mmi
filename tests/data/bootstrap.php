@@ -26,10 +26,3 @@ foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'va
 
 //kopiowanie testowej bazy danych do tmp
 copy(BASE_PATH . '/tests/data/db.sqlite', BASE_PATH . '/var/test-db.sqlite');
-
-ob_start();
-//uruchomienie aplikacji CLI
-(new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', 'DEFAULT'))->run();
-while (!empty(ob_get_status())) {
-    ob_end_clean();
-}

@@ -37,7 +37,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEmptyStructure()
     {
-        FrontController::getInstance()->getStructure();
+        FrontController::getInstance(true)->getStructure();
     }
 
     /**

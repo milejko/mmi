@@ -45,6 +45,7 @@ class KernelEventHandler
 
     /**
      * Handler zamknięcia aplikacji
+     * @return \Mmi\Http\Response
      */
     public static function shutdownHandler()
     {

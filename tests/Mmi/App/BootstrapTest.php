@@ -42,7 +42,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\Mmi\App\KernelProfiler', \Mmi\App\FrontController::getInstance()->getProfiler());
         $response = $this->_testResponseAfterRun();
         ob_start();
-        $this->assertNull($response->send());
+        $this->assertInstanceOf('\Mmi\Http\Response', $response->send(false));
         $html = ob_get_contents();
         $this->assertRegExp('/' . \Mmi\IndexController::DEFAULT_LABEL . '/', $html);
         $this->assertRegExp('/#MmiPanel/', $html);

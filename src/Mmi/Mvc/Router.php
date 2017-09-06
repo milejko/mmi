@@ -81,8 +81,6 @@ class Router
         if (isset($params['module'])) {
             return $params;
         }
-        //domyślny moduł
-        $params['module'] = isset($params['module']) ? $params['module'] : 'mmi';
         //filtrowanie URL
         $filteredUrl = html_entity_decode(trim((isset($parsedUrl['path']) ? $parsedUrl['path'] : ''), '/ '), ENT_HTML401 | ENT_HTML5 | ENT_QUOTES, 'UTF-8');
         //próba aplikacji rout
@@ -123,10 +121,6 @@ class Router
         //czyszczenie dopasowanych z routy
         foreach (isset($matched) ? $matched : [] as $match => $value) {
             unset($params[$match]);
-        }
-        //usuwanie modułu jeśli mmi
-        if (isset($params['module']) && $params['module'] == 'mmi') {
-            unset($params['module']);
         }
         //usuwanie kontrolera jeśli index
         if (isset($params['controller']) && $params['controller'] == 'index') {

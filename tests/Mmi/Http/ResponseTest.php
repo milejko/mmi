@@ -78,7 +78,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $view->anotherVariable = 'test';
         $this->assertEquals('test content', $response->getContent());
         ob_start();
-        $this->assertNull($response->send());
+        $this->assertInstanceOf('\Mmi\Http\Response', $response->send(false));
         $this->assertEquals('test content', ob_get_contents());
         ob_end_clean();
     }
@@ -92,7 +92,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         foreach ($response->getHeaders() as $header) {
             $this->assertInstanceOf('\Mmi\Http\ResponseHeader', $header);
         }
-        $this->assertNull($response->send());
+        $this->assertInstanceOf('\Mmi\Http\Response', $response->send(false));
     }
 
     /**
