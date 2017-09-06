@@ -51,12 +51,11 @@ class KernelEventHandler
         //wysyłka odpowiedzi
         FrontController::getInstance()->getResponse()
             ->send();
-        //przy braku błędów 
-        if (!$error = error_get_last()) {
-            return;
+        //obsługa błędów nieobsłużonych przez error handler
+        if (null !== $error = error_get_last()) {
+            //logowanie błędu poza zamknięciem aplikacji
+            FrontController::getInstance()->getLogger()->notice(FrontController::getInstance()->getEnvironment()->requestUri . ' (' . $error['type'] . '): ' . $error['message']);
         }
-        //logowanie błędu Emergency
-        FrontController::getInstance()->getLogger()->emergency(\Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' (' . $error['type'] . ') ' . $error['message']);
     }
 
     /**

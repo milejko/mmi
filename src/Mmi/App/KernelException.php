@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-use Monolog\Logger;
+use Mmi\Log\LogConfigInstance;
 
 /**
  * Wyjątek aplikacji
@@ -22,7 +22,7 @@ class KernelException extends \Exception
      * Poziom logowania
      * @var integer
      */
-    protected $code = Logger::ERROR;
+    protected $code = LogConfigInstance::ERROR;
 
     /**
      * Pobiera sformatowaną wiadomość

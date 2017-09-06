@@ -10,7 +10,7 @@
 
 namespace Mmi\Mvc;
 
-use Monolog\Logger;
+use Mmi\Log\LogConfigInstance;
 
 /**
  * Klasa wyjątku nieodnalezionego miejsca mvc
@@ -22,7 +22,7 @@ class MvcNotFoundException extends MvcException
      * Poziom logowania
      * @var integer
      */
-    protected $code = Logger::INFO;
+    protected $code = LogConfigInstance::INFO;
 
     /**
      * Konstruktor
@@ -30,7 +30,7 @@ class MvcNotFoundException extends MvcException
      * @param integer $code
      * @param \Exception $previous
      */
-    public function __construct($message = "", $code = 0, \Exception $previous = null)
+    public function __construct($message = "", $code = LogConfigInstance::INFO, \Exception $previous = null)
     {
         //ignorowanie transakcji
         extension_loaded('newrelic') ? newrelic_ignore_transaction() : null;

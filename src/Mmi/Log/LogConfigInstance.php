@@ -25,6 +25,16 @@ namespace Mmi\Log;
 class LogConfigInstance extends \Mmi\OptionObject
 {
 
+    //poziomy logowania
+    CONST DEBUG = 100;
+    CONST INFO = 200;
+    CONST NOTICE = 250;
+    CONST WARNING = 300;
+    CONST ERROR = 400;
+    CONST CRITICAL = 500;
+    CONST ALERT = 550;
+    CONST EMERGENCY = 600;    
+    
     /**
      * Domyślne ustawienia
      */
@@ -41,7 +51,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelDebug()
     {
-        return $this->setOption('level', 100);
+        return $this->setOption('level', self::DEBUG);
     }
 
     /**
@@ -50,7 +60,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelInfo()
     {
-        return $this->setOption('level', 200);
+        return $this->setOption('level', self::INFO);
     }
 
     /**
@@ -59,7 +69,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelNotice()
     {
-        return $this->setOption('level', 250);
+        return $this->setOption('level', self::NOTICE);
     }
 
     /**
@@ -68,7 +78,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelWarning()
     {
-        return $this->setOption('level', 300);
+        return $this->setOption('level', self::WARNING);
     }
 
     /**
@@ -77,16 +87,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelError()
     {
-        return $this->setOption('level', 400);
-    }
-
-    /**
-     * Poziom na Alert
-     * @return \Mmi\Log\LogConfigInstance
-     */
-    public function setLevelAlert()
-    {
-        return $this->setOption('level', 550);
+        return $this->setOption('level', self::ERROR);
     }
 
     /**
@@ -95,7 +96,16 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelCritical()
     {
-        return $this->setOption('level', 500);
+        return $this->setOption('level', self::CRITICAL);
+    }
+
+    /**
+     * Poziom na Alert
+     * @return \Mmi\Log\LogConfigInstance
+     */
+    public function setLevelAlert()
+    {
+        return $this->setOption('level', self::ALERT);
     }
 
     /**
@@ -104,7 +114,7 @@ class LogConfigInstance extends \Mmi\OptionObject
      */
     public function setLevelEmergency()
     {
-        return $this->setOption('level', 600);
+        return $this->setOption('level', self::EMERGENCY);
     }
 
     /**
