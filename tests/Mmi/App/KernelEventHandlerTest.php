@@ -30,7 +30,7 @@ class KernelEventHandlerTest extends \PHPUnit\Framework\TestCase
     {
         //czyszczenie odpowiedzi
         \Mmi\App\FrontController::getInstance()->setResponse(new \Mmi\Http\Response);
-        $this->assertInstanceOf('\Mmi\Http\Response', (KernelEventHandler::shutdownHandler()));
+        $this->assertNull(KernelEventHandler::shutdownHandler());
     }
 
     /**
