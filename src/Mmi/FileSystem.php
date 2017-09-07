@@ -98,22 +98,32 @@ class FileSystem
      */
     public static function rmdirRecursive($dirName)
     {
-        //nie istnieje
-        if (!file_exists($dirName)) {
+        //próba zbadania czy jest plikiem
+        try {
+            $isFile = is_file($dirName);
+        } catch (\Exception $e) {
             return false;
         }
         //zwykły plik
-        if (is_file($dirName)) {
+        if ($isFile) {
+            //próba usunięcia
             try {
-                //próba usunięcia
                 unlink($dirName);
             } catch (\Exception $e) {
+                //prawdopodobnie już usunięty
                 return false;
             }
             return true;
         }
+        //próba otwarcia katalogu
+        try {
+            $directoryIterator = new \DirectoryIterator($dirName);
+        } catch (\Exception $e) {
+            //prawdopodobnie już usunięty
+            return false;
+        }
         //iteracja po katalogu
-        foreach (new \DirectoryIterator($dirName) as $dir) {
+        foreach ($directoryIterator as $dir) {
             //katalog .
             if ($dir->isDot()) {
                 continue;
@@ -121,10 +131,11 @@ class FileSystem
             //usunięcie rekurencyjne
             self::rmdirRecursive($dir->getPathname());
         }
-        //usunięcie pustego katalogu
+        //próba usunięcia pustego katalogu
         try {
             rmdir($dirName);
         } catch (\Exception $e) {
+            //prawdopodobnie już usunięty
             return false;
         }
         return true;
