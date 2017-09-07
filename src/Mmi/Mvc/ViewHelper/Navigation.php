@@ -197,6 +197,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
         //iteracja po odwróconej tablicy breadcrumbów
         foreach (array_reverse($data) as $breadcrumb) {
             $i++;
+            $breadcrumb['label'] = isset($breadcrumb['label']) ? $breadcrumb['label'] : '';
             //dodawanie breadcrumbów (ostatni nie ma linku)
             $breadcrumbs[] = ($i == 1) ? ('<span>' . strip_tags($breadcrumb['label']) . '</span>') :
                 ('<a href="' . $breadcrumb['uri'] . '">' . strip_tags($breadcrumb['label']) . '</a>');
