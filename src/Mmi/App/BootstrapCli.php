@@ -39,8 +39,9 @@ class BootstrapCli extends \Mmi\App\Bootstrap
             ->setControllerName('index')
             ->setActionName('index');
         //ustawianie żądania
-        \Mmi\App\FrontController::getInstance()->setRequest($request)
+        FrontController::getInstance()->setRequest($request)
             ->getView()->setRequest($request);
+        FrontController::getInstance()->getResponse()->clearHeaders();
     }
 
 }
