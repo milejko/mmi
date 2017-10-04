@@ -20,7 +20,4 @@ define('BASE_PATH', realpath(dirname(__FILE__)) . '/../');
 $loader = require BASE_PATH . 'vendor/autoload.php';
 
 $application = new Application();
-$application->add((new \Mmi\Console\DbDeployCommand()));
-$application->add((new \Mmi\Console\FlushCacheCommand()));
-$application->add((new \Mmi\Console\DaoRenderCommand()));
 $application->run();

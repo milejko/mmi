@@ -15,6 +15,11 @@ class FlushCacheCommand extends CommandAbstract
         parent::configure();
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         //czyszczenie bufora systemowego
@@ -22,7 +27,7 @@ class FlushCacheCommand extends CommandAbstract
         //czyszczenie bufora aplikacyjnego
         \App\Registry::$cache->flush();
 
-        $output->writeln('Cache flushed on ' . $input->getOption('env') . ' environment');
+        $output->writeln('Cache flushed');
     }
 
 }

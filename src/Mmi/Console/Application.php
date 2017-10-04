@@ -2,6 +2,7 @@
 
 namespace Mmi\Console;
 
+use Mmi\Mvc\StructureParser;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -12,14 +13,13 @@ class Application extends BaseApplication
 
     /**
      * Application constructor.
-     * @param string $name
-     * @param string $version
      */
     public function __construct()
     {
         parent::__construct('MMi Console', '1.0');
 
-        $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.'));
+        $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED,
+            'The Environment name.'));
     }
 
     /**
@@ -40,4 +40,40 @@ class Application extends BaseApplication
 
         return parent::doRun($input, $output);
     }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultCommands()
+    {
+        return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
+    }
+
+    /**
+     * Pobieranie komend z aplikacji
+     */
+    protected function getApplicationCommands()
+    {
+        $commands = [];
+        foreach (StructureParser::getModules() as $module) {
+            //namespace modułu
+            $moduleNamespace = substr($module, strrpos($module, '/') + 1, strlen($module));
+            //iteracja po komendach konsolowych
+            foreach (glob($module . '/Console/*Command.php') as $command) {
+                $className = basename($command, '.php');
+                $class = '\\' . $moduleNamespace . '\\Console\\' . $className;
+
+                //reflection do sprawdzenia pochodzenia
+                $r = new \ReflectionClass($class);
+                if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command')
+                    && !$r->isAbstract()
+                    && !$r->getConstructor()->getNumberOfRequiredParameters()
+                ) {
+                    $commands[] = $r->newInstance();
+                }
+            }
+        }
+        return $commands;
+    }
+
 }

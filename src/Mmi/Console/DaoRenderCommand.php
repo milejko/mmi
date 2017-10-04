@@ -15,6 +15,11 @@ class DaoRenderCommand extends CommandAbstract
         parent::configure();
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         //odbudowanie wszystkich DAO/Record/Query/Field/Join
@@ -23,7 +28,7 @@ class DaoRenderCommand extends CommandAbstract
             \Mmi\Orm\Builder::buildFromTableName($tableName);
         }
 
-        $output->writeln('DAO classess rendered for ' . $input->getOption('env') . ' environment');
+        $output->writeln('DAO classess rendered');
     }
 
 }
