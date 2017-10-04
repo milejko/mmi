@@ -5,7 +5,7 @@ namespace Mmi\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DbDeployCommand extends Command
+class DbDeployCommand extends CommandAbstract
 {
 
     public function configure()

@@ -5,7 +5,7 @@ namespace Mmi\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DaoRenderCommand extends Command
+class DaoRenderCommand extends CommandAbstract
 {
 
     public function configure()
