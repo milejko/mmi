@@ -1,5 +1,6 @@
 /composer.lock
 /nbproject/
+/.idea
 /src/App/
 /var/
 /vendor/
