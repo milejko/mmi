@@ -117,7 +117,7 @@ class Deployer
     protected function _performQuery($query)
     {
         //brak query
-        if (!$query) {
+        if (!trim($query)) {
             return;
         }
         //start transakcji
