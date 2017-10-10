@@ -19,21 +19,6 @@ use Mmi\Form\Element;
  * @method Form setClass($class) ustawia nazwę klasy
  * @method Form setMethod($method) ustawia nazwę metody
  * @method Form setAction($action) ustawia akcję
- * 
- * @method Element\Button addElementButton($name) dodaje element button
- * @method Element\Checkbox addElementCheckbox($name) dodaje element checkbox
- * @method Element\File addElementFile($name) dodaje element file
- * @method Element\Hidden addElementHidden($name) dodaje element hidden
- * @method Element\Label addElementLabel($name) dodaje element label
- * @method Element\MultiCheckbox addElementMultiCheckbox($name) dodaje element multicheckbox
- * @method Element\Password addElementPassword($name) dodaje element password
- * @method Element\Radio addElementRadio($name) dodaje element radio
- * @method Element\Select addElementSelect($name) dodaje element select
- * @method Element\Submit addElementSubmit($name) dodaje element submit
- * @method Element\Text addElementText($name) dodaje element text
- * @method Element\Textarea addElementTextarea($name) dodaje element textarea
- * @method Element\Csrf addElementCsrf($name) dodaje element zabezpieczający CSRF
- * @method Element\Email addElementEmail($name) dodaje element email
  */
 abstract class Form extends \Mmi\OptionObject
 {

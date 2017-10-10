@@ -24,54 +24,6 @@ namespace Mmi\Form\Element;
  * @method self setValue($value) ustawia wartość
  * @method self setId($id) ustawia identyfikator
  * @method self setPlaceholder($placeholder) ustawia placeholder pola
- * 
- * Walidatory
- * @method self addValidatorAlnum($message = null) walidator alfanumeryczny
- * @method self addValidatorDate($message = null) walidator daty
- * @method self addValidatorEmailAddress($message = null) walidator email
- * @method self addValidatorEmailAddressList($message = null) walidator listy email
- * @method self addValidatorEqual($value, $message = null) walidator równości
- * @method self addValidatorIban($country = null, $message = null) walidator IBAN
- * @method self addValidatorInteger($message = null) walidator liczb całkowitych
- * @method self addValidatorIp4($message = null) walidator IPv4
- * @method self addValidatorIp6($message = null) walidator IPv6
- * @method self addValidatorNotEmpty($message = null) walidator niepustości
- * @method self addValidatorNumberBetween($from, $to, $message = null) walidator numer pomiędzy
- * @method self addValidatorNumeric($message = null) walidator numeryczny
- * @method self addValidatorPostal($message = null) walidator kodu pocztowego
- * @method self addValidatorRecordUnique(\Mmi\Orm\Query $query, $field, $id = null, $message = null) walidator unikalności rekordu
- * @method self addValidatorRegex($pattern, $message = null) walidator regex
- * @method self addValidatorStringLength($from, $to, $message = null) walidator długości ciągu
- * @method self addValidatorJson($message = null) walidator json
- * 
- * Filtry
- * @method self addFilterAlnum() filtr alfanumeryczny
- * @method self addFilterAscii() filtr ASCII
- * @method self addFilterCapitalize() filtr kapitalizacja
- * @method self addFilterCeil() filtr sufit
- * @method self addFilterCount() filtr zliczający
- * @method self addFilterDateFormat($format) filtr formatujący datę
- * @method self addFilterDump() filtr zrzucający
- * @method self addFilterEmptyToNull() filtr konwertujący pustą wartość do null
- * @method self addFilterEscape() filtr wykluczający HTML
- * @method self addFilterInput() filtr tekstowy
- * @method self addFilterIntval() filtr konwertujący do liczby całkowitej
- * @method self addFilterIsEmpty() filtr sprawdzający pustość
- * @method self addFilterLength() filtr długości zmiennej
- * @method self addFilterLowercase() filtr obniżający litery
- * @method self addFilterMarkupProperty() filtr wycina znaki do poprawnych dla atrybutu HTML
- * @method self addFilterNl2Br() filtr nowa linia do br
- * @method self addFilterNumberFormat($digits, $separator, $thousands = null, $trimZeros = null, $trimZerosLeave = null) filtr format liczby
- * @method self addFilterReplace($search, $replace) filtr zamiana
- * @method self addFilterRound($precision) filtr zaokrąglenie z precyzją
- * @method self addFilterStringTrim($extras) filtr trim
- * @method self addFilterStripTags($exceptions) filtr usuwanie tagów HTML
- * @method self addFilterTinyMce() filtr dla tinyMce
- * @method self addFilterTruncate($length, $ending = '...', $boundary = false) filtr obcięcie
- * @method self addFilterUppercase() filtr wielkie litery
- * @method self addFilterUrl() filtr url
- * @method self addFilterUrlencode() filtr urlencode
- * @method self addFilterZeroToNull() filtr zero do null'a
  */
 abstract class ElementAbstract extends \Mmi\OptionObject
 {
@@ -552,28 +504,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-    }
-
-    /**
-     * Obsługa dodawania validatorów i filtrów
-     * @param string $name
-     * @param array $params
-     * @return mixed
-     */
-    public function __call($name, $params)
-    {
-        $matches = [];
-        //obsługa walidatorów
-        if (preg_match('/^addValidator([a-zA-Z0-9]+)/', $name, $matches)) {
-            $validatorClass = '\\Mmi\\Validator\\' . $matches[1];
-            return $this->addValidator(new $validatorClass($params));
-        }
-        //obsługa filtrów
-        if (preg_match('/^addFilter([a-zA-Z0-9]+)/', $name, $matches)) {
-            $filterClass = '\\Mmi\\Filter\\' . $matches[1];
-            return $this->addFilter(new $filterClass($params));
-        }
-        return parent::__call($name, $params);
     }
 
 }
