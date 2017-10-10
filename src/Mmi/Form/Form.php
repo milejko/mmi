@@ -120,12 +120,13 @@ abstract class Form extends \Mmi\OptionObject
     /**
      * Dodawanie elementu formularza z gotowego obiektu
      * @param \Mmi\Form\Element\ElementAbstract $element obiekt elementu formularza
-     * @return \Mmi\Form\Element\ElementAbstract
+     * @return self
      */
-    public final function addElement(\Mmi\Form\Element\ElementAbstract $element)
+    public function addElement(\Mmi\Form\Element\ElementAbstract $element)
     {
         //ustawianie opcji na elemencie
-        return $this->_elements[$element->getName()] = $element->setForm($this);
+        $this->_elements[$element->getName()] = $element->setForm($this);
+        return $this;
     }
 
     /**
