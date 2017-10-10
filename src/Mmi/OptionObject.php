@@ -107,6 +107,7 @@ class OptionObject
      * @param string $name
      * @param array $params
      * @return mixed
+     * @throws App\KernelException
      */
     public function __call($name, $params)
     {
