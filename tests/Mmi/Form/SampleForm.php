@@ -53,9 +53,9 @@ class SampleForm extends \Mmi\Form\Form
             $element->setLabel('l:' . $name)
                 ->setDescription('d:' . $name)
                 ->setValue('v:' . $name)
-                ->addFilterCapitalize()
-                ->addFilterAscii()
-                ->addValidatorStringLength(3, 30, 'Invalid string length');
+                ->addFilter(new \Mmi\Filter\Capitalize)
+                ->addFilter(new \Mmi\Filter\Ascii)
+                ->addValidator(new \Mmi\Validator\StringLength([3, 30, 'Invalid string length']));
         }
         
     }
