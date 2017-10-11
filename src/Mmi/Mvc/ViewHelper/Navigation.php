@@ -168,9 +168,30 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
         //sprawdzanie czy auth i acl włączone
         if ($this->_allowedOnly && self::$_auth && self::$_acl) {
             //sprawdzenie na acl
-            return self::$_acl->isAllowed(self::$_auth->getRoles(), strtolower($leaf['module'] . ':' . $leaf['controller'] . ':' . $leaf['action']));
+            return self::$_acl->isAllowed(self::$_auth->getRoles(), strtolower($leaf['module'] . ':' . $leaf['controller'] . ':' . $leaf['action']))
+				&& $this->_checkRoles($leaf);
         }
         return true;
+    }
+	
+    /**
+     * Sprawdzenie dostępności liścia dla zalogowanych roli
+     * @param array $leaf liść
+     * @return boolean
+     */
+    protected function _checkRoles(array &$leaf)
+    {
+		if (!isset($leaf['roles']) || empty($leaf['roles'])) {
+			return true;
+		}
+		//dla każdej roli użytkownika
+		foreach (self::$_auth->getRoles() as $role) {
+			//sprawdzenie czy dopuszczone
+			if (in_array($role, $leaf['roles'])) {
+				return true;
+			}
+		}
+		return false;
     }
 
     /**

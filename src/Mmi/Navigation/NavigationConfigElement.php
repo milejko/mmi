@@ -62,7 +62,9 @@ class NavigationConfigElement extends \Mmi\OptionObject
             //tabela z elementami potomnymi
             'children' => [],
             //konfiguracja
-            'config' => new \Mmi\DataObject
+            'config' => new \Mmi\DataObject,
+			//role, które mają dostęp
+			'roles' => []
         ]);
     }
 
@@ -129,6 +131,16 @@ class NavigationConfigElement extends \Mmi\OptionObject
     public function setConfig(\Mmi\DataObject $config)
     {
         return $this->setOption('config', $config);
+    }
+	
+    /**
+     * Ustawia role, które posiadają dostęp
+     * @param array $roles
+     * @return \Mmi\Navigation\NavigationConfigElement
+     */
+    public function setRoles(array $roles = [])
+    {
+        return $this->setOption('roles', $roles);
     }
 
     /**
