@@ -16,6 +16,9 @@ namespace Mmi\Form\Element;
 class Checkbox extends ElementAbstract
 {
 
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/checkbox';
+
     /**
      * Konstruktor ustawia kolejność i opcje
      * @param string $name
@@ -26,15 +29,6 @@ class Checkbox extends ElementAbstract
         $this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchLabel', 'fetchDescription', 'fetchErrors', 'fetchEnd'])
             ->setLabelPostfix('')
             ->setValue(1);
-    }
-
-    /**
-     * Render pola
-     * @return string
-     */
-    public function fetchField()
-    {
-        return '<input type="checkbox" ' . $this->_getHtmlOptions() . '/>';
     }
 
     /**

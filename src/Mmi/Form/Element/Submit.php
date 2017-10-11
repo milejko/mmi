@@ -16,6 +16,9 @@ namespace Mmi\Form\Element;
 class Submit extends ElementAbstract
 {
 
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/submit';
+
     /**
      * Konstruktor, ustawia nazwę pola i opcje
      * @param string $name nazwa
@@ -25,19 +28,6 @@ class Submit extends ElementAbstract
         parent::__construct($name);
         $this->setIgnore()
             ->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
-    }
-
-    /**
-     * Buduje pole
-     * @return string
-     */
-    public function fetchField()
-    {
-        //labelka jako value
-        if ($this->getLabel()) {
-            $this->setValue($this->getLabel());
-        }
-        return '<input type="submit" ' . $this->_getHtmlOptions() . '/>';
     }
 
 }

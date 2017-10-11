@@ -452,7 +452,15 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Buduje pole
      * @return string
      */
-    public abstract function fetchField();
+    public function fetchField()
+    {
+        //opcje do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_htmlOptions = $this->_getHtmlOptions();
+        //element do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_FIELD);
+    }
 
     /**
      * Buduje opis pola

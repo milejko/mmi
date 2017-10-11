@@ -16,6 +16,9 @@ namespace Mmi\Form\Element;
 class File extends ElementAbstract
 {
 
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/file';
+
     /**
      * Informacje o zuploadowanym pliku
      * @var \Mmi\Http\RequestFile[]
@@ -23,14 +26,10 @@ class File extends ElementAbstract
     private $_files = [];
 
     /**
-     * Buduje pole
-     * @return string
+     * Ustawia formularz
+     * @param \Mmi\Form\Form $form
+     * @return \Mmi\Form\Element\File
      */
-    public function fetchField()
-    {
-        return '<input type="file" ' . $this->_getHtmlOptions() . '/>';
-    }
-
     public function setForm(\Mmi\Form\Form $form)
     {
         parent::setForm($form);

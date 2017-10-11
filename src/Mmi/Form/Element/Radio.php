@@ -16,38 +16,8 @@ namespace Mmi\Form\Element;
 class Radio extends ElementAbstract
 {
 
-    /**
-     * Buduje pole
-     * @return string
-     */
-    public function fetchField()
-    {
-        $baseId = $this->getId();
-        $value = $this->getValue();
-        $html = '<ul id="' . $this->getId() . '-list">';
-        $f = new \Mmi\Filter\Url;
-        foreach ($this->getMultioptions() as $key => $caption) {
-            //konfiguracja pola
-            $this->setValue($key)
-                ->unsetOption('checked')
-                ->setId($baseId . '-' . $f->filter($key));
-            //ustalenie zaznaczenia
-            if ($value !== null && $value == $key) {
-                $this->setOption('checked', '');
-            }
-            //wartość wyłączona
-            if (strpos($key, ':disabled') !== false) {
-                $this->setDisabled();
-            }
-            $html .= '<li id="' . $this->getId() . '-item">
-				<input type="radio" ' . $this->_getHtmlOptions() . ' />
-				<label for="' . $this->getId() . '">' . $caption . '</label></li>';
-        }
-        //reset całego pola
-        $this->setId($baseId)
-            ->setValue($value);
-        return $html . '</ul>';
-    }
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/radio';
 
     /**
      * Buduje etykietę pola
