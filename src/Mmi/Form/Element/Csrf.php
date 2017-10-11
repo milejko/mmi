@@ -16,6 +16,9 @@ namespace Mmi\Form\Element;
 class Csrf extends Hidden
 {
 
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/hidden';
+
     /**
      * Ignorowanie tego pola, pole obowiązkowe, automatyczna walidacja
      */

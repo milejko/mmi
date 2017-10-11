@@ -16,6 +16,9 @@ namespace Mmi\Form\Element;
 class Hidden extends ElementAbstract
 {
 
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/element/hidden';
+
     /**
      * Konstruktor zmienia kolejność renderowania
      * @param string $name
@@ -24,15 +27,6 @@ class Hidden extends ElementAbstract
     {
         parent::__construct($name);
         $this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
-    }
-
-    /**
-     * Buduje pole
-     * @return string
-     */
-    public function fetchField()
-    {
-        return '<input type="hidden" ' . $this->_getHtmlOptions() . '/>';
     }
 
 }

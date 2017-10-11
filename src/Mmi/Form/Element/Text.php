@@ -16,14 +16,7 @@ namespace Mmi\Form\Element;
 class Text extends ElementAbstract
 {
 
-    /**
-     * Rendering pola tekstowego
-     * @return string
-     */
-    public function fetchField()
-    {
-        $this->setValue((new \Mmi\Filter\Input)->filter($this->getValue()));
-        return '<input type="text" ' . $this->_getHtmlOptions() . '/>';
-    }
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/element/text';
 
 }

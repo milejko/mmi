@@ -16,15 +16,7 @@ namespace Mmi\Form\Element;
 class Textarea extends ElementAbstract
 {
 
-    /**
-     * Buduje pole
-     * @return string
-     */
-    public function fetchField()
-    {
-        $value = (new \Mmi\Filter\Input)->filter($this->getValue());
-        $this->unsetOption('value');
-        return '<textarea ' . $this->_getHtmlOptions() . '>' . $value . '</textarea>';
-    }
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/element/textarea';
 
 }

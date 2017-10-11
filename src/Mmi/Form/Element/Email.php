@@ -16,14 +16,7 @@ namespace Mmi\Form\Element;
 class Email extends ElementAbstract
 {
 
-    /**
-     * Rendering pola typu e-mail
-     * @return string
-     */
-    public function fetchField()
-    {
-        $this->setValue((new \Mmi\Filter\Input)->filter($this->getValue()));
-        return '<input type="email" ' . $this->_getHtmlOptions() . '/>';
-    }
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/element/email';
 
 }

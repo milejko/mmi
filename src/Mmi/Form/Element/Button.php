@@ -15,6 +15,9 @@ namespace Mmi\Form\Element;
  */
 class Button extends ElementAbstract
 {
+    
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/element/button';
 
     /**
      * Ignorowanie tego pola, inna kolejnośc renderowania
@@ -36,7 +39,10 @@ class Button extends ElementAbstract
         if ($this->getLabel()) {
             $this->setValue($this->getLabel());
         }
-        return '<input type="button" ' . $this->_getHtmlOptions() . '/>';
+        //opcje do widoku
+        \Mmi\App\FrontController::getInstance()->getView()->_htmlOptions = $this->_getHtmlOptions();
+        //render szablonu
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_FIELD);
     }
 
 }

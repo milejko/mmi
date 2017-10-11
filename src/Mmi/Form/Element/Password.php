@@ -16,13 +16,7 @@ namespace Mmi\Form\Element;
 class Password extends ElementAbstract
 {
 
-    /**
-     * Buduje pole
-     * @return string
-     */
-    public function fetchField()
-    {
-        return '<input type="password" ' . $this->_getHtmlOptions() . '/>';
-    }
+    //szablon pola
+    const TEMPLATE_FIELD = 'mmi/form/element/password';
 
 }
