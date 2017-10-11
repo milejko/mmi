@@ -17,7 +17,7 @@ class Hidden extends ElementAbstract
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/hidden';
+    const TEMPLATE_FIELD = 'mmi/form/element/hidden';
 
     /**
      * Konstruktor zmienia kolejność renderowania

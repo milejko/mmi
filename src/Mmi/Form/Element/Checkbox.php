@@ -17,7 +17,7 @@ class Checkbox extends ElementAbstract
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/checkbox';
+    const TEMPLATE_FIELD = 'mmi/form/element/checkbox';
 
     /**
      * Konstruktor ustawia kolejność i opcje

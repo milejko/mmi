@@ -17,6 +17,6 @@ class Email extends ElementAbstract
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/email';
+    const TEMPLATE_FIELD = 'mmi/form/element/email';
 
 }

@@ -17,7 +17,7 @@ class Submit extends ElementAbstract
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/submit';
+    const TEMPLATE_FIELD = 'mmi/form/element/submit';
 
     /**
      * Konstruktor, ustawia nazwę pola i opcje

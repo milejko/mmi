@@ -17,7 +17,7 @@ class Button extends ElementAbstract
 {
     
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/button';
+    const TEMPLATE_FIELD = 'mmi/form/element/button';
 
     /**
      * Ignorowanie tego pola, inna kolejnośc renderowania

@@ -17,7 +17,7 @@ class File extends ElementAbstract
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/file';
+    const TEMPLATE_FIELD = 'mmi/form/element/file';
 
     /**
      * Informacje o zuploadowanym pliku

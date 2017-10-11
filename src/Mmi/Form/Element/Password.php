@@ -17,6 +17,6 @@ class Password extends ElementAbstract
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/password';
+    const TEMPLATE_FIELD = 'mmi/form/element/password';
 
 }
