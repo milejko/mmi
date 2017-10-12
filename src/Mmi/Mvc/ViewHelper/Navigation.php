@@ -184,14 +184,8 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
 		if (!isset($leaf['roles']) || empty($leaf['roles'])) {
 			return true;
 		}
-		//dla każdej roli użytkownika
-		foreach (self::$_auth->getRoles() as $role) {
-			//sprawdzenie czy dopuszczone
-			if (in_array($role, $leaf['roles'])) {
-				return true;
-			}
-		}
-		return false;
+		//czy jest część wspólna
+		return [] !== array_intersect(self::$_auth->getRoles(), $leaf['roles']);
     }
 
     /**
