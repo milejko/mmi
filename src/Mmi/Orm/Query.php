@@ -39,13 +39,8 @@ class Query
         //nowa kompilacja
         $this->_compile = new QueryCompile;
         //klasa DAO na podstawie parametru konstruktora
-        if ($tableName !== null) {
+        if ($tableName) {
             $this->_tableName = $tableName;
-            return;
-        }
-        //jeśli ustalona klasa - wyjście
-        if ($this->_tableName === null) {
-            throw new OrmException('Table name not specified');
         }
     }
 
