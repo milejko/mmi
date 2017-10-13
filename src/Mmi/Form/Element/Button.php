@@ -42,7 +42,7 @@ class Button extends ElementAbstract
         //opcje do widoku
         \Mmi\App\FrontController::getInstance()->getView()->_htmlOptions = $this->_getHtmlOptions();
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_FIELD);
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_FIELD);
     }
 
 }

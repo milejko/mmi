@@ -128,7 +128,7 @@ class Paginator extends \Mmi\OptionObject
         //paginator do widoku
         \Mmi\App\FrontController::getInstance()->getView()->_paginator = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE);
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE);
     }
 
 }

@@ -31,7 +31,7 @@ class Messenger extends HelperAbstract
             return;
         }
         $this->view->_messenger = $messenger;
-        return $this->view->renderTemplate(self::TEMPLATE);
+        return $this->view->renderTemplate(static::TEMPLATE);
     }
 
 }

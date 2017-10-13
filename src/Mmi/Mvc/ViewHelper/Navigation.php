@@ -284,7 +284,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
             //obiekt do widoku
             $this->view->_menuItem = $menuItem;
             //render itemu
-            $html .= $this->view->renderTemplate(self::TEMPLATE);
+            $html .= $this->view->renderTemplate(static::TEMPLATE);
             //podwyższanie licznika
             $index++;
         }

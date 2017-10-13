@@ -414,7 +414,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         //element do widoku
         \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_BEGIN);
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_BEGIN);
     }
 
     /**
@@ -426,7 +426,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         //element do widoku
         \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_END);
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_END);
     }
 
     /**
@@ -445,7 +445,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         //element do widoku
         \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_LABEL);
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_LABEL);
     }
 
     /**
@@ -475,7 +475,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         //element do widoku
         \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_DESCRIPTION);
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_DESCRIPTION);
     }
 
     /**
@@ -487,7 +487,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         //element do widoku
         \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(self::TEMPLATE_ERRORS);
+        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_ERRORS);
     }
 
     /**
