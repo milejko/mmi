@@ -35,7 +35,7 @@ class CacheRecord extends \Mmi\Orm\Record
      * @var integer
      */
     public $ttl;
-
+    
     /**
      * Zapis to próba wstawienia, przy niepowodzeniu - update
      * @return boolean

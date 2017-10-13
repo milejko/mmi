@@ -52,9 +52,7 @@ class RecordRo
      */
     public final function __construct($id = null)
     {
-        if ($this->_queryClass === null) {
-            $this->_queryClass = substr(get_called_class(), 0, -6) . 'Query';
-        }
+        $this->_queryClass = substr(get_called_class(), 0, -6) . 'Query';
         if ($id === null) {
             return;
         }
@@ -73,9 +71,6 @@ class RecordRo
      */
     public final function getPk()
     {
-        if (!property_exists($this, 'id')) {
-            return;
-        }
         return $this->id;
     }
 

@@ -62,7 +62,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\Mmi\Orm\Record', $r = (new \Mmi\Orm\CacheQuery)->where('id')->like('test%')->orderDesc('id')->findFirst());
         $this->assertEquals('test3', $r->id);
         $this->assertInstanceOf('\Mmi\Orm\Record', $r = (new \Mmi\Orm\CacheQuery)->where('id')->like('test%')->orderAsc('id')->findFirst());
-        $this->assertEquals('test1', $r->id);
+        $this->assertEquals('test1', $r->getPk());
         $this->assertInstanceOf('\Mmi\Orm\RecordCollection', $rc = (new \Mmi\Orm\CacheQuery)->where('id')->like('test%')->orderAsc('id')->find());
         $this->assertEquals(3, $rc->count());
         $this->assertInstanceOf('\Mmi\Orm\RecordCollection', $rc = (new \Mmi\Orm\CacheQuery)->where('id')->like('test%')->orderAsc('id')->limit(2)->find());
@@ -78,7 +78,13 @@ class QueryTest extends \PHPUnit\Framework\TestCase
                 ->orderDesc('ttl')
                 ->orderAsc('id')
                 ->findPairs('id', 'id'));
-
+        $this->assertSame(['test1' => 'test1', 'test2' => 'test2', 'test3' => 'test3'], (new \Mmi\Orm\CacheQuery)
+                ->where('id')->like('test%')
+                ->orderDesc('ttl')
+                ->andQuery((new \Mmi\Orm\CacheQuery)->orderAsc('id'))
+                ->andQuery((new \Mmi\Orm\CacheQuery)->orderAsc('id'))
+                ->orderAsc('id')
+                ->findPairs('id', 'id'));
         $record = (new \Mmi\Orm\CacheQuery)
             ->where('id')->like('test%')
             ->orderAsc('RAND()')
@@ -113,9 +119,30 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
     public function testFind()
     {
+        $r = new \Mmi\Orm\CacheRecord('test1');
+        $this->assertEquals('test1', $r->getPk());
         $this->assertEquals(2, (new Query('mmi_cache'))->where('id')->like('test%')->andQuery((new Query('mmi_cache'))->where('id')->equals('test1')->orField('id')->equals('test2'))->count());
         $this->assertEquals('test1-data', (new \Mmi\Orm\CacheQuery)->findPk('test1')->data);
         $this->assertSame(['1'], (new Query('mmi_cache'))->where('id')->equals(['test1', 'test2', 'test3'])->findUnique('ttl'));
+        $this->assertNull((new Query('mmi_cache'))->findPk('inexistent-id'));
+    }
+
+    public function testJoin()
+    {
+        $this->assertSame(['test1' => 'test1'], (new \Mmi\Orm\CacheQuery)->where('id')->equals('test1')
+                ->join('mmi_cache', 'mmi_cache', 'cache1')->on('id')
+                ->join('mmi_cache', 'cache1', 'cache2')->on('id')
+                ->findPairs('cache1.id', 'cache2.id'));
+
+        $this->assertSame(['test1' => 'test1'], (new \Mmi\Orm\CacheQuery)->where('id')->equals('test1')
+                ->join('mmi_cache', 'mmi_cache', 'cache1')->on('id')
+                ->andQuery((new \Mmi\Orm\CacheQuery)->join('mmi_cache', 'mmi_cache', 'cache2')->on('id'))
+                ->findPairs('cache1.id', 'cache2.id'));
+
+        $this->assertSame(['test1' => 'test1'], (new \Mmi\Orm\CacheQuery)->where('id')->equals('test1')
+                ->join('mmi_cache', 'mmi_cache', 'cache1')->on('id')
+                ->join('mmi_cache', 'cache1', 'cache2')->on('id')
+                ->findPairs('cache1.id', 'cache2.id'));
     }
 
     public function testResets()

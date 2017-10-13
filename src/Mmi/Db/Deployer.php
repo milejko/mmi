@@ -67,7 +67,7 @@ class Deployer
         \App\Registry::$db->setDefaultImportParams();
         //pobranie rekordu
         try {
-            $dc = (new Orm\ChangelogQuery)->byFilename(basename($file))->findFirst();
+            $dc = (new Orm\ChangelogQuery)->whereFileName()->equals(basename($file))->findFirst();
         } catch (\Exception $e) {
             echo 'INITIAL IMPORT.' . "\n";
             $dc = null;

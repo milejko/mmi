@@ -18,14 +18,4 @@ class ChangelogQuery extends \Mmi\Orm\Query
 
     protected $_tableName = 'mmi_changelog';
 
-    /**
-     * Zapytanie szukające po nazwie pliku
-     * @param string $filename
-     * @return \App\Orm\Changelog
-     */
-    public function byFilename($filename)
-    {
-        return $this->whereFilename()->equals($filename);
-    }
-
 }
