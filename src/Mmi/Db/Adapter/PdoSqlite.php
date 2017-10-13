@@ -14,14 +14,6 @@ class PdoSqlite extends PdoAbstract
 {
 
     /**
-     * Przechowuje funkcje sortowania
-     * @var array
-     */
-    protected static $_orderFunctions = [
-        'RAND()' => 'RANDOM()'
-    ];
-
-    /**
      * Ustawia schemat
      * @param string $schemaName nazwa schematu
      * @return \Mmi\Db\Adapter\PdoSqlite
@@ -107,6 +99,10 @@ class PdoSqlite extends PdoAbstract
      */
     public function prepareField($fieldName)
     {
+        //konwersja random
+        if ($fieldName == 'RAND()') {
+            return 'RANDOM()';
+        }
         //dla sqlite "
         if (strpos($fieldName, '"') === false) {
             //"

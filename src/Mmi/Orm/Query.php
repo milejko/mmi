@@ -430,7 +430,7 @@ class Query
     {
         //funkcja sortująca rand()
         if ($fieldName == 'RAND()') {
-            return 'RAND()';
+            return DbConnector::getAdapter()->prepareField('RAND()');
         }
         //nazwa tabeli
         $tableName = ($forcedTableName === null) ? $this->_tableName : $forcedTableName;

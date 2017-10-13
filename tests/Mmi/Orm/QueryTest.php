@@ -71,6 +71,21 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $rc->count());
     }
 
+    public function testOrder()
+    {
+        $this->assertSame(['test1' => 'test1', 'test2' => 'test2', 'test3' => 'test3'], (new \Mmi\Orm\CacheQuery)
+                ->where('id')->like('test%')
+                ->orderDesc('ttl')
+                ->orderAsc('id')
+                ->findPairs('id', 'id'));
+
+        $record = (new \Mmi\Orm\CacheQuery)
+            ->where('id')->like('test%')
+            ->orderAsc('RAND()')
+            ->findFirst();
+        $this->assertTrue(in_array($record->id, ['test1', 'test2', 'test3']));
+    }
+
     public function testFindMinMax()
     {
         $this->assertEquals('test3', (new \Mmi\Orm\CacheQuery)->where('id')->like('test%')->findMax('id'));
@@ -118,9 +133,9 @@ class QueryTest extends \PHPUnit\Framework\TestCase
     public function testQueryCompileHash()
     {
         $this->assertEquals('fdaea49f25dd99e002e568cb25ebb06a', (new \Mmi\Orm\CacheQuery)->where('ttl')->equals(1)
-            ->join('mmi_cache')->on('id')->getQueryCompileHash());
+                ->join('mmi_cache')->on('id')->getQueryCompileHash());
         $this->assertEquals('03c3dbd53e5e63552144ba0a5fded14a', (new \Mmi\Orm\CacheQuery)->where('ttl')->equals(1)
-            ->joinLeft('mmi_cache')->on('id')->getQueryCompileHash());
+                ->joinLeft('mmi_cache')->on('id')->getQueryCompileHash());
     }
 
 }

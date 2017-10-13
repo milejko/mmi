@@ -42,7 +42,7 @@ class PdoMysql extends PdoAbstract
     public function connect()
     {
         $this->_config->port = $this->_config->port ? $this->_config->port : 3306;
-         //nowy obiekt PDO do odczytu danych
+        //nowy obiekt PDO do odczytu danych
         $this->_downstreamPdo = new \PDO(
             $this->_config->driver . ':host=' . $this->_config->host . ';port=' . $this->_config->port . ';dbname=' . $this->_config->name . ';charset=utf8', $this->_config->user, $this->_config->password, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
@@ -62,8 +62,12 @@ class PdoMysql extends PdoAbstract
      */
     public function prepareField($fieldName)
     {
+        //funkcja sortująca
+        if ($fieldName == 'RAND()') {
+            return 'RAND()';
+        }
         //dla mysql `
-        if (strpos($fieldName, '`') === false) {
+        if (false === strpos($fieldName, '`')) {
             return '`' . str_replace('.', '`.`', $fieldName) . '`';
         }
         return $fieldName;
