@@ -20,7 +20,7 @@ class HeadMetaTest extends \PHPUnit\Framework\TestCase
         $hm = new HeadMeta;
         $hm->openGraph('test', 'test', false, '?');
         $this->assertInstanceOf('\Mmi\Mvc\ViewHelper\HeadMeta', $hm->headMeta());
-        $this->assertEquals('<!--[if ?]>	<meta property="test" content="test" /><![endif]-->', (string) $hm);
+        $this->assertEquals('<!--[if ?]>	<meta property="test" content="test" /><![endif]-->' . "\n", (string) $hm);
     }
 
 }
