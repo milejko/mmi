@@ -54,6 +54,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
     public function testCount()
     {
+        $this->assertEquals(0, (new TestQuery)->whereAnotherColumn()->equals('non-existent')->count());
         $this->assertEquals(3, (new Query('mmi_cache'))->where('id')->like('test%')->count());
     }
 
@@ -90,6 +91,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->orderAsc('RAND()')
             ->findFirst();
         $this->assertTrue(in_array($record->id, ['test1', 'test2', 'test3']));
+        $this->assertEquals(0, (new TestQuery)->andQuery((new TestQuery)->orderAsc('id'))->count());
     }
 
     public function testFindMinMax()
@@ -125,6 +127,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test1-data', (new \Mmi\Orm\CacheQuery)->findPk('test1')->data);
         $this->assertSame(['1'], (new Query('mmi_cache'))->where('id')->equals(['test1', 'test2', 'test3'])->findUnique('ttl'));
         $this->assertNull((new Query('mmi_cache'))->findPk('inexistent-id'));
+        $this->assertInstanceOf('\Mmi\Orm\RecordCollection', (new TestQuery)->joinLeft('mmi_cache')->on('id')->find());
     }
 
     public function testJoin()

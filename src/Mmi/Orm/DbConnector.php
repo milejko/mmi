@@ -50,14 +50,6 @@ class DbConnector
     protected static $_cache;
 
     /**
-     * Zabezpieczony konstruktor
-     */
-    private final function __construct()
-    {
-        
-    }
-
-    /**
      * Pobiera adapter bazodanowy
      * @return \Mmi\Db\Adapter\PdoAbstract
      */

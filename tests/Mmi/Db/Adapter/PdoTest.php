@@ -165,7 +165,7 @@ class PdoTest extends \PHPUnit\Framework\TestCase
 
     public function testTableList()
     {
-        $this->assertEquals(['mmi_cache', 'mmi_changelog', 'mmi_session'], $this->_db->tableList());
+        $this->assertEquals(['mmi_cache', 'mmi_changelog', 'mmi_session', 'test', 'sqlite_sequence'], $this->_db->tableList());
     }
 
 }

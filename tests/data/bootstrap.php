@@ -16,6 +16,8 @@ require BASE_PATH . 'vendor/autoload.php';
 //powołanie konfiguracji i rejestru
 require 'data/config-default.php';
 require 'data/registry.php';
+//mock
+require 'data/test-query-record.php';
 require 'data/fc-plugin.php';
 
 //iteracja po katalogach do utworzenia
