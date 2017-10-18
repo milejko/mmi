@@ -49,6 +49,7 @@ class RecordRo
     /**
      * Konstruktor
      * @param mixed $id identyfikator do tworzenia obiektu
+     * @throws RecordNotFoundException
      */
     public final function __construct($id = null)
     {
@@ -78,6 +79,7 @@ class RecordRo
      * Magicznie pobiera dane z rekordu
      * @param string $name nazwa
      * @return mixed
+     * @throws RecordFieldException
      */
     public final function __get($name)
     {
@@ -88,6 +90,7 @@ class RecordRo
      * Magicznie ustawia dane w rekordzie
      * @param string $name nazwa
      * @param mixed $value wartość
+     * @throws RecordFieldException
      */
     public final function __set($name, $value)
     {

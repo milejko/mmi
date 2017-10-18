@@ -34,7 +34,7 @@ class OptionObject
     /**
      * Ustawia opcję
      * @param string $key klucz
-     * @param string $value wartość
+     * @param mixed $value wartość
      * @return self
      */
     public function setOption($key, $value)
