@@ -2,7 +2,6 @@
 <?php
 
 use Mmi\Console\Application;
-use Symfony\Component\Console\Input\ArgvInput;
 
 if (PHP_SAPI !== 'cli') {
     echo 'Must be run as a CLI application';
