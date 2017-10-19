@@ -243,6 +243,8 @@ class Auth
         if ($cookies) {
             $this->forgetMe();
         }
+        //czyszczenie
+        $this->_identity = $this->_credential = null;
         //wylogowanie na modelu
         if ($this->_modelName) {
             $model = $this->_modelName;
@@ -330,7 +332,6 @@ class Auth
             ->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
             ->setCodeUnauthorized()
             ->setContent($errorMessage);
-            //->send();
         //zakończenie skryptu
         exit;
     }

@@ -17,6 +17,7 @@ require BASE_PATH . 'vendor/autoload.php';
 require 'data/config-default.php';
 require 'data/registry.php';
 //mock
+require 'data/auth-model.php';
 require 'data/test-query-record.php';
 require 'data/fc-plugin.php';
 
