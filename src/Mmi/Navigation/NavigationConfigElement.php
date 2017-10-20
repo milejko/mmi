@@ -65,8 +65,8 @@ class NavigationConfigElement extends \Mmi\OptionObject
             'children' => [],
             //konfiguracja
             'config' => new \Mmi\DataObject,
-			//role, które mają dostęp
-			'roles' => []
+            //role, które mają dostęp
+            'roles' => []
         ]);
     }
 
@@ -134,7 +134,7 @@ class NavigationConfigElement extends \Mmi\OptionObject
     {
         return $this->setOption('config', $config);
     }
-	
+
     /**
      * Ustawia role, które posiadają dostęp
      * @param array $roles
@@ -143,6 +143,16 @@ class NavigationConfigElement extends \Mmi\OptionObject
     public function setRoles(array $roles = [])
     {
         return $this->setOption('roles', $roles);
+    }
+
+    /**
+     * Ustawia ikonę
+     * @param string $icon
+     * @return \Mmi\Navigation\NavigationConfigElement
+     */
+    public function setIcon($icon)
+    {
+        return $this->setOption('icon', $icon);
     }
 
     /**
