@@ -279,8 +279,6 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
             }
             //nadawanie klas html
             $menuItem['class'] = (isset($menuItem['active']) && $menuItem['active']) ? 'active current ' : '';
-            //$menuItem['class'] .= ($index == 0) ? 'first ' : '';
-            //$menuItem['class'] .= ($index == ($count - 1)) ? 'last ' : '';
             //obiekt do widoku
             $this->view->_menuItem = $menuItem;
             //render itemu
