@@ -58,6 +58,8 @@ class NavigationConfigElement extends \Mmi\OptionObject
             //daty
             'dateStart' => null,
             'dateEnd' => null,
+            //ikona
+            'icon' => null,
             'uri' => null,
             //tabela z elementami potomnymi
             'children' => [],
