@@ -16,7 +16,22 @@ namespace Mmi\Orm;
 class ChangelogRecord extends \Mmi\Orm\Record
 {
 
+    /**
+     * Nieużywane
+     * @var null
+     */
+    public $id;
+    
+    /**
+     * Nazwa pliku
+     * @var string 
+     */
     public $filename;
+    
+    /**
+     * Odcisk zawartości pliku
+     * @var string 
+     */
     public $md5;
 
 }
