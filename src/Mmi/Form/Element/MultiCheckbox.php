@@ -24,6 +24,7 @@ class MultiCheckbox extends ElementAbstract
     {
         parent::__construct($name);
         $this->setBaseName($name);
+        $this->setOption('class', $this->getOption('class') . ' multi-box multi-checkbox');
     }
 
     /**
