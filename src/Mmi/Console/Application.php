@@ -57,7 +57,7 @@ class Application extends BaseApplication
         $commands = [];
         foreach (StructureParser::getModules() as $module) {
             //namespace modułu
-            $moduleNamespace = substr($module, strrpos($module, '/') + 1, strlen($module));
+            $moduleNamespace = substr($module, strrpos($module, DIRECTORY_SEPARATOR) + 1, strlen($module));
             //iteracja po komendach konsolowych
             foreach (glob($module . '/Console/*Command.php') as $command) {
                 $className = basename($command, '.php');

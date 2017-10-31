@@ -48,7 +48,6 @@ namespace Mmi\App {
 
         /**
          * Uruchomienie aplikacji
-         * @param \Mmi\Bootstrap $bootstrap
          */
         public function run()
         {
@@ -58,12 +57,17 @@ namespace Mmi\App {
         /**
          * Ustawia konfigurację
          * @param string $env
-         * @return \Mmi\App\Kernel
+         * @return Kernel
+         * @throws KernelException
          */
         private function _initConfig($env)
         {
             //konwencja nazwy konfiguracji
             $configClassName = '\App\Config' . $env;
+            //sprawdzenie czy klasa konfiguracji istnieje
+            if (!class_exists($configClassName)) {
+                throw new \Mmi\App\KernelException('There is no environment configuration class');
+            }
             //konfiguracja dla danego środowiska
             \App\Registry::$config = new $configClassName;
             //strefa czasowa
