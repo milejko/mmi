@@ -36,7 +36,8 @@ class KernelEventHandler
      * @param string $errfile plik
      * @param string $errline linia z błędem
      * @param string $errcontext kontekst
-     * @return boolean
+     * @return bool
+     * @throws KernelException
      */
     public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
     {

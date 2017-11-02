@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -10,9 +10,8 @@
 
 namespace Mmi\Mvc;
 
-//użycie front controllera i requestu
-use Mmi\App\FrontController,
-    \Mmi\Http\Request;
+use Mmi\App\FrontController;
+use Mmi\Http\Request;
 
 /**
  * Helper akcji
@@ -34,7 +33,7 @@ class ActionHelper
 
     /**
      * Instancja helpera akcji
-     * @var \Mmi\Mvc\ActionHelper 
+     * @var \Mmi\Mvc\ActionHelper
      */
     protected static $_instance;
 

@@ -241,6 +241,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Ustaw kolejność realizacji
      * @param array $renderingOrder
      * @return ElementAbstract
+     * @throws \Mmi\Form\FormException
      */
     public final function setRenderingOrder(array $renderingOrder = [])
     {
