@@ -65,7 +65,7 @@ class Application extends BaseApplication
 
                 //reflection do sprawdzenia pochodzenia
                 $r = new \ReflectionClass($class);
-                if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command')
+                if ($r->isSubclassOf('Mmi\\Console\\CommandAbstract')
                     && !$r->isAbstract()
                     && !$r->getConstructor()->getNumberOfRequiredParameters()
                 ) {
