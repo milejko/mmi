@@ -56,6 +56,7 @@ class Deployer
     /**
      * Importuje pojedynczy plik
      * @param string $file
+     * @throws \Mmi\App\KernelException
      */
     protected function _importIncremental($file)
     {
@@ -79,8 +80,10 @@ class Deployer
         }
         //restore istnieje md5 niezgodne - plik się zmienił - przerwanie importu
         if ($dc) {
-            die('INVALID MD5: ' . $baseFileName . ' --- VALID: ' . $md5file . " --- IMPORT TERMINATED!\n");
+            throw new \Mmi\App\KernelException('INVALID MD5: ' . $baseFileName . ' --- VALID: ' . $md5file . ' --- IMPORT TERMINATED!\n');
         }
+        //informacja na ekran przed importem aby bylo wiadomo który
+        echo 'RESTORE INCREMENTAL: ' . $baseFileName . "\n";
         //import danych
         $this->_importSql($file);
         //resetowanie struktur tabeli
@@ -93,8 +96,6 @@ class Deployer
         $newDc->md5 = $md5file;
         //zapis rekordu
         $newDc->save();
-        //informacja na ekran
-        echo 'RESTORE INCREMENTAL: ' . $baseFileName . "\n";
     }
 
     /**
