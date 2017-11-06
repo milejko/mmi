@@ -18,9 +18,13 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     public function testClass()
     {
         $nav = new Navigation;
-        $nav->appendBreadcrumb('test', 'testu', 'testt', 'testd');
-        $nav->appendBreadcrumb('test', 'testu', 'testt', 'testd', true);
         $this->assertEquals('', $nav->breadcrumbs());
+        Navigation::setNavigation(new \Mmi\Navigation\Navigation(new \Mmi\Navigation\NavigationConfig));
+        $this->assertEquals('', $nav->breadcrumbs());
+        $nav->appendBreadcrumb('test', 'testu', 'testt', 'testd');
+        $nav->appendBreadcrumb('test', 'testu', 'testt', 'testd');
+        $nav->createBreadcrumb('test', 'testu', 'testt', 'testd', true);
+        $this->assertEquals('<span>test</span>', $nav->breadcrumbs());
     }
 
 }
