@@ -49,6 +49,11 @@ class KernelEventHandler
      */
     public static function shutdownHandler()
     {
+        //iteracja po pluginach
+        foreach (FrontController::getInstance()->getPlugins() as $plugin) {
+            //wykonywanie beforeSend() na kolejnych pluginach
+            $plugin->beforeSend(FrontController::getInstance()->getRequest());
+        }
         //wysyłka odpowiedzi
         FrontController::getInstance()->getResponse()
             ->send();

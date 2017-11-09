@@ -40,4 +40,13 @@ class FrontControllerPluginAbstract
         
     }
 
+    /**
+     * Metoda wykona się przed wysłaniem contentu do użytkownika
+     * @param \Mmi\Http\Request $request
+     */
+    public function beforeSend(\Mmi\Http\Request $request)
+    {
+        
+    }
+
 }
