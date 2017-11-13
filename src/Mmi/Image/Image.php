@@ -187,11 +187,11 @@ class Image
         }
         //obliczanie nowej szerokości
         if (($sx = imagesx($input)) < $newWidth + $x) {
-            $newWidth = ($sx - $x) > 0 ? ($sx - $x) : 1;
+            $newWidth = ($sx - $x) > 1 ? ($sx - $x) : 1;
         }
         //obliczanie nowej wysokości
         if (($sy = imagesy($input)) < $newHeight + $y) {
-            $newHeight = ($sy - $y) > 0 ? ($sy - $y) : 1;
+            $newHeight = ($sy - $y) > 1 ? ($sy - $y) : 1;
         }
         //wycinanie obrazka
         $destination = imagecreatetruecolor($newWidth, $newHeight);
