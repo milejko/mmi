@@ -165,10 +165,14 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     protected function _checkAcl(array $leaf)
     {
+        //brak modułu
+        if (':index:index' === $component = $leaf['module'] . ':' . $leaf['controller'] . ':' . $leaf['action']) {
+            return true;
+        }
         //sprawdzanie czy auth i acl włączone
         if ($this->_allowedOnly && self::$_auth && self::$_acl) {
             //sprawdzenie na acl
-            return self::$_acl->isAllowed(self::$_auth->getRoles(), strtolower($leaf['module'] . ':' . $leaf['controller'] . ':' . $leaf['action']))
+            return self::$_acl->isAllowed(self::$_auth->getRoles(), strtolower($component))
 				&& $this->_checkRoles($leaf);
         }
         return true;
