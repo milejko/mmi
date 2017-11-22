@@ -17,7 +17,7 @@ class Radio extends ElementAbstract
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/radio';
+    const TEMPLATE_FIELD = 'mmi/form/element/radio';
 
     /**
      * Buduje etykietę pola

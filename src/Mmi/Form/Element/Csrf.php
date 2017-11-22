@@ -17,7 +17,7 @@ class Csrf extends Hidden
 {
 
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/hidden';
+    const TEMPLATE_FIELD = 'mmi/form/element/hidden';
 
     /**
      * Ignorowanie tego pola, pole obowiązkowe, automatyczna walidacja
