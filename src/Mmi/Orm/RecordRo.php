@@ -72,7 +72,7 @@ class RecordRo
      */
     public final function getPk()
     {
-        return $this->id;
+        return property_exists($this, 'id') ? $this->id : null;
     }
 
     /**
