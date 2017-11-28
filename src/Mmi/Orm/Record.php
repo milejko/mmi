@@ -71,7 +71,7 @@ class Record extends \Mmi\Orm\RecordRo
     {
         $query = $this->_queryClass;
         $bindKey = PdoBindHelper::generateBindKey();
-        $result = DbConnector::getAdapter()->update((new $query)->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
+        $result = DbConnector::getAdapter()->update((new $query)->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
         //utrwalanie bieżącego stanu
         $this->clearModified();
         return ($result >= 0);
