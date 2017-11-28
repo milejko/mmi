@@ -41,7 +41,7 @@ class Record extends \Mmi\Orm\RecordRo
         }
         $query = $this->_queryClass;
         $bindKey = PdoBindHelper::generateBindKey();
-        $result = DbConnector::getAdapter()->delete((new $query)->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getPk()]);
+        $result = DbConnector::getAdapter()->delete((new $query)->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
         return ($result > 0) ? true : false;
     }
 
