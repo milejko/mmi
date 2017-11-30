@@ -211,9 +211,9 @@ class QueryField
      * @param string $value
      * @return Query
      */
-    public function ilike($value)
+    public function notLike($value)
     {
-        return $this->_prepareQuery($value, 'ILIKE');
+        return $this->_prepareQuery($value, 'NOT LIKE');
     }
 
     /**
@@ -269,8 +269,8 @@ class QueryField
             $this->_query->getQueryCompile()->where .= $this->_fieldName . ' ' . ($condition == '<>' ? 'NOT IN' : 'IN') . '(' . trim($fields, ', ') . ')';
             return $this->_query;
         }
-        //ilike
-        if ('ILIKE' == $condition) {
+        //like powinien działać jak ilike
+        if ('LIKE' == $condition) {
             $this->_query->getQueryCompile()->where .= DbConnector::getAdapter()->prepareIlike($this->_fieldName) . ' :' . $bindKey;
             return $this->_query;
         }

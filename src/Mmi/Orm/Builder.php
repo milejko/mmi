@@ -127,7 +127,7 @@ class Builder
             ' * @method \\' . $queryClassName . ' greaterOrEquals($value)' . "\n" .
             ' * @method \\' . $queryClassName . ' lessOrEquals($value)' . "\n" .
             ' * @method \\' . $queryClassName . ' like($value)' . "\n" .
-            ' * @method \\' . $queryClassName . ' ilike($value)' . "\n" .
+            ' * @method \\' . $queryClassName . ' notLike($value)' . "\n" .
             ' * @method \\' . $queryClassName . ' between($from, $to)' . "\n" .
             $methods .
             ' */' . "\n" .
