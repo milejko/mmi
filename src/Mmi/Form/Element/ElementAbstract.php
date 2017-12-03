@@ -137,9 +137,18 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     }
 
     /**
-     * Zdarzenie wywoływane po zapisie
+     * Zdarzenie wywoływane po zapisie całego formularza
      */
     public function onFormSaved()
+    {
+        
+    }
+    
+    /**
+     * Zdarzenie wywoływane po zapisie rekordu - znane PK,
+     * ale niewykonane jeszcze afterSave
+     */
+    public function onRecordSaved()
     {
         
     }

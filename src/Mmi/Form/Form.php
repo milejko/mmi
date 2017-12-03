@@ -360,9 +360,20 @@ abstract class Form extends \Mmi\OptionObject
         \Mmi\Orm\DbConnector::getAdapter()->beginTransaction();
         //ustawianie danych rekordu
         $this->_setRecordData();
-        //metoda przed zapisem, zapis i po zapisie
+        //metoda przed zapisem, zapis rekordu
         //transakcja jest odrzucana w przypadku niepowodzenia którejkolwiek
-        if (false === $this->beforeSave() || false === $this->_record->save() || false === $this->afterSave()) {
+        if (false === $this->beforeSave() || false === $this->_record->save()) {
+            //odrzucenie transakcji
+            \Mmi\Orm\DbConnector::getAdapter()->rollback();
+            return $this->_saved = false;
+        }
+        //powiadomienie elementów o zapisie rekordu - znamy już PK
+        foreach ($this->getElements() as $element) {
+            //powiadamianie elementu o poprawnym zapisie rekordu
+            $element->onRecordSaved();
+        }
+        //operacje po zapisie rekordu
+        if (false === $this->afterSave()) {
             //odrzucenie transakcji
             \Mmi\Orm\DbConnector::getAdapter()->rollback();
             return $this->_saved = false;
