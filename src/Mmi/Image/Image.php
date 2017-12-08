@@ -186,12 +186,12 @@ class Image
             return;
         }
         //obliczanie nowej szerokości
-        if (($sx = imagesx($input)) < $newWidth + $x) {
-            $newWidth = ($sx - $x) > 1 ? ($sx - $x) : 1;
+        if (imagesx($input) < $newWidth + $x) {
+            $newWidth = imagesx($input) - $x;
         }
         //obliczanie nowej wysokości
-        if (($sy = imagesy($input)) < $newHeight + $y) {
-            $newHeight = ($sy - $y) > 1 ? ($sy - $y) : 1;
+        if (imagesy($input) < $newHeight + $y) {
+            $newHeight = imagesy($input) - $y;
         }
         //wycinanie obrazka
         $destination = imagecreatetruecolor($newWidth, $newHeight);
