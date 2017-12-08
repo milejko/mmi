@@ -114,9 +114,9 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
     public function testGroupBy()
     {
-        $this->assertEquals(1, (new Query('mmi_cache'))->where('id')->like('test%')->groupBy('id')->count());
-        $this->assertEquals(3, (new Query('mmi_cache'))->where('id')->like('test%')->groupBy('ttl')->count());
-        $this->assertEquals(1, (new Query('mmi_cache'))->where('id')->like('test%')->groupBy('ttl')->groupBy('id')->count());
+        $this->assertEquals(3, (new Query('mmi_cache'))->where('id')->like('test%')->groupBy('id')->count());
+        $this->assertEquals(1, (new Query('mmi_cache'))->where('id')->like('test%')->groupBy('ttl')->count());
+        $this->assertEquals(3, (new Query('mmi_cache'))->where('id')->like('test%')->groupBy('ttl')->groupBy('id')->count());
     }
 
     public function testFind()

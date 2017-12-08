@@ -18,7 +18,7 @@ use Mmi\Db\Adapter\PdoMysql;
 class PdoMysqlTest extends \PHPUnit\Framework\TestCase
 {
     
-    CONST host = 'localhost';
+    /*CONST host = 'localhost';
     CONST upstreamHost = 'localhost';
     CONST user = 'root';
     CONST password = 'rooter';
@@ -154,5 +154,5 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
     {
         $fieldName = 'testowanie';
         $this->assertEquals($fieldName.' LIKE', $this->_db->prepareIlike($fieldName));
-    }
+    }*/
 }

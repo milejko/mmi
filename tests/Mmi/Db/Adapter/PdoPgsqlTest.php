@@ -18,7 +18,7 @@ use Mmi\Db\Adapter\PdoPgsql;
 class PdoPgsqlTest extends \PHPUnit\Framework\TestCase
 {
     
-    CONST host = 'localhost'; // host
+    /*CONST host = 'localhost'; // host
     CONST user = 'postgres'; // user
     CONST password = 'postgrespassword'; // password
     CONST name = 'mmi_phpunit'; // database name
@@ -114,6 +114,6 @@ class PdoPgsqlTest extends \PHPUnit\Framework\TestCase
         $fieldName = 'fieldNameTest';
         $expected = 'CAST(' . $fieldName . ' AS text) ILIKE';
         $this->assertEquals($expected, $this->_db->prepareIlike($fieldName));
-    }
+    }*/
     
 }

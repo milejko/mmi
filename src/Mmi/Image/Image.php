@@ -16,6 +16,9 @@ namespace Mmi\Image;
 class Image
 {
 
+    //minimalna długość binariów
+    const BINARY_MIN_LENGTH = 1024;
+
     /**
      * Konwertuje string, lub binaria do zasobu GD
      * @param mixed $input
@@ -28,7 +31,7 @@ class Image
             return $input;
         }
         //jeśli krótki content zakłada że to ścieżka pliku
-        return imagecreatefromstring((strlen($input) < 1024) ? file_get_contents($input) : $input);
+        return imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
     }
 
     /**
@@ -40,20 +43,18 @@ class Image
      */
     public static function scaleCrop($input, $x, $y)
     {
-        //brak zasobu
-        if (!($input = self::inputToResource($input))) {
-            return;
-        }
+        //wczytanie zasobu
+        $resource = self::inputToResource($input);
         //badanie rozmiaru obrazu
-        $width = imagesx($input);
-        $height = imagesy($input);
+        $width = imagesx($resource);
+        $height = imagesy($resource);
         //obliczanie skali
         $scale = max($y / $height, $x / $width);
         //obliczanie zeskalowanych wymiarów
         $sx = round($width * $scale);
         $sy = round($height * $scale);
         //cropowanie zeskalowanego obrazu
-        return self::crop(self::scale($input, $sx, $sy), abs($sx - $x) / 2, abs($sy - $y) / 2, $x, $y);
+        return self::crop(self::scale($resource, $sx, $sy), abs($sx - $x) / 2, abs($sy - $y) / 2, $x, $y);
     }
 
     /**
@@ -65,12 +66,10 @@ class Image
     public static function scaleProportional($input, $percent)
     {
         //brak zasobu
-        if (!($input = self::inputToResource($input))) {
-            return;
-        }
+        $resource = self::inputToResource($input);
         //badanie rozmiarów obrazu
-        $width = imagesx($input);
-        $height = imagesy($input);
+        $width = imagesx($resource);
+        $height = imagesy($resource);
         //obliczanie rozmiarów po skalowaniu
         $sx = round($width * $percent / 100);
         $sy = round($height * $percent / 100);
@@ -79,7 +78,7 @@ class Image
         //zapis przeźroczystości
         self::_saveAlpha($tmp);
         //skalowanie
-        imagecopyresampled($tmp, $input, 0, 0, 0, 0, $sx, $sy, $width, $height);
+        imagecopyresampled($tmp, $resource, 0, 0, 0, 0, $sx, $sy, $width, $height);
         return $tmp;
     }
 
@@ -90,38 +89,37 @@ class Image
      * @param int $maxDimY szerokość do której chcemy przeskalować obrazek
      * @return resource obrazek
      */
-    public static function scale($input, $maxDimX, $maxDimY = null)
+    public static function scale($input, $maxDimX = null, $maxDimY = null)
     {
         //brak zasobu
-        if (!($input = self::inputToResource($input))) {
-            return;
+        $resource = self::inputToResource($input);
+        //brak skali
+        if (!$maxDimX && !$maxDimY) {
+            return $resource;
         }
         //badanie rozmiaru obrazu
-        $width = imagesx($input);
-        $height = imagesy($input);
+        $width = imagesx($resource);
+        $height = imagesy($resource);
+        //obliczanie współczynnika X
+        $ratioX = 100 * $maxDimX / $width;
+        //obliczanie współczynnika Y
+        $ratioY = 100 * $maxDimY / $height;
+        //nie podano długości
+        if (null === $maxDimX) {
+            //skalowanie do maksymalnego X-a
+            return self::scaleProportional($resource, $ratioY);
+        }
         //nie podano wysokości
         if (null === $maxDimY) {
-            //obraz jest szerszy niż wyższy
-            if ($width > $height) {
-                //skalowanie do maksymalnego X-a
-                return self::scalex($input, $maxDimX);
-            }
-            //obraz jest wyższy niż szerszy, skalowanie do maksymalnego Y-ka
-            return self::scaley($input, $maxDimX);
+            //skalowanie do maksymalnego X-a
+            return self::scaleProportional($resource, $ratioX);
         }
-        //obliczanie współczynników
-        $ratioX = $maxDimX / $width;
-        $ratioY = $maxDimY / $height;
         //skalowanie proporcjonalne ze współczynnikiem X
-        if ($ratioX < $ratioY && $ratioX < 1) {
-            return self::scaleProportional($input, $ratioX * 100);
+        if ($ratioX < $ratioY) {
+            return self::scaleProportional($resource, $ratioX);
         }
         //skalowanie proporcjonalne ze współczynnikiem Y
-        if ($ratioY <= $ratioX && $ratioY < 1) {
-            return self::scaleProportional($input, $ratioY * 100);
-        }
-        //zwrot obrazu
-        return $input;
+        return self::scaleProportional($resource, $ratioY);
     }
 
     /**
@@ -132,7 +130,7 @@ class Image
      */
     public static function scalex($input, $maxDim)
     {
-        return self::scaleMax($input, $maxDim);
+        return self::scale($input, $maxDim);
     }
 
     /**
@@ -143,7 +141,7 @@ class Image
      */
     public static function scaley($input, $maxDim)
     {
-        return self::scaleMax($input, $maxDim, false);
+        return self::scale($input, null, $maxDim);
     }
 
     /**
@@ -156,18 +154,16 @@ class Image
     public static function scaleMax($input, $maxDim, $horizontal = true)
     {
         //brak zasobu
-        if (!($input = self::inputToResource($input))) {
-            return;
-        }
+        $resource = self::inputToResource($input);
         //badanie rozmiarów obrazu
-        $width = imagesx($input);
-        $height = imagesy($input);
+        $width = imagesx($resource);
+        $height = imagesy($resource);
         //obraz jest już prawidłowy
         if (($horizontal ? $width : $height) <= $maxDim) {
-            return $input;
+            return $resource;
         }
         //obliczanie proporcji i skalowanie proporcjonalne
-        return self::scaleProportional($input, ($maxDim / ($horizontal ? $width : $height)) * 100);
+        return self::scaleProportional($resource, ($maxDim / ($horizontal ? $width : $height)) * 100);
     }
 
     /**
@@ -182,23 +178,21 @@ class Image
     public static function crop($input, $x, $y, $newWidth, $newHeight)
     {
         //brak zasobu
-        if (!($input = self::inputToResource($input))) {
-            return;
-        }
+        $resource = self::inputToResource($input);
         //obliczanie nowej szerokości
-        if (imagesx($input) < $newWidth + $x) {
-            $newWidth = imagesx($input) - $x;
+        if (imagesx($resource) < $newWidth + $x) {
+            $newWidth = imagesx($resource) - $x;
         }
         //obliczanie nowej wysokości
-        if (imagesy($input) < $newHeight + $y) {
-            $newHeight = imagesy($input) - $y;
+        if (imagesy($resource) < $newHeight + $y) {
+            $newHeight = imagesy($resource) - $y;
         }
         //wycinanie obrazka
         $destination = imagecreatetruecolor($newWidth, $newHeight);
         //zapis przeźroczystości
         self::_saveAlpha($destination);
         //przycinanie
-        imagecopy($destination, $input, 0, 0, $x, $y, $newWidth, $newHeight);
+        imagecopy($destination, $resource, 0, 0, $x, $y, $newWidth, $newHeight);
         //zwrot
         return $destination;
     }
