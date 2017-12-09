@@ -118,9 +118,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     
     public function testScaleMax() {
         $this->assertEquals(360, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 1024)));
-        $this->assertEquals(360, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 1024, false)));
-        $this->assertEquals(100, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 100)));
-        $this->assertEquals(56, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 100, false)));
+        $this->assertEquals(113, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 200)));
+        $this->assertEquals(56, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 100)));
         
     }
 

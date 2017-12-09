@@ -145,25 +145,28 @@ class Image
     }
 
     /**
-     * Pomniejsza obrazek do maksymalnej długości lub szerokości (proporcjonalnie)
+     * Pomniejsza proporcjonalnie obrazek by zmieścił się w kwadracie maxDim x maxDim
      * @param mixed $input wejście
      * @param int $maxDim wysokość do której chcemy pomniejszyć obrazek
-     * @param boolean $horizontal
      * @return resource obrazek
      */
-    public static function scaleMax($input, $maxDim, $horizontal = true)
+    public static function scaleMax($input, $maxDim)
     {
         //brak zasobu
         $resource = self::inputToResource($input);
         //badanie rozmiarów obrazu
         $width = imagesx($resource);
         $height = imagesy($resource);
-        //obraz jest już prawidłowy
-        if (($horizontal ? $width : $height) <= $maxDim) {
+        //skala już prawidłowa
+        if ($width <= $maxDim && $height <= $maxDim) {
             return $resource;
         }
-        //obliczanie proporcji i skalowanie proporcjonalne
-        return self::scaleProportional($resource, ($maxDim / ($horizontal ? $width : $height)) * 100);
+        //obrazek jest horyzontalny
+        if ($width > $height) {
+            return self::scalex($resource, $maxDim);
+        }
+        //obrazek jest wertykalny
+        return self::scaley($resource, $maxDim);
     }
 
     /**
@@ -201,7 +204,7 @@ class Image
      * Zachowanie alphy
      * @param resource $imgRes
      */
-    protected static function _saveAlpha($imgRes)
+    private static function _saveAlpha($imgRes)
     {
         imagealphablending($imgRes, false);
         imagesavealpha($imgRes, true);
