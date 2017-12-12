@@ -59,6 +59,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         unlink(self::TMP_PATH);
         $this->assertEquals(144, imagesx(Image::scaleCrop(self::VERTICAL_IMAGE_PATH, 144, 144)));
         $this->assertEquals(72, imagesy(Image::scaleCrop(self::VERTICAL_IMAGE_PATH, 72, 72)));
+        for ($i = 200; $i < 800; $i += 23) {
+            $tmp = Image::scaleCrop(self::IMAGE_PATH, $i, round(1,1 * $i));
+            $this->assertEquals($i, imagesx($tmp));
+            $this->assertEquals(round(1,1 * $i), imagesy($tmp));
+        }
     }
 
     public function testScaleProportional()
@@ -115,12 +120,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(312, imagesx(Image::scalex(self::VERTICAL_IMAGE_PATH, 312)));
         $this->assertEquals(555, imagesy(Image::scalex(self::VERTICAL_IMAGE_PATH, 312)));
     }
-    
-    public function testScaleMax() {
+
+    public function testScaleMax()
+    {
         $this->assertEquals(360, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 1024)));
         $this->assertEquals(113, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 200)));
         $this->assertEquals(56, imagesx(Image::scaleMax(self::VERTICAL_IMAGE_PATH, 100)));
-        
     }
 
     public function testCrop()

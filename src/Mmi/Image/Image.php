@@ -51,8 +51,8 @@ class Image
         //obliczanie skali
         $scale = max($y / $height, $x / $width);
         //obliczanie zeskalowanych wymiarów
-        $sx = round($width * $scale);
-        $sy = round($height * $scale);
+        $sx = ceil($width * $scale);
+        $sy = ceil($height * $scale);
         //cropowanie zeskalowanego obrazu
         return self::crop(self::scale($resource, $sx, $sy), abs($sx - $x) / 2, abs($sy - $y) / 2, $x, $y);
     }
