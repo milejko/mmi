@@ -30,4 +30,18 @@ class Submit extends ElementAbstract
             ->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchErrors', 'fetchEnd']);
     }
 
+    /**
+     * Buduje pole
+     * @return string
+     */
+    public function fetchField()
+    {
+        //labelka jako value
+        if ($this->getLabel()) {
+            $this->setValue($this->getLabel());
+        }
+        //rendering szablonu
+        return parent::fetchField();
+    }
+
 }
