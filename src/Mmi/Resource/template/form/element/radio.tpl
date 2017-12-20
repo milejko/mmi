@@ -1,7 +1,7 @@
 {$baseId = $_element->getId()}
 {$value = $_element->getValue()}
 <ul id="{$baseId}-list">
-    {foreach $_element->getMultioptions() as $key => $caption)}
+    {foreach $_element->getMultioptions() as $key => $caption}
         {$keyUrl = $key|url}
         {* reset pola *}
         {$unused = $_element->setValue($key)->unsetOption('checked')->setId($baseId . '-' . $keyUrl)}
@@ -10,7 +10,7 @@
             {$_element->setOption('checked', '')}
         {/if}
         {* wartość wyłączona *}
-        {if php_strpos($key, ':disabled') !== false)}
+        {if php_strpos($key, ':disabled') !== false}
             {$a = $_element->setDisabled()}
         {/if}
         <li id="{$_element->getId()}-item">
