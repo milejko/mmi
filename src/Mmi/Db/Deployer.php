@@ -132,8 +132,7 @@ class Deployer
         } catch (\Mmi\Db\DbException $e) {
             //rollback
             \App\Registry::$db->rollBack();
-            //wiadomość o niepowodzeniu
-            die($e->getMessage() . "\n");
+            throw $e;
         }
     }
 
