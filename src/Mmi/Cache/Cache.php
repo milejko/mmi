@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -24,7 +24,7 @@ class Cache
 
     /**
      * Handler bufora
-     * @var HandlerInterface
+     * @var CacheHandlerInterface
      */
     private $_handler;
 
@@ -63,6 +63,7 @@ class Cache
      * Ładuje (jeśli istnieją) dane z bufora
      * @param string $key klucz
      * @return mixed
+     * @throws CacheException
      */
     public function load($key)
     {
@@ -85,6 +86,7 @@ class Cache
      * @param string $key klucz
      * @param integer $lifetime czas życia
      * @return boolean
+     * @throws CacheException
      */
     public function save($data, $key, $lifetime = null)
     {
@@ -100,13 +102,14 @@ class Cache
         //zapis w rejestrze
         $this->getRegistry()->setOption($key, $data);
         //zapis w handlerzie
-        return (bool) $this->_handler->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
+        return (bool)$this->_handler->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
     }
 
     /**
      * Usuwanie danych z bufora na podstawie klucza
      * @param string $key klucz
      * @return boolean
+     * @throws CacheException
      */
     public function remove($key)
     {
@@ -117,7 +120,7 @@ class Cache
         //usunięcie z rejestru
         $this->getRegistry()->unsetOption($key);
         //usunięcie handlerem
-        return (bool) $this->_handler->delete($key);
+        return (bool)$this->_handler->delete($key);
     }
 
     /**
@@ -138,6 +141,7 @@ class Cache
     /**
      * Zwraca aktywność cache
      * @return boolean
+     * @throws CacheException
      */
     public function isActive()
     {
@@ -172,7 +176,7 @@ class Cache
 
     /**
      * Ustawia handler bufora
-     * @param \Mmi\Cache\CacheHandlerInterface $handler
+     * @param CacheHandlerInterface $handler
      */
     protected function _setHandler(CacheHandlerInterface $handler)
     {

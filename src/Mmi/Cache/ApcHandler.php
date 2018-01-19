@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -19,6 +19,7 @@ class ApcHandler extends DistributedCacheHandlerAbstract
     /**
      * Ładuje dane o podanym kluczu
      * @param string $key klucz
+     * @return mixed
      */
     public function load($key)
     {
@@ -31,7 +32,7 @@ class ApcHandler extends DistributedCacheHandlerAbstract
      * @param string $key klucz
      * @param string $data
      * @param int $lifeTime wygaśnięcie danych w buforze (informacja dla bufora)
-     * @param boolean
+     * @return bool
      */
     public function save($key, $data, $lifeTime)
     {
@@ -43,7 +44,7 @@ class ApcHandler extends DistributedCacheHandlerAbstract
     /**
      * Kasuje klucz bez rozgłaszania
      * @param strings $key klucz
-     * @return boolean
+     * @return bool
      */
     protected function _deleteNoBroadcasting($key)
     {

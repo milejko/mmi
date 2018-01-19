@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -18,9 +18,9 @@ interface CacheHandlerInterface
 
     /**
      * Konstruktor
-     * @param \Mmi\Cache\Cache $cache obiekt bufora
+     * @param Cache $cache obiekt bufora
      */
-    public function __construct(\Mmi\Cache\Cache $cache);
+    public function __construct(Cache $cache);
 
     /**
      * Ładuje dane o podanym kluczu

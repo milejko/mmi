@@ -53,14 +53,16 @@ class DistributedStorage extends \Mmi\OptionObject
      * Zapisuje dane pod podanym kluczem
      * @param string $data
      * @param string $key klucz
+     * @return bool
      */
     public function save($data, $key)
     {
         //tworzenie nowego rekordu
         $cacheRecord = new CacheRecord;
-        $cacheRecord->clearModified();
         //nadawanie identyfikatora
         $cacheRecord->id = $key;
+        //usuwanie flagi modyfikacji po nadaniu identyfikatora, inaczej UPDATE nie zadziała
+        $cacheRecord->clearModified();
         //ustawianie danych
         $cacheRecord->data = $data;
         //ustawienie ttl

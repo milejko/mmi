@@ -2,13 +2,15 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
 namespace Mmi\Cache;
+
+use Mmi\Cache\Cache;
 
 /**
  * Handler bufora w APC
@@ -73,7 +75,8 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
 
     /**
      * Kostruktor
-     * @param \Mmi\Cache\Cache $cache obiekt bufora
+     * @param Cache $cache obiekt bufora
+     * @throws CacheException
      */
     public final function __construct(Cache $cache)
     {
@@ -93,6 +96,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
      * Kasuje dane o podanym kluczu
      * @param string $key klucz
      * @return boolean
+     * @throws CacheException
      */
     public final function delete($key)
     {
@@ -113,7 +117,8 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
 
     /**
      * Inicjalizacja bufora rozproszonego
-     * @param \Mmi\Cache\Cache $cache
+     * @param Cache $cache
+     * @throws CacheException
      */
     protected final function _initDistributedStorage(Cache $cache)
     {
@@ -135,13 +140,14 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
         foreach ($this->_distributedStorage->getOptions() as $key => $timestamp) {
             //jeśli klucz powinien zostać usunięty usuwa bez dalszego rozgłaszania
             $this->_keyShouldBeDeleted($key) &&
-                $this->_deleteNoBroadcasting($key);
+            $this->_deleteNoBroadcasting($key);
         }
     }
 
     /**
      * Ustawienie bufora rozproszonego
-     * @return \Mmi\Cache\Cache
+     * @return Cache
+     * @throws CacheException
      */
     protected final function _getDistributedStorage()
     {
@@ -158,6 +164,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
      * Sprawdza czy klucz powinien zostać usunięty (rozgłoszony w buforze rozproszonym)
      * @param string $key klucz
      * @return boolean
+     * @throws CacheException
      */
     protected final function _keyShouldBeDeleted($key)
     {
@@ -178,6 +185,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
      * Rozgłoszenie o skasowaniu klucza
      * @param string $key klucz
      * @return boolean
+     * @throws CacheException
      */
     protected final function _broadcastDelete($key)
     {
@@ -193,6 +201,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
     /**
      * Rozgłoszenie o usunięciu bufora
      * @return boolean
+     * @throws CacheException
      */
     protected final function _broadcastDeleteAll()
     {
@@ -202,7 +211,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
         }
         //rozgłoszenie informacji o usunięciu bufora i zapis o lokalnym czyszczeniu
         $this->_distributedStorage->save($time = time(), self::FLUSH_MESSAGE) &&
-            $this->_undistributedCache->save($time, self::DEL_PREFIX . self::FLUSH_MESSAGE, 0);
+        $this->_undistributedCache->save($time, self::DEL_PREFIX . self::FLUSH_MESSAGE, 0);
     }
 
 }
