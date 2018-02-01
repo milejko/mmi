@@ -25,7 +25,7 @@ class Csrf extends ValidatorAbstract
     /**
      * Komunikat błędnego kodu zabezpieczającego
      */
-    const INVALID = 'Kod CSRF niepoprawny';
+    const INVALID = 'Formularz wysłany wielokrotnie';
 
     /**
      * Ustawia opcje
@@ -46,6 +46,8 @@ class Csrf extends ValidatorAbstract
     {
         //wartość niepusta i zgodna z sesją
         if ($value != '' && $this->getHash() == $value) {
+            //regeneracja hash
+            $this->generateHash();
             return true;
         }
         return $this->_error(self::INVALID);
