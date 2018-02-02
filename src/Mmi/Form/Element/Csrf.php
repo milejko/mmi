@@ -16,8 +16,11 @@ namespace Mmi\Form\Element;
 class Csrf extends Hidden
 {
 
-    //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/element/hidden';
+    /**
+     * Walidator CSRF
+     * @var \Mmi\Validator\Csrf
+     */
+    private $_validator;
 
     /**
      * Ignorowanie tego pola, pole obowiązkowe, automatyczna walidacja
@@ -25,9 +28,10 @@ class Csrf extends Hidden
     public function __construct($name)
     {
         parent::__construct($name);
-        $this->setIgnore()
+        //generowanie hasha
+        $this//->setIgnore()
             ->setRequired()
-            ->addValidator(new \Mmi\Validator\Csrf(['name' => $name]));
+            ->addValidator($this->_validator = new \Mmi\Validator\Csrf(['name' => $name]));
     }
 
     /**
@@ -36,13 +40,8 @@ class Csrf extends Hidden
      */
     public function fetchField()
     {
-        foreach ($this->getValidators() as $validator) {
-            if (!($validator instanceof \Mmi\Validator\Csrf)) {
-                continue;
-            }
-            $this->setValue($validator->generateHash());
-            break;
-        }
+        //ustawianie wartości
+        $this->setValue($this->_validator->generateHash());
         return parent::fetchField();
     }
 

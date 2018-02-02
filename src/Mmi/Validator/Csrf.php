@@ -46,7 +46,7 @@ class Csrf extends ValidatorAbstract
     {
         //wartość niepusta i zgodna z sesją
         if ($value != '' && $this->getHash() == $value) {
-            //regeneracja hash
+            //regeneracja hash'a
             $this->generateHash();
             return true;
         }
@@ -59,8 +59,7 @@ class Csrf extends ValidatorAbstract
      */
     public function getHash()
     {
-        return (new \Mmi\Session\SessionSpace($this->getOption('name')))
-            ->hash;
+        return (new \Mmi\Session\SessionSpace($this->getOption('name')))->hash;
     }
 
     /**
