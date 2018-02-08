@@ -14,7 +14,7 @@
             {$a = $_element->setDisabled()}
         {/if}
         <li id="{$_element->getId()}-item">
-            <input type="radio" {$_htmlOptions} />
+            <input value="{$_element->getValue()}" id="{$_element->getId()}" type="radio" {$_htmlOptions} />
             <label for="{$_element->getId()}">{$caption}</label>
         </li>
     {/foreach}
