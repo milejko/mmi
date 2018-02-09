@@ -1,21 +1,24 @@
 {$baseId = $_element->getId()}
 {$value = $_element->getValue()}
+{$id = 0}
 <ul id="{$baseId}-list">
     {foreach $_element->getMultioptions() as $key => $caption}
+        {$id++}
+        {$checked = ''}
         {$keyUrl = $key|url}
         {* reset pola *}
         {$unused = $_element->setValue($key)->unsetOption('checked')->setId($baseId . '-' . $keyUrl)}
         {* ustalenie zaznaczenia *}
         {if $value !== null && $value == $key}
-            {$_element->setOption('checked', '')}
+            {$checked = 'checked'}
         {/if}
         {* wartość wyłączona *}
         {if php_strpos($key, ':disabled') !== false}
             {$a = $_element->setDisabled()}
         {/if}
         <li id="{$_element->getId()}-item">
-            <input value="{$_element->getValue()}" id="{$_element->getId()}" type="radio" {$_htmlOptions} />
-            <label for="{$_element->getId()}">{$caption}</label>
+            <input value="{$key}" id="{$baseId}-{$id}" type="radio" {$_htmlOptions} {$checked} />
+            <label for="{$baseId}-{$id}">{$caption}</label>
         </li>
     {/foreach}
     {* reset całego pola *}
