@@ -135,7 +135,7 @@ class Router
             return $url;
         }
         //budowanie zapytania
-        return $url . '/?' . http_build_query($params);
+        return $url . ($url == '/' ? '?' : '/?') . http_build_query($params);
     }
 
 }
