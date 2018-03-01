@@ -70,7 +70,7 @@ class HttpServerEnv extends \Mmi\DataObject
             return;
         }
         //PHP_SELF wskazuje na aplikację w podkatalogu
-        if (null === $newBaseUrl = preg_replace('/\/app_([a-z]+)?\.php/i', '', filter_input(INPUT_SERVER, 'PHP_SELF'))) {
+        if (null === $newBaseUrl = preg_replace('/\/app([_a-z]+)?\.php/i', '', filter_input(INPUT_SERVER, 'PHP_SELF'))) {
             return;
         }
         //nadpisanie zmiennych po wykryciu apki w podkatalogu
