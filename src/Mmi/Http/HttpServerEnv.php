@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,21 +12,21 @@ namespace Mmi\Http;
 
 /**
  * Klasa środowiska serwera HTTP
- * 
+ *
  * @property string $applicationLanguage do ustawienia jako zmienna serwera dla stron wielojęzycznych
  * @property string $requestUri uri żądania HTTP
  * @property string $baseUrl ścieżka bazowa aplikacji
  * @property string $authUser autoryzowany użytkownik basic-auth
  * @property string $authPassword hasło użytkownika basic-auth
  * @property string $scriptFilename wykonywany plik (wejście do aplikacji)
- *  
+ *
  * @property string $remoteAddress ip klienta
  * @property string $remotePort port klienta
  *
  * @property string $serverAddress adres serwera
  * @property string $serverPort port serwera
  * @property string $serverSoftware oprogramowanie serwera
- *  
+ *
  * @property string $httpAcceptLanguage Http-Accept-Language
  * @property string $httpAcceptEncoding Http-Accept-Encoding
  * @property string $httpHost host HTTP
@@ -65,22 +65,17 @@ class HttpServerEnv extends \Mmi\DataObject
             'httpUserAgent' => filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_SPECIAL_CHARS),
             'httpRange' => filter_input(INPUT_SERVER, 'HTTP_RANGE', FILTER_SANITIZE_SPECIAL_CHARS),
         ];
-        //dekodowanie url i zastąpienie
+        //dekodowanie url
         if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim(urldecode(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS)), '/'))) {
             return;
         }
-        //obsługa serwisu w podkatalogu
-        $subFolderPath = substr(BASE_PATH, strrpos(BASE_PATH, '/') + 1) . '/web';
-        $position = strpos($this->_data['requestUri'], $subFolderPath);
-        if (false !== $position) {
-            $this->_data['baseUrl'] = '/' . substr($this->_data['requestUri'], 0, strlen($subFolderPath) + $position);
-            $this->_data['requestUri'] = trim(substr($this->_data['requestUri'], strlen($subFolderPath) + $position + 1), '/');
+        //PHP_SELF wskazuje na aplikację w podkatalogu
+        if (null === $newBaseUrl = preg_replace('/\/app_[a-z]+\.php/i', '', filter_input(INPUT_SERVER, 'PHP_SELF'))) {
+            return;
         }
-        //wejście przez plik PHP
-        if ($this->_data['requestUri'] && (false !== $scriptPosition = strpos($this->_data['requestUri'], $fileName = basename($this->scriptFileName)))) {
-            $this->_data['requestUri'] = substr($this->_url, $scriptPosition + strlen($fileName) + 1);
-        }
-        $this->_data['requestUri'] = rtrim($this->_data['requestUri'], '/');
+        //nadpisanie zmiennych po wykryciu apki w podkatalogu
+        $this->_data['baseUrl'] = $newBaseUrl;
+        $this->_data['requestUri'] = substr($this->_data['requestUri'], strlen($newBaseUrl));
     }
 
     /**
