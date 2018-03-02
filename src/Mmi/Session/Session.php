@@ -25,8 +25,14 @@ class Session
         ini_set('session.gc_divisor', $config->gcDivisor);
         ini_set('session.gc_maxlifetime', $config->gcMaxLifetime);
         ini_set('session.gc_probability', $config->gcProbability);
-        ini_set('session.save_handler', $config->handler);
-        session_save_path($config->path);
+        if ($config->handler == 'user') {
+            $handlerClass = $config->path;
+            $handler = new $handlerClass();
+            session_set_save_handler($handler);
+        } else {
+            ini_set('session.save_handler', $config->handler);
+            session_save_path($config->path);
+        }
         session_start();
     }
 
