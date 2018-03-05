@@ -50,7 +50,7 @@ class Csrf extends ValidatorAbstract
             $this->generateHash();
             return true;
         }
-        return $this->_error(self::INVALID);
+        return $this->_error(static::INVALID);
     }
 
     /**
