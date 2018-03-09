@@ -69,6 +69,9 @@ class HttpServerEnv extends \Mmi\DataObject
         if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim(urldecode(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS)), '/'))) {
             return;
         }
+        if (null === $this->_data['rawRequestUri'] = str_replace(['&amp;', '&#38;'], '&', trim((filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS)), '/'))) {
+            return;
+        }
         //PHP_SELF wskazuje na aplikację w podkatalogu
         if (null === $newBaseUrl = preg_replace('/\/app([_a-z]+)?\.php/i', '', filter_input(INPUT_SERVER, 'PHP_SELF'))) {
             return;

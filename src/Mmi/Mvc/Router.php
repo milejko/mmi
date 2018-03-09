@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -64,10 +64,16 @@ class Router
     {
         //parsowanie url'a
         $parsedUrl = parse_url($url);
+        //test fail KON-487
+        if (isset($parsedUrl['path'])) {
+            $parsedUrl['path'] = urldecode($parsedUrl['path']);
+        }
+
         //inicjalizacja pustych parametrów
         $params = [];
         //parsowanie query string (GET)
         if (isset($parsedUrl['query'])) {
+            //test fail KON-487 - funkcja parse_str dekoduje przez urldecode
             parse_str($parsedUrl['query'], $params);
         }
         //domyślne parametry
@@ -82,7 +88,8 @@ class Router
             return $params;
         }
         //filtrowanie URL
-        $filteredUrl = html_entity_decode(trim((isset($parsedUrl['path']) ? $parsedUrl['path'] : ''), '/ '), ENT_HTML401 | ENT_HTML5 | ENT_QUOTES, 'UTF-8');
+        $filteredUrl = html_entity_decode(trim((isset($parsedUrl['path']) ? $parsedUrl['path'] : ''), '/ '),
+            ENT_HTML401 | ENT_HTML5 | ENT_QUOTES, 'UTF-8');
         //próba aplikacji rout
         foreach ($this->getRoutes() as $route) {
             /* @var $route \Mmi\Mvc\RouterConfigRoute */
