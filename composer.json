@@ -38,7 +38,8 @@
         "ext-spl": "*",
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.4.*",
-        "symfony/console": "^3.3"
+        "symfony/console": "^3.3",
+        "giggsey/libphonenumber-for-php": "^8.9"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",
