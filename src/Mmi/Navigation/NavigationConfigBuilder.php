@@ -26,7 +26,7 @@ class NavigationConfigBuilder
         //budowanie requestu
         $data['request'] = array_merge($data['params'], ['module' => $data['module'], 'controller' => $data['controller'], 'action' => $data['action']]);
         if (!$data['uri']) {
-            $data['uri'] = \Mmi\App\FrontController::getInstance()->getView()->url($data['request'], true, isset($data['https']) && $data['https']);
+            $data['uri'] = \Mmi\App\FrontController::getInstance()->getView()->url($data['request'], true, isset($data['https']) ? $data['https'] : null);
         }
         $build = $data;
         $build['children'] = [];
