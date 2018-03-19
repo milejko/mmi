@@ -66,10 +66,7 @@ class HttpServerEnv extends \Mmi\DataObject
             'httpRange' => filter_input(INPUT_SERVER, 'HTTP_RANGE', FILTER_SANITIZE_SPECIAL_CHARS),
         ];
         //dekodowanie url
-        if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim(urldecode(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS)), '/'))) {
-            return;
-        }
-        if (null === $this->_data['rawRequestUri'] = str_replace(['&amp;', '&#38;'], '&', trim((filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS)), '/'))) {
+        if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS), '/'))) {
             return;
         }
         //PHP_SELF wskazuje na aplikację w podkatalogu

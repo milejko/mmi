@@ -13,6 +13,8 @@ namespace Mmi\Mvc;
 class Router
 {
 
+    CONST HASH_REPLACE = '_TMP-ENCODED-HASH_';
+
     /**
      * Konfiguracja
      * @var \Mmi\Mvc\RouterConfig
@@ -62,18 +64,17 @@ class Router
      */
     public function decodeUrl($url)
     {
-        //parsowanie url'a
+        //parsowanie url'a z zamianą hasha
         $parsedUrl = parse_url($url);
-        //test fail KON-487
+        //inicjalizacja pustych parametrów
+        $params = [];
+        //dekodowanie ścieżki
         if (isset($parsedUrl['path'])) {
             $parsedUrl['path'] = urldecode($parsedUrl['path']);
         }
-
-        //inicjalizacja pustych parametrów
-        $params = [];
         //parsowanie query string (GET)
         if (isset($parsedUrl['query'])) {
-            //test fail KON-487 - funkcja parse_str dekoduje przez urldecode
+            //funkcja parse_str dekoduje przez urldecode
             parse_str($parsedUrl['query'], $params);
         }
         //domyślne parametry

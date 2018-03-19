@@ -57,7 +57,7 @@ class Dispatcher
         $frontController = FrontController::getInstance();
         //ustawianie requestu po zdekodowaniu żądania przez router
         $frontController->getRequest()
-            ->setParams($frontController->getRouter()->decodeUrl($frontController->getEnvironment()->rawRequestUri));
+            ->setParams($frontController->getRouter()->decodeUrl($frontController->getEnvironment()->requestUri));
         //informacja o zakończeniu ustawiania routingu
         $frontController->getProfiler()->event('Mvc\Dispatcher: routing applied');
         //wpięcie dla pluginów przed dispatchem
