@@ -15,6 +15,8 @@ namespace Mmi\Http;
  *
  * @property string $applicationLanguage do ustawienia jako zmienna serwera dla stron wielojęzycznych
  * @property string $requestUri uri żądania HTTP
+ * @property string $requestMethod metoda żądania
+ * @property string $contentType typ treści
  * @property string $baseUrl ścieżka bazowa aplikacji
  * @property string $authUser autoryzowany użytkownik basic-auth
  * @property string $authPassword hasło użytkownika basic-auth
@@ -49,6 +51,8 @@ class HttpServerEnv extends \Mmi\DataObject
             'authUser' => $this->_filter('PHP_AUTH_USER'),
             'authPassword' => $this->_filter('PHP_AUTH_PW'),
             'baseUrl' => '',
+            'requestMethod' => $this->_filter('REQUEST_METHOD'),
+            'contentType' => $this->_filter('CONTENT_TYPE'),
             'applicationLanguage' => $this->_filter('APPLICATION_LANGUAGE'),
             'scriptFileName' => $this->_filter('SCRIPT_FILENAME'),
             'remoteAddress' => $xForwarderFor ? $xForwarderFor : $this->_filter('REMOTE_ADDR'),
@@ -64,11 +68,11 @@ class HttpServerEnv extends \Mmi\DataObject
             'httpRange' => $this->_filter('HTTP_RANGE'),
         ];
         //dekodowanie url
-        if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS), '/'))) {
+        if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim($this->_filter('REQUEST_URI'), '/'))) {
             return;
         }
         //PHP_SELF wskazuje na aplikację w podkatalogu
-        if (null === $newBaseUrl = preg_replace('/\/app([_a-z]+)?\.php/i', '', filter_input(INPUT_SERVER, 'PHP_SELF'))) {
+        if (null === $newBaseUrl = preg_replace('/\/app([_a-z]+)?\.php/i', '', $this->_filter('PHP_SELF'))) {
             return;
         }
         //nadpisanie zmiennych po wykryciu apki w podkatalogu
@@ -87,6 +91,12 @@ class HttpServerEnv extends \Mmi\DataObject
         throw new HttpException('Unable to ser environment variable: ' . $key);
     }
 
+    /**
+     * Metoda filtrująca zmienną z tablicy $_SERVER
+     * @param $name nazwa zmiennej
+     * @param int $filter typ filtra, domyślny FILTER_SANITIZE_SPECIAL_CHARS
+     * @return mixed|null
+     */
     private function _filter($name, $filter = FILTER_SANITIZE_SPECIAL_CHARS) {
         return isset($_SERVER[$name]) ? filter_var($_SERVER[$name], $filter) : null;
     }

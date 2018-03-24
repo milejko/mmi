@@ -26,7 +26,7 @@ class Request extends \Mmi\DataObject
      */
     public function getContentType()
     {
-        return filter_input(INPUT_SERVER, 'CONTENT_TYPE', FILTER_SANITIZE_SPECIAL_CHARS);
+        return \Mmi\App\FrontController::getInstance()->getEnvironment()->contentType;
     }
 
     /**
@@ -35,7 +35,7 @@ class Request extends \Mmi\DataObject
      */
     public function getRequestMethod()
     {
-        return filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_SPECIAL_CHARS);
+        return \Mmi\App\FrontController::getInstance()->getEnvironment()->requestMethod;
     }
 
     /**
