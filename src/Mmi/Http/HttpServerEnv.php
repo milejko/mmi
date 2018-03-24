@@ -25,7 +25,6 @@ namespace Mmi\Http;
  *
  * @property string $serverAddress adres serwera
  * @property string $serverPort port serwera
- * @property string $serverSoftware oprogramowanie serwera
  *
  * @property string $httpAcceptLanguage Http-Accept-Language
  * @property string $httpAcceptEncoding Http-Accept-Encoding
@@ -44,26 +43,25 @@ class HttpServerEnv extends \Mmi\DataObject
     public function __construct()
     {
         //x-forwarded-for
-        $xForwarderFor = filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_FOR', FILTER_SANITIZE_SPECIAL_CHARS);
+        $xForwarderFor = $this->_filter('HTTP_X_FORWARDED_FOR');
         //ustawianie zmiennych środowiskowych
         $this->_data = [
-            'authUser' => isset($_SERVER['PHP_AUTH_USER']) ? filter_var($_SERVER['PHP_AUTH_USER']) : null,
-            'authPassword' => isset($_SERVER['PHP_AUTH_PW']) ? filter_var($_SERVER['PHP_AUTH_PW']) : null,
+            'authUser' => $this->_filter('PHP_AUTH_USER'),
+            'authPassword' => $this->_filter('PHP_AUTH_PW'),
             'baseUrl' => '',
-            'applicationLanguage' => filter_input(INPUT_SERVER, 'APPLICATION_LANGUAGE'),
-            'scriptFileName' => filter_input(INPUT_SERVER, 'SCRIPT_FILENAME', FILTER_SANITIZE_SPECIAL_CHARS),
-            'remoteAddress' => $xForwarderFor ? $xForwarderFor : filter_input(INPUT_SERVER, 'REMOTE_ADDR', FILTER_SANITIZE_SPECIAL_CHARS),
-            'remotePort' => filter_input(INPUT_SERVER, 'REMOTE_PORT', FILTER_SANITIZE_NUMBER_INT),
-            'serverAddress' => filter_input(INPUT_SERVER, 'SERVER_ADDR', FILTER_SANITIZE_SPECIAL_CHARS),
-            'serverPort' => filter_input(INPUT_SERVER, 'SERVER_PORT', FILTER_SANITIZE_NUMBER_INT),
-            'serverSoftware' => filter_input(INPUT_SERVER, 'SERVER_SOFTWARE', FILTER_SANITIZE_SPECIAL_CHARS),
-            'httpSecure' => ('on' == (filter_input(INPUT_SERVER, 'HTTPS')) || ('https' == filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_PROTO')) || 443 == $this->serverPort) ? true : false,
-            'httpAcceptLanguage' => filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE', FILTER_SANITIZE_SPECIAL_CHARS),
-            'httpAcceptEncoding' => filter_input(INPUT_SERVER, 'HTTP_ACCEPT_ENCODING', FILTER_SANITIZE_SPECIAL_CHARS),
-            'httpHost' => filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_SPECIAL_CHARS),
-            'httpReferer' => filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING),
-            'httpUserAgent' => filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_SPECIAL_CHARS),
-            'httpRange' => filter_input(INPUT_SERVER, 'HTTP_RANGE', FILTER_SANITIZE_SPECIAL_CHARS),
+            'applicationLanguage' => $this->_filter('APPLICATION_LANGUAGE'),
+            'scriptFileName' => $this->_filter('SCRIPT_FILENAME'),
+            'remoteAddress' => $xForwarderFor ? $xForwarderFor : $this->_filter('REMOTE_ADDR'),
+            'remotePort' => $this->_filter('REMOTE_PORT', FILTER_SANITIZE_NUMBER_INT),
+            'serverAddress' => $this->_filter('SERVER_ADDR'),
+            'serverPort' => $this->_filter('SERVER_PORT', FILTER_SANITIZE_NUMBER_INT),
+            'httpSecure' => ('on' == ($this->_filter('HTTPS')) || ('https' == $this->_filter('HTTP_X_FORWARDED_PROTO')) || 443 == $this->serverPort) ? true : false,
+            'httpAcceptLanguage' => $this->_filter('HTTP_ACCEPT_LANGUAGE'),
+            'httpAcceptEncoding' => $this->_filter('HTTP_ACCEPT_ENCODING'),
+            'httpHost' => $this->_filter('HTTP_HOST'),
+            'httpReferer' => $this->_filter('HTTP_REFERER', FILTER_SANITIZE_STRING),
+            'httpUserAgent' => $this->_filter('HTTP_USER_AGENT'),
+            'httpRange' => $this->_filter('HTTP_RANGE'),
         ];
         //dekodowanie url
         if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_SPECIAL_CHARS), '/'))) {
@@ -87,6 +85,10 @@ class HttpServerEnv extends \Mmi\DataObject
     public function __set($key, $value)
     {
         throw new HttpException('Unable to ser environment variable: ' . $key);
+    }
+
+    private function _filter($name, $filter = FILTER_SANITIZE_SPECIAL_CHARS) {
+        return isset($_SERVER[$name]) ? filter_var($_SERVER[$name], $filter) : null;
     }
 
 }
