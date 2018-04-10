@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -20,13 +20,16 @@ class StructureParser
      * Katalogi konieczne w module
      * @var array
      */
-    protected static $_moduleRequirements = ['IndexController.php',
+    protected static $_moduleRequirements = [
+        'IndexController.php',
+        'WidgetController.php',
         'Resource',
         'Filter',
         'Model',
         'Orm',
         'Resource',
-        'View'
+        'View',
+        'Form'
     ];
 
     /**
@@ -108,7 +111,7 @@ class StructureParser
     {
         //iteracja po wymaganych katalogach
         foreach (self::$_moduleRequirements as $req) {
-            //sprawdzanie istnienia katalogu 
+            //sprawdzanie istnienia katalogu
             if (file_exists($modulePath . '/' . $req)) {
                 return true;
             }
