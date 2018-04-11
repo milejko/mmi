@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,6 +17,8 @@ use \Mmi\Orm;
  */
 class Deployer
 {
+    const TYPE_SQL = 'sql';
+    const TYPE_PHP = 'php';
 
     /**
      * Metoda uruchamiająca
@@ -33,13 +35,25 @@ class Deployer
         //iteracja po modułach aplikacji
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
             //moduł nie zawiera incrementali
-            if (!file_exists($module . '/Resource/incremental/' . \App\Registry::$config->db->driver)) {
+            $directory = $module . '/Resource/incremental/' . \App\Registry::$config->db->driver;
+            if (!file_exists($directory)) {
                 continue;
             }
-            //iteracja po incrementalach
-            foreach (glob($module . '/Resource/incremental/' . \App\Registry::$config->db->driver . '/*.sql') as $file) {
+            //iteracja po incrementalach sql
+            foreach (glob($directory . '/*.sql') as $file) {
                 //dodawanie incrementala do tablicy
-                $incrementals[basename($file)] = $file;
+                $incrementals[basename($file)] = [
+                    'fileType' => static::TYPE_SQL,
+                    'fileName' => $file,
+                ];
+            }
+            //iteracja po incrementalach php
+            foreach (glob($directory . '/*.php') as $file) {
+                //dodawanie incrementala do tablicy
+                $incrementals[basename($file)] = [
+                    'fileType' => static::TYPE_PHP,
+                    'fileName' => $file,
+                ];
             }
         }
         //sortowanie plików po nazwach
@@ -47,7 +61,7 @@ class Deployer
         //przywracanie incrementali
         foreach ($incrementals as $incremental) {
             //importowanie incrementala
-            $this->_importIncremental($incremental);
+            $this->_importIncremental($incremental['fileType'], $incremental['fileName']);
             //flush wyniku na ekran
             flush();
         }
@@ -55,20 +69,21 @@ class Deployer
 
     /**
      * Importuje pojedynczy plik
-     * @param string $file
+     * @param string $fileType
+     * @param string $fileName
      * @throws \Mmi\App\KernelException
      */
-    protected function _importIncremental($file)
+    protected function _importIncremental($fileType, $fileName)
     {
         //nazwa pliku
-        $baseFileName = basename($file);
+        $baseFileName = basename($fileName);
         //hash pliku
-        $md5file = md5_file($file);
+        $md5file = md5_file($fileName);
         //ustawianie domyślnych parametrów importu
         \App\Registry::$db->setDefaultImportParams();
         //pobranie rekordu
         try {
-            $dc = (new Orm\ChangelogQuery)->whereFilename()->equals(basename($file))->findFirst();
+            $dc = (new Orm\ChangelogQuery)->whereFilename()->equals(basename($fileName))->findFirst();
         } catch (\Exception $e) {
             echo 'INITIAL IMPORT.' . "\n";
             $dc = null;
@@ -84,8 +99,13 @@ class Deployer
         }
         //informacja na ekran przed importem aby bylo wiadomo który
         echo 'RESTORE INCREMENTAL: ' . $baseFileName . "\n";
-        //import danych
-        $this->_importSql($file);
+        //import danych z pliku sql
+        if ($fileType === static::TYPE_SQL) {
+            $this->_importSqlIncremental($fileName);
+        } //import danych z pliku php
+        elseif ($fileType === static::TYPE_PHP) {
+            $this->_importPhpIncremental($fileName);
+        }
         //resetowanie struktur tabeli
         \Mmi\Orm\DbConnector::resetTableStructures();
         //brak restore - zakłada nowy rekord
@@ -101,8 +121,9 @@ class Deployer
     /**
      * Import pliku sql
      * @param string $fileName nazwa pliku
+     * @throws DbException
      */
-    protected function _importSql($fileName)
+    protected function _importSqlIncremental($fileName)
     {
         //rozbicie zapytań po średniku i końcu linii
         foreach (explode(';' . PHP_EOL, file_get_contents($fileName)) as $query) {
@@ -114,6 +135,7 @@ class Deployer
     /**
      * Wykonanie pojedynczego zapytania
      * @param string $query
+     * @throws DbException
      */
     protected function _performQuery($query)
     {
@@ -136,4 +158,38 @@ class Deployer
         }
     }
 
+
+    /**
+     * Import pliku php
+     * @param string $fileName nazwa pliku
+     * @throws \Exception
+     */
+    protected function _importPhpIncremental($fileName)
+    {
+        require_once($fileName);
+
+        // Nazwa klasy incrementala bazujaca na nazwie pliku
+        $incrementalClass = 'Incremental_' . basename(strtolower($fileName), '.php');
+        // Sprawdzenie czy klasa istnieje
+        if (class_exists($incrementalClass)) {
+            // Utworzenie instancji klasy incrementala
+            $incremental = new $incrementalClass();
+            // Sprawdzenie czy metoda execute istnieje
+            if (method_exists($incremental, 'execute')) {
+                // Start transakcji
+                \App\Registry::$db->beginTransaction();
+                try {
+                    // Wykonanie incrementala
+                    $incremental->execute(\App\Registry::$db);
+
+                    // Commit
+                    \App\Registry::$db->commit();
+                } catch (\Exception $e) {
+                    // Rollback
+                    \App\Registry::$db->rollBack();
+                    throw $e;
+                }
+            }
+        }
+    }
 }
