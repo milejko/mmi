@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Paginator;
 
 /**
  * Klasa paginatora
- * 
+ *
  * @method \Mmi\Http\Request getRequest() Zwraca obiekt requesta używany przez Paginator
  * @method \Mmi\Paginator\Paginator setRowsCount(integer $count) Ustawia ilość danych do stronnicowania
  * @method \Mmi\Paginator\Paginator setRowsPerPage(integer $count) Ustawia ilość wierszy na stronę
@@ -21,7 +21,7 @@ namespace Mmi\Paginator;
  * @method \Mmi\Paginator\Paginator setPreviousLabel(string $label) Ustawia tekst pod linkiem poprzedniej strony
  * @method \Mmi\Paginator\Paginator setNextLabel(integer $pages) Ustawia tekst pod linkiem następnej strony
  * @method \Mmi\Paginator\Paginator setPage(integer $page) Ustawia aktualną stronę
- * 
+ *
  * @method integer getRowsCount() Zwraca aktualną ilość wierszy w paginatorze
  * @method integer getRowsPerPageCount() Zwraca ilość wierszy na stronę
  */
@@ -96,6 +96,10 @@ class Paginator extends \Mmi\OptionObject
      */
     public function setHashHref($label)
     {
+        // Ignorujemy hash href przy pustym stringu
+        if (mb_strlen($label) === 0) {
+            return $this->setOption('hashHref', '');
+        }
         return $this->setOption('hashHref', '#' . $label);
     }
 
