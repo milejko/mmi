@@ -78,7 +78,7 @@ class ActionHelper
      * @param \Mmi\Http\Request $request
      * @return mixed
      */
-    public function action(Request $request, $main = false)
+    public function action(Request $request)
     {
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
@@ -86,7 +86,7 @@ class ActionHelper
             return FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
         }
         //rendering szablonu jeśli akcja zwraca null
-        return $this->_renderAction($request, (FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request), $main);
+        return $this->_renderAction($request);
     }
 
     /**
@@ -119,33 +119,21 @@ class ActionHelper
     /**
      * Renderuje akcję (zwraca content akcji, lub template)
      * @param Request $request
-     * @param Request $resetRequest request przekazywany do widoku po zakończeniu renderingu
-     * @param boolean $main określa czy akcja jest akcją główną (2 przypadki - gdy wywołana z front-controllera, lub forward)
      * @return string
      */
-    private function _renderAction(Request $request, Request $resetRequest, $main)
+    private function _renderAction(Request $request)
     {
-        //zapamiętanie stanu wyłączenia layoutu
-        //$resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
         //klonowanie widoku
         $view = clone FrontController::getInstance()->getView();
         $view->setRequest($request);
         //wywołanie akcji
         if (null !== $actionContent = $this->_invokeAction($request, $view)) {
-            //reset requestu i dla akcji głównej wyłączenie layoutu
-            //FrontController::getInstance()->getView()
-                //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-                //->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
-            //zwrot danych z akcji
+            FrontController::getInstance()->getView()->setLayoutDisabled();
             return $actionContent;
         }
         //zwrot wyrenderowanego szablonu
         $content = $view->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
-        //pobranie widoku
-        //FrontController::getInstance()->getView()
-            //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-            //->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
-        //profiler wyrenderowaniu szablonu
+        //profiler
         FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $request->getAsColonSeparatedString() . ' rendered');
         //zwrot wyrenderowanego szablonu
         return $content;
@@ -190,13 +178,10 @@ class ActionHelper
         $controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
         //nazwa akcji
         $actionMethodName = $request->getActionName() . 'Action';
-
         //inicjalizacja tłumaczeń
         $this->_initTranslaction($view, $request->module, $request->lang);
-
         //wywołanie akcji
         $content = (new $controllerClassName($request, $view))->$actionMethodName();
-        die($content);exit;
         //informacja o zakończeniu wykonywania akcji do profilera
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
@@ -224,7 +209,7 @@ class ActionHelper
         //ładowanie zbuforowanego translatora
         $cache = $view->getCache();
         //klucz buforowania
-        $key = 'mmi-translate-' . $lang . '-' . '-' . $module;
+        $key = 'mmi-translate-' . $lang . $module;
         //próba załadowania z bufora
         if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
             //wstrzyknięcie zbuforowanego translatora do widoku
