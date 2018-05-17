@@ -126,24 +126,25 @@ class ActionHelper
     private function _renderAction(Request $request, Request $resetRequest, $main)
     {
         //zapamiętanie stanu wyłączenia layoutu
-        $resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
+        //$resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
+        //klonowanie widoku
+        $view = clone FrontController::getInstance()->getView();
+        $view->setRequest($request);
         //wywołanie akcji
-        if (null !== $actionContent = $this->_invokeAction($request)) {
+        if (null !== $actionContent = $this->_invokeAction($request, $view)) {
             //reset requestu i dla akcji głównej wyłączenie layoutu
-            FrontController::getInstance()->getView()->setRequest($resetRequest)
+            //FrontController::getInstance()->getView()
                 //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-                ->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
+                //->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
             //zwrot danych z akcji
             return $actionContent;
         }
         //zwrot wyrenderowanego szablonu
-        $content = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+        $content = $view->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
         //pobranie widoku
-        FrontController::getInstance()->getView()
-            //reset requestu
-            ->setRequest($resetRequest)
+        //FrontController::getInstance()->getView()
             //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-            ->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
+            //->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
         //profiler wyrenderowaniu szablonu
         FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $request->getAsColonSeparatedString() . ' rendered');
         //zwrot wyrenderowanego szablonu
@@ -167,7 +168,7 @@ class ActionHelper
      * @return string
      * @throws MvcNotFoundException
      */
-    private function _invokeAction(Request $request)
+    private function _invokeAction(Request $request, View $view)
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' start');
@@ -178,8 +179,6 @@ class ActionHelper
             //komponent nieodnaleziony
             throw new MvcNotFoundException('Component not found: ' . $request->getAsColonSeparatedString());
         }
-        //ustawienie requestu w widoku
-        FrontController::getInstance()->getView()->setRequest($request);
         //rozbijanie po myślniku
         $controllerParts = explode('-', $request->getControllerName());
         //iteracja po częściach
@@ -191,11 +190,56 @@ class ActionHelper
         $controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
         //nazwa akcji
         $actionMethodName = $request->getActionName() . 'Action';
+
+        //inicjalizacja tłumaczeń
+        $this->_initTranslaction($view, $request->module, $request->lang);
+
         //wywołanie akcji
-        $content = (new $controllerClassName($request))->$actionMethodName();
+        $content = (new $controllerClassName($request, $view))->$actionMethodName();
+        die($content);exit;
         //informacja o zakończeniu wykonywania akcji do profilera
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
+    }
+
+    /**
+     * Inicjalizacja tłumaczeń
+     * @param \Mmi\Mvc\View $view
+     * @param string $module nazwa modułu
+     * @param string $lang język
+     * @return mixed wartość
+     */
+    private function _initTranslaction(\Mmi\Mvc\View $view, $module, $lang)
+    {
+        //pobranie struktury translatora
+        $structure = FrontController::getInstance()->getStructure('translate');
+        //brak tłumaczenia w strukturze
+        if (!isset($structure[$module][$lang])) {
+            return;
+        }
+        //brak tłumaczenia, lub domyślny język
+        if ($lang === null || $lang == $view->getTranslate()->getDefaultLocale()) {
+            return;
+        }
+        //ładowanie zbuforowanego translatora
+        $cache = $view->getCache();
+        //klucz buforowania
+        $key = 'mmi-translate-' . $lang . '-' . '-' . $module;
+        //próba załadowania z bufora
+        if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
+            //wstrzyknięcie zbuforowanego translatora do widoku
+            $view->setTranslate($cachedTranslate->setLocale($lang));
+            return FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
+        }
+        //dodawanie tłumaczeń do translatora
+        $view->getTranslate()->addTranslation(is_array($structure[$module][$lang]) ? $structure[$module][$lang][0] : $structure[$module][$lang], $lang)
+            ->setLocale($lang);
+        //zapis do cache
+        if ($cache !== null) {
+            $cache->save($view->getTranslate(), $key, 0);
+        }
+        //event profilera
+        FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
     }
 
 }

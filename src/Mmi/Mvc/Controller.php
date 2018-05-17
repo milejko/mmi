@@ -39,14 +39,14 @@ class Controller
     /**
      * Konstruktor
      */
-    public function __construct(\Mmi\Http\Request $request)
+    public function __construct(\Mmi\Http\Request $request, \Mmi\Mvc\View $view)
     {
         //request
         $this->_request = $request;
-        //response
+        //ustawienie response
         $this->_response = \Mmi\App\FrontController::getInstance()->getResponse();
-        //inicjalizacja domyślna
-        $this->_init();
+        //ustawienie pola widoku
+        $this->view = $view;
         //inicjacja programisty kontrolera
         $this->init();
     }
@@ -170,57 +170,6 @@ class Controller
     public final function getProfiler()
     {
         return FrontController::getInstance()->getProfiler();
-    }
-
-    /**
-     * Konfiguruje kontroler akcji
-     */
-    private function _init()
-    {
-        //przypięcie widoku
-        $this->view = FrontController::getInstance()->getView();
-
-        //inicjalizacja tłumaczeń
-        $this->_initTranslaction($this->_request->__get('module'), $this->_request->__get('lang'));
-    }
-
-    /**
-     * Inicjalizacja tłumaczeń
-     * @param string $module nazwa modułu
-     * @param string $lang język
-     * @return mixed wartość
-     */
-    private function _initTranslaction($module, $lang)
-    {
-        //pobranie struktury translatora
-        $structure = FrontController::getInstance()->getStructure('translate');
-        //brak tłumaczenia w strukturze
-        if (!isset($structure[$module][$lang])) {
-            return;
-        }
-        //brak tłumaczenia, lub domyślny język
-        if ($lang === null || $lang == $this->view->getTranslate()->getDefaultLocale()) {
-            return;
-        }
-        //ładowanie zbuforowanego translatora
-        $cache = $this->view->getCache();
-        //klucz buforowania
-        $key = 'mmi-translate-' . $lang . '-' . '-' . $module;
-        //próba załadowania z bufora
-        if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
-            //wstrzyknięcie zbuforowanego translatora do widoku
-            $this->view->setTranslate($cachedTranslate->setLocale($lang));
-            return FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
-        }
-        //dodawanie tłumaczeń do translatora
-        $this->view->getTranslate()->addTranslation(is_array($structure[$module][$lang]) ? $structure[$module][$lang][0] : $structure[$module][$lang], $lang)
-            ->setLocale($lang);
-        //zapis do cache
-        if ($cache !== null) {
-            $cache->save($this->view->getTranslate(), $key, 0);
-        }
-        //event profilera
-        FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
     }
 
 }
