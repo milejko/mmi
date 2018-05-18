@@ -12,6 +12,7 @@ namespace Mmi\Mvc;
 
 use Mmi\App\FrontController;
 use Mmi\Http\Request;
+use Twig\TokenParser\FromTokenParser;
 
 /**
  * Helper akcji
@@ -126,25 +127,26 @@ class ActionHelper
     private function _renderAction(Request $request, Request $resetRequest, $main)
     {
         //zapamiętanie stanu wyłączenia layoutu
-        //$resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
-        //klonowanie widoku
-        $view = clone FrontController::getInstance()->getView();
-        $view->setRequest($request);
+        $resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
+        //ustawienia requestu
+        FrontController::getInstance()->getView()->setRequest($request);
         //wywołanie akcji
-        if (null !== $actionContent = $this->_invokeAction($request, $view)) {
+        if (null !== $actionContent = $this->_invokeAction($request)) {
             //reset requestu i dla akcji głównej wyłączenie layoutu
-            //FrontController::getInstance()->getView()
+            FrontController::getInstance()->getView()
+                ->setRequest($resetRequest)
                 //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-                //->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
+                ->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
             //zwrot danych z akcji
             return $actionContent;
         }
         //zwrot wyrenderowanego szablonu
-        $content = $view->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+        $content = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
         //pobranie widoku
-        //FrontController::getInstance()->getView()
+        FrontController::getInstance()->getView()
+            ->setRequest($resetRequest)
             //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-            //->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
+            ->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
         //profiler wyrenderowaniu szablonu
         FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $request->getAsColonSeparatedString() . ' rendered');
         //zwrot wyrenderowanego szablonu
@@ -168,7 +170,7 @@ class ActionHelper
      * @return string
      * @throws MvcNotFoundException
      */
-    private function _invokeAction(Request $request, View $view)
+    private function _invokeAction(Request $request)
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' start');
@@ -192,11 +194,10 @@ class ActionHelper
         $actionMethodName = $request->getActionName() . 'Action';
 
         //inicjalizacja tłumaczeń
-        $this->_initTranslaction($view, $request->module, $request->lang);
+        $this->_initTranslaction(FrontController::getInstance()->getView(), $request->module, $request->lang);
 
         //wywołanie akcji
-        $content = (new $controllerClassName($request, $view))->$actionMethodName();
-        die($content);exit;
+        $content = (new $controllerClassName($request, FrontController::getInstance()->getView()))->$actionMethodName();
         //informacja o zakończeniu wykonywania akcji do profilera
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
