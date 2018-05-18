@@ -108,7 +108,7 @@ class RouterMatcher
                 if (is_array($match)) {
                     $match = trim(implode(';', $match), ';');
                 }
-                $url = preg_replace('/\(\#\)/', urlencode($match), $url, 1);
+                $url = preg_replace('/\(\#\)/', $match, $url, 1);
             }
         }
         return [
