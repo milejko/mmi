@@ -11,6 +11,7 @@
 namespace Mmi\Mvc;
 
 use Mmi\App\FrontController;
+use \Mmi\Message\MessengerHelper;
 
 /**
  * Klasa kontrolera akcji
@@ -44,7 +45,7 @@ class Controller
         //request
         $this->_request = $request;
         //ustawienie response
-        $this->_response = \Mmi\App\FrontController::getInstance()->getResponse();
+        $this->_response = FrontController::getInstance()->getResponse();
         //ustawienie pola widoku
         $this->view = $view;
         //inicjacja programisty kontrolera
@@ -54,6 +55,7 @@ class Controller
     /**
      * Magiczne pobranie zmiennej z requestu
      * @param string $name nazwa zmiennej
+     * @return mixed
      */
     public final function __get($name)
     {
@@ -138,11 +140,11 @@ class Controller
 
     /**
      * Pobiera helper messengera
-     * @return \Mmi\Messenger\Messenger
+     * @return \Mmi\Message\Messenger
      */
     public final function getMessenger()
     {
-        return \Mmi\Message\MessengerHelper::getMessenger();
+        return MessengerHelper::getMessenger();
     }
 
     /**
