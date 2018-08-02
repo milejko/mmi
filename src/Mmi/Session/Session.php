@@ -20,7 +20,7 @@ class Session
     public static function start(\Mmi\Session\SessionConfig $config)
     {
         session_name($config->name);
-        session_set_cookie_params($config->cookieLifetime);
+        session_set_cookie_params($config->cookieLifetime, $config->cookiePath, $config->cookieDomain, $config->cookieSecure, $config->cookieHttpOnly);
         session_cache_expire($config->cacheExpire);
         ini_set('session.gc_divisor', $config->gcDivisor);
         ini_set('session.gc_maxlifetime', $config->gcMaxLifetime);
