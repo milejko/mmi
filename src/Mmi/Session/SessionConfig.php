@@ -29,6 +29,30 @@ class SessionConfig
     public $cookieLifetime = 0;
 
     /**
+     * Ścieżka cookie
+     * @var string
+     */
+    public $cookiePath;
+
+    /**
+     * Domena cookie
+     * @var string
+     */
+    public $cookieDomain;
+
+    /**
+     * Cookie secure
+     * @var bool
+     */
+    public $cookieSecure = false;
+
+    /**
+     * HTTP only cookie
+     * @var bool
+     */
+    public $cookieHttpOnly = false;
+
+    /**
      * Czas wygasania cache w sekundach
      * @var int
      */

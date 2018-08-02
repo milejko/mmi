@@ -12,7 +12,6 @@ namespace Mmi\Mvc;
 
 use Mmi\App\FrontController;
 use Mmi\Http\Request;
-use Twig\TokenParser\FromTokenParser;
 
 /**
  * Helper akcji
