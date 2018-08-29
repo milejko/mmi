@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.0.0",
         "ext-bcmath": "*",
         "ext-date": "*",
         "ext-exif": "*",
@@ -34,12 +34,10 @@
         "ext-pdo": "*",
         "ext-reflection": "*",
         "ext-session": "*",
-        "ext-shmop": "*",
         "ext-spl": "*",
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.4.*",
-        "symfony/console": "^3.3",
-        "giggsey/libphonenumber-for-php": "^8.9"
+        "symfony/console": "^3.3"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",
@@ -58,7 +56,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.6-dev"
+            "dev-master": "3.7-dev"
         }
     }
 }
