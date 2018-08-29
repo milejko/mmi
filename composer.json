@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.0",
         "ext-bcmath": "*",
         "ext-date": "*",
         "ext-exif": "*",
@@ -38,8 +38,7 @@
         "ext-spl": "*",
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.4.*",
-        "symfony/console": "^3.3",
-        "giggsey/libphonenumber-for-php": "^8.9"
+        "symfony/console": "^3.3"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",

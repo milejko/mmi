@@ -11,7 +11,10 @@
 namespace Mmi\Mvc;
 
 use Mmi\App\FrontController;
+use Mmi\App\KernelException;
 use Mmi\Http\Request;
+use Mmi\Security\Acl;
+use Mmi\Security\Auth;
 
 /**
  * Helper akcji
@@ -49,10 +52,10 @@ class ActionHelper
 
     /**
      * Ustawia obiekt ACL
-     * @param \Mmi\Security\Acl $acl
-     * @return \Mmi\Security\Acl
+     * @param Acl $acl
+     * @return Acl
      */
-    public function setAcl(\Mmi\Security\Acl $acl)
+    public function setAcl(Acl $acl)
     {
         //acl
         $this->_acl = $acl;
@@ -62,10 +65,10 @@ class ActionHelper
 
     /**
      * Ustawia obiekt autoryzacji
-     * @param \Mmi\Security\Auth $auth
-     * @return \Mmi\Security\Auth
+     * @param Auth $auth
+     * @return Auth
      */
-    public function setAuth(\Mmi\Security\Auth $auth)
+    public function setAuth(Auth $auth)
     {
         //auth
         $this->_auth = $auth;
@@ -77,8 +80,10 @@ class ActionHelper
      * Uruchamia akcję z kontrolera ze sprawdzeniem ACL
      * @param \Mmi\Http\Request $request
      * @return mixed
+     * @throws MvcNotFoundException
+     * @throws KernelException
      */
-    public function action(Request $request, $main = false)
+    public function action(Request $request, View $view = null)
     {
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
@@ -86,16 +91,17 @@ class ActionHelper
             return FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
         }
         //rendering szablonu jeśli akcja zwraca null
-        return $this->_renderAction($request, (FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request), $main);
+        return $this->_renderAction($request, $view);
     }
 
     /**
      * Przekierowuje na request zwraca wyrenderowaną akcję i layout
      * @param \Mmi\Http\Request $request
      * @return string
-     * @throws \Mmi\Mvc\MvcException
+     * @throws MvcNotFoundException
+     * @throws KernelException
      */
-    public function forward(Request $request)
+    public function forward(Request $request, View $view = null)
     {
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
@@ -103,7 +109,7 @@ class ActionHelper
             throw new MvcForbiddenException('Action ' . $request->getAsColonSeparatedString() . ' blocked');
         }
         //renderowanie akcji
-        $content = $this->_renderAction($request, $request, true);
+        $content = $this->_renderAction($request, $view);
         //iteracja po pluginach front controllera
         foreach (FrontController::getInstance()->getPlugins() as $plugin) {
             //post dispatch
@@ -121,31 +127,21 @@ class ActionHelper
      * @param Request $request
      * @param Request $resetRequest request przekazywany do widoku po zakończeniu renderingu
      * @param boolean $main określa czy akcja jest akcją główną (2 przypadki - gdy wywołana z front-controllera, lub forward)
+     * @throws KernelException
      * @return string
      */
-    private function _renderAction(Request $request, Request $resetRequest, $main)
+    private function _renderAction(Request $request, View $view = null)
     {
-        //zapamiętanie stanu wyłączenia layoutu
-        $resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
-        //ustawienia requestu
-        FrontController::getInstance()->getView()->setRequest($request);
+        //powoływanie nowego widoku
+        $view = $view ? : clone(FrontController::getInstance()->getView());
+        $view->setRequest($request);
         //wywołanie akcji
-        if (null !== $actionContent = $this->_invokeAction($request)) {
-            //reset requestu i dla akcji głównej wyłączenie layoutu
-            FrontController::getInstance()->getView()
-                ->setRequest($resetRequest)
-                //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-                ->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
+        if (null !== $actionContent = $this->_invokeAction($view)) {
             //zwrot danych z akcji
             return $actionContent;
         }
         //zwrot wyrenderowanego szablonu
-        $content = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
-        //pobranie widoku
-        FrontController::getInstance()->getView()
-            ->setRequest($resetRequest)
-            //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-            ->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
+        $content = $view->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
         //profiler wyrenderowaniu szablonu
         FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $request->getAsColonSeparatedString() . ' rendered');
         //zwrot wyrenderowanego szablonu
@@ -168,9 +164,11 @@ class ActionHelper
      * @param \Mmi\Http\Request $request
      * @return string
      * @throws MvcNotFoundException
+     * @throws KernelException
      */
-    private function _invokeAction(Request $request)
+    private function _invokeAction(View $view)
     {
+        $request = $view->request;
         //informacja do profilera o rozpoczęciu wykonywania akcji
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
@@ -193,10 +191,10 @@ class ActionHelper
         $actionMethodName = $request->getActionName() . 'Action';
 
         //inicjalizacja tłumaczeń
-        $this->_initTranslaction(FrontController::getInstance()->getView(), $request->module, $request->lang);
+        $this->_initTranslaction($view, $request->module, $request->lang);
 
         //wywołanie akcji
-        $content = (new $controllerClassName($request, FrontController::getInstance()->getView()))->$actionMethodName();
+        $content = (new $controllerClassName($request, $view))->$actionMethodName();
         //informacja o zakończeniu wykonywania akcji do profilera
         FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
@@ -207,6 +205,7 @@ class ActionHelper
      * @param \Mmi\Mvc\View $view
      * @param string $module nazwa modułu
      * @param string $lang język
+     * @throws KernelException
      * @return mixed wartość
      */
     private function _initTranslaction(\Mmi\Mvc\View $view, $module, $lang)
