@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License 
  */ 
  
-namespace Mmi\Command; 
+namespace Mmi\App;
  
 use Composer\Script\Event; 
  
@@ -144,16 +144,9 @@ class ComposerInstaller
      * Kopiuje binaria do /bin 
      */ 
     protected static function _copyModuleBinaries() 
-    { 
-        //iteracja po modułach 
-        foreach (\Mmi\Mvc\StructureParser::getModules() as $module) { 
-            //istnieje resource web 
-            if (file_exists($module . '/Command')) { 
-                //kopiowanie kaskadowe 
-                \Mmi\FileSystem::copyRecursive($module . '/Command', BASE_PATH . '/bin'); 
-            } 
-        } 
-        //iteracja po binarkach 
+    {
+        copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/mmi', BASE_PATH . '/bin/mmi');
+        //iteracja po binarkach
         foreach (new \DirectoryIterator(BASE_PATH . '/bin') as $file) { 
             //katalog (lub wyjście wyżej) 
             if ($file->isDot() || $file->isDir()) { 
