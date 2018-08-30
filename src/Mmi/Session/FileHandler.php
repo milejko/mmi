@@ -19,7 +19,7 @@ class FileHandler implements \SessionHandlerInterface
     /**
      * Namespace sesji
      */
-    private $_namespace;
+    private $_namespace = BASE_PATH . '/var/session/sess-';
 
     /**
      * Dane w sesji
@@ -35,7 +35,6 @@ class FileHandler implements \SessionHandlerInterface
      */
     public function open($savePath, $sessionName)
     {
-        $this->_namespace = BASE_PATH . '/var/session/sess-';
         return true;
     }
 

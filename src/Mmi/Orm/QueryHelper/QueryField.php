@@ -271,7 +271,7 @@ class QueryField
         }
         //like powinien działać jak ilike
         if ('LIKE' == $condition) {
-            $this->_query->getQueryCompile()->where .= DbConnector::getAdapter()->prepareIlike($this->_fieldName) . ' :' . $bindKey;
+            $this->_query->getQueryCompile()->where .= DbConnector::getAdapter()->prepareLike($this->_fieldName) . ' :' . $bindKey;
             return $this->_query;
         }
         //zwykłe porównanie

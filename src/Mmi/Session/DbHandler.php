@@ -127,7 +127,7 @@ class DbHandler implements \SessionHandlerInterface
     public function gc($maxLifetime)
     {
         //uproszczone usuwanie - jednym zapytaniem
-        \Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp < :time', [':time' => (time() - $maxLifetime)]);
+        \Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp <= :time', [':time' => (time() - $maxLifetime)]);
         return true;
     }
 

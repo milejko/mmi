@@ -18,27 +18,23 @@ use Mmi\Db\Adapter\PdoMysql;
 class PdoMysqlTest extends \PHPUnit\Framework\TestCase
 {
     
-    /*CONST host = 'localhost';
-    CONST upstreamHost = 'localhost';
-    CONST user = 'root';
-    CONST password = 'rooter';
-    CONST name = 'mmi_fresh';
-    CONST tblName = 'test';
-    CONST driver = 'mysql';
-    CONST port = '3306';
-    CONST upstreamPort = '3306';
-    
-    
+    CONST HOST = 'localhost';
+    CONST PORT = '3306';
+    CONST USER = 'root';
+    CONST PASSWORD = '';
+    CONST DB_NAME = 'test';
+    CONST TABLE_NAME = 'test';
+
     private $_db;
 
     public function setUp()
     {
         $cfg = new \Mmi\Db\DbConfig;
-        $cfg->user = self::user;
-        $cfg->password = self::password;
-        $cfg->name = self::name;
-        $cfg->driver = self::driver;
-        $cfg->port = self::port;
+        $cfg->user = self::USER;
+        $cfg->password = self::PASSWORD;
+        $cfg->name = self::DB_NAME;
+        $cfg->driver = 'mysql';
+        $cfg->port = self::PORT;
         $this->_db = new PdoMysql($cfg);
         try {
             $this->_db->connect();
@@ -50,7 +46,7 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
     public function testSelectSchema()
     {
         $this->_createTable();
-        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoMysql', $this->_db->selectSchema(self::name));
+        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoMysql', $this->_db->selectSchema(self::TABLE_NAME));
         $this->_deleteTable();
     }
     
@@ -67,7 +63,7 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
     // utworzenie tabeli tymczasowej na potrzeby testów (jeśli nie istnieje)
     private function _createTable()
     {
-        if (!$this->_connect()->query('CREATE TABLE IF NOT EXISTS `'.self::tblName.'` (
+        if (!$this->_db->query('CREATE TABLE IF NOT EXISTS `' . self::TABLE_NAME. '` (
                 `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `test_name` varchar(255) NOT NULL,
                 `test_value` char NOT NULL
@@ -79,20 +75,7 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
     // usunięcie tabeli tymczasowej
     private function _deleteTable()
     {
-        $this->_connect()->delete(self::tblName);
-    }
-    
-    // utworzenie połączenia na potrzeby testów
-    private function _connect()
-    {
-        $cfg = new \Mmi\Db\DbConfig;
-        $cfg->user = self::user;
-        $cfg->password = self::password;
-        $cfg->name = self::name;
-        $cfg->driver = self::driver;
-        $cfg->port = self::port;
-        $connect = new PdoMysql($cfg);
-        return $connect;
+        $this->_db->delete(self::TABLE_NAME);
     }
 
 
@@ -117,12 +100,18 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
                 'null' => false,
                 'default' => ''
             ]
-        ], $this->_db->tableInfo(self::tblName));
+        ], $this->_db->tableInfo(self::TABLE_NAME));
     }
     
     public function testPrepareTable()
     {
         $this->assertEquals('`nazwa`', $this->_db->prepareTable('nazwa'));
+    }
+
+    public function testInsertAll()
+    {
+        $this->assertEquals(2, $this->_db->insertAll(self::TABLE_NAME, [['test_name' => 't1', 'test_value' => 't1'], [], ['test_name' => 't2', 'test_value' => 't2']]));
+        $this->assertSame(['COUNT(*)' => '2'], $this->_db->fetchRow('SELECT COUNT(*) FROM `' .self::TABLE_NAME. '` WHERE `test_name` = "t1" OR `test_name` = "t2"'));
     }
     
     public function testPrepareField()
@@ -139,8 +128,8 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
     
     public function testTableList()
     {
-        foreach ($this->_db->tableList(self::name) as $row) {
-            $this->assertEquals(self::tblName, $row);
+        foreach ($this->_db->tableList(self::TABLE_NAME) as $row) {
+            $this->assertEquals(self::TABLE_NAME, $row);
         }
     }
     
@@ -150,9 +139,9 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('ISNULL('.$fieldName.')', $this->_db->prepareNullCheck($fieldName));
     }
     
-    public function testPrepareIlike()
+    public function testPrepareLike()
     {
         $fieldName = 'testowanie';
-        $this->assertEquals($fieldName.' LIKE', $this->_db->prepareIlike($fieldName));
-    }*/
+        $this->assertEquals($fieldName.' LIKE', $this->_db->prepareLike($fieldName));
+    }
 }

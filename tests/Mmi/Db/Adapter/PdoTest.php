@@ -10,6 +10,8 @@
 
 namespace Mmi\Test\Db\Adapter;
 
+use Mmi\App\Kernel;
+
 /**
  * Test adapterów pdo bazy danych
  */
@@ -21,6 +23,12 @@ class PdoTest extends \PHPUnit\Framework\TestCase
      * @var \Mmi\Db\Adapter\PdoAbstract
      */
     private $_db;
+
+    public static function setUpBeforeClass()
+    {
+        require_once 'data/config-cache.php';
+        (new Kernel('\Mmi\App\Bootstrap', 'CACHE'));
+    }
 
     public function setUp()
     {

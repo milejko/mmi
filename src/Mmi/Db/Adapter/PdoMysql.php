@@ -131,7 +131,7 @@ class PdoMysql extends PdoAbstract
      * @param string $fieldName nazwa pola
      * @return string
      */
-    public function prepareIlike($fieldName)
+    public function prepareLike($fieldName)
     {
         return $fieldName . ' LIKE';
     }

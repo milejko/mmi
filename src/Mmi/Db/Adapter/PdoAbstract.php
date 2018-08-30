@@ -102,7 +102,7 @@ abstract class PdoAbstract
      * @param string $fieldName nazwa pola
      * @return string
      */
-    abstract public function prepareIlike($fieldName);
+    abstract public function prepareLike($fieldName);
 
     /**
      * Ustawia schemat

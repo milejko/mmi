@@ -18,7 +18,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testClass()
     {
         $tpl = new Template;
-        $this->assertEquals('/?module=test', $tpl->template('{@module=test@}'));
+        $this->assertContains('/?module=test', $tpl->template('{@module=test@}'));
         $this->assertEquals('<h1>It works!</h1>' . "\n" .
             '<p>This is the default web page for this server.</p>' . "\n" .
             '<p>The web server software is running but no content has been added, yet.</p>', $tpl->template('{\'mmi/index/index\'}'));

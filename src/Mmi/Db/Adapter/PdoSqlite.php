@@ -168,7 +168,7 @@ class PdoSqlite extends PdoAbstract
      * @param string $fieldName nazwa pola
      * @return string
      */
-    public function prepareIlike($fieldName)
+    public function prepareLike($fieldName)
     {
         //ilike jak like
         return $fieldName . ' LIKE';

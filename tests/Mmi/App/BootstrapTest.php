@@ -20,9 +20,8 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass()
     {
-        require 'data/config-cache.php';
-        require 'data/config-nodb.php';
-        require 'data/config-session.php';
+        require_once 'data/config-cache.php';
+        require_once 'data/config-nodb.php';
     }
 
     public function testBootstrap()
@@ -53,12 +52,6 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     public function testBootstrapNoDb()
     {
         (new Kernel('\Mmi\App\Bootstrap', 'NODB'))->run();
-        $this->_testResponseAfterRun();
-    }
-
-    public function testBootstrapSession()
-    {
-        (new Kernel('\Mmi\App\Bootstrap', 'SESSION'))->run();
         $this->_testResponseAfterRun();
     }
 
