@@ -32,13 +32,13 @@ class SessionConfig
      * Ścieżka cookie
      * @var string
      */
-    public $cookiePath;
+    public $cookiePath = '';
 
     /**
      * Domena cookie
      * @var string
      */
-    public $cookieDomain;
+    public $cookieDomain = '';
 
     /**
      * Cookie secure
