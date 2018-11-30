@@ -343,8 +343,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     {
         $result = true;
         //waliduje poprawnie jeśli niewymagane, ale tylko gdy niepuste
-        if (!($this->getRequired() || $this->getValue() != '')) {
-            return $result;
+        if ($this->getRequired() && $this->getValue() === '') {
+            $this->addError(\Mmi\Validator\NotEmpty::INVALID);
+            
+            return false;
         }
         //iteracja po walidatorach
         foreach ($this->getValidators() as $validator) {
