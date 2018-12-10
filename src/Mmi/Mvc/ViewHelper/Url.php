@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -35,12 +35,16 @@ class Url extends HelperAbstract
         }
         //wyznaczanie url
         $url = $this->view->baseUrl . \Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params);
+        //gdy aplikacja działa w środowisku https => wymuszony https
+        if (\Mmi\App\FrontController::getInstance()->getEnvironment()->httpSecure) {
+            $https = true;
+        }
         //zwrot samego url (bez zmiany protokołu)
         if (null === $https) {
             return $url ? $url : '/';
         }
         //host środowiskowy, lub z konfiguracji (jeśli brak)
-        $host = \Mmi\App\FrontController::getInstance()->getEnvironment()->httpHost ? : \App\Registry::$config->host;
+        $host = \Mmi\App\FrontController::getInstance()->getEnvironment()->httpHost ?: \App\Registry::$config->host;
         //link absolutny
         return ($https ? 'https' : 'http') . '://' . $host . $url;
     }
