@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,13 +12,13 @@ namespace Mmi\Form\Element;
 
 /**
  * Abstrakcyjna klasa elementu formularza
- * 
+ *
  * Gettery
  * @method string getName() pobiera nazwę
  * @method mixed getValue() pobiera wartość pola
  * @method string getId() pobiera nazwę
  * @method string getPlaceholder() pobiera placeholder
- * 
+ *
  * Settery
  * @method self setName($name) ustawia nazwę
  * @method self setValue($value) ustawia wartość
@@ -74,7 +74,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     CONST TEMPLATE_ERRORS = 'mmi/form/element/element-abstract/errors';
     //szablon etykiety
     CONST TEMPLATE_LABEL = 'mmi/form/element/element-abstract/label';
-    
+
     /**
      * Konstruktor
      * @param string $name nazwa
@@ -141,16 +141,16 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public function onFormSaved()
     {
-        
+
     }
-    
+
     /**
      * Zdarzenie wywoływane po zapisie rekordu - znane PK,
      * ale niewykonane jeszcze afterSave
      */
     public function onRecordSaved()
     {
-        
+
     }
 
     /**
@@ -339,7 +339,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Waliduje pole
      * @return boolean
      */
-    public final function isValid()
+    public function isValid()
     {
         $result = true;
         //waliduje poprawnie jeśli niewymagane, ale tylko gdy niepuste

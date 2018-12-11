@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -79,7 +79,8 @@ class RequestFiles extends \Mmi\DataObject
     {
         $files = new RequestFiles();
         //iteracja po plikach
-        foreach ($this->_fixFiles($fileData) as $key => $file) {
+        $fixFiles = $this->_fixFiles($fileData);
+        foreach ($fixFiles as $key => $file) {
             //brak pliku
             if (!isset($file['tmp_name']) || $file['tmp_name'] == '') {
                 continue;
@@ -103,8 +104,10 @@ class RequestFiles extends \Mmi\DataObject
             if (!is_array($all)) {
                 break;
             }
-            foreach ($all as $i => $val) {
-                $fixed[$i][$key] = $val;
+            foreach ($all as $fieldName => $val) {
+                for ($i = 0; $i < count($val); $i++){
+                    $fixed[$fieldName.'['.$i.']'][$key] = $val[$i];
+                }
             }
         }
         return $fixed;
