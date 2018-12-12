@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -38,14 +38,16 @@ class File extends ElementAbstract
         $fieldName = $this->getName();
         $files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles();
         //brak pliku
-        if (!isset($files->{$namespace}->{$fieldName})) {
+        if (!isset($files->{$namespace})) {
             return $this;
         }
-        $this->_files = $files->{$namespace}->{$fieldName};
-        //opakowanie w array jeśli plik jest jeden
-        if ($this->_files instanceof \Mmi\Http\RequestFile) {
-            $this->_files = [$this->_files];
+        foreach (($files->{$namespace})->toArray() as $file){
+            //opakowanie w array jeśli plik jest jeden
+            if ($file instanceof \Mmi\Http\RequestFile) {
+                $this->_files[] = $file;
+            }
         }
+
         return $this;
     }
 
@@ -67,4 +69,27 @@ class File extends ElementAbstract
         return !empty($this->_files);
     }
 
+    /**
+     * Waliduje pole
+     * @return boolean
+     */
+    public function isValid()
+    {
+        $result = true;
+        //waliduje poprawnie jeśli niewymagane, ale tylko gdy niepuste
+        if (!($this->getRequired() || empty($this->getFiles()))) {
+            return $result;
+        }
+        //iteracja po walidatorach
+        foreach ($this->getValidators() as $validator) {
+            if ($validator->isValid($this->getFiles())) {
+                continue;
+            }
+            $result = false;
+            //dodawanie wiadomości z walidatora
+            $this->addError($validator->getMessage() ? $validator->getMessage() : $validator->getError());
+        }
+        //zwrot rezultatu wszystkich walidacji (iloczyn)
+        return $result;
+    }
 }
