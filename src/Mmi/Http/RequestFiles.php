@@ -43,7 +43,7 @@ class RequestFiles extends \Mmi\DataObject
             }
             //pojedynczy plik
             if (null !== ($file = $this->_handleSingleUpload($fieldFiles))) {
-                $files[$fieldName][] = $file;
+                $files[$fieldName] = $file;
                 continue;
             }
             //obsługa multiuploadu HTML5
@@ -59,15 +59,22 @@ class RequestFiles extends \Mmi\DataObject
      */
     protected function _handleSingleUpload(array $fileData)
     {
+        $fieldName = key($fileData['name']);
         //jeśli nazwa jest tablicą, oznacza to wielokrotny upload HTML5
-        if (!isset($fileData['name']) || is_array($fileData['name'])) {
+        if (!isset($fileData['name']) || is_array(reset($fileData['name']))) {
             return;
         }
         //brak pliku
         if (!isset($fileData['tmp_name']) || $fileData['tmp_name'] == '') {
             return;
         }
-        return new RequestFile($fileData);
+        foreach ($fileData as $key => $value) {
+            $fileData[$key] = current($value);
+        }
+
+        $files = new RequestFiles();
+
+        return  $files->{$fieldName} = new RequestFile($fileData);
     }
 
     /**
