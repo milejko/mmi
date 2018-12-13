@@ -59,22 +59,44 @@ class RequestFiles extends \Mmi\DataObject
      */
     protected function _handleSingleUpload(array $fileData)
     {
-        $fieldName = key($fileData['name']);
-        //jeśli nazwa jest tablicą, oznacza to wielokrotny upload HTML5
-        if (!isset($fileData['name']) || is_array(reset($fileData['name']))) {
+        //wstepne sprawdzenie czy plik istnieje, czy tablica nie jest pusta
+        if(!isset($fileData['name']) || !isset($fileData['tmp_name'])){
             return;
         }
-        //brak pliku
-        if (!isset($fileData['tmp_name']) || $fileData['tmp_name'] == '') {
-            return;
-        }
-        foreach ($fileData as $key => $value) {
-            $fileData[$key] = current($value);
+
+        //przypadek gdy file data to prosta tablica klucz => wartość bez zagnieżdżeń
+        // $fileData = ['name' => 'nazwa_pliku.jpg']
+        if(is_string($fileData['name'])){
+            //czy plik istnieje
+            if($fileData['tmp_name'] == ''){
+                return;
+            }
+            $fieldName = $fileData['name'];
         }
 
-        $files = new RequestFiles();
+        //przypadek trochę bardziej skomplikowany gdzie sa zagnieżdżenia:
+        // $fileData['name'] = ['cmsAttribute' => 'nazwa_pliku.png']
+        if(is_array($fileData['name'])){
+            //sprawdzamy czy nie ejst to kilka plików
+            if(count(reset($fileData['name'])) > 1){
+                return;
+            }
+            //czy plik istnieje
+            if(is_array(reset($fileData['name'])) || reset($fileData['tmp_name']) == ''){
+                return;
+            }
 
-        return  $files->{$fieldName} = new RequestFile($fileData);
+            $fieldName = key($fileData['name']);
+
+            foreach ($fileData as $key => $value) {
+                $fileData[$key] = current($value);
+            }
+        }
+
+        $file = new RequestFiles();
+        $file->{$fieldName} = new RequestFile($fileData);
+
+        return  $file;
     }
 
     /**
@@ -113,11 +135,10 @@ class RequestFiles extends \Mmi\DataObject
             }
             foreach ($all as $fieldName => $val) {
                 for ($i = 0; $i < count($val); $i++){
-                    $fixed[$fieldName.'['.$i.']'][$key] = $val[$i];
+                    $fixed[$fieldName . '[' . $i . ']'][$key] = $val[$i];
                 }
             }
         }
         return $fixed;
     }
-
 }
