@@ -1,1 +1,1 @@
-<label{if $_element->getId()} id="{$_element->getId()}-label" for="{$_element->getId()}"{/if}>{$_element->getLabel()}{$_element->getOption('data-labelPostfix')}{if $_element->getRequired()} <span class="required">{$_element->getOption('data-requiredAsterisk')}</span>{/if}</label>
+<label{if $_element->getId()} id="{$_element->getId()}-label" for="{$_element->getId()}"{/if}>{_($_element->getLabel())}{$_element->getOption('data-labelPostfix')}{if $_element->getRequired()} <span class="required">{$_element->getOption('data-requiredAsterisk')}</span>{/if}</label>

@@ -38,14 +38,14 @@ class Template extends HelperAbstract
             "\r\n",
             '{*',
             '*}',
-            ], [
+        ], [
             '__-angular-controller-__',
             '__-angular-start-__',
             '__-angular-end-__',
             "\n",
             '<?php /*',
             '*/ ?>',
-            ], $input);
+        ], $input);
 
         //buforowanie linkowanie aplikacji
         $input = preg_replace_callback('/\{@([\*]+)?(.[^@\^]+)?[\^]?(.[^@\^]+)?@\}/', [&$this, '_url'], $input);
@@ -90,7 +90,7 @@ class Template extends HelperAbstract
             '/\{\$this->([a-z0-9_-]+)\(/i', //wyświetlanie helperów
             '/([a-z0-9)\]\'\+\-])}/i', //obsługa zamknięcia
             '/\{\$\$this->([a-z0-9_-]+)/i', //$nazwa -> $this->{$this->nazwa}
-            ], [
+        ], [
             '$this->${1}',
             '<?php end${1}; ?>',
             '<?php ${1}; ?>',
@@ -114,7 +114,7 @@ class Template extends HelperAbstract
             '<?php echo \$this->${1}(',
             '${1}; ?>',
             '<?php echo \$this->{$this->${1}}',
-            ], $input);
+        ], $input);
 
         /**
          * first i last w pętlach foreach
@@ -122,9 +122,11 @@ class Template extends HelperAbstract
          */
         $input = preg_replace([
             '/\<\?php foreach[\s]+?\([\s]+?name=[\'\"]?([a-z0-9]+)[\'\"]? (\$this[\>\(\)a-z0-9_\-\[\]\'\"]+) as (\$this->[a-z0-9_\-]+)\):/i',
-            '/\<\?php foreach[\s]+?\([\s]+?name=[\'\"]?([a-z0-9]+)[\'\"]? (\$this[\>\(\)a-z0-9_\-\[\]\'\"]+) as (\$this->[a-z0-9_\-]+) => (\$this->[a-z0-9_\-]+)\):/i'], [
+            '/\<\?php foreach[\s]+?\([\s]+?name=[\'\"]?([a-z0-9]+)[\'\"]? (\$this[\>\(\)a-z0-9_\-\[\]\'\"]+) as (\$this->[a-z0-9_\-]+) => (\$this->[a-z0-9_\-]+)\):/i'
+        ], [
             '<?php $_${1}Source = ${2}; $_${1}Count = count((array)$_${1}Source); $this->_${1}Index = 0; foreach ( $_${1}Source as ${3}): $this->_${1}Index++; $this->_${1}First = false; $this->_${1}Last = false; if ($this->_${1}Index == 1) { $this->_${1}First = true; } else { $this->_${1}First = false; } if ($this->_${1}Index == $_${1}Count) { $this->_${1}Last = true; } else { $this->_${1}Last = false; } if($this->_${1}Index % 2 == 0) { $this->_${1}Even = true; } else { $this->_${1}Even = false; }',
-            '<?php $_${1}Source = ${2}; $_${1}Count = count((array)$_${1}Source); $this->_${1}Index = 0; foreach ( $_${1}Source as ${3} => ${4}): $this->_${1}Index++; $this->_${1}First = false; if ($this->_${1}Index == 1) { $this->_${1}First = true; } else { $this->_${1}First = false; } if ($this->_${1}Index == $_${1}Count) { $this->_${1}Last = true; } else { $this->_${1}Last = false; }'], $input);
+            '<?php $_${1}Source = ${2}; $_${1}Count = count((array)$_${1}Source); $this->_${1}Index = 0; foreach ( $_${1}Source as ${3} => ${4}): $this->_${1}Index++; $this->_${1}First = false; if ($this->_${1}Index == 1) { $this->_${1}First = true; } else { $this->_${1}First = false; } if ($this->_${1}Index == $_${1}Count) { $this->_${1}Last = true; } else { $this->_${1}Last = false; }'
+        ], $input);
 
         /**
          * odzyskuje klamry
@@ -133,11 +135,11 @@ class Template extends HelperAbstract
             '__-angular-controller-__',
             '__-angular-start-__',
             '__-angular-end-__',
-            ], [
+        ], [
             '{{$',
             '{{',
             '}}',
-            ], $input);
+        ], $input);
 
         //fix dla funkcji JS'owych - badanie krótkich pod-ciągów
         $output = '';
@@ -232,12 +234,8 @@ class Template extends HelperAbstract
      */
     private function _translate(array $matches)
     {
-        //brak tłumaczenia
-        if ($this->view->getTranslate() === null) {
-            return $matches[1];
-        }
         //tłumaczenie
-        return $this->view->getTranslate()->_($matches[1]);
+        return \App\Registry::$translate->_($matches[1]);
     }
 
     /**

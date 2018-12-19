@@ -23,14 +23,14 @@ class Bootstrap implements BootstrapInterface
      */
     public function __construct()
     {
-        //inicjalizacja tłumaczeń
-        $translate = $this->_setupTranslate();
         //ustawienie front controllera, sesji i bazy danych
         $this->_setupDatabase()
             //konfiguracja lokalnego bufora
             ->_setupLocalCache()
+            //inicjalizacja tłumaczeń
+            ->_setupTranslate()
             //konfiguracja front controllera
-            ->_setupFrontController($router = $this->_setupRouter($translate->getLocale()), $this->_setupView($translate, $router))
+            ->_setupFrontController($router = $this->_setupRouter(\App\Registry::$translate->getLocale()), $this->_setupView($router))
             //konfiguracja cache
             ->_setupCache()
             //konfiguracja sesji
@@ -59,26 +59,27 @@ class Bootstrap implements BootstrapInterface
 
     /**
      * Inicjalizacja tłumaczeń
-     * @return \Mmi\Translate
+     * @return \Mmi\App\Bootstrap
      */
     protected function _setupTranslate()
     {
         //utworzenie obiektu tłumaczenia
-        $translate = new \Mmi\Translate;
+        \App\Registry::$translate = new \Mmi\Translate;
         //domyślny język
-        $translate->setDefaultLocale(isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null);
+        \App\Registry::$translate->setDefaultLocale(isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null);
         //język ze zmiennej środowiskowej
         $envLang = FrontController::getInstance()->getEnvironment()->applicationLanguage;
         if (null === $envLang) {
             //zwrot translate z domyślnym locale
-            return $translate;
+            return $this;
         }
         //brak języka ze zmiennej środowiskowej
         if (!in_array($envLang, \App\Registry::$config->languages)) {
-            return $translate;
+            return $this;
         }
-        //zwrot translate z ustawieniem locale
-        return $translate->setLocale($envLang);
+        //ustawianie locale z envLang
+        \App\Registry::$translate->setLocale($envLang);
+        return $this;
     }
 
     /**
@@ -196,24 +197,21 @@ class Bootstrap implements BootstrapInterface
 
     /**
      * Inicjalizacja widoku
-     * @param \Mmi\Translate $translate
      * @param \Mmi\Mvc\Router $router
      * @return \Mmi\Mvc\View
      */
-    protected function _setupView(\Mmi\Translate $translate, \Mmi\Mvc\Router $router)
+    protected function _setupView(\Mmi\Mvc\Router $router)
     {
         //powołanie i konfiguracja widoku
         return (new \Mmi\Mvc\View)->setCache(FrontController::getInstance()->getLocalCache())
                 //opcja kompilacji
-                ->setAlwaysCompile(\App\Registry::$config->compile)
-                //ustawienie translator
-                ->setTranslate($translate)
+            ->setAlwaysCompile(\App\Registry::$config->compile)
                 //ustawienie cdn
-                ->setCdn(\App\Registry::$config->cdn)
+            ->setCdn(\App\Registry::$config->cdn)
                 //ustawienie requestu
-                ->setRequest(FrontController::getInstance()->getRequest())
+            ->setRequest(FrontController::getInstance()->getRequest())
                 //ustawianie baseUrl
-                ->setBaseUrl(FrontController::getInstance()->getEnvironment()->baseUrl);
+            ->setBaseUrl(FrontController::getInstance()->getEnvironment()->baseUrl);
     }
 
 }

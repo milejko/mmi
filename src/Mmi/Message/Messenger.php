@@ -106,8 +106,7 @@ class Messenger
      */
     public function prepareTranslatedMessage(array $message = [])
     {
-        $view = \Mmi\App\FrontController::getInstance()->getView();
-        $translatedMessage = ($view->getTranslate() !== null) ? $view->getTranslate()->_($message['message']) : $message['message'];
+        $translatedMessage = \App\Registry::$translate->_($message['message']);
         array_unshift($message['vars'], $translatedMessage);
         return call_user_func_array('sprintf', $message['vars']);
     }

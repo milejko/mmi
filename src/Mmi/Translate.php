@@ -114,7 +114,7 @@ class Translate
      * przykład : :translate('number %d', 12) wyświetli np. "liczba 12"
      * @return string
      */
-    public function _($key)
+    public function _($key, array $params = [])
     {
         //jeśli brak locale, lub zgodne z domyślnym - zwrot klucza
         if ($this->_locale === null || $this->_locale == $this->_defaultLocale) {
@@ -122,10 +122,10 @@ class Translate
         }
         //zwrot znalezionego tłumaczenia
         if (isset($this->_data[$this->_locale][$key])) {
-            return $this->_data[$this->_locale][$key];
+            return vsprintf($this->_data[$this->_locale][$key], $params);
         }
         //logowanie braku tłumaczenia i zwrot klucza
-        return $this->_returnKeyAndLogUntranslated($key);
+        return $this->_returnKeyAndLogUntranslated($key, $params);
     }
 
     /**
@@ -159,12 +159,12 @@ class Translate
      * Loguje nieprzetłumaczone teksty do pliku
      * @param string $key klucz
      */
-    private function _returnKeyAndLogUntranslated($key)
+    private function _returnKeyAndLogUntranslated($key, array $params)
     {
         //otwieranie loga
         $log = fopen(BASE_PATH . '/var/log/error.translation.log', 'a');
         //zapis zdarzenia
-        fwrite($log, date('Y-m-d H:i:s') . ' ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] {#' . $key . "#}\n");
+        fwrite($log, date('Y-m-d H:i:s') . ' ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] ' . $key . ($params ? ' ' . print_r($params, true) : '') . "\n");
         //zamknięcie logu
         fclose($log);
         //zwrot klucza

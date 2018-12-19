@@ -22,7 +22,8 @@ class Structure
      */
     public static function getStructure()
     {
-        $components = ['module' => [],
+        $components = [
+            'module' => [],
             'template' => [],
             'translate' => [],
             'filter' => [],
@@ -42,7 +43,8 @@ class Structure
      */
     private static function _parseModule($path)
     {
-        $components = ['module' => [],
+        $components = [
+            'module' => [],
             'template' => [],
             'translate' => [],
             'filter' => [],
@@ -58,7 +60,7 @@ class Structure
         //filtry
         self::_parseAdditions($components['filter'], $module, $path . '/Filter');
         //tłumaczenia
-        self::_parseAdditions($components['translate'], $module, $path . '/Resource/i18n');
+        self::_parseAdditions($components['translate'], lcfirst($module), $path . '/Resource/i18n');
         //kontrolery
         self::_parseControllers($components['module'], lcfirst($module), $path);
         //szablony

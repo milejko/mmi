@@ -218,7 +218,7 @@ class ActionHelper
             return;
         }
         //brak tłumaczenia, lub domyślny język
-        if ($lang === null || $lang == $view->getTranslate()->getDefaultLocale()) {
+        if ($lang === null || $lang == \App\Registry::$translate->getDefaultLocale()) {
             return;
         }
         //ładowanie zbuforowanego translatora
@@ -227,19 +227,19 @@ class ActionHelper
         $key = 'mmi-translate-' . $lang . '-' . '-' . $module;
         //próba załadowania z bufora
         if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
-            //wstrzyknięcie zbuforowanego translatora do widoku
-            $view->setTranslate($cachedTranslate->setLocale($lang));
-            return FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
+            //zmiana obiektu translacji z bufora
+            \App\Registry::$translate = $cachedTranslate->setLocale($lang);
+            return FrontController::getInstance()->getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
         }
         //dodawanie tłumaczeń do translatora
-        $view->getTranslate()->addTranslation(is_array($structure[$module][$lang]) ? $structure[$module][$lang][0] : $structure[$module][$lang], $lang)
+        \App\Registry::$translate->addTranslation(is_array($structure[$module][$lang]) ? $structure[$module][$lang][0] : $structure[$module][$lang], $lang)
             ->setLocale($lang);
         //zapis do cache
         if ($cache !== null) {
-            $cache->save($view->getTranslate(), $key, 0);
+            $cache->save(\App\Registry::$translate, $key, 0);
         }
         //event profilera
-        FrontController::getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
+        FrontController::getInstance()->getProfiler()->event('Mvc\Controller: translate cache [' . $lang . '] ' . $module);
     }
 
 }

@@ -52,12 +52,6 @@ class View extends \Mmi\DataObject
     private $_layoutDisabled = false;
 
     /**
-     * Obiekt tłumaczeń
-     * @var \Mmi\Translate
-     */
-    private $_translate;
-
-    /**
      * Obiekt buforujący
      * @var \Mmi\Cache\Cache
      */
@@ -116,17 +110,6 @@ class View extends \Mmi\DataObject
     }
 
     /**
-     * Ustawia translator
-     * @param \Mmi\Translate $translate
-     * @return \Mmi\Mvc\View
-     */
-    public function setTranslate(\Mmi\Translate $translate)
-    {
-        $this->_translate = $translate;
-        return $this;
-    }
-
-    /**
      * Ustawia obiekt cache
      * @param \Mmi\Cache\Cache $cache
      * @return \Mmi\Mvc\View
@@ -168,16 +151,6 @@ class View extends \Mmi\DataObject
     {
         $this->cdn = $cdn;
         return $this;
-    }
-
-    /**
-     * Zwraca obiekt translatora
-     * @return \Mmi\Translate
-     */
-    public function getTranslate()
-    {
-        //próba załadowania translate, lub utworzenie i zbuforowanie nowego translate
-        return ($this->_translate !== null) ? $this->_translate : ($this->_translate = new \Mmi\Translate);
     }
 
     /**
@@ -341,10 +314,8 @@ class View extends \Mmi\DataObject
             //brak template
             return;
         }
-        //inicjalizacja języka
-        $this->_initLocale();
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->_locale . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . \App\Registry::$translate->getLocale() . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
@@ -357,9 +328,9 @@ class View extends \Mmi\DataObject
     {
         return $this->isLayoutDisabled() ? $content : $this
                 //ustawianie treści w placeholder 'content'
-                ->setPlaceholder('content', $content)
+            ->setPlaceholder('content', $content)
                 //renderowanie layoutu
-                ->renderTemplate($this->_getLayout($request));
+            ->renderTemplate($this->_getLayout($request));
     }
 
     /**
@@ -369,22 +340,19 @@ class View extends \Mmi\DataObject
      */
     public function renderDirectly($templateCode)
     {
-        //inicjalizacja języka
-        $this->_initLocale();
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->_locale . '_direct_' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . \App\Registry::$translate->getLocale() . '_direct_' . md5($templateCode) . '.php');
     }
 
     /**
-     * Inicjalizacja lokalizacji / języka
+     * Skrót translatora
+     * @param string $key
+     * @param array $params
+     * @return string
      */
-    private function _initLocale()
+    public function _($key, array $params = [])
     {
-        //sprawdzanie lokalizacji (języka)
-        if (!$this->_locale && null !== $this->_translate) {
-            //ustawianie lokalizacji
-            $this->_locale = $this->_translate->getLocale();
-        }
+        return \App\Registry::$translate->_($key, $params);
     }
 
     /**

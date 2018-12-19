@@ -5,7 +5,7 @@
         <ul>
             <li class="point first"></li>
             {foreach $_errors as $_error}
-            <li class="notice error"><i class="icon-remove-sign icon-large"></i>{$_error}</li>
+            <li class="notice error"><i class="icon-remove-sign icon-large"></i>{_($_error)}</li>
             {/foreach}
             <li class="close last"></li>
         </ul>

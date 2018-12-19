@@ -30,6 +30,12 @@ abstract class KernelRegistry
     public static $cache;
 
     /**
+     * Obiekt tłumaczeń
+     * @var \Mmi\Translate
+     */
+    public static $translate;
+
+    /**
      * Obiekt adaptera bazodanowego
      * @var \Mmi\Db\Adapter\PdoAbstract
      */
