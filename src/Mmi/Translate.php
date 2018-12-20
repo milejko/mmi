@@ -35,12 +35,6 @@ class Translate
     private $_locale;
 
     /**
-     * Domyślna wersja językowa
-     * @var string
-     */
-    private $_defaultLocale;
-
-    /**
      * Dodaje tłumaczenie
      * @param string $sourceFile ścieżka do pliku
      * @param string $locale wersja językowa podanego pliku
@@ -77,15 +71,6 @@ class Translate
     }
 
     /**
-     * Domyślny język
-     * @return string
-     */
-    public function getDefaultLocale()
-    {
-        return $this->_defaultLocale;
-    }
-
-    /**
      * Ustawia bieżącą wersję językową
      * @param string $locale wersja językowa
      * @return \Mmi\Translate
@@ -98,31 +83,27 @@ class Translate
     }
 
     /**
-     * Ustawia domyślną wersję językową
-     * @param string $locale wersja językowa
-     * @return \Mmi\Translate
-     */
-    public function setDefaultLocale($locale)
-    {
-        //domyślne locale
-        $this->_defaultLocale = $locale;
-        return $this;
-    }
-
-    /**
      * Tłumaczy ciąg znaków, działając analogicznie do sprintf
      * przykład : :translate('number %d', 12) wyświetli np. "liczba 12"
      * @return string
      */
     public function _($key, array $params = [])
     {
-        //jeśli brak locale, lub zgodne z domyślnym - zwrot klucza
-        if ($this->_locale === null || $this->_locale == $this->_defaultLocale) {
+        //jeśli brak locale - zwrot klucza
+        if ($this->_locale === null) {
             return $key;
+        }
+        //parametry istnieją
+        if (!empty($params)) {
+            $filteredParams = [];
+            array_walk($params, function ($value, $key) use (&$filteredParams) {
+                $filteredParams['%' . $key . '%'] = $value;
+            });
+            $params = $filteredParams;
         }
         //zwrot znalezionego tłumaczenia
         if (isset($this->_data[$this->_locale][$key])) {
-            return vsprintf($this->_data[$this->_locale][$key], $params);
+            return strtr($this->_data[$this->_locale][$key], $params);
         }
         //logowanie braku tłumaczenia i zwrot klucza
         return $this->_returnKeyAndLogUntranslated($key, $params);

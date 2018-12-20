@@ -23,10 +23,10 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
     {
         $files = new RequestFiles([$this->_sampleFile, $this->_sampleIncompleteFile, $this->_anotherIncompleteFile]);
         $this->assertFalse($files->isEmpty());
-        $firstFile = $files->current()[0];
+        $firstFile = $files->current();
         $this->assertInstanceOf('\Mmi\Http\RequestFile', $firstFile);
         $this->assertEquals('image.png', $firstFile->name);
-        $this->assertFalse(isset($files->current()[1]));
+        //$this->assertFalse(isset($files->current()));
     }
 
     public function testMultiUpload()

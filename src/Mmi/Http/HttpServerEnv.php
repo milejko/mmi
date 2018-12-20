@@ -13,7 +13,7 @@ namespace Mmi\Http;
 /**
  * Klasa środowiska serwera HTTP
  *
- * @property string $applicationLanguage do ustawienia jako zmienna serwera dla stron wielojęzycznych
+ * @property string $lang do ustawienia jako zmienna serwera dla stron wielojęzycznych
  * @property string $requestUri uri żądania HTTP
  * @property string $requestMethod metoda żądania
  * @property string $contentType typ treści
@@ -48,12 +48,12 @@ class HttpServerEnv extends \Mmi\DataObject
         $xForwarderFor = $this->_filter('HTTP_X_FORWARDED_FOR');
         //ustawianie zmiennych środowiskowych
         $this->_data = [
+            'lang' => $this->_filter('APPLICATION_LANGUAGE'),
             'authUser' => $this->_filter('PHP_AUTH_USER'),
             'authPassword' => $this->_filter('PHP_AUTH_PW'),
             'baseUrl' => '',
             'requestMethod' => $this->_filter('REQUEST_METHOD'),
             'contentType' => $this->_filter('CONTENT_TYPE'),
-            'applicationLanguage' => $this->_filter('APPLICATION_LANGUAGE'),
             'scriptFileName' => $this->_filter('SCRIPT_FILENAME'),
             'remoteAddress' => $xForwarderFor ? $xForwarderFor : $this->_filter('REMOTE_ADDR'),
             'remotePort' => $this->_filter('REMOTE_PORT', FILTER_SANITIZE_NUMBER_INT),
@@ -97,7 +97,8 @@ class HttpServerEnv extends \Mmi\DataObject
      * @param int $filter typ filtra, domyślny FILTER_SANITIZE_SPECIAL_CHARS
      * @return mixed|null
      */
-    private function _filter($name, $filter = FILTER_SANITIZE_SPECIAL_CHARS) {
+    private function _filter($name, $filter = FILTER_SANITIZE_SPECIAL_CHARS)
+    {
         return isset($_SERVER[$name]) ? filter_var($_SERVER[$name], $filter) : null;
     }
 

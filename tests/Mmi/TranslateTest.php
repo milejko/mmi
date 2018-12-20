@@ -34,13 +34,11 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetLocale(Translate $translate)
     {
-        $this->assertInstanceOf('\Mmi\Translate', $translate->setDefaultLocale('en')
-                ->setLocale('pl'));
-        $this->assertEquals('en', $translate->getDefaultLocale());
+        $this->assertInstanceOf('\Mmi\Translate', $translate->setLocale('pl'));
         $this->assertInstanceOf('\Mmi\Translate', $translate->addTranslation(BASE_PATH . '/tests/data/en.ini', 'en'));
         $this->assertEquals('pl', $translate->getLocale());
     }
-    
+
     /**
      * @depends testAddTranslation
      * @expectedException \Mmi\App\KernelException
@@ -51,7 +49,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('dziewczyna', $translate->_('girl'));
         $this->assertEquals('żółw', $translate->_('turtle'));
         $this->assertEquals('cow', $translate->_('cow'), 'Inexistent translation should return default value');
-        
+
         $this->assertInstanceOf('\Mmi\Translate', $translate->setLocale('de'));
         $this->assertEquals('Junge', $translate->_('boy'));
         $this->assertEquals('girl', $translate->_('girl'));
@@ -59,8 +57,14 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf('\Mmi\Translate', $translate->setLocale('en'));
         $this->assertEquals('boy', $translate->_('boy'));
-        $this->assertEquals('girl', $translate->_('girl'));
+        $this->assertEquals('gril', $translate->_('girl'));
         $this->assertEquals('cow', $translate->_('cow'));
+
+        $this->assertEquals('translation with a sample text string and another text int 13 and %unused% sample text', $translate->_('test', [
+            'firstText' => 'sample text',
+            'secondText' => 'another text',
+            'number' => 13
+        ]));
         //wyjątek
         $translate->addTranslation(BASE_PATH . '/tests/data/inexistent-language.ini', 'pl');
     }

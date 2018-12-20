@@ -193,7 +193,7 @@ class ActionHelper
         $actionMethodName = $request->getActionName() . 'Action';
 
         //inicjalizacja tłumaczeń
-        $this->_initTranslaction(FrontController::getInstance()->getView(), $request->module, $request->lang);
+        $this->_initTranslaction(FrontController::getInstance()->getView(), $request->module);
 
         //wywołanie akcji
         $content = (new $controllerClassName($request, FrontController::getInstance()->getView()))->$actionMethodName();
@@ -209,8 +209,10 @@ class ActionHelper
      * @param string $lang język
      * @return mixed wartość
      */
-    private function _initTranslaction(\Mmi\Mvc\View $view, $module, $lang)
+    private function _initTranslaction(\Mmi\Mvc\View $view, $module)
     {
+        //lang
+        $lang = \App\Registry::$translate->getLocale();
         //pobranie struktury translatora
         $structure = FrontController::getInstance()->getStructure('translate');
         //brak tłumaczenia w strukturze
@@ -218,7 +220,7 @@ class ActionHelper
             return;
         }
         //brak tłumaczenia, lub domyślny język
-        if ($lang === null || $lang == \App\Registry::$translate->getDefaultLocale()) {
+        if (null === $lang) {
             return;
         }
         //ładowanie zbuforowanego translatora

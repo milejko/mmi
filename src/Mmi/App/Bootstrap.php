@@ -10,7 +10,8 @@
 
 namespace Mmi\App;
 
-use \Mmi\App\FrontController;
+use Mmi\App\FrontController;
+use Mmi\Mvc\MvcNotFoundException;
 
 /**
  * Klasa rozruchu aplikacji
@@ -65,20 +66,17 @@ class Bootstrap implements BootstrapInterface
     {
         //utworzenie obiektu tłumaczenia
         \App\Registry::$translate = new \Mmi\Translate;
-        //domyślny język
-        \App\Registry::$translate->setDefaultLocale(isset(\App\Registry::$config->languages[0]) ? \App\Registry::$config->languages[0] : null);
-        //język ze zmiennej środowiskowej
-        $envLang = FrontController::getInstance()->getEnvironment()->applicationLanguage;
-        if (null === $envLang) {
+        //getting language from environment
+        if (null === FrontController::getInstance()->getEnvironment()->lang) {
             //zwrot translate z domyślnym locale
             return $this;
         }
         //brak języka ze zmiennej środowiskowej
-        if (!in_array($envLang, \App\Registry::$config->languages)) {
+        if (!in_array(FrontController::getInstance()->getEnvironment()->lang, \App\Registry::$config->languages)) {
             return $this;
         }
-        //ustawianie locale z envLang
-        \App\Registry::$translate->setLocale($envLang);
+        //ustawianie locale ze środowiska
+        \App\Registry::$translate->setLocale(FrontController::getInstance()->getEnvironment()->lang);
         return $this;
     }
 
