@@ -25,17 +25,7 @@ class Regex extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Nieprawidłowy typ danych wejściowych';
-
-    /**
-     * Komunikat - nie pasuje do wzorca
-     */
-    const NOT_MATCH = 'Wartość nie pasuje do wzorca';
-
-    /**
-     * Komunikat o błędzie wyrażenia regularnego
-     */
-    const ERROROUS = 'Błędne wyrażenie regularne';
+    const INVALID = 'validator.regex.message';
 
     /**
      * Ustawia opcje
@@ -45,7 +35,7 @@ class Regex extends ValidatorAbstract
     public function setOptions(array $options = [], $reset = false)
     {
         return $this->setPattern(current($options))
-                ->setMessage(next($options));
+            ->setMessage(next($options));
     }
 
     /**
@@ -67,9 +57,9 @@ class Regex extends ValidatorAbstract
             //badanie wyrażeniem
             $status = preg_match($this->getPattern(), $value);
         } catch (\Mmi\App\KernelException $e) {
-            return $this->_error(self::ERROROUS);
+            return $this->_error(self::INVALID);
         }
-        return $status ? true : $this->_error(self::NOT_MATCH);
+        return $status ? true : $this->_error(self::INVALID);
     }
 
 }

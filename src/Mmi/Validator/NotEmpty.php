@@ -19,7 +19,7 @@ class NotEmpty extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Pole nie może być puste';
+    const INVALID = 'validator.notEmpty.message';
 
     /**
      * Walidacja niepustości

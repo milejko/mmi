@@ -24,7 +24,7 @@ class Iban extends ValidatorAbstract
     /**
      * Treść błędu
      */
-    const INVALID = 'Wprowadzona wartość nie jest poprawnym numerem IBAN';
+    const INVALID = 'validator.iban.message';
 
     /**
      * Ustawia opcje
@@ -34,7 +34,7 @@ class Iban extends ValidatorAbstract
     public function setOptions(array $options = [], $reset = false)
     {
         return $this->setCountry(current($options) ? current($options) : 'PL')
-                ->setMessage(next($options));
+            ->setMessage(next($options));
     }
 
     /**
@@ -72,10 +72,10 @@ class Iban extends ValidatorAbstract
         $tmp = str_replace([
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
             'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-            ], [
+        ], [
             '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22',
             '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35'
-            ], $tmp);
+        ], $tmp);
         //błąd sumy kontrolnej
         if (bcmod($tmp, 97) != 1) {
             $this->_error(self::INVALID);

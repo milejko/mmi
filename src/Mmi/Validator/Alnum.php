@@ -19,7 +19,7 @@ class Alnum extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Ciąg zawiera znaki inne niż litery i cyfry';
+    const INVALID = 'validator.alnum.message';
 
     /**
      * Walidacja znaków alfanumerycznych

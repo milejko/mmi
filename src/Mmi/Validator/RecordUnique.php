@@ -29,7 +29,7 @@ class RecordUnique extends ValidatorAbstract
     /**
      * Komunikat istnienia pola
      */
-    const EXISTS = 'Pole o takiej wartości już istnieje';
+    const INVALID = 'validator.recordUnique.message';
 
     /**
      * Ustawia opcje
@@ -39,9 +39,9 @@ class RecordUnique extends ValidatorAbstract
     public function setOptions(array $options = [], $reset = false)
     {
         return $this->setQuery(current($options))
-                ->setField(next($options))
-                ->setId(next($options))
-                ->setMessage(next($options));
+            ->setField(next($options))
+            ->setId(next($options))
+            ->setMessage(next($options));
     }
 
     /**
@@ -67,7 +67,7 @@ class RecordUnique extends ValidatorAbstract
         }
         //rekord istnieje
         if ($q->count() > 0) {
-            return $this->_error(self::EXISTS);
+            return $this->_error(self::INVALID);
         }
         return true;
     }

@@ -19,7 +19,7 @@ class Integer extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Wprowadzona wartość nie jest liczbą całkowitą';
+    const INVALID = 'validator.integer.message';
 
     /**
      * Walidacja liczb całkowitych

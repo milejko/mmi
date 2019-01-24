@@ -19,7 +19,7 @@ class Numeric extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Wprowadzona wartość nie jest liczbą';
+    const INVALID = 'validator.numeric.message';
 
     /**
      * Walidacja liczb

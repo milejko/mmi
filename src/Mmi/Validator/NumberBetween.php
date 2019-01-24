@@ -27,12 +27,7 @@ class NumberBetween extends ValidatorAbstract
     /**
      * Treść błędu 
      */
-    const INVALID = 'Wprowadzona wartość nie mieści się w wymaganym przedziale';
-
-    /**
-     * Treść błędu, jeśli nie jest liczbą
-     */
-    const NUMERIC = 'Wprowadzona wartość nie jest liczbą';
+    const INVALID = 'validator.numberBetween.message';
 
     /**
      * Ustawia opcje
@@ -42,8 +37,8 @@ class NumberBetween extends ValidatorAbstract
     public function setOptions(array $options = [], $reset = false)
     {
         return $this->setFrom(current($options))
-                ->setTo(next($options))
-                ->setMessage(next($options));
+            ->setTo(next($options))
+            ->setMessage(next($options));
     }
 
     /**
@@ -55,7 +50,7 @@ class NumberBetween extends ValidatorAbstract
     {
         //czy liczba
         if (!is_numeric($value)) {
-            return $this->_error(self::NUMERIC);
+            return $this->_error(self::INVALID);
         }
         //sprawdzamy dolny zakres
         if ($this->getFrom() !== null && $value < $this->getFrom()) {

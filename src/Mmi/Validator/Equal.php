@@ -25,7 +25,7 @@ class Equal extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Wprowadzona wartość nie jest poprawna';
+    const INVALID = 'validator.equal.message';
 
     /**
      * Ustawia opcje
@@ -35,7 +35,7 @@ class Equal extends ValidatorAbstract
     public function setOptions(array $options = [], $reset = false)
     {
         return $this->setValue(current($options))
-                ->setMessage(next($options));
+            ->setMessage(next($options));
     }
 
     /**
