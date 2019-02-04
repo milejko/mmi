@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -163,4 +163,43 @@ class FileSystem
         return finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $binary);
     }
 
+    /**
+     * Find the relative file system path between two file system paths
+     * @param string $fromPath path to start from
+     * @param string $toPath path we want to end up in
+     * @return string path leading from $fromPath to $toPath
+     */
+    public static function relativePath($fromPath, $toPath)
+    {
+        $from = explode(DIRECTORY_SEPARATOR, $fromPath);
+        $to = explode(DIRECTORY_SEPARATOR, $toPath);
+        $relPath = '';
+
+        $i = 0;
+        // Find how far the path is the same
+        while (isset($from[$i]) && isset($to[$i])) {
+            if ($from[$i] != $to[$i]) {
+                break;
+            }
+            $i++;
+        }
+        $j = count($from) - 1;
+        // Add '..' until the path is the same
+        while ($i <= $j) {
+            if (!empty($from[$j])) {
+                $relPath .= '..' . DIRECTORY_SEPARATOR;
+            }
+            $j--;
+        }
+        // Go to folder from where it starts differing
+        while (isset($to[$i])) {
+            if (!empty($to[$i])) {
+                $relPath .= $to[$i] . DIRECTORY_SEPARATOR;
+            }
+            $i++;
+        }
+
+        // Strip last separator
+        return substr($relPath, 0, -1);
+    }
 }
