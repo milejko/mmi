@@ -39,7 +39,7 @@ class KernelEventHandler
      * @return bool
      * @throws KernelException
      */
-    public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         throw new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
     }
@@ -112,10 +112,10 @@ class KernelEventHandler
     {
         //wybór typów
         switch ($response->getType()) {
-            //plaintext
+                //plaintext
             case 'text/plain':
                 return 'Error 500' . "\n" . 'Something went wrong' . "\n";
-            //json
+                //json
             case 'application/json':
                 return json_encode([
                     'status' => 500,
@@ -175,5 +175,4 @@ class KernelEventHandler
         }
         return $message;
     }
-
 }
