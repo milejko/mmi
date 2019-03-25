@@ -117,7 +117,7 @@ class Translate
     private function _parseTranslationFile($sourceFile)
     {
         //wczytanie pliku
-        $data = explode("\n", str_replace("\r\n", '\n', file_get_contents($sourceFile)));
+        $data = explode("\n", str_replace("\r\n", "\n", file_get_contents($sourceFile)));
         $output = [];
         //parsowanie linii
         foreach ($data as $line) {
