@@ -19,7 +19,7 @@ class Ip4 extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Niepoprawny adres IP';
+    const INVALID = 'validator.ip4.message';
 
     /**
      * Walidacja IPv4

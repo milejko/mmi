@@ -19,7 +19,7 @@ class Json extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'JSON jest niepoprawny';
+    const INVALID = 'validator.json.message';
 
     /**
      * Walidacja jsona

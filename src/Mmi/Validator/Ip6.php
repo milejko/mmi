@@ -19,7 +19,7 @@ class Ip6 extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Niepoprawny adres IPv6';
+    const INVALID = 'validator.ip6.message';
 
     /**
      * Walidacja IPv6

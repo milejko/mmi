@@ -25,7 +25,7 @@ class Csrf extends ValidatorAbstract
     /**
      * Komunikat błędnego kodu zabezpieczającego
      */
-    const INVALID = 'Formularz wysłany wielokrotnie';
+    const INVALID = 'validator.csrf.message';
 
     /**
      * Ustawia opcje

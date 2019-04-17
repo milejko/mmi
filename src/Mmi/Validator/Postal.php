@@ -19,7 +19,7 @@ class Postal extends ValidatorAbstract
     /**
      * Komunikat błędnego kodu
      */
-    const ERROR = 'Wprowadzono niepoprawny kod pocztowy';
+    const INVALID = 'validator.postal.message';
 
     /**
      * Sprawdza czy tekst jest e-mailem
@@ -32,7 +32,7 @@ class Postal extends ValidatorAbstract
         if (preg_match('/^[0-9]{2}-[0-9]{3}$/', $value)) {
             return true;
         }
-        return $this->_error(self::ERROR);
+        return $this->_error(self::INVALID);
     }
 
 }

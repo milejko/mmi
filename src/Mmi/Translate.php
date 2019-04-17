@@ -117,7 +117,7 @@ class Translate
     private function _parseTranslationFile($sourceFile)
     {
         //wczytanie pliku
-        $data = explode("\n", str_replace("\r\n", '\n', file_get_contents($sourceFile)));
+        $data = explode("\n", str_replace("\r\n", "\n", file_get_contents($sourceFile)));
         $output = [];
         //parsowanie linii
         foreach ($data as $line) {
@@ -142,14 +142,9 @@ class Translate
      */
     private function _returnKeyAndLogUntranslated($key, array $params)
     {
-        //otwieranie loga
-        $log = fopen(BASE_PATH . '/var/log/error.translation.log', 'a');
-        //zapis zdarzenia
-        fwrite($log, date('Y-m-d H:i:s') . ' ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] ' . $key . ($params ? ' ' . print_r($params, true) : '') . "\n");
-        //zamknięcie logu
-        fclose($log);
+        //debug log
+        \Mmi\App\FrontController::getInstance()->getLogger()->debug('Translate: ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] ' . $key);
         //zwrot klucza
         return $key;
     }
-
 }

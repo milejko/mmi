@@ -59,13 +59,13 @@ class Select extends ElementAbstract
             if (is_array($caption)) {
                 $html .= '<optgroup label="' . $key . '">';
                 foreach ($caption as $k => $c) {
-                    $html .= '<option value="' . $k . '" ' . $this->_calculateSelected($k, $value) . $disabled . '>' . $c . '</option>';
+                    $html .= '<option value="' . $k . '" ' . $this->_calculateSelected($k, $value) . $disabled . '>' . \App\Registry::$translate->_($c) . '</option>';
                 }
                 $html .= '</optgroup>';
                 continue;
             }
             //dodawanie pojedynczej opcji
-            $html .= '<option value="' . $key . '"' . $this->_calculateSelected($key, $value) . $disabled . '>' . $caption . '</option>';
+            $html .= '<option value="' . $key . '"' . $this->_calculateSelected($key, $value) . $disabled . '>' . \App\Registry::$translate->_($caption) . '</option>';
         }
         $html .= '</select>';
         return $html;
@@ -74,7 +74,7 @@ class Select extends ElementAbstract
     /**
      * Zaznacza element który powinien być zaznaczony
      * @param string $key klucz
-     * @param string $value wartość
+     * @param mixed $value wartość
      * @return string
      */
     protected function _calculateSelected($key, $value)
@@ -85,10 +85,9 @@ class Select extends ElementAbstract
             return in_array($key, $value) ? $selected : '';
         }
         //typ skalarny
-        if ((string) $value == (string) $key && !is_null($value)) {
+        if ((string)$value == (string)$key && !is_null($value)) {
             return $selected;
         }
         return '';
     }
-
 }

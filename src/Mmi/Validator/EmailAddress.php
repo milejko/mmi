@@ -17,9 +17,9 @@ class EmailAddress extends ValidatorAbstract
 {
 
     /**
-     * Komunikat niedostatecznej długości
+     * Komunikat błędu
      */
-    const INVALID = 'Niepoprawny adres e-mail';
+    const INVALID = 'validator.emailAddress.message';
 
     /**
      * Sprawdza czy tekst jest e-mailem

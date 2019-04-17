@@ -25,6 +25,8 @@ class KernelEventHandler
         register_shutdown_function(['\\Mmi\\App\\KernelEventHandler', 'shutdownHandler']);
         //domyślne przechwycenie wyjątków
         set_exception_handler(['\\Mmi\\App\\KernelEventHandler', 'exceptionHandler']);
+        //raportowanie błędów jest niepotrzebne - customowy error handler w kolejnej linii
+        error_reporting(0);
         //domyślne przechwycenie błędów
         set_error_handler(['\\Mmi\\App\\KernelEventHandler', 'errorHandler']);
     }
@@ -39,7 +41,7 @@ class KernelEventHandler
      * @return bool
      * @throws KernelException
      */
-    public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public static function errorHandler($errno, $errstr, $errfile, $errline)
     {
         throw new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
     }
@@ -57,11 +59,6 @@ class KernelEventHandler
         //wysyłka odpowiedzi
         FrontController::getInstance()->getResponse()
             ->send();
-        //obsługa błędów nieobsłużonych przez error handler
-        if (null !== $error = error_get_last()) {
-            //logowanie błędu poza zamknięciem aplikacji
-            FrontController::getInstance()->getLogger()->notice(FrontController::getInstance()->getEnvironment()->requestUri . ' (' . $error['type'] . '): ' . $error['message']);
-        }
     }
 
     /**

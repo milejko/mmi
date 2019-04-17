@@ -16,7 +16,7 @@ class Checked extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Pole wymaga zaznaczenia';
+    const INVALID = 'validator.checked.message';
 
     /**
      * Ustawia element

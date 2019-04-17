@@ -19,7 +19,7 @@ class Date extends ValidatorAbstract
     /**
      * Treść wiadomości
      */
-    const INVALID = 'Wprowadzona wartość nie jest poprawną datą';
+    const INVALID = 'validator.date.message';
 
     /**
      * Walidacja daty

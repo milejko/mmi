@@ -27,12 +27,7 @@ class StringLength extends ValidatorAbstract
     /**
      * Komunikat niedostatecznej długości
      */
-    const SHORT = 'Tekst jest zbyt krótki';
-
-    /**
-     * Komunikat nadmiernej długości
-     */
-    const LONG = 'Tekst jest zbyt długi';
+    const INVALID = 'validator.stringLength.message';
 
     /**
      * Ustawia opcje
@@ -42,8 +37,8 @@ class StringLength extends ValidatorAbstract
     public function setOptions(array $options = [], $reset = false)
     {
         return $this->setFrom(current($options))
-                ->setTo(next($options))
-                ->setMessage(next($options));
+            ->setTo(next($options))
+            ->setMessage(next($options));
     }
 
     /**
@@ -56,11 +51,11 @@ class StringLength extends ValidatorAbstract
     {
         //za krótki
         if ($this->getFrom() && mb_strlen($value) < $this->getFrom()) {
-            return $this->_error(self::SHORT);
+            return $this->_error(self::INVALID);
         }
         //za długi
         if ($this->getTo() && mb_strlen($value) > $this->getTo()) {
-            return $this->_error(self::LONG);
+            return $this->_error(self::INVALID);
         }
         return true;
     }
