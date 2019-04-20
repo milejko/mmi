@@ -11,7 +11,6 @@
 namespace Mmi\App;
 
 use Mmi\App\FrontController;
-use Mmi\Mvc\MvcNotFoundException;
 
 /**
  * Klasa rozruchu aplikacji
@@ -28,12 +27,14 @@ class Bootstrap implements BootstrapInterface
         $this->_setupDatabase()
             //konfiguracja lokalnego bufora
             ->_setupLocalCache()
-            //inicjalizacja tłumaczeń
-            ->_setupTranslate()
             //konfiguracja front controllera
-            ->_setupFrontController($router = $this->_setupRouter(\App\Registry::$translate->getLocale()), $this->_setupView($router))
+            ->_setupFrontController($router = $this->_setupRouter(), $this->_setupView($router))
             //konfiguracja cache
             ->_setupCache()
+            //konfiguracja tłumaczeń
+            ->_setupTranslate()
+            //konfiguracja lokalizacji
+            ->_setupLocale()
             //konfiguracja sesji
             ->_setupSession();
     }
@@ -52,20 +53,18 @@ class Bootstrap implements BootstrapInterface
      * @param string $language
      * @return \Mmi\Mvc\Router
      */
-    protected function _setupRouter($language)
+    protected function _setupRouter()
     {
         //powołanie routera z konfiguracją
-        return new \Mmi\Mvc\Router(\App\Registry::$config->router ? \App\Registry::$config->router : new \Mmi\Mvc\RouterConfig, $language);
+        return new \Mmi\Mvc\Router(\App\Registry::$config->router ? \App\Registry::$config->router : new \Mmi\Mvc\RouterConfig);
     }
 
     /**
-     * Inicjalizacja tłumaczeń
+     * Inicjalizacja lokalizacji
      * @return \Mmi\App\Bootstrap
      */
-    protected function _setupTranslate()
+    protected function _setupLocale()
     {
-        //utworzenie obiektu tłumaczenia
-        \App\Registry::$translate = new \Mmi\Translate;
         //getting language from environment
         if (null === FrontController::getInstance()->getEnvironment()->lang) {
             //zwrot translate z domyślnym locale
@@ -77,6 +76,38 @@ class Bootstrap implements BootstrapInterface
         }
         //ustawianie locale ze środowiska
         \App\Registry::$translate->setLocale(FrontController::getInstance()->getEnvironment()->lang);
+        return $this;
+    }
+
+    protected function _setupTranslate()
+    {
+        //pobranie struktury translatora
+        $structure = FrontController::getInstance()->getStructure('translate');
+        //ładowanie zbuforowanego translatora
+        $cache = FrontController::getInstance()->getLocalCache();
+        //klucz buforowania
+        $key = 'mmi-translate';
+        //próba załadowania z bufora
+        if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
+            //wczytanie obiektu translacji z bufora
+            \App\Registry::$translate = $cachedTranslate;
+            FrontController::getInstance()->getProfiler()->event('Mvc\Controller: load translate cache');
+            return $this;
+        }
+        //utworzenie obiektu tłumaczenia
+        \App\Registry::$translate = new \Mmi\Translate;
+        //dodawanie tłumaczeń do translatora
+        foreach ($structure as $module => $languageData) {
+            foreach ($languageData as $lang => $translationData) {
+                \App\Registry::$translate->addTranslation(is_array($translationData) ? $translationData[0] : $translationData, $lang);
+            }
+        }
+        //zapis do cache
+        if ($cache !== null) {
+            $cache->save(\App\Registry::$translate, $key, 0);
+        }
+        //event profilera
+        FrontController::getInstance()->getProfiler()->event('Mvc\Controller: translations added');
         return $this;
     }
 
@@ -202,14 +233,13 @@ class Bootstrap implements BootstrapInterface
     {
         //powołanie i konfiguracja widoku
         return (new \Mmi\Mvc\View)->setCache(FrontController::getInstance()->getLocalCache())
-                //opcja kompilacji
+            //opcja kompilacji
             ->setAlwaysCompile(\App\Registry::$config->compile)
-                //ustawienie cdn
+            //ustawienie cdn
             ->setCdn(\App\Registry::$config->cdn)
-                //ustawienie requestu
+            //ustawienie requestu
             ->setRequest(FrontController::getInstance()->getRequest())
-                //ustawianie baseUrl
+            //ustawianie baseUrl
             ->setBaseUrl(FrontController::getInstance()->getEnvironment()->baseUrl);
     }
-
 }

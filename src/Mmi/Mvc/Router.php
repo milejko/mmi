@@ -13,7 +13,7 @@ namespace Mmi\Mvc;
 class Router
 {
 
-    CONST HASH_REPLACE = '_TMP-ENCODED-HASH_';
+    const HASH_REPLACE = '_TMP-ENCODED-HASH_';
 
     /**
      * Konfiguracja
@@ -22,20 +22,12 @@ class Router
     private $_config;
 
     /**
-     * Domyślny język
-     * @var string
-     */
-    private $_defaultLanguage;
-
-    /**
      * Konstruktor routera
      * @param \Mmi\Mvc\RouterConfig $config
-     * @param string $defaultLanguage domyślny język
      */
-    public function __construct(\Mmi\Mvc\RouterConfig $config, $defaultLanguage = null)
+    public function __construct(\Mmi\Mvc\RouterConfig $config)
     {
         $this->_config = $config;
-        $this->_defaultLanguage = $defaultLanguage;
     }
 
     /**
@@ -80,17 +72,16 @@ class Router
         //domyślne parametry
         $params['controller'] = isset($params['controller']) ? $params['controller'] : 'index';
         $params['action'] = isset($params['action']) ? $params['action'] : 'index';
-        //jeśli aplikacja jest językowa
-        if ($this->_defaultLanguage) {
-            $params['lang'] = isset($params['lang']) ? $params['lang'] : $this->_defaultLanguage;
-        }
         //jeśli nieustawiony moduł, url nie jest analizowany
         if (isset($params['module'])) {
             return $params;
         }
         //filtrowanie URL
-        $filteredUrl = html_entity_decode(trim((isset($parsedUrl['path']) ? $parsedUrl['path'] : ''), '/ '),
-            ENT_HTML401 | ENT_HTML5 | ENT_QUOTES, 'UTF-8');
+        $filteredUrl = html_entity_decode(
+            trim((isset($parsedUrl['path']) ? $parsedUrl['path'] : ''), '/ '),
+            ENT_HTML401 | ENT_HTML5 | ENT_QUOTES,
+            'UTF-8'
+        );
         //próba aplikacji rout
         foreach ($this->getRoutes() as $route) {
             /* @var $route \Mmi\Mvc\RouterConfigRoute */
@@ -145,5 +136,4 @@ class Router
         //budowanie zapytania
         return $url . ($url == '/' ? '?' : '/?') . http_build_query($params);
     }
-
 }
