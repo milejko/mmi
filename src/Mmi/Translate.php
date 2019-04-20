@@ -90,7 +90,7 @@ class Translate
     public function _($key, array $params = [])
     {
         //jeśli brak locale - zwrot klucza
-        if ($this->_locale === null) {
+        if (null === $this->_locale) {
             return $key;
         }
         //parametry istnieją

@@ -123,12 +123,12 @@ class Auth
     public function hasIdentity()
     {
         //brak tożsamości
-        return (bool) $this->_session->id;
+        return (bool)$this->_session->id;
     }
 
     /**
      * Pobiera rolę
-     * @return string
+     * @return array
      */
     public function getRoles()
     {
@@ -285,7 +285,7 @@ class Auth
     protected function _setAuthentication(\Mmi\Security\AuthRecord $record)
     {
         //przekazanie danych z rekordu autoryzacji do sesji
-        $this->_session->setFromArray((array) $record);
+        $this->_session->setFromArray((array)$record);
         return true;
     }
 
@@ -335,5 +335,4 @@ class Auth
         //zakończenie skryptu
         exit;
     }
-
 }
