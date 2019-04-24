@@ -97,7 +97,7 @@ class Bootstrap implements BootstrapInterface
         //utworzenie obiektu tłumaczenia
         \App\Registry::$translate = new \Mmi\Translate;
         //dodawanie tłumaczeń do translatora
-        foreach ($structure as $module => $languageData) {
+        foreach ($structure as $languageData) {
             foreach ($languageData as $lang => $translationData) {
                 \App\Registry::$translate->addTranslation(is_array($translationData) ? $translationData[0] : $translationData, $lang);
             }

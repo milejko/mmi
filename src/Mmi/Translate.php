@@ -23,12 +23,6 @@ class Translate
     private $_data = [];
 
     /**
-     * Dostępne języki
-     * @var array
-     */
-    private $_languages = [];
-
-    /**
      * Bieżąca wersja językowa
      * @var string
      */
@@ -49,15 +43,10 @@ class Translate
         }
         //parser pliku tłumaczeń
         $data = $this->_parseTranslationFile($sourceFile);
-        //dodawanie języka
-        $this->_languages[$locale] = $sourceFile;
+        //logowanie 
+        \Mmi\App\FrontController::getInstance()->getLogger()->info('Parsing translation file: ' . realpath($sourceFile) . ' with: ' . count($data) . ' keys');
         //istnieje tłumaczenie
-        if (isset($this->_data[$locale])) {
-            //łączenie tłumaczeń
-            $data = array_merge($this->_data[$locale], $data);
-        }
-        //dodanie tłumaczenia
-        $this->_data[$locale] = $data;
+        $this->_data[$locale] = isset($this->_data[$locale]) ? array_merge($data, $this->_data[$locale]) : $data;
         return $this;
     }
 
@@ -143,7 +132,7 @@ class Translate
     private function _returnKeyAndLogUntranslated($key, array $params)
     {
         //debug log
-        \Mmi\App\FrontController::getInstance()->getLogger()->debug('Translate: ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] ' . $key);
+        \Mmi\App\FrontController::getInstance()->getLogger()->debug('Missing translation: ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] ' . $key);
         //zwrot klucza
         return $key;
     }
