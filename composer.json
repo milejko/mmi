@@ -42,7 +42,8 @@
         "symfony/http-kernel": "^4.2",
         "symfony/dependency-injection": "^4.2",
         "symfony/config": "^4.2",
-        "symfony/routing": "^4.2"
+        "symfony/routing": "^4.2",
+        "symfony/finder": "^4.2"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",
