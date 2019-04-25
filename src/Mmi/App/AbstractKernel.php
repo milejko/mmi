@@ -24,12 +24,15 @@ abstract class AbstractKernel extends BaseKernel
     abstract protected function configureRoutes(RouteCollectionBuilder $routes);
     
     /**
-     * @param ContainerBuilder $c
+     * @param ContainerBuilder $containerBuilder
      * @param LoaderInterface  $loader
      *
-     * @return mixed
+     * @throws \Exception
      */
-    abstract protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader);
+    protected function configureContainer(ContainerBuilder $containerBuilder, LoaderInterface $loader)
+    {
+        $loader->load(__DIR__ . '/../Resources/config/services.xml', 'glob');
+    }
     
     /**
      * @param LoaderInterface $loader
@@ -45,8 +48,6 @@ abstract class AbstractKernel extends BaseKernel
                     ->setPublic(true)
                     ->addTag('kernel.event_subscriber');
             }
-            
-            $loader->load(__DIR__ . '/../Resources/config/services.xml', 'glob');
             $this->configureContainer($container, $loader);
             
             $container->addObjectResource($this);
