@@ -14,6 +14,8 @@ use Mmi\App\FrontController;
 
 /**
  * Klasa rozruchu aplikacji
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Bootstrap implements BootstrapInterface
 {

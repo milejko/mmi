@@ -12,6 +12,8 @@ namespace Mmi\Validator;
 
 /**
  * Waliduje ciąg literowo cyfrowy
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Alnum extends ValidatorAbstract
 {

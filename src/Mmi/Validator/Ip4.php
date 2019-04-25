@@ -12,6 +12,8 @@ namespace Mmi\Validator;
 
 /**
  * Walidator IP4
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Ip4 extends ValidatorAbstract
 {

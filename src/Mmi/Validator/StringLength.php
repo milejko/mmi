@@ -20,6 +20,8 @@ namespace Mmi\Validator;
  * @method integer getFrom() pobiera od
  * @method integer getTo() pobiera do
  * @method string getMessage() pobiera wiadomość
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class StringLength extends ValidatorAbstract
 {

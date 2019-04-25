@@ -11,7 +11,9 @@
 namespace Mmi\Validator;
 
 /**
- * Walidator pustości
+ * Walidator pustościv
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class NotEmpty extends ValidatorAbstract
 {

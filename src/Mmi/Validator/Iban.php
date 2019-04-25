@@ -17,6 +17,8 @@ namespace Mmi\Validator;
  * 
  * @method string getCountry() pobiera kraj
  * @method string getMessage() pobiera wiadomość
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Iban extends ValidatorAbstract
 {

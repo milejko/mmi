@@ -12,6 +12,8 @@ namespace Mmi\App;
 
 /**
  * Bootstrap aplikacji CMD
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class BootstrapCli extends \Mmi\App\Bootstrap
 {

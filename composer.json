@@ -4,6 +4,7 @@
     "description": "MMi Framework Library",
     "keywords": ["mmi", "framework"],
     "license": "MIT",
+    "version": "3.9.10",
     "authors": [
         {
             "name": "Mariusz Miłejko",
@@ -37,7 +38,11 @@
         "ext-spl": "*",
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.5.*",
-        "symfony/console": "^3.3"
+        "symfony/console": "^3.3",
+        "symfony/http-kernel": "^4.2",
+        "symfony/dependency-injection": "^4.2",
+        "symfony/config": "^4.2",
+        "symfony/routing": "^4.2"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",
@@ -45,8 +50,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Mmi\\": "src/Mmi",
-            "": "src/"
+            "Mmi\\": "src/Mmi"
         }
     },
     "autoload-dev": {

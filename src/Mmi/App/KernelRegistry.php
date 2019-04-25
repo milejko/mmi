@@ -13,6 +13,8 @@ namespace Mmi\App;
 /**
  * Abstrakcyjna klasa rejestru aplikacji
  * powinna być rozszerzona przez \App\Registry
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 abstract class KernelRegistry
 {

@@ -12,6 +12,8 @@ namespace Mmi\App;
 
 /**
  * Klasa konfiguracji aplikacji
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 abstract class KernelConfig
 {

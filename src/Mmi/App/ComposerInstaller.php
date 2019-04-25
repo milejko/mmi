@@ -13,7 +13,9 @@ namespace Mmi\App;
 use Composer\Script\Event; 
  
 /** 
- * Klasa używana przy instalacji composerem 
+ * Klasa używana przy instalacji composerem
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */ 
 class ComposerInstaller 
 { 

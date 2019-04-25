@@ -9,6 +9,8 @@ namespace Mmi\Validator;
  * 
  * @method \Mmi\Form\Element\Checkbox getElement() pobiera checkbox
  * @method string getMessage() pobiera wiadomość
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Checked extends ValidatorAbstract
 {

@@ -14,6 +14,8 @@ namespace Mmi\Validator;
  * Klasa pozwalająca tworzyć grupy walidacyjne
  *
  * @package Mmi\Validator
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Sequence extends ValidatorAbstract
 {

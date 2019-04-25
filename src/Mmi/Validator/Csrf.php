@@ -18,6 +18,8 @@ namespace Mmi\Validator;
  * @method string getName() pobiera nazwę pola
  * 
  * @see \Mmi\Form\Element\Csrf
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Csrf extends ValidatorAbstract
 {

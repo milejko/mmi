@@ -15,6 +15,8 @@ namespace Mmi\Validator;
  * 
  * @method self setMessage($message) ustawia własną wiadomość walidatora
  * @method string getMessage() pobiera wiadomość
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 abstract class ValidatorAbstract extends \Mmi\OptionObject
 {

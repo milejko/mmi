@@ -22,6 +22,8 @@ namespace Mmi\Validator;
  * @method string getField() pobiera nazwę pola
  * @method integer getId() pobiera ID
  * @method string getMessage() pobiera własną wiadomość walidatora
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class RecordUnique extends ValidatorAbstract
 {

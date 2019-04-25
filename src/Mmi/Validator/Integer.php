@@ -12,6 +12,8 @@ namespace Mmi\Validator;
 
 /**
  * Walidator liczb całkowitych
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class Integer extends ValidatorAbstract
 {
