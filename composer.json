@@ -44,7 +44,8 @@
         "symfony/config": "^4.2",
         "symfony/routing": "^4.2",
         "symfony/finder": "^4.2",
-        "symfony/event-dispatcher": "^4.2"
+        "symfony/event-dispatcher": "^4.2",
+        "symfony/yaml": "^4.2"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",
