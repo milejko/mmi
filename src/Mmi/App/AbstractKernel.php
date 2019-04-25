@@ -2,6 +2,8 @@
 
 namespace Mmi\App;
 
+use Mmi\DependencyInjection\CmsExtension;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,10 +31,7 @@ abstract class AbstractKernel extends BaseKernel
      *
      * @throws \Exception
      */
-    protected function configureContainer(ContainerBuilder $containerBuilder, LoaderInterface $loader)
-    {
-        $loader->load(__DIR__ . '/../Resources/config/services.xml', 'glob');
-    }
+    abstract protected function configureContainer(ContainerBuilder $containerBuilder, LoaderInterface $loader);
     
     /**
      * @param LoaderInterface $loader
@@ -68,10 +67,19 @@ abstract class AbstractKernel extends BaseKernel
     }
     
     /**
+     * @param ContainerBuilder $container
+     */
+    protected function prepareContainer(ContainerBuilder $container)
+    {
+        $container->registerExtension(new CmsExtension());
+        parent::prepareContainer($container);
+    }
+    
+    /**
      * @return iterable|BundleInterface[]|void
      */
     public function registerBundles()
     {
-        // TODO: Implement registerBundles() method.
+        return [new FrameworkBundle()];
     }
 }
