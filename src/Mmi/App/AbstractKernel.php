@@ -6,9 +6,9 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouteCollectionBuilder;
-use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 /**
  * Class AbstractKernel
@@ -46,6 +46,7 @@ abstract class AbstractKernel extends BaseKernel
                     ->addTag('kernel.event_subscriber');
             }
             
+            $loader->load(__DIR__ . '/../Resources/config/services.xml', 'glob');
             $this->configureContainer($container, $loader);
             
             $container->addObjectResource($this);
