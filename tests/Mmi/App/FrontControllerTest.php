@@ -18,8 +18,8 @@ use Mmi\App\FrontController;
 class FrontControllerTest extends \PHPUnit\Framework\TestCase
 {
 
-    CONST CLASS_NAME = '\Mmi\App\FrontController';
-    
+    const CLASS_NAME = '\Mmi\App\FrontController';
+
     public function testGetInstance()
     {
         $this->assertInstanceOf(self::CLASS_NAME, FrontController::getInstance(true), 'Setter does not return self');
@@ -146,5 +146,4 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
             ->setRouter(new \Mmi\Mvc\Router((new \Mmi\Mvc\RouterConfig())->setRoute('test', '', ['module' => 'a', 'controller' => 'b', 'action' => 'c'])))
             ->run();
     }
-
 }

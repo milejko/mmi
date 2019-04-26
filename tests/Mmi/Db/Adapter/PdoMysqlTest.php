@@ -27,7 +27,7 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
 
     private $_db;
 
-    public function setUp()
+    public function setUp(): void
     {
         $cfg = new \Mmi\Db\DbConfig;
         $cfg->user = self::USER;
@@ -110,7 +110,7 @@ class PdoMysqlTest extends \PHPUnit\Framework\TestCase
 
     public function testInsertAll()
     {
-        $this->assertEquals(2, $this->_db->insertAll(self::TABLE_NAME, [['test_name' => 't1', 'test_value' => 't1'], [], ['test_name' => 't2', 'test_value' => 't2']]));
+        $this->assertEquals(2, $this->_db->insertAll(self::TABLE_NAME, [['test_name' => 't1', 'test_value' => '1'], [], ['test_name' => 't2', 'test_value' => '2']]));
         $this->assertSame(['COUNT(*)' => '2'], $this->_db->fetchRow('SELECT COUNT(*) FROM `' .self::TABLE_NAME. '` WHERE `test_name` = "t1" OR `test_name` = "t2"'));
     }
     

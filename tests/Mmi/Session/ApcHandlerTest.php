@@ -22,11 +22,17 @@ class ApcHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testOpen()
     {
+        if (!function_exists('\apcu_fetch')) {
+            return;
+        }
         $this->assertTrue((new ApcHandler())->open('test', 'test'));
     }
 
     public function testRead()
     {
+        if (!function_exists('\apcu_fetch')) {
+            return;
+        }
         $fh = new ApcHandler();
         $this->assertEquals('', $fh->read('abc'));
         $sessionId = md5(microtime());
@@ -35,11 +41,17 @@ class ApcHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testClose()
     {
+        if (!function_exists('\apcu_fetch')) {
+            return;
+        }
         $this->assertTrue((new ApcHandler())->close());
     }
 
     public function testGc()
     {
+        if (!function_exists('\apcu_fetch')) {
+            return;
+        }
         $fh = new ApcHandler();
         $this->assertTrue($fh->gc(0));
     }

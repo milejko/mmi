@@ -24,13 +24,13 @@ class PdoTest extends \PHPUnit\Framework\TestCase
      */
     private $_db;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require_once 'data/config-cache.php';
         (new Kernel('\Mmi\App\Bootstrap', 'CACHE'));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $db = new \Mmi\Db\Adapter\PdoSqlite(\App\Registry::$config->db);
         $db->delete('mmi_cache');

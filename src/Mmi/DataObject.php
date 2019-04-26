@@ -22,10 +22,11 @@ class DataObject implements \Iterator
     /**
      * Konstruktor ustawia obiekt
      * @param array $data zmienne requestu
+     * @param boolean $shallow
      */
     public function __construct(array $data = [])
     {
-        $this->setParams($data);
+        $this->setParams($data, false);
     }
 
     /**
@@ -146,5 +147,4 @@ class DataObject implements \Iterator
     {
         return key($this->_data) !== null;
     }
-
 }

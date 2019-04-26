@@ -18,7 +18,7 @@ use Mmi\App\Kernel;
 class BootstrapTest extends \PHPUnit\Framework\TestCase
 {
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require_once 'data/config-cache.php';
         require_once 'data/config-nodb.php';

@@ -23,13 +23,13 @@ class ExifTest extends \PHPUnit\Framework\TestCase
     private $_img1;
     private $_img2;
     
-    public function setUp()
+    public function setUp(): void
     {
         try {
             $this->_img1 = new Exif(self::imagePath1);
             $this->_img2 = new Exif(self::imagePath2);
         } catch(\Exception $ex) {
-            return $ex->getMessage();
+            //$ex->getMessage();
         }
     }
     

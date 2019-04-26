@@ -24,7 +24,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', (new Url)->filter('-'));
         $this->assertEquals('ala-ma-kota', (new Url)->filter('Ala ma kota!'));
         $this->assertEquals('nie-programuj-nocami-w-c-', (new Url)->filter('Nie programuj nocami w C++'));
-        $this->assertEquals('-zwirek-i-muchomorek', (new Url)->filter('„Żwirek i Muchomorek”'));
+        $this->assertEquals('zwirek-i-muchomorek', (new Url)->filter('„Żwirek i Muchomorek”'));
         $this->assertEquals('-azzcsc', (new Url)->filter('   ążźćść'));
         $this->assertEquals('-', (new Url)->filter('/-^-^-/'));
         $this->assertEquals('ya-lyublyu-php-', (new Url)->filter('Я люблю PHP :)'));
