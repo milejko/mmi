@@ -134,8 +134,10 @@ class RequestFiles extends \Mmi\DataObject
                 break;
             }
             foreach ($all as $fieldName => $val) {
-                for ($i = 0; $i < count($val); $i++){
-                    $fixed[$fieldName . '[' . $i . ']'][$key] = $val[$i];
+                if(is_array($val)){
+                    for ($i = 0; $i < count($val); $i++){
+                        $fixed[$fieldName . '[' . $i . ']'][$key] = $val[$i];
+                    }
                 }
             }
         }
