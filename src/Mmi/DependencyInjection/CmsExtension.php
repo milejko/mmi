@@ -106,20 +106,22 @@ class CmsExtension extends Extension
         $container->setDefinition('mmi.session.session_space', $sessionSpaceDefinition);
         
         $sessionDefinition = new Definition(Session::class, [
-            'name'             => $container->getParameter('cms.security.name'),
-            'cookie_lifetime'  => $container->getParameter('cms.security.cookie_lifetime'),
-            'cookie_path'      => $container->getParameter('cms.security.cookie_path'),
-            'cookie_domain'    => $container->getParameter('cms.security.cookie_domain'),
-            'cookie_secure'    => $container->getParameter('cms.security.cookie_secure'),
-            'cookie_http_only' => $container->getParameter('cms.security.cookie_http_only'),
-            'cache_expire'     => $container->getParameter('cms.security.cache_expire'),
-            'gc_divisor'       => $container->getParameter('cms.security.gc_divisor'),
-            'gc_max_lifetime'  => $container->getParameter('cms.security.gc_max_lifetime'),
-            'gc_probability'   => $container->getParameter('cms.security.gc_probability'),
-            'handler'          => $container->getParameter('cms.security.handler'),
-            'path'             => $container->getParameter('cms.security.path'),
-            'auth_model'       => $container->getParameter('cms.security.auth_model'),
-            'auth_remember'    => $container->getParameter('cms.security.auth_remember'),
+            [
+                'name'             => $container->getParameter('cms.security.name'),
+                'cookie_lifetime'  => $container->getParameter('cms.security.cookie_lifetime'),
+                'cookie_path'      => $container->getParameter('cms.security.cookie_path'),
+                'cookie_domain'    => $container->getParameter('cms.security.cookie_domain'),
+                'cookie_secure'    => $container->getParameter('cms.security.cookie_secure'),
+                'cookie_http_only' => $container->getParameter('cms.security.cookie_http_only'),
+                'cache_expire'     => $container->getParameter('cms.security.cache_expire'),
+                'gc_divisor'       => $container->getParameter('cms.security.gc_divisor'),
+                'gc_max_lifetime'  => $container->getParameter('cms.security.gc_max_lifetime'),
+                'gc_probability'   => $container->getParameter('cms.security.gc_probability'),
+                'handler'          => $container->getParameter('cms.security.handler'),
+                'path'             => $container->getParameter('cms.security.path'),
+                'auth_model'       => $container->getParameter('cms.security.auth_model'),
+                'auth_remember'    => $container->getParameter('cms.security.auth_remember'),
+            ]
         ]);
         $container->setDefinition('mmi.session.session', $sessionDefinition);
         
