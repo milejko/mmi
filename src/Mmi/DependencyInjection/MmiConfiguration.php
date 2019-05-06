@@ -2,6 +2,8 @@
 
 namespace Mmi\DependencyInjection;
 
+use Mmi\Cache\Cache;
+use Mmi\Db\Adapter\PdoAbstract;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -45,6 +47,12 @@ class MmiConfiguration implements ConfigurationInterface
                         ->scalarNode('username')->end()
                         ->scalarNode('password')->end()
                         ->scalarNode('database_name')->end()
+                        ->scalarNode('database_adapter')
+                            ->info(sprintf('Instance of "%s", Service ID', PdoAbstract::class))
+                        ->end()
+                        ->scalarNode('database_cache')
+                            ->info(sprintf('Instance of "%s", Service ID', Cache::class))
+                        ->end()
                     ->end()
                     ->validate()
                         ->always(function ($data){
@@ -58,6 +66,8 @@ class MmiConfiguration implements ConfigurationInterface
                                 'username',
                                 'password',
                                 'database_name',
+                                'database_adapter',
+                                'database_cache'
                             ];
                             
                             foreach ($properties as $property) {
@@ -69,6 +79,8 @@ class MmiConfiguration implements ConfigurationInterface
                                     ));
                                 }
                             }
+                            
+                            return $data;
                         })
                     ->end()
                 ->end()

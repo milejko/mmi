@@ -7,6 +7,7 @@ use Mmi\Session\SessionSpace;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
@@ -60,6 +61,17 @@ class MmiExtension extends Extension
         $container->setParameter('mmi.database.password', $config['password']);
         $container->setParameter('mmi.database.port', $config['port']);
         $container->setParameter('mmi.database.name', $config['database_name']);
+        
+        if (false === $container->hasDefinition($config['database_adapter'])) {
+            throw new ServiceNotFoundException($config['database_adapter']);
+        }
+    
+        if (false === $container->hasDefinition($config['database_cache'])) {
+            throw new ServiceNotFoundException($config['database_cache']);
+        }
+        
+        $container->setAlias('mmi.orm.adapter.default', $config['database_adapter']);
+        $container->setAlias('mmi.orm.cache.default', $config['database_cache']);
     }
     
     /**
