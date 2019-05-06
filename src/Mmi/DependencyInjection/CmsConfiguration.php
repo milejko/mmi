@@ -86,17 +86,18 @@ class CmsConfiguration implements ConfigurationInterface
         $node
             ->children()
                 ->arrayNode('security')
+                    ->isRequired()
                     ->children()
                         ->scalarNode('name')->isRequired()->cannotBeEmpty()->end()
-                        ->integerNode('cookie_lifetime')->defaultValue(0)->cannotBeEmpty()->end()
+                        ->integerNode('cookie_lifetime')->defaultValue(0)->end()
                         ->scalarNode('cookie_path')->defaultValue('/')->cannotBeEmpty()->end()
                         ->scalarNode('cookie_domain')->defaultValue('')->cannotBeEmpty()->end()
                         ->booleanNode('cookie_secure')->defaultFalse()->end()
                         ->booleanNode('cookie_http_only')->defaultTrue()->end()
-                        ->integerNode('cache_expire')->defaultValue(14400)->cannotBeEmpty()->end()
+                        ->integerNode('cache_expire')->defaultValue(14400)->end()
                         ->integerNode('gc_divisor')->defaultValue(1000)->end()
-                        ->integerNode('gc_max_lifetime')->defaultValue(28800)->cannotBeEmpty()->end()
-                        ->integerNode('gc_probability')->defaultValue(1)->cannotBeEmpty()->end()
+                        ->integerNode('gc_max_lifetime')->defaultValue(28800)->end()
+                        ->integerNode('gc_probability')->defaultValue(1)->end()
                         ->scalarNode('handler')->end()
                         ->scalarNode('path')->defaultValue('/tmp')->end()
                         ->scalarNode('auth_model')->cannotBeEmpty()->end()
@@ -106,6 +107,7 @@ class CmsConfiguration implements ConfigurationInterface
                 ->end()
             ->end();
     }
+    
     
     private function addTranslationConfig(ArrayNodeDefinition $node) {
         $node
