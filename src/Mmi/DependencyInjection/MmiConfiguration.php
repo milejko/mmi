@@ -48,10 +48,16 @@ class MmiConfiguration implements ConfigurationInterface
                         ->scalarNode('password')->end()
                         ->scalarNode('database_name')->end()
                         ->scalarNode('database_adapter')
+                            ->example('some.service.id or \\Path\\To\\Some\\Class')
                             ->info(sprintf('Instance of "%s", Service ID', PdoAbstract::class))
+                            ->isRequired()
+                            ->cannotBeEmpty()
                         ->end()
                         ->scalarNode('database_cache')
+                            ->example('some.service.id or \\Path\\To\\Some\\Class')
                             ->info(sprintf('Instance of "%s", Service ID', Cache::class))
+                            ->isRequired()
+                            ->cannotBeEmpty()
                         ->end()
                     ->end()
                     ->validate()
@@ -66,8 +72,6 @@ class MmiConfiguration implements ConfigurationInterface
                                 'username',
                                 'password',
                                 'database_name',
-                                'database_adapter',
-                                'database_cache'
                             ];
                             
                             foreach ($properties as $property) {
