@@ -25,6 +25,7 @@ class CmsConfiguration implements ConfigurationInterface
         $this->addDatabase($node);
         $this->addCmsRequirements($node);
         $this->addTranslationConfig($node);
+        $this->addSessionConfig($node);
         
         return $treeBuilder;
     }
@@ -47,28 +48,28 @@ class CmsConfiguration implements ConfigurationInterface
                     ->end()
                     ->validate()
                         ->always(function ($data){
-                if (false === $data['enabled']) {
-                    return $data;
-                }
-                
-                $properties = [
-                    'host',
-                    'port',
-                    'username',
-                    'password',
-                    'database_name',
-                ];
-                
-                foreach ($properties as $property) {
-                    if (false === array_key_exists($property, $data) || true === empty($data[$property])) {
-                        throw new InvalidConfigurationException(sprintf(
-                            'Node "%s" under "%s" must be properly configured',
-                            $property,
-                            'cms.database'
-                        ));
-                    }
-                }
-            })
+                            if (false === $data['enabled']) {
+                                return $data;
+                            }
+                            
+                            $properties = [
+                                'host',
+                                'port',
+                                'username',
+                                'password',
+                                'database_name',
+                            ];
+                            
+                            foreach ($properties as $property) {
+                                if (false === array_key_exists($property, $data) || true === empty($data[$property])) {
+                                    throw new InvalidConfigurationException(sprintf(
+                                        'Node "%s" under "%s" must be properly configured',
+                                        $property,
+                                        'cms.database'
+                                    ));
+                                }
+                            }
+                        })
                     ->end()
                 ->end()
             ->end();
@@ -78,6 +79,30 @@ class CmsConfiguration implements ConfigurationInterface
         $node
             ->children()
                 ->scalarNode('secret')->isRequired()->cannotBeEmpty()->end()
+            ->end();
+    }
+    
+    private function addSessionConfig(ArrayNodeDefinition $node) {
+        $node
+            ->children()
+                ->arrayNode('session')
+                    ->children()
+                        ->scalarNode('name')->isRequired()->cannotBeEmpty()->end()
+                        ->integerNode('cookie_lifetime')->defaultValue(0)->cannotBeEmpty()->end()
+                        ->scalarNode('cookie_path')->defaultValue('/')->cannotBeEmpty()->end()
+                        ->scalarNode('cookie_domain')->defaultValue('')->cannotBeEmpty()->end()
+                        ->booleanNode('cookie_secure')->defaultFalse()->end()
+                        ->booleanNode('cookie_http_only')->defaultTrue()->end()
+                        ->integerNode('cache_expire')->defaultValue(14400)->cannotBeEmpty()->end()
+                        ->integerNode('gc_divisor')->defaultValue(1000)->end()
+                        ->integerNode('gc_max_lifetime')->defaultValue(28800)->cannotBeEmpty()->end()
+                        ->integerNode('gc_probability')->defaultValue(1)->cannotBeEmpty()->end()
+                        ->scalarNode('handler')->end()
+                        ->scalarNode('path')->defaultValue('/tmp')->end()
+                        ->scalarNode('auth_model')->cannotBeEmpty()->end()
+                        ->scalarNode('auth_remember')->defaultValue(31536000)->end()
+                    ->end()
+                ->end()
             ->end();
     }
     
@@ -99,27 +124,27 @@ class CmsConfiguration implements ConfigurationInterface
                     ->end()
                     ->validate()
                         ->always(function ($data){
-                if (false === $data['enabled']) {
-                    return $data;
-                }
-                
-                $properties = [
-                    'language',
-                    'supported_languages'
-                ];
-                
-                foreach ($properties as $property) {
-                    if (false === array_key_exists($property, $data) || true === empty($data[$property])) {
-                        throw new InvalidConfigurationException(sprintf(
-                            'Node "%s" under "%s" must be properly configured',
-                            $property,
-                            'cms.localization'
-                        ));
-                    }
-                }
-                
-                return $data;
-            })
+                            if (false === $data['enabled']) {
+                                return $data;
+                            }
+                            
+                            $properties = [
+                                'language',
+                                'supported_languages'
+                            ];
+                            
+                            foreach ($properties as $property) {
+                                if (false === array_key_exists($property, $data) || true === empty($data[$property])) {
+                                    throw new InvalidConfigurationException(sprintf(
+                                        'Node "%s" under "%s" must be properly configured',
+                                        $property,
+                                        'cms.localization'
+                                    ));
+                                }
+                            }
+                            
+                            return $data;
+                        })
                     ->end()
                 ->end()
             ->end();
