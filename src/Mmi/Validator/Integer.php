@@ -30,11 +30,11 @@ class Integer extends ValidatorAbstract
     {
         //wartość nienumeryczna
         if (!is_numeric($value)) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         //wartość nie równa
         if (intval($value) != $value) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         return true;
     }

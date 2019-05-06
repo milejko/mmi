@@ -50,15 +50,15 @@ class NumberBetween extends ValidatorAbstract
     {
         //czy liczba
         if (!is_numeric($value)) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         //sprawdzamy dolny zakres
         if ($this->getFrom() !== null && $value < $this->getFrom()) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         //sprawdzamy górny zakres
         if ($this->getTo() !== null && $value > $this->getTo()) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         return true;
     }

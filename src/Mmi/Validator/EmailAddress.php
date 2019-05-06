@@ -32,7 +32,7 @@ class EmailAddress extends ValidatorAbstract
         if (preg_match('/^([*+!.&#$|\'\\%\/0-9a-z^_`{}=?~:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,4})$/i', $value)) {
             return true;
         }
-        return $this->_error(self::INVALID);
+        return $this->_error(static::INVALID);
     }
 
 }

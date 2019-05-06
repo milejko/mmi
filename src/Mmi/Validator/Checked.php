@@ -52,7 +52,7 @@ class Checked extends ValidatorAbstract
     {
         //jeśli niezaznaczony
         if ($this->getElement() && !$this->getElement()->isChecked()) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         return true;
     }

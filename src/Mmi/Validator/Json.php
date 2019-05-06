@@ -30,10 +30,10 @@ class Json extends ValidatorAbstract
     {
         try {
             if (null === \json_decode($value, true)) {
-                return $this->_error(self::INVALID);
+                return $this->_error(static::INVALID);
             }
         } catch (\Exception $e) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         return true;
     }
