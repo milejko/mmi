@@ -21,6 +21,9 @@ class CmsExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__) . '/Resources/config'));
+        $configuration = new Configuration();
+        $loader        = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__) . '/Resources/config'));
+        $config        = $this->processConfiguration($configuration, $configs);
+        
     }
 }
