@@ -4,6 +4,6 @@ services:
         autoconfigure: true
         public:        false
 
-    Mmi\EventListener\KernelEventSubscriber:
+    Mmi\EventListener\KernelRequestSessionWarmer:
         tags:
-            - { name: "kernel.event_subscriber" }
+            - { name: "kernel.event_subscriber", event: "kernel.request", method: "warmUpSession" }
