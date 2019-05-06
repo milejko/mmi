@@ -19,6 +19,16 @@ class KernelEventSubscriber implements EventSubscriberInterface
     private $session;
     
     /**
+     * KernelEventSubscriber constructor.
+     *
+     * @param Session $session
+     */
+    public function __construct(Session $session)
+    {
+        $this->session = $session;
+    }
+    
+    /**
      * Returns an array of event names this subscriber wants to listen to.
      *
      * The array keys are event names and the value can be:
