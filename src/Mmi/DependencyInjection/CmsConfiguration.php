@@ -5,6 +5,7 @@ namespace Mmi\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * Class CmsConfiguration
@@ -34,12 +35,40 @@ class CmsConfiguration implements ConfigurationInterface
                 ->arrayNode('database')
                     ->isRequired()
                     ->children()
-                        ->booleanNode('enabled')->isRequired()->treatNullLike(true)->end()
-                        ->scalarNode('host')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('port')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('database_name')->isRequired()->cannotBeEmpty()->end()
+                        ->booleanNode('enabled')
+                            ->treatNullLike(false)
+                            ->defaultValue(false)
+                        ->end()
+                        ->scalarNode('host')->end()
+                        ->scalarNode('port')->end()
+                        ->scalarNode('username')->end()
+                        ->scalarNode('password')->end()
+                        ->scalarNode('database_name')->end()
+                    ->end()
+                    ->validate()
+                        ->always(function ($data){
+                if (false === $data['enabled']) {
+                    return $data;
+                }
+                
+                $properties = [
+                    'host',
+                    'port',
+                    'username',
+                    'password',
+                    'database_name',
+                ];
+                
+                foreach ($properties as $property) {
+                    if (false === array_key_exists($property, $data) || true === empty($data[$property])) {
+                        throw new InvalidConfigurationException(sprintf(
+                            'Node "%s" under "%s" must be properly configured',
+                            $property,
+                            'cms.database'
+                        ));
+                    }
+                }
+            })
                     ->end()
                 ->end()
             ->end();
@@ -58,11 +87,39 @@ class CmsConfiguration implements ConfigurationInterface
                 ->arrayNode('localization')
                     ->isRequired()
                     ->children()
-                        ->booleanNode('enabled')->isRequired()->treatNullLike(true)->end()
-                        ->scalarNode('language')->defaultValue('en')->isRequired()->cannotBeEmpty()->end()
+                        ->booleanNode('enabled')
+                            ->treatNullLike(false)
+                            ->defaultValue(false)
+                        ->end()
+                        ->scalarNode('language')->end()
                         ->arrayNode('supported_languages')
+                            ->requiresAtLeastOneElement()
                             ->scalarPrototype()->end()
                         ->end()
+                    ->end()
+                    ->validate()
+                        ->always(function ($data){
+                if (false === $data['enabled']) {
+                    return $data;
+                }
+                
+                $properties = [
+                    'language',
+                    'supported_languages'
+                ];
+                
+                foreach ($properties as $property) {
+                    if (false === array_key_exists($property, $data) || true === empty($data[$property])) {
+                        throw new InvalidConfigurationException(sprintf(
+                            'Node "%s" under "%s" must be properly configured',
+                            $property,
+                            'cms.localization'
+                        ));
+                    }
+                }
+                
+                return $data;
+            })
                     ->end()
                 ->end()
             ->end();
