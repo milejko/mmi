@@ -2,7 +2,7 @@
 
 namespace Mmi\App;
 
-use Mmi\DependencyInjection\CmsExtension;
+use Mmi\DependencyInjection\MmiExtension;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -77,7 +77,7 @@ abstract class AbstractKernel extends BaseKernel
      */
     protected function prepareContainer(ContainerBuilder $container)
     {
-        $container->registerExtension(new CmsExtension());
+        $container->registerExtension(new MmiExtension());
         parent::prepareContainer($container);
     }
     

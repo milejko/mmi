@@ -11,7 +11,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  * Class CmsConfiguration
  * @package Mmi\DependencyInjection\Cms
  */
-class CmsConfiguration implements ConfigurationInterface
+class MmiConfiguration implements ConfigurationInterface
 {
     
     /**
@@ -19,7 +19,7 @@ class CmsConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('cms');
+        $treeBuilder = new TreeBuilder('mmi');
         $node        = $treeBuilder->getRootNode();
         
         $this->addDatabase($node);
@@ -65,7 +65,7 @@ class CmsConfiguration implements ConfigurationInterface
                                     throw new InvalidConfigurationException(sprintf(
                                         'Node "%s" under "%s" must be properly configured',
                                         $property,
-                                        'cms.database'
+                                        'mmi.database'
                                     ));
                                 }
                             }
@@ -141,7 +141,7 @@ class CmsConfiguration implements ConfigurationInterface
                                     throw new InvalidConfigurationException(sprintf(
                                         'Node "%s" under "%s" must be properly configured',
                                         $property,
-                                        'cms.localization'
+                                        'mmi.localization'
                                     ));
                                 }
                             }
