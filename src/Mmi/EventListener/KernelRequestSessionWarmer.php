@@ -7,7 +7,7 @@ use Mmi\Session\SessionConfig;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
- * Class KernelEventSubscriber
+ * Class KernelRequestSessionWarmer
  * @package Mmi\EventListener
  */
 class KernelRequestSessionWarmer
