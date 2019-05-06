@@ -1,9 +1,7 @@
 services:
-    _defaults:
-        autowire:      true
-        autoconfigure: true
-        public:        false
-
-    Mmi\EventListener\KernelRequestSessionWarmer:
+    mmi.event_listener.kernel_request_session_warmer:
+        class: Mmi\EventListener\KernelRequestSessionWarmer
+        arguments:
+            - '@mmi.session.session'
         tags:
             - { name: "kernel.event_listener", event: "kernel.request", method: "warmUpSession" }

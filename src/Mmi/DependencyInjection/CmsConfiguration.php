@@ -85,7 +85,7 @@ class CmsConfiguration implements ConfigurationInterface
     private function addSessionConfig(ArrayNodeDefinition $node) {
         $node
             ->children()
-                ->arrayNode('session')
+                ->arrayNode('security')
                     ->children()
                         ->scalarNode('name')->isRequired()->cannotBeEmpty()->end()
                         ->integerNode('cookie_lifetime')->defaultValue(0)->cannotBeEmpty()->end()
@@ -100,7 +100,8 @@ class CmsConfiguration implements ConfigurationInterface
                         ->scalarNode('handler')->end()
                         ->scalarNode('path')->defaultValue('/tmp')->end()
                         ->scalarNode('auth_model')->cannotBeEmpty()->end()
-                        ->scalarNode('auth_remember')->defaultValue(31536000)->end()
+                        ->integerNode('auth_remember')->defaultValue(31536000)->end()
+                        ->scalarNode('session_space')->isRequired()->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end();

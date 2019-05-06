@@ -3,7 +3,6 @@
 namespace Mmi\EventListener;
 
 use Mmi\Session\Session;
-use Mmi\Session\SessionConfig;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
@@ -32,6 +31,6 @@ class KernelRequestSessionWarmer
      */
     public function warmUpSession(GetResponseEvent $event)
     {
-        $this->session->start(new SessionConfig());
+        $this->session->start();
     }
 }

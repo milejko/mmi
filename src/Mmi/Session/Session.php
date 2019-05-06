@@ -12,26 +12,45 @@ namespace Mmi\Session;
 
 class Session
 {
-
+    /**
+     * @var array
+     */
+    private $config;
+    
+    /**
+     * Session constructor.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+    
     /**
      * Rozpoczęcie sesji
-     * @param \Mmi\Session\SessionConfig $config
      */
-    public function start(\Mmi\Session\SessionConfig $config)
+    public function start()
     {
-        session_name($config->name);
-        session_set_cookie_params($config->cookieLifetime, $config->cookiePath, $config->cookieDomain, $config->cookieSecure, $config->cookieHttpOnly);
-        session_cache_expire($config->cacheExpire);
-        ini_set('session.gc_divisor', $config->gcDivisor);
-        ini_set('session.gc_maxlifetime', $config->gcMaxLifetime);
-        ini_set('session.gc_probability', $config->gcProbability);
-        if ($config->handler == 'user') {
-            $handlerClass = $config->path;
+        session_name($this->config['name']);
+        session_set_cookie_params(
+            $this->config['cookie_lifetime'],
+            $this->config['cookie_path'],
+            $this->config['cookie_domain'],
+            $this->config['cookie_secure'],
+            $this->config['cookie_http_only']
+        );
+        session_cache_expire($this->config['cache_expire']);
+        ini_set('session.gc_divisor', $this->config['gc_divisor']);
+        ini_set('session.gc_maxlifetime', $this->config['gc_max_lifetime']);
+        ini_set('session.gc_probability', $this->config['gc_probability']);
+        if ($this->config['handler'] == 'user') {
+            $handlerClass = $this->config['path'];
             $handler = new $handlerClass();
             session_set_save_handler($handler);
         } else {
-            ini_set('session.save_handler', $config->handler);
-            session_save_path($config->path);
+            ini_set('session.save_handler', $this->config['handler']);
+            session_save_path($this->config['path']);
         }
         session_start();
     }

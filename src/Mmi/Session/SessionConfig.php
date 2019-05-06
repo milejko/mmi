@@ -12,6 +12,8 @@ namespace Mmi\Session;
 
 /**
  * Klasa konfiguracji sesji
+ *
+ * @deprecated since 3.9.0 to be removed in 4.0.0
  */
 class SessionConfig
 {

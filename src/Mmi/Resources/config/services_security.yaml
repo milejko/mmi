@@ -1,22 +1,19 @@
 services:
-    _defaults:
-        autowire:      true
-        autoconfigure: true
-        public:        false
-        
-    Mmi\Security\Auth: ~
-    Mmi\Security\Acl: ~
-    
-    Mmi\Session\SessionSpace:
+    mmi.security.auth:
+        class: Mmi\Security\Auth
         arguments:
-            - 'Auth'
-            
-    Mmi\Session\ApcHandler:
-        tags:
-            - "cms.session.handler"
+            - '@mmi.session.session_space'
+
+    mmi.security.acl:
+        class: Mmi\Security\Acl
     
-    Mmi\Session\FileHandler:
+    mmi.security.handler.apc:
+        class: Mmi\Session\ApcHandler
+        tags:
+            - { name: "cms.session.handler" }
+    
+    mmi.security.handler.file:
+        class: Mmi\Session\FileHandler
         tags:
             - "cms.session.handler"
 
-    Mmi\Session\Session: ~
