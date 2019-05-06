@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
  * Class CmsExtension
- * @package Mmi\DependencyInjection
+ * @package Mmi\DependencyInjection\Cms
  */
 class CmsExtension extends Extension
 {
@@ -21,9 +21,8 @@ class CmsExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
+        $configuration = new CmsConfiguration();
         $loader        = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__) . '/Resources/config'));
         $config        = $this->processConfiguration($configuration, $configs);
-        
     }
 }
