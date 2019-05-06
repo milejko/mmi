@@ -10,6 +10,8 @@
 
 namespace Mmi\Security;
 
+use Mmi\Session\SessionSpace;
+
 /**
  * Klasa autoryzacji
  */
@@ -51,14 +53,15 @@ class Auth
      * @var string
      */
     private $_salt;
-
+    
     /**
-     * Kostruktor, tworzy przestrzeń w sesji
+     * Auth constructor.
+     *
+     * @param SessionSpace $session
      */
-    public function __construct()
+    public function __construct(SessionSpace $session)
     {
-        //otwieranie przestrzeni w sesji
-        $this->_session = new \Mmi\Session\SessionSpace($this->_namespace);
+        $this->_session = $session;
     }
 
     /**

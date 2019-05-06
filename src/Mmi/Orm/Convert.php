@@ -21,7 +21,7 @@ class Convert
      * @param string $value
      * @return string
      */
-    public static final function underscoreToCamelcase($value)
+    public function underscoreToCamelcase($value)
     {
         //używa callbacku
         return preg_replace_callback('/\_([a-z0-9])/', function ($matches) {
@@ -34,7 +34,7 @@ class Convert
      * @param string $value
      * @return string
      */
-    public static final function camelcaseToUnderscore($value)
+    public function camelcaseToUnderscore($value)
     {
         //używa callbacku
         return preg_replace_callback('/([A-Z])/', function ($matches) {

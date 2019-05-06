@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire:      true
+        autoconfigure: true
+        public:        false
+
+    Mmi\EventListener\KernelEventSubscriber:
+        tags:
+            - { name: "kernel.event_subscriber" }

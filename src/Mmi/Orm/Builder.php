@@ -19,11 +19,33 @@ class Builder
     CONST INDENT = "    ";
     
     /**
+     * @var DbConnector
+     */
+    private $dbConnector;
+    
+    /**
+     * @var Convert
+     */
+    private $converter;
+    
+    /**
+     * Builder constructor.
+     *
+     * @param DbConnector $dbConnector
+     * @param Convert     $converter
+     */
+    public function __construct(DbConnector $dbConnector, Convert $converter)
+    {
+        $this->dbConnector = $dbConnector;
+        $this->converter   = $converter;
+    }
+    
+    /**
      * Renderuje DAO, Record i Query dla podanej nazwy tabeli
      * @param string $tableName
      * @throws \Mmi\Orm\OrmException
      */
-    public static function buildFromTableName($tableName)
+    public function buildFromTableName($tableName)
     {
         //pomijanie modułów z vendorów
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
@@ -32,45 +54,45 @@ class Builder
             }
         }
         //aktualizacja QUERY-FIELD
-        self::_updateQueryField($tableName);
+        $this->_updateQueryField($tableName);
         //aktualizacja QUERY-JOIN
-        self::_updateQueryJoin($tableName);
+        $this->_updateQueryJoin($tableName);
         //aktualizacja QUERY
-        self::_updateQuery($tableName);
+        $this->_updateQuery($tableName);
         //aktualizacja RECORD
-        self::_updateRecord($tableName);
+        $this->_updateRecord($tableName);
     }
 
     /**
      * Tworzy, lub aktualizuje rekord
      * @param string $tableName
      */
-    protected static function _updateRecord($tableName)
+    protected function _updateRecord($tableName)
     {
         //kod rekordu
         $recordCode = '<?php' . "\n\n" .
-            'namespace ' . self::_getNamespace($tableName) . ";\n\n" .
-            'class ' . ($className = self::_getNamePrefix($tableName) . 'Record') . ' extends \Mmi\Orm\Record' .
+            'namespace ' . $this->_getNamespace($tableName) . ";\n\n" .
+            'class ' . ($className = $this->_getNamePrefix($tableName) . 'Record') . ' extends \Mmi\Orm\Record' .
             "\n{" .
             "\n\n" .
             '}' . "\n";
         //ścieżka do pliku
-        $path = self::_mkdirRecursive(self::_getPathPrefix($tableName)) . '/' . $className . '.php';
+        $path = $this->_mkdirRecursive($this->_getPathPrefix($tableName)) . '/' . $className . '.php';
         //wczytanie istniejącego rekordu
         if (file_exists($path)) {
             $recordCode = file_get_contents($path);
         }
         //odczyt struktury tabeli
-        $structure = DbConnector::getTableStructure($tableName);
+        $structure = $this->dbConnector->getTableStructure($tableName);
         //błędna struktrura lub brak
         if (empty($structure)) {
-            throw new rmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
+            throw new OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
         }
         $variableString = "\n";
         //generowanie pól rekordu
         foreach ($structure as $fieldName => $fieldDetails) {
-            $variables[] = Convert::underscoreToCamelcase($fieldName);
-            $variableString .= self::INDENT . 'public $' . Convert::underscoreToCamelcase($fieldName) . ";\n";
+            $variables[] = $this->converter->underscoreToCamelcase($fieldName);
+            $variableString .= self::INDENT . 'public $' . $this->converter->underscoreToCamelcase($fieldName) . ";\n";
         }
         //sprawdzanie istnienia pól rekordu
         if (preg_match_all('/' . self::INDENT . 'public \$([a-zA-Z0-9\_]+)[\;|\s\=]/', $recordCode, $codeVariables) && isset($codeVariables[1])) {
@@ -93,16 +115,16 @@ class Builder
      * Tworzy lub aktualizuje pole query
      * @param string $tableName
      */
-    protected static function _updateQueryField($tableName)
+    protected function _updateQueryField($tableName)
     {
         //prefixy nazw
-        $queryClassName = self::_getNamespace($tableName) . '\\' . self::_getNamePrefix($tableName) . 'Query';
+        $queryClassName = $this->_getNamespace($tableName) . '\\' . $this->_getNamePrefix($tableName) . 'Query';
         //odczyt struktury
-        $structure = DbConnector::getTableStructure($tableName);
+        $structure = $this->dbConnector->getTableStructure($tableName);
         $methods = '';
         //budowanie komentarzy do metod
         foreach ($structure as $fieldName => $fieldDetails) {
-            $fieldName = ucfirst(Convert::underscoreToCamelcase($fieldName));
+            $fieldName = ucfirst($this->converter->underscoreToCamelcase($fieldName));
             //metody equalsColumn... np. equalsColumnActive()
             $methods .= ' * @method \\' . $queryClassName . ' equalsColumn' . $fieldName . '()' . "\n";
             //notEqualsColumn
@@ -118,7 +140,7 @@ class Builder
         }
         //anotacje dla metod porównujących (equals itp.)
         $queryCode = '<?php' . "\n\n" .
-            'namespace ' . self::_getNamespace($tableName) . '\QueryHelper' . ";\n\n" .
+            'namespace ' . $this->_getNamespace($tableName) . '\QueryHelper' . ";\n\n" .
             '/**' . "\n" .
             ' * @method \\' . $queryClassName . ' equals($value)' . "\n" .
             ' * @method \\' . $queryClassName . ' notEquals($value)' . "\n" .
@@ -131,44 +153,44 @@ class Builder
             ' * @method \\' . $queryClassName . ' between($from, $to)' . "\n" .
             $methods .
             ' */' . "\n" .
-            'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryField') . ' extends \Mmi\Orm\QueryHelper\QueryField' .
+            'class ' . ($className = $this->_getNamePrefix($tableName) . 'QueryField') . ' extends \Mmi\Orm\QueryHelper\QueryField' .
             "\n{" .
             "\n\n" .
             '}' . "\n";
         //zapis pliku
-        file_put_contents(self::_mkdirRecursive(self::_getPathPrefix($tableName) . '/QueryHelper') . '/' . $className . '.php', $queryCode);
+        file_put_contents($this->_mkdirRecursive($this->_getPathPrefix($tableName) . '/QueryHelper') . '/' . $className . '.php', $queryCode);
     }
 
     /**
      * Tworzy lub aktualizuje obiekt złączenia (JOIN)
      * @param string $tableName
      */
-    protected static function _updateQueryJoin($tableName)
+    protected function _updateQueryJoin($tableName)
     {
         //prefixy nazw
-        $queryClassName = self::_getNamespace($tableName) . '\\' . self::_getNamePrefix($tableName) . 'Query';
+        $queryClassName = $this->_getNamespace($tableName) . '\\' . $this->_getNamePrefix($tableName) . 'Query';
         //anotacja dla metody on()
         $queryCode = '<?php' . "\n\n" .
-            'namespace ' . self::_getNamespace($tableName) . '\QueryHelper' . ";\n\n" .
+            'namespace ' . $this->_getNamespace($tableName) . '\QueryHelper' . ";\n\n" .
             '/**' . "\n" .
             ' * @method \\' . $queryClassName . ' on($localKeyName, $joinedKeyName = \'id\')' . "\n" .
             ' */' . "\n" .
-            'class ' . ($className = self::_getNamePrefix($tableName) . 'QueryJoin') . ' extends \Mmi\Orm\QueryHelper\QueryJoin' .
+            'class ' . ($className = $this->_getNamePrefix($tableName) . 'QueryJoin') . ' extends \Mmi\Orm\QueryHelper\QueryJoin' .
             "\n{" .
             "\n\n" .
             '}' . "\n";
         //zapis pliku
-        file_put_contents(self::_mkdirRecursive(self::_getPathPrefix($tableName) . '/QueryHelper') . '/' . $className . '.php', $queryCode);
+        file_put_contents($this->_mkdirRecursive($this->_getPathPrefix($tableName) . '/QueryHelper') . '/' . $className . '.php', $queryCode);
     }
 
     /**
      * Tworzy, lub aktualizuje zapytanie
      * @param string $tableName
      */
-    protected static function _updateQuery($tableName)
+    protected function _updateQuery($tableName)
     {
         //prefixy nazw
-        $namePrefix = self::_getNamePrefix($tableName);
+        $namePrefix = $this->_getNamePrefix($tableName);
         //nazwa klasy
         $className = $namePrefix . 'Query';
         //nazwa klasy pola
@@ -178,7 +200,7 @@ class Builder
         //nazwa rekordu
         $recordClassName = $namePrefix . 'Record';
         //ścieżka
-        $path = self::_mkdirRecursive(self::_getPathPrefix($tableName)) . '/' . $className . '.php';
+        $path = $this->_mkdirRecursive($this->_getPathPrefix($tableName)) . '/' . $className . '.php';
         //kod zapytania
         $queryCode = "{\n\n" . self::INDENT .
             'protected $_tableName = \'' .
@@ -189,7 +211,7 @@ class Builder
             $queryCode = file_get_contents($path);
         }
         //odczyt struktury
-        $structure = DbConnector::getTableStructure($tableName);
+        $structure = $this->dbConnector->getTableStructure($tableName);
         //pusta, lub błędna struktura
         if (empty($structure)) {
             throw new OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
@@ -198,7 +220,7 @@ class Builder
         $methods = '';
         //budowanie komentarzy do metod
         foreach ($structure as $fieldName => $fieldDetails) {
-            $fieldName = ucfirst(Convert::underscoreToCamelcase($fieldName));
+            $fieldName = ucfirst($this->converter->underscoreToCamelcase($fieldName));
             //metody where... np. whereActive()
             $methods .= ' * @method QueryHelper\\' . $fieldClassName . ' where' . $fieldName . '()' . "\n";
             //metody andField... np. andFieldActive()
@@ -213,7 +235,7 @@ class Builder
             $methods .= ' * @method ' . $className . ' groupBy' . $fieldName . '()' . "\n";
         }
         $queryHead = '<?php' . "\n\n" .
-            'namespace ' . self::_getNamespace($tableName) . ";\n\n" .
+            'namespace ' . $this->_getNamespace($tableName) . ";\n\n" .
             '//<editor-fold defaultstate="collapsed" desc="' . $className . '">' . "\n" .
             '/**' . "\n" .
             ' * @method ' . $className . ' limit($limit = null)' . "\n" .
@@ -245,7 +267,7 @@ class Builder
      * @return string
      * @throws \Mmi\Orm\OrmException
      */
-    protected static function _getPathPrefix($tableName)
+    protected function _getPathPrefix($tableName)
     {
         $table = explode('_', $tableName);
         //klasy leżą w plikach w /Orm/
@@ -258,7 +280,7 @@ class Builder
      * @param string $tableName
      * @return string
      */
-    protected static function _getNamespace($tableName)
+    protected function _getNamespace($tableName)
     {
         $table = explode('_', $tableName);
         //klasy leżą w namespace'ach Orm w modułach
@@ -271,7 +293,7 @@ class Builder
      * @return string
      * @throws \Mmi\Orm\OrmException
      */
-    protected static function _getNamePrefix($tableName)
+    protected function _getNamePrefix($tableName)
     {
         $table = explode('_', $tableName);
         $className = '';
@@ -287,7 +309,7 @@ class Builder
      * @param string $path
      * @return string ścieżka wejściowa
      */
-    protected static function _mkdirRecursive($path)
+    protected function _mkdirRecursive($path)
     {
         $dirs = explode('/', $path);
         $currentDir = '';

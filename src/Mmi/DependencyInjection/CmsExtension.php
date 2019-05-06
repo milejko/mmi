@@ -5,7 +5,7 @@ namespace Mmi\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Class CmsExtension
@@ -22,7 +22,7 @@ class CmsExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new CmsConfiguration();
-        $loader        = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__) . '/Resources/config'));
+        $loader        = new YamlFileLoader($container, new FileLocator(\dirname(__DIR__) . '/Resources/config'));
         $config        = $this->processConfiguration($configuration, $configs);
         
         $container->setParameter('kernel.secret', $config['secret']);
@@ -30,6 +30,12 @@ class CmsExtension extends Extension
         
         $this->appendDatabaseConfig($config['database'], $container);
         $this->appendLocalizationConfig($config['localization'], $container);
+        
+        $loader->load('services.yaml');
+        
+        if (true === $container->getParameter('cms.database.enabled')) {
+            $loader->load('services_orm.yaml');
+        }
     }
     
     /**

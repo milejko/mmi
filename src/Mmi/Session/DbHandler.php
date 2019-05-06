@@ -23,7 +23,22 @@ class DbHandler implements \SessionHandlerInterface
      * @var mixed
      */
     private $_data;
-
+    
+    /**
+     * @var Orm\DbConnector
+     */
+    private $dbConnector;
+    
+    /**
+     * DbHandler constructor.
+     *
+     * @param Orm\DbConnector $dbConnector
+     */
+    public function __construct(Orm\DbConnector $dbConnector)
+    {
+        $this->dbConnector = $dbConnector;
+    }
+    
     /**
      * Otwarcie sesji
      * @param string $savePath
@@ -127,7 +142,7 @@ class DbHandler implements \SessionHandlerInterface
     public function gc($maxLifetime)
     {
         //uproszczone usuwanie - jednym zapytaniem
-        \Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp <= :time', [':time' => (time() - $maxLifetime)]);
+        $this->dbConnector->getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp <= :time', [':time' => (time() - $maxLifetime)]);
         return true;
     }
 

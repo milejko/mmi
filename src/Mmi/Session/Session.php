@@ -17,7 +17,7 @@ class Session
      * Rozpoczęcie sesji
      * @param \Mmi\Session\SessionConfig $config
      */
-    public static function start(\Mmi\Session\SessionConfig $config)
+    public function start(\Mmi\Session\SessionConfig $config)
     {
         session_name($config->name);
         session_set_cookie_params($config->cookieLifetime, $config->cookiePath, $config->cookieDomain, $config->cookieSecure, $config->cookieHttpOnly);

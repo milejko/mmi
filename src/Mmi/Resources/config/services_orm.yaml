@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire:      true
+        autoconfigure: true
+        public:        false
+    Mmi\Orm\DbConnector: ~
+    Mmi\Orm\Convert: ~
+    Mmi\Orm\Builder: ~
+    Mmi\Session\DbHandler:
+        tags:
+            - "cms.session.handler"
