@@ -32,6 +32,7 @@ class CmsExtension extends Extension
         $this->appendLocalizationConfig($config['localization'], $container);
         
         $loader->load('services.yaml');
+        $loader->load('services_security.yaml');
         
         if (true === $container->getParameter('cms.database.enabled')) {
             $loader->load('services_orm.yaml');
