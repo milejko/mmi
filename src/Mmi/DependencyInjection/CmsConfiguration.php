@@ -32,8 +32,6 @@ class CmsConfiguration implements ConfigurationInterface
         $node
             ->children()
                 ->arrayNode('database')
-                    ->treatNullLike(false)
-                    ->treatTrueLike(false)
                     ->isRequired()
                     ->children()
                         ->booleanNode('enabled')->isRequired()->treatNullLike(true)->end()
@@ -41,7 +39,7 @@ class CmsConfiguration implements ConfigurationInterface
                         ->scalarNode('port')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('username')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('database')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('database_name')->isRequired()->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end();
