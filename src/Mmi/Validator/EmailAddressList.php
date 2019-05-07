@@ -33,7 +33,7 @@ class EmailAddressList extends ValidatorAbstract
         foreach ($emails as $email) {
             //niepoprawny email
             if (!(new EmailAddress)->isValid($email)) {
-                return $this->_error(self::INVALID);
+                return $this->_error(static::INVALID);
             }
         }
         return true;

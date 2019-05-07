@@ -67,7 +67,7 @@ class RecordUnique extends ValidatorAbstract
         }
         //rekord istnieje
         if ($q->count() > 0) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         return true;
     }

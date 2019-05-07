@@ -47,7 +47,7 @@ class Equal extends ValidatorAbstract
     {
         //wartość nierówna
         if ($this->getValue() != $value) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         return true;
     }

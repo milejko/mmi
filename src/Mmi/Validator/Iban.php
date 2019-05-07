@@ -60,7 +60,7 @@ class Iban extends ValidatorAbstract
         $tmp = strtoupper(str_replace($trims, '', $value));
         //brak pierwszego znaku
         if (!isset($tmp[0])) {
-            $this->_error(self::INVALID);
+            $this->_error(static::INVALID);
             return false;
         }
         //brak kodu kraju - doklejanie
@@ -78,7 +78,7 @@ class Iban extends ValidatorAbstract
         ], $tmp);
         //błąd sumy kontrolnej
         if (bcmod($tmp, 97) != 1) {
-            $this->_error(self::INVALID);
+            $this->_error(static::INVALID);
             return false;
         }
         return true;

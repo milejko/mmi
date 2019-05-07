@@ -32,7 +32,7 @@ class Postal extends ValidatorAbstract
         if (preg_match('/^[0-9]{2}-[0-9]{3}$/', $value)) {
             return true;
         }
-        return $this->_error(self::INVALID);
+        return $this->_error(static::INVALID);
     }
 
 }

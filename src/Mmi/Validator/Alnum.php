@@ -31,10 +31,10 @@ class Alnum extends ValidatorAbstract
 
         //nieprawidłowy typ danych
         if (!is_string($value) && !is_int($value) && !is_float($value)) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         //wartość filtrowana alnumem jest równa zadanej, lub nie
-        return (new \Mmi\Filter\Alnum())->filter($value) == $value ? true : $this->_error(self::INVALID);
+        return (new \Mmi\Filter\Alnum())->filter($value) == $value ? true : $this->_error(static::INVALID);
     }
 
 }

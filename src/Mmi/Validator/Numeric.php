@@ -30,7 +30,7 @@ class Numeric extends ValidatorAbstract
     {
         //błąd
         if (!is_numeric($value)) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         return true;
     }

@@ -51,15 +51,15 @@ class Regex extends ValidatorAbstract
         }
         //błędny typ danych
         if (!is_string($value) && !is_int($value) && !is_float($value)) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
         try {
             //badanie wyrażeniem
             $status = preg_match($this->getPattern(), $value);
         } catch (\Mmi\App\KernelException $e) {
-            return $this->_error(self::INVALID);
+            return $this->_error(static::INVALID);
         }
-        return $status ? true : $this->_error(self::INVALID);
+        return $status ? true : $this->_error(static::INVALID);
     }
 
 }
