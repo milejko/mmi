@@ -36,6 +36,10 @@ class File extends ElementAbstract
         //nazwa pola
         $namespace = $form->getBaseName();
         $fieldName = $this->getName();
+        //brak załadowanych plików
+        if (\Mmi\App\FrontController::getInstance()->getRequest()->getFiles()->isEmpty()) {
+            return $this;
+        }
         $files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles()->getAsArray();
         //brak pliku
         if (!isset($files[$namespace]) || !isset($files[$namespace][$fieldName])) {
