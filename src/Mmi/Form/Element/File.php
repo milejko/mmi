@@ -36,18 +36,12 @@ class File extends ElementAbstract
         //nazwa pola
         $namespace = $form->getBaseName();
         $fieldName = $this->getName();
-        $files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles();
+        $files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles()->getAsArray();
         //brak pliku
-        if (!isset($files->{$namespace}) || !isset($files->{$namespace}->{$fieldName})) {
+        if (!isset($files[$namespace]) || !isset($files[$namespace][$fieldName])) {
             return $this;
         }
-        foreach ($files->{$namespace}->{$fieldName} as $file) {
-            //opakowanie w array jeśli plik jest jeden
-            if ($file instanceof \Mmi\Http\RequestFile) {
-                $this->_files[] = $file;
-            }
-        }
-
+        $this->_files = $files[$namespace][$fieldName];
         return $this;
     }
 

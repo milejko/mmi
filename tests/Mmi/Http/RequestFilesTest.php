@@ -21,16 +21,16 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
 
     public function testSingleUpload()
     {
-        $files = new RequestFiles(['field1' => $this->_sampleFile, 'field2' => $this->_sampleIncompleteFile, 'field3' => $this->_anotherIncompleteFile]);
-        $this->assertFalse($files->isEmpty());
-        $firstFile = $files->field1[0];
+        $rf = new RequestFiles(['field1' => $this->_sampleFile, 'field2' => $this->_sampleIncompleteFile, 'field3' => $this->_anotherIncompleteFile]);
+        $this->assertFalse($rf->isEmpty());
+        $firstFile = $rf->getAsArray()['field1'][0];
         $this->assertInstanceOf('\Mmi\Http\RequestFile', $firstFile);
         $this->assertEquals('image.png', $firstFile->name);
     }
 
     public function testMultiUpload()
     {
-        $files = new RequestFiles(['fieldName' => [
+        $rf = new RequestFiles(['fieldName' => [
             'name' => [
                 0 => 'image.png',
                 1 => 'image2.png',
@@ -53,23 +53,25 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
                 1 => 456
             ],
         ]]);
-        $this->assertFalse($files->isEmpty());
-        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files->fieldName[0]);
-        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files->fieldName[1]);
-        $this->assertEquals('image2.png', $files->fieldName[1]->name);
+        $this->assertFalse($rf->isEmpty());
+        $files = $rf->getAsArray();
+        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files['fieldName'][0]);
+        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files['fieldName'][1]);
+        $this->assertEquals('image2.png', $files['fieldName'][1]->name);
     }
 
     public function testNestedForms()
     {
-        $files = new RequestFiles([
+        $rf = new RequestFiles([
             'formname' => [
                 'name' => ['field1' => 'image.jpg'],
                 'tmp_name' => ['field1' => BASE_PATH . '/tests/data/test.png'],
             ]
         ]);
-        $this->assertFalse($files->isEmpty());
-        $firstFile = $files->formname->field1[0];
+        $this->assertFalse($rf->isEmpty());
+        $files = $rf->getAsArray();
+        $firstFile = $files['formname']['field1'][0];
         $this->assertInstanceOf('\Mmi\Http\RequestFile', $firstFile);
-        $this->assertEquals('image.png', $firstFile->name);
+        $this->assertEquals('image.jpg', $firstFile->name);
     }
 }

@@ -14,11 +14,16 @@ namespace Mmi\Http;
  * Klasa plików
  * @method File[] toArray() Zwraca tablicę obiektów plików \Mmi\Http\RequestFile
  */
-class RequestFiles extends \Mmi\DataObject
+class RequestFiles
 {
 
     const FILE_NAME_KEY = 'name';
     const FILE_PATH_KEY = 'tmp_name';
+
+    /**
+     * Tablica zawierająca strukturę plików
+     */
+    protected $_files = [];
 
     /**
      * Konstruktor
@@ -27,13 +32,30 @@ class RequestFiles extends \Mmi\DataObject
     public function __construct(array $data = [])
     {
         //obsługa uploadu plików
-        parent::__construct($this->_handleNestedForm($data));
+        $this->_handleForm($data, $this->_files);
+    }
+
+    /**
+     * Zwraca tablicę z plikami
+     * @return RequestFiles[]
+     */
+    public function getAsArray()
+    {
+        return $this->_files;
+    }
+
+    /**
+     * Sprawdza pustość requestu
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return empty($this->_files);
     }
 
     /**
      * Obsługa prostego formularza (pola z nazwami string)
      * @param array $fileData
-     * @return array
      */
     private function _handleFieldFiles(array $fieldFiles)
     {
@@ -46,30 +68,29 @@ class RequestFiles extends \Mmi\DataObject
     }
 
     /**
-     * Obsługa formularza z polami tablicowymi: typu user[files], lub user[file][]
+     * Obsługa formularza z róznymi typami pól: typu files, user[files], lub user[file][]
      * @param array $data
      * @return array
      */
-    private function _handleNestedForm(array $data)
+    private function _handleForm(array $data, array &$node)
     {
-        $files = [];
-        foreach ($data as $expectedFieldName => $expectedFieldFiles) {
+        foreach ($data as $nodeName => $expectedFieldFiles) {
             //brak tablicy
             if (!is_array($expectedFieldFiles)) {
                 continue;
             }
+            $node[$nodeName] = [];
             //kolejne zagłębienie w tablicy -> zejście rekurencyjne
             if (!isset($expectedFieldFiles[self::FILE_PATH_KEY])) {
-                $this->_handleNestedForm($expectedFieldFiles);
+                $this->_handleForm($expectedFieldFiles, $node[$nodeName]);
                 continue;
             }
             //pusta ściezka, lub brak nazwy (uszkodzony plik)
             if ('' == $expectedFieldFiles[self::FILE_PATH_KEY] || !isset($expectedFieldFiles[self::FILE_NAME_KEY])) {
                 continue;
             }
-            $files[$expectedFieldName] = $this->_handleFieldFiles($expectedFieldFiles);
+            $node[$nodeName] = $this->_handleFieldFiles($expectedFieldFiles);
         }
-        return $files;
     }
 
     /**
@@ -94,7 +115,7 @@ class RequestFiles extends \Mmi\DataObject
     /**
      * Obsługa uploadu wielu plików (HTML5)
      * @param array $fieldFiles dane plików
-     * @return \Mmi\Http\RequestFile[]
+     * @return RequestFile[]
      */
     private function _handleMultiUpload(array $fieldFiles)
     {
@@ -104,10 +125,13 @@ class RequestFiles extends \Mmi\DataObject
             //plik uszkodzony, lub brak ściezki pliku
             if (isset($fileData[self::FILE_PATH_KEY]) && '' != $fileData[self::FILE_PATH_KEY]) {
                 //dodawanie pliku do tabeli
-                $files[$fileName] = new RequestFile($fileData);
+                is_int($fileName) ?
+                    $files[$fileName] = new RequestFile($fileData) : $files[$fileName][] = new RequestFile($fileData);
                 continue;
             }
-            $files[$fileName] = [];
+            if (!isset($files[$fileName])) {
+                $files[$fileName] = [];
+            }
             //iterate multiple files in multiupload
             foreach ($fileData as $singleFile) {
                 if (isset($singleFile[self::FILE_PATH_KEY]) && '' != $singleFile[self::FILE_PATH_KEY]) {
