@@ -42,8 +42,6 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['module' => 'test', 'controller' => 'index', 'action' => 'index', 'id' => 2], $router->decodeUrl('/test-index-index/?id=2'));
         $this->assertEquals('', $router->encodeUrl([]));
 
-        $plRouter = new Router($config, 'pl');
-        $this->assertEquals(['module' => 'static', 'controller' => 'index', 'action' => 'index', 'lang' => 'pl'], $plRouter->decodeUrl('static'));
         //czyszczenie routera
         $router->getConfig()->setRoutes([], true);
         $this->assertEquals('/?module=mmi', $router->encodeUrl(['module' => 'mmi', 'controller' => 'index', 'action' => 'index']));

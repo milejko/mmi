@@ -15,7 +15,7 @@ use Mmi\Orm\Query;
 class QueryTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         $r1 = new \Mmi\Orm\CacheRecord;
         $r1->id = 'test1';

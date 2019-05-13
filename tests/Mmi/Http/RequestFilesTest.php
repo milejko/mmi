@@ -17,21 +17,20 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
 
     private $_sampleFile = ['name' => 'image.png', 'tmp_name' => BASE_PATH . '/tests/data/test.png'];
     private $_sampleIncompleteFile = ['size' => 1];
-    private $_anotherIncompleteFile = ['name' => 'image.jpg'];
+    private $_anotherIncompleteFile = ['name' => 'image2.jpg'];
 
     public function testSingleUpload()
     {
-        $files = new RequestFiles([$this->_sampleFile, $this->_sampleIncompleteFile, $this->_anotherIncompleteFile]);
-        $this->assertFalse($files->isEmpty());
-        $firstFile = $files->current();
+        $rf = new RequestFiles(['field1' => $this->_sampleFile, 'field2' => $this->_sampleIncompleteFile, 'field3' => $this->_anotherIncompleteFile]);
+        $this->assertFalse($rf->isEmpty());
+        $firstFile = $rf->getAsArray()['field1'][0];
         $this->assertInstanceOf('\Mmi\Http\RequestFile', $firstFile);
         $this->assertEquals('image.png', $firstFile->name);
-        //$this->assertFalse(isset($files->current()));
     }
 
     public function testMultiUpload()
     {
-        $files = new RequestFiles([[
+        $rf = new RequestFiles(['fieldName' => [
             'name' => [
                 0 => 'image.png',
                 1 => 'image2.png',
@@ -54,10 +53,25 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
                 1 => 456
             ],
         ]]);
-        $this->assertFalse($files->isEmpty());
-        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files->__get(0)->__get(0));
-        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files->__get(0)->__get(1));
-        $this->assertEquals('image2.png', $files->__get(0)->__get(1)->name);
+        $this->assertFalse($rf->isEmpty());
+        $files = $rf->getAsArray();
+        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files['fieldName'][0]);
+        $this->assertInstanceOf('\Mmi\Http\RequestFile', $files['fieldName'][1]);
+        $this->assertEquals('image2.png', $files['fieldName'][1]->name);
     }
 
+    public function testNestedForms()
+    {
+        $rf = new RequestFiles([
+            'formname' => [
+                'name' => ['field1' => 'image.jpg'],
+                'tmp_name' => ['field1' => BASE_PATH . '/tests/data/test.png'],
+            ]
+        ]);
+        $this->assertFalse($rf->isEmpty());
+        $files = $rf->getAsArray();
+        $firstFile = $files['formname']['field1'][0];
+        $this->assertInstanceOf('\Mmi\Http\RequestFile', $firstFile);
+        $this->assertEquals('image.jpg', $firstFile->name);
+    }
 }

@@ -51,7 +51,7 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsNotWith('<div class="paginator">', $renderedPaginator);
     }
     
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         //czyszczenie fc
         \Mmi\App\FrontController::getInstance(true);
