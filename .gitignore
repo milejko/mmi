@@ -1,5 +1,6 @@
 /composer.lock
 /nbproject/
+/tests/.phpunit*
 /.idea
 /src/App/
 /var/
