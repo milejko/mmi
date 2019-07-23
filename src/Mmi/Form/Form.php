@@ -372,16 +372,16 @@ abstract class Form extends \Mmi\OptionObject
             //powiadamianie elementu o poprawnym zapisie rekordu
             $element->onRecordSaved();
         }
+        //iteracja po elementach
+        foreach ($this->getElements() as $element) {
+            //powiadamianie elementu o poprawnym zapisie formularza
+            $element->onFormSaved();
+        }
         //operacje po zapisie rekordu
         if (false === $this->afterSave()) {
             //odrzucenie transakcji
             \Mmi\Orm\DbConnector::getAdapter()->rollback();
             return $this->_saved = false;
-        }
-        //iteracja po elementach
-        foreach ($this->getElements() as $element) {
-            //powiadamianie elementu o poprawnym zapisie formularza
-            $element->onFormSaved();
         }
         //zatwierdzenie transakcji
         \Mmi\Orm\DbConnector::getAdapter()->commit();
