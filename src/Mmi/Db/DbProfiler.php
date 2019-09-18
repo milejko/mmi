@@ -10,11 +10,15 @@
 
 namespace Mmi\Db;
 
+use Mmi\App\FrontController;
+
 /**
  * Klasa profilera aplikacji
  */
 class DbProfiler
 {
+
+    const KERNEL_PROFILER_PREFIX = 'Db\Adapter\Pdo';
 
     /**
      * Dane profilera
@@ -40,7 +44,7 @@ class DbProfiler
         });
         //iteracja po kluczach
         foreach ($keys as $key => $value) {
-            //zamiana kluczy 
+            //zamiana kluczy
             if (is_int($value)) {
                 $sql = preg_replace('/\?/', $values[$key], $sql, 1);
                 continue;
@@ -52,6 +56,8 @@ class DbProfiler
             'sql' => $sql,
             'elapsed' => $elapsed,
         ];
+        //event profilera
+        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PREFIX . ': ' . substr($sql, 0, strpos($sql, ' ')));
         return $this;
     }
 

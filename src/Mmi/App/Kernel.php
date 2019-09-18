@@ -74,8 +74,8 @@ namespace Mmi\App {
             date_default_timezone_set(\App\Registry::$config->timeZone);
             //ustawianie konfiguracji loggera
             \App\Registry::$config->log ? \Mmi\Log\LoggerHelper::setConfig(\App\Registry::$config->log) : null;
-            //włączenie profilera jeśli włączony debug w aplikacji
-            \App\Registry::$config->debug ? FrontController::getInstance()->setProfiler(new KernelProfiler) : null;
+            //włączenie profilera
+            FrontController::getInstance()->setProfiler(new KernelProfiler);
             return $this;
         }
 

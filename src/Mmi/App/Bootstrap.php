@@ -18,6 +18,8 @@ use Mmi\App\FrontController;
 class Bootstrap implements BootstrapInterface
 {
 
+    const KERNEL_PROFILER_PREFIX = 'App\Bootstrap';
+
     /**
      * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
      */
@@ -91,7 +93,7 @@ class Bootstrap implements BootstrapInterface
         if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
             //wczytanie obiektu translacji z bufora
             \App\Registry::$translate = $cachedTranslate;
-            FrontController::getInstance()->getProfiler()->event('Mvc\Controller: load translate cache');
+            FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PREFIX . ': load translate cache');
             return $this;
         }
         //utworzenie obiektu tłumaczenia
@@ -107,7 +109,7 @@ class Bootstrap implements BootstrapInterface
             $cache->save(\App\Registry::$translate, $key, 0);
         }
         //event profilera
-        FrontController::getInstance()->getProfiler()->event('Mvc\Controller: translations added');
+        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PREFIX . ': translations added');
         return $this;
     }
 
@@ -185,11 +187,8 @@ class Bootstrap implements BootstrapInterface
         $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst(\App\Registry::$config->db->driver);
         //próba powołania drivera
         \App\Registry::$db = new $driver(\App\Registry::$config->db);
-        //jeśli aplikacja w trybie debug
-        if (\App\Registry::$config->debug) {
-            //wstrzyknięcie profilera do adaptera bazodanowego
-            \App\Registry::$db->setProfiler(new \Mmi\Db\DbProfiler);
-        }
+        //wstrzyknięcie profilera do adaptera bazodanowego
+        \App\Registry::$db->setProfiler(new \Mmi\Db\DbProfiler);
         //wstrzyknięcie do ORM
         \Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
         return $this;

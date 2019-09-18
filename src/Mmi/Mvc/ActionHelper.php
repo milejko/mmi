@@ -18,6 +18,9 @@ use Mmi\Http\Request;
  */
 class ActionHelper
 {
+    const KERNEL_PROFILER_ACTION_PREFIX = 'Mvc\Controller';
+    const KERNEL_PROFILER_TEMPLATE_PREFIX = 'Mvc\View';
+    const KERNEL_PROFILER_PLUGIN_PREFIX = 'Mvc\Dispatcher';
 
     /**
      * Obiekt ACL
@@ -83,7 +86,7 @@ class ActionHelper
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
             //logowanie zablokowania akcji
-            return FrontController::getInstance()->getProfiler()->event('Mvc\ActionExecuter: ' . $request->getAsColonSeparatedString() . ' blocked');
+            return FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' blocked');
         }
         //rendering szablonu jeśli akcja zwraca null
         return $this->_renderAction($request, (FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request), $main);
@@ -108,7 +111,7 @@ class ActionHelper
         foreach (FrontController::getInstance()->getPlugins() as $plugin) {
             //post dispatch
             $plugin->postDispatch($request);
-            FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: plugins post-dispatch');
+            FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PLUGIN_PREFIX . ': plugins post-dispatch');
         }
         //zmiana requestu i render layoutu
         return FrontController::getInstance()
@@ -147,7 +150,7 @@ class ActionHelper
             //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
             ->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
         //profiler wyrenderowaniu szablonu
-        FrontController::getInstance()->getProfiler()->event('Mvc\View: ' . $request->getAsColonSeparatedString() . ' rendered');
+        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_TEMPLATE_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' rendered');
         //zwrot wyrenderowanego szablonu
         return $content;
     }
@@ -172,7 +175,7 @@ class ActionHelper
     private function _invokeAction(Request $request)
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
-        FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' start');
+        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
         $structure = FrontController::getInstance()->getStructure('module');
         //sprawdzenie w strukturze
@@ -194,7 +197,7 @@ class ActionHelper
         //wywołanie akcji
         $content = (new $controllerClassName($request, FrontController::getInstance()->getView()))->$actionMethodName();
         //informacja o zakończeniu wykonywania akcji do profilera
-        FrontController::getInstance()->getProfiler()->event('Mvc\ActionHelper: ' . $request->getAsColonSeparatedString() . ' done');
+        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
     }
 }

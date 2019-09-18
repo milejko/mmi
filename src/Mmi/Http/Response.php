@@ -10,6 +10,8 @@
 
 namespace Mmi\Http;
 
+use Mmi\App\FrontController;
+
 /**
  * Klasa odpowiedzi aplikacji
  */
@@ -330,6 +332,9 @@ class Response
             //wysłanie nagłówka
             $header->send();
         }
+        //wysyłka nagółwka Server-Timing
+        (new ResponseTimingHeader(FrontController::getInstance()->getProfiler()))->getTimingHeader()->send();
+        //zwrot siebie
         return $this;
     }
 
