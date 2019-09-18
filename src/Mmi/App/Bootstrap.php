@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-use Mmi\App\FrontController;
+use Mmi\Http\ResponseTimingHeader;
 
 /**
  * Klasa rozruchu aplikacji
@@ -48,6 +48,8 @@ class Bootstrap implements BootstrapInterface
     {
         //uruchomienie front controllera
         FrontController::getInstance()->run();
+        //wysyłka nagółwka Server-Timing
+        (new ResponseTimingHeader(FrontController::getInstance()->getProfiler()))->getTimingHeader()->send();
     }
 
     /**
