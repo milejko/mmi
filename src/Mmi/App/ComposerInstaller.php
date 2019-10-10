@@ -41,7 +41,7 @@ class ComposerInstaller
         //inicjalizacja autoloadera 
         self::_initAutoload($event); 
         //linkowanie zasobów web 
-        self::_linkModuleWebResources(); 
+        self::linkModuleWebResources();
         //kopiowanie binariów z modułów 
         self::_copyModuleBinaries(); 
     } 
@@ -57,7 +57,7 @@ class ComposerInstaller
         //kopiowanie plików z dystrybucji 
         self::_copyDistFiles(); 
         //linkowanie zasobów web 
-        self::_linkModuleWebResources(); 
+        self::linkModuleWebResources();
         //kopiowanie binariów z modułów 
         self::_copyModuleBinaries(); 
     } 
@@ -117,7 +117,7 @@ class ComposerInstaller
     /** 
      * Linkuje zasoby publiczne do /web 
      */ 
-    protected static function _linkModuleWebResources() 
+    public static function linkModuleWebResources()
     { 
         //iteracja po modułach 
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) { 
