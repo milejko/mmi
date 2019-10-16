@@ -35,6 +35,9 @@ class FileHandler implements \SessionHandlerInterface
      */
     public function open($savePath, $sessionName)
     {
+        if ($savePath) {
+            $this->_namespace = $savePath . '/';
+        }
         return true;
     }
 

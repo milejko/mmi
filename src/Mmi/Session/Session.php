@@ -10,28 +10,33 @@
 
 namespace Mmi\Session;
 
+use Mmi\App\FrontController;
+
 class Session
 {
+
+    const FILE_HANDLER = 'files';
+    const REDIS_HANDLER = 'redis';
 
     /**
      * Rozpoczęcie sesji
      * @param \Mmi\Session\SessionConfig $config
+     * @throws SessionException
      */
     public static function start(\Mmi\Session\SessionConfig $config)
     {
         session_name($config->name);
         session_set_cookie_params($config->cookieLifetime, $config->cookiePath, $config->cookieDomain, $config->cookieSecure, $config->cookieHttpOnly);
         session_cache_expire($config->cacheExpire);
+        session_save_path($config->path);
         ini_set('session.gc_divisor', $config->gcDivisor);
         ini_set('session.gc_maxlifetime', $config->gcMaxLifetime);
         ini_set('session.gc_probability', $config->gcProbability);
-        if ($config->handler == 'user') {
-            $handlerClass = $config->path;
-            $handler = new $handlerClass();
-            session_set_save_handler($handler);
-        } else {
+        if ($config->handler == self::FILE_HANDLER || $config->handler == self::FILE_HANDLER) {
             ini_set('session.save_handler', $config->handler);
-            session_save_path($config->path);
+        } else {
+            $handlerClass = $config->handler;
+            session_set_save_handler(new $handlerClass());
         }
         session_start();
     }

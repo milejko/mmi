@@ -23,12 +23,6 @@ class RedisHandler implements \SessionHandlerInterface
     private $_server;
 
     /**
-     * Namespace
-     * @var string
-     */
-    private $_namespace;
-
-    /**
      * Dane w sesji
      * @var mixed
      */
@@ -75,7 +69,7 @@ class RedisHandler implements \SessionHandlerInterface
             return '';
         }
         //wyszukiwanie rekordu
-        if (null === $data = $this->_server->get($this->_namespace . $id)) {
+        if (!($data = $this->_server->get($id))) {
             //nie może zwracać null
             return ($this->_data = '');
         }
@@ -102,11 +96,11 @@ class RedisHandler implements \SessionHandlerInterface
         //puste dane sesyjne
         if (!$data) {
             //usuwamy
-            $this->_server->delete($this->_namespace . $id);
+            $this->_server->del($id);
             return true;
         }
         //ustawianie danych w Redis
-        $this->_server->set($this->_namespace . $id, $data);
+        $this->_server->set($id, $data);
         //zapis rekordu
         return true;
     }
@@ -132,7 +126,7 @@ class RedisHandler implements \SessionHandlerInterface
             return true;
         }
         //zapis pustej sesji
-        $this->write($id, null);
+        $this->_server->del($id);
         return true;
     }
 
