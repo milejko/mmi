@@ -108,6 +108,9 @@ class LoggerHelper
             case 'console':
                 $logger->pushHandler(new Handler\PHPConsoleHandler([], null, $config->getLevel()));
                 break;
+            case 'syslog':
+                $logger->pushHandler(new Handler\SyslogHandler([], null, $config->getLevel()));
+                break;
             default:
                 throw new LoggerException('Unknown handler');
         }

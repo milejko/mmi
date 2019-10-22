@@ -41,8 +41,7 @@ class LogConfigInstance extends \Mmi\OptionObject
     public function __construct()
     {
         $this->setLevelDebug()
-            ->setPath(BASE_PATH . '/var/log/app.log')
-            ->setHandler('stream');
+            ->setHandlerSyslog();
     }
 
     /**
@@ -151,6 +150,15 @@ class LogConfigInstance extends \Mmi\OptionObject
     public function setHandlerGelf()
     {
         return $this->setOption('handler', 'gelf');
+    }
+
+    /**
+     * Ustawia handler syslog
+     * @return \Mmi\OptionObject
+     */
+    public function setHandlerSyslog()
+    {
+        return $this->setOption('handler', 'syslog');
     }
 
 }
