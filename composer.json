@@ -37,7 +37,7 @@
         "ext-spl": "*",
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.5.*",
-        "symfony/console": "^3.3"
+        "symfony/console": "^5.0"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",
