@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "ext-bcmath": "*",
         "ext-date": "*",
         "ext-exif": "*",
@@ -37,7 +37,8 @@
         "ext-spl": "*",
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.5.*",
-        "symfony/console": "^5.0"
+        "symfony/console": "^5.0",
+        "doctrine/orm": "^2.7"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",

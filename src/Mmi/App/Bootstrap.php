@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -10,6 +10,14 @@
 
 namespace Mmi\App;
 
+use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use Mmi\Db\DbException;
 use Mmi\Http\ResponseTimingHeader;
 
 /**
@@ -20,11 +28,20 @@ class Bootstrap implements BootstrapInterface
 
     const KERNEL_PROFILER_PREFIX = 'App\Bootstrap';
 
+    /** @var EntityManagerInterface|null */
+    private $doctrine;
+
+    /** @var string */
+    protected $env;
+
     /**
      * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
+     *
+     * @param string $env
      */
-    public function __construct()
+    public function __construct(string $env)
     {
+        $this->env = $env;
         //ustawienie front controllera, sesji i bazy danych
         $this->_setupDatabase()
             //konfiguracja lokalnego bufora
@@ -38,7 +55,8 @@ class Bootstrap implements BootstrapInterface
             //konfiguracja lokalizacji
             ->_setupLocale()
             //konfiguracja sesji
-            ->_setupSession();
+            ->_setupSession()
+        ;
     }
 
     /**
@@ -181,10 +199,49 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupDatabase()
     {
+        if (isset(\App\Registry::$config->useDoctrine) && true === \App\Registry::$config->useDoctrine && \App\Registry::$config->doctrine) {
+            $properties = [
+                'host',
+                'port',
+                'username',
+                'password',
+                'dbName',
+                'driver'
+            ];
+            foreach ($properties as $property) {
+                if (false === property_exists(\App\Registry::$config->doctrine, $property)) {
+                    throw new DbException(
+                        sprintf(
+                            'Property "%s" is not configured under $config->doctrine',
+                            $property
+                        )
+                    );
+                }
+            }
+            $setup = Setup::createYAMLMetadataConfiguration([], 'DEV' === strtoupper($this->env));
+            $this->doctrine = EntityManager::create(
+                new Connection(
+                    [
+                        'host' => \App\Registry::$config->doctrine->host,
+                        'port' => \App\Registry::$config->doctrine->port,
+                        'username' => \App\Registry::$config->doctrine->username,
+                        'password' => \App\Registry::$config->doctrine->password,
+                        'dbname' => \App\Registry::$config->doctrine->dbName
+                    ],
+                    \App\Registry::$config->doctrine->driver
+                ),
+                Setup::createAnnotationMetadataConfiguration([], 'DEV' === strtoupper($this->env)),
+                new EventManager()
+            );
+
+            return $this;
+        }
+
         //brak konfiguracji bazy
         if (!\App\Registry::$config->db || !\App\Registry::$config->db->driver) {
             return $this;
         }
+
         //obliczanie nazwy drivera
         $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst(\App\Registry::$config->db->driver);
         //próba powołania drivera
