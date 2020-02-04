@@ -14,7 +14,7 @@ namespace Mmi\Orm;
  * Class RecordNotFoundException
  * @package Mmi\Orm
  *
- * @deprecated since 3.8 to be removed in 4.0
+ * @deprecated since 3.11 to be removed in 4.0
  */
 class RecordNotFoundException extends \Mmi\App\KernelException
 {

@@ -14,7 +14,7 @@ namespace Mmi\Orm;
  * Klasa zapytania
  * umożliwia odpytywanie DAO o Rekordy
  *
- * @deprecated since 3.8 to be removed in 4.0
+ * @deprecated since 3.11 to be removed in 4.0
  */
 class Query
 {

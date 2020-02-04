@@ -13,7 +13,7 @@ namespace Mmi\Orm;
 /**
  * Klasa dostępu do tabel w bazie danych
  *
- * @deprecated since 3.8 to be removed in 4.0
+ * @deprecated since 3.11 to be removed in 4.0
  */
 class DbConnector
 {
