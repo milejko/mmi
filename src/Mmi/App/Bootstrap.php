@@ -10,15 +10,12 @@
 
 namespace Mmi\App;
 
-use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\Configuration;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Mmi\Db\DbException;
 use Mmi\Http\ResponseTimingHeader;
+use Mmi\Orm\DoctrineFactory;
 
 /**
  * Klasa rozruchu aplikacji
@@ -48,6 +45,8 @@ class Bootstrap implements BootstrapInterface
             ->_setupLocalCache()
             //konfiguracja front controllera
             ->_setupFrontController($router = $this->_setupRouter(), $this->_setupView($router))
+            // po załadowaniu struktury
+            ->_setupDoctrine()
             //konfiguracja cache
             ->_setupCache()
             //konfiguracja tłumaczeń
@@ -198,46 +197,7 @@ class Bootstrap implements BootstrapInterface
      * @return \Mmi\App\Bootstrap
      */
     protected function _setupDatabase()
-    {
-        if (isset(\App\Registry::$config->useDoctrine) && true === \App\Registry::$config->useDoctrine && \App\Registry::$config->doctrine) {
-            $properties = [
-                'host',
-                'port',
-                'username',
-                'password',
-                'dbName',
-                'driver'
-            ];
-            foreach ($properties as $property) {
-                if (false === property_exists(\App\Registry::$config->doctrine, $property)) {
-                    throw new DbException(
-                        sprintf(
-                            'Property "%s" is not configured under $config->doctrine',
-                            $property
-                        )
-                    );
-                }
-            }
-            $setup = Setup::createYAMLMetadataConfiguration([], 'DEV' === strtoupper($this->env));
-            $this->doctrine = EntityManager::create(
-                new Connection(
-                    [
-                        'host' => \App\Registry::$config->doctrine->host,
-                        'port' => \App\Registry::$config->doctrine->port,
-                        'username' => \App\Registry::$config->doctrine->username,
-                        'password' => \App\Registry::$config->doctrine->password,
-                        'dbname' => \App\Registry::$config->doctrine->dbName
-                    ],
-                    \App\Registry::$config->doctrine->driver
-                ),
-                Setup::createAnnotationMetadataConfiguration([], 'DEV' === strtoupper($this->env)),
-                new EventManager()
-            );
-
-            return $this;
-        }
-
-        //brak konfiguracji bazy
+    {        //brak konfiguracji bazy
         if (!\App\Registry::$config->db || !\App\Registry::$config->db->driver) {
             return $this;
         }
@@ -250,6 +210,74 @@ class Bootstrap implements BootstrapInterface
         \App\Registry::$db->setProfiler(new \Mmi\Db\DbProfiler);
         //wstrzyknięcie do ORM
         \Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
+        return $this;
+    }
+
+    protected function _setupDoctrine(){
+        if (isset(\App\Registry::$config->useDoctrine) && true === \App\Registry::$config->useDoctrine && \App\Registry::$config->doctrine) {
+            $properties = [
+                'host',
+                'port',
+                'username',
+                'password',
+                'dbName',
+                'driver',
+                'databaseDriverClassName'
+            ];
+            foreach ($properties as $property) {
+                if (false === property_exists(\App\Registry::$config->doctrine, $property)) {
+                    throw new DbException(
+                        sprintf(
+                            'Property "%s" is not configured under $config->doctrine',
+                            $property
+                        )
+                    );
+                }
+            }
+            $factory = new DoctrineFactory(
+                \App\Registry::$config->doctrine->host,
+                \App\Registry::$config->doctrine->port,
+                \App\Registry::$config->doctrine->dbName,
+                \App\Registry::$config->doctrine->username,
+                \App\Registry::$config->doctrine->password,
+                'DEV' === strtoupper($this->env)
+            );
+            $structure = FrontController::getInstance()->getStructure();
+            $entities  = array_merge(
+                array_filter(
+                    $structure,
+                    function ($array, $key) {
+                        if ('entity' !== $key) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    ARRAY_FILTER_USE_BOTH
+                )
+            );
+            $mapperDefinition = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+                $entities['entity'],
+                'DEV' === strtoupper($this->env),
+                null,
+                null,
+                false
+            );
+            $cache = new FilesystemCache(
+                realpath(\App\Registry::$config->cache . '/doctrine-cache')
+            );
+            $factory->setProxyDir(
+                realpath(\App\Registry::$config->cache . '/doctrine-proxy')
+            );
+            $factory->setProxyNamespace('App\\Proxy');
+            $factory->setDatabaseDriverClassName(
+                \App\Registry::$config->doctrine->databaseDriverClassName
+            );
+            $factory->setMappingDriver($mapperDefinition->getMetadataDriverImpl());
+            $factory->setCacheDriver($cache);
+            $factory->setNamingStrategy(new UnderscoreNamingStrategy());
+            FrontController::getInstance()->setEntityManager($factory->create());
+        }
         return $this;
     }
 

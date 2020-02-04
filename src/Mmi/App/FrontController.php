@@ -85,7 +85,7 @@ class FrontController
     private $_structure;
 
     /** @var EntityManagerInterface|null */
-    private $_doctrine;
+    private $_entityManager;
 
     /**
      * Zabezpieczony konstruktor
@@ -354,9 +354,9 @@ class FrontController
     /**
      * @return EntityManagerInterface|null
      */
-    public function getDoctrine(): ?EntityManagerInterface
+    public function getEntityManager(): ?EntityManagerInterface
     {
-        return $this->_doctrine;
+        return $this->_entityManager;
     }
 
     /**
@@ -364,9 +364,9 @@ class FrontController
      *
      * @return FrontController
      */
-    public function setDoctrine(EntityManagerInterface $doctrine = null): FrontController
+    public function setEntityManager(EntityManagerInterface $doctrine = null): FrontController
     {
-        $this->_doctrine = $doctrine;
+        $this->_entityManager = $doctrine;
 
         return $this;
     }
