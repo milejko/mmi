@@ -10,6 +10,12 @@
 
 namespace Mmi\Db\Adapter;
 
+/**
+ * Class PdoSqlite
+ * @package Mmi\Db\Adapter
+ *
+ * @deprecated since 3.11 to be removed in 4.0
+ */
 class PdoSqlite extends PdoAbstract
 {
 

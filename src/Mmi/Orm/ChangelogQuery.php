@@ -12,6 +12,8 @@ namespace Mmi\Orm;
 
 /**
  * Zapytanie używane przy wdrożeniach incrementali bazy danych
+ *
+ * @deprecated since 3.11 to be removed in 4.0
  */
 class ChangelogQuery extends \Mmi\Orm\Query
 {

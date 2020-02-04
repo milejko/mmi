@@ -10,6 +10,8 @@
 
 namespace Mmi\App;
 
+use Doctrine\ORM\EntityManager;
+
 /**
  * Abstrakcyjna klasa rejestru aplikacji
  * powinna być rozszerzona przez \App\Registry
@@ -19,7 +21,7 @@ abstract class KernelRegistry
 
     /**
      * Konfiguracja aplikacji
-     * @var \App\Config
+     * @var \App\Config|KernelConfig
      */
     public static $config;
 
@@ -41,4 +43,6 @@ abstract class KernelRegistry
      */
     public static $db;
 
+    /** @var EntityManager */
+    public static $entityManager;
 }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -18,7 +18,7 @@ class Structure
 
     /**
      * Zwraca dostępne komponenty aplikacji
-     * @return array 
+     * @return array
      */
     public static function getStructure()
     {
@@ -49,6 +49,7 @@ class Structure
             'translate' => [],
             'filter' => [],
             'helper' => [],
+            'entity' => []
         ];
         //brak modułów
         if (!file_exists($path)) {
@@ -63,10 +64,29 @@ class Structure
         self::_parseAdditions($components['translate'], lcfirst($module), $path . '/Resource/i18n');
         //kontrolery
         self::_parseControllers($components['module'], lcfirst($module), $path);
+        //encje doctrine
+        self::_parseEntities($components['entity'], $path);
         //szablony
         $components['template'][lcfirst($module)] = [];
         self::_parseTemplates($components['template'][lcfirst($module)], $path . '/Resource/template');
         return $components;
+    }
+
+    private static function _parseEntities(array &$components, $path){
+        if (!file_exists($path)) {
+            return;
+        }
+        foreach (new \DirectoryIterator($path) as $entry) {
+            if ($entry->isDot()) {
+                continue;
+            }
+            if ($entry->isDir()) {
+                if('Entity' === $entry->getFilename()){
+                    $components[] = realpath($entry->getPathname());
+                }
+                self::_parseEntities($components, $entry->getPathname());
+            }
+        }
     }
 
     /**

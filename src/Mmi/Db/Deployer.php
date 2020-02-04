@@ -14,6 +14,8 @@ use \Mmi\Orm;
 
 /**
  * Klasa wdrożeń incrementali bazy danych
+ *
+ * @deprecated since 3.11 to be removed in 4.0
  */
 class Deployer
 {

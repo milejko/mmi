@@ -17,6 +17,8 @@ use Mmi\Db\Adapter\PdoBindHelper,
 
 /**
  * Klasa pola zapytania
+ *
+ * @deprecated since 3.11 to be removed in 4.0
  */
 class QueryField
 {

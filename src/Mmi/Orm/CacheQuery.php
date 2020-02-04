@@ -12,6 +12,8 @@ namespace Mmi\Orm;
 
 /**
  * Zapytanie dla rekordów cache
+ *
+ * @deprecated since 3.11 to be removed in 4.0
  */
 class CacheQuery extends \Mmi\Orm\Query
 {

@@ -345,5 +345,4 @@ class FrontController
         //pobranie odpowiedzi
         return (new \Mmi\Mvc\Dispatcher)->dispatch();
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -10,7 +10,11 @@
 
 namespace Mmi\App;
 
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
+use Mmi\Db\DbException;
 use Mmi\Http\ResponseTimingHeader;
+use Mmi\Doctrine\DoctrineFactory;
 
 /**
  * Klasa rozruchu aplikacji
@@ -20,17 +24,25 @@ class Bootstrap implements BootstrapInterface
 
     const KERNEL_PROFILER_PREFIX = 'App\Bootstrap';
 
+    /** @var string */
+    protected $env;
+
     /**
      * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
+     *
+     * @param string $env
      */
-    public function __construct()
+    public function __construct(string $env)
     {
+        $this->env = $env;
         //ustawienie front controllera, sesji i bazy danych
         $this->_setupDatabase()
             //konfiguracja lokalnego bufora
             ->_setupLocalCache()
             //konfiguracja front controllera
             ->_setupFrontController($router = $this->_setupRouter(), $this->_setupView($router))
+            // po załadowaniu struktury
+            ->_setupDoctrine()
             //konfiguracja cache
             ->_setupCache()
             //konfiguracja tłumaczeń
@@ -38,7 +50,8 @@ class Bootstrap implements BootstrapInterface
             //konfiguracja lokalizacji
             ->_setupLocale()
             //konfiguracja sesji
-            ->_setupSession();
+            ->_setupSession()
+        ;
     }
 
     /**
@@ -180,11 +193,11 @@ class Bootstrap implements BootstrapInterface
      * @return \Mmi\App\Bootstrap
      */
     protected function _setupDatabase()
-    {
-        //brak konfiguracji bazy
+    {        //brak konfiguracji bazy
         if (!\App\Registry::$config->db || !\App\Registry::$config->db->driver) {
             return $this;
         }
+
         //obliczanie nazwy drivera
         $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst(\App\Registry::$config->db->driver);
         //próba powołania drivera
@@ -193,6 +206,77 @@ class Bootstrap implements BootstrapInterface
         \App\Registry::$db->setProfiler(new \Mmi\Db\DbProfiler);
         //wstrzyknięcie do ORM
         \Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
+        return $this;
+    }
+
+    protected function _setupDoctrine(){
+        if (isset(\App\Registry::$config->useDoctrine) && true === \App\Registry::$config->useDoctrine && \App\Registry::$config->doctrine) {
+            $properties = [
+                'host',
+                'port',
+                'username',
+                'password',
+                'dbName',
+                'driver',
+                'databaseDriverClassName'
+            ];
+            foreach ($properties as $property) {
+                if (false === property_exists(\App\Registry::$config->doctrine, $property)) {
+                    throw new DbException(
+                        sprintf(
+                            'Property "%s" is not configured under $config->doctrine',
+                            $property
+                        )
+                    );
+                }
+            }
+            $factory = new DoctrineFactory(
+                \App\Registry::$config->doctrine->host,
+                \App\Registry::$config->doctrine->port,
+                \App\Registry::$config->doctrine->dbName,
+                \App\Registry::$config->doctrine->username,
+                \App\Registry::$config->doctrine->password,
+                'DEV' === strtoupper($this->env)
+            );
+            $structure = FrontController::getInstance()->getStructure();
+            $entities  = array_merge(
+                array_filter(
+                    $structure,
+                    function ($array, $key) {
+                        if ('entity' !== $key) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    ARRAY_FILTER_USE_BOTH
+                )
+            );
+            $mapperDefinition = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+                $entities['entity'],
+                'DEV' === strtoupper($this->env),
+                null,
+                null,
+                false
+            );
+            $reader = new \Doctrine\Common\Annotations\AnnotationReader();
+            $driver = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, $entities['entity']);
+            $mapperDefinition->setMetadataDriverImpl($driver);
+            $cache = new FilesystemCache(
+                realpath(\App\Registry::$config->cache . '/doctrine-cache')
+            );
+            $factory->setProxyDir(
+                realpath(\App\Registry::$config->cache . '/doctrine-proxy')
+            );
+            $factory->setProxyNamespace(new \App\Registry::$config->doctrine->proxyNamespace);
+            $factory->setDatabaseDriverClassName(
+                \App\Registry::$config->doctrine->databaseDriverClassName
+            );
+            $factory->setMappingDriver($mapperDefinition->getMetadataDriverImpl());
+            $factory->setCacheDriver($cache);
+            $factory->setNamingStrategy(new \App\Registry::$config->doctrine->namingStrategy);
+            \App\Registry::$entityManager = $factory->create();
+        }
         return $this;
     }
 
