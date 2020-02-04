@@ -11,7 +11,6 @@
 namespace Mmi\App;
 
 use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Mmi\Db\DbException;
 use Mmi\Http\ResponseTimingHeader;
@@ -24,9 +23,6 @@ class Bootstrap implements BootstrapInterface
 {
 
     const KERNEL_PROFILER_PREFIX = 'App\Bootstrap';
-
-    /** @var EntityManagerInterface|null */
-    private $doctrine;
 
     /** @var string */
     protected $env;
@@ -276,7 +272,7 @@ class Bootstrap implements BootstrapInterface
             $factory->setMappingDriver($mapperDefinition->getMetadataDriverImpl());
             $factory->setCacheDriver($cache);
             $factory->setNamingStrategy(new UnderscoreNamingStrategy());
-            FrontController::getInstance()->setEntityManager($factory->create());
+            \App\Registry::$entityManager = $factory->create();
         }
         return $this;
     }

@@ -10,8 +10,6 @@
 
 namespace Mmi\App;
 
-use Doctrine\ORM\EntityManagerInterface;
-
 /**
  * Klasa implementująca kontroler frontu
  */
@@ -83,9 +81,6 @@ class FrontController
      * @var array
      */
     private $_structure;
-
-    /** @var EntityManagerInterface|null */
-    private $_entityManager;
 
     /**
      * Zabezpieczony konstruktor
@@ -349,25 +344,5 @@ class FrontController
     {
         //pobranie odpowiedzi
         return (new \Mmi\Mvc\Dispatcher)->dispatch();
-    }
-
-    /**
-     * @return EntityManagerInterface|null
-     */
-    public function getEntityManager(): ?EntityManagerInterface
-    {
-        return $this->_entityManager;
-    }
-
-    /**
-     * @param EntityManagerInterface|null $doctrine
-     *
-     * @return FrontController
-     */
-    public function setEntityManager(EntityManagerInterface $doctrine = null): FrontController
-    {
-        $this->_entityManager = $doctrine;
-
-        return $this;
     }
 }

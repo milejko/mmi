@@ -3,7 +3,6 @@
 namespace Mmi\Console;
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Mmi\App\FrontController;
 use Mmi\Mvc\StructureParser;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,7 +41,7 @@ class Application extends BaseApplication
 
         if (isset(\App\Registry::$config->useDoctrine) && true === \App\Registry::$config->useDoctrine && \App\Registry::$config->doctrine) {
             // init doctrine commands
-            $helperSet = ConsoleRunner::createHelperSet(FrontController::getInstance()->getEntityManager());
+            $helperSet = ConsoleRunner::createHelperSet(\App\Registry::$entityManager);
             $this->setHelperSet($helperSet);
             ConsoleRunner::addCommands($this);
         }
