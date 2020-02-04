@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Mmi\Orm;
+namespace Mmi\Doctrine;
 
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping\NamingStrategy;
 /**
  * Class DoctrineFactory
  * Package Mmi\App
- *
- * @deprecated since 3.11 to be removed in 4.0
  */
 class DoctrineFactory
 {

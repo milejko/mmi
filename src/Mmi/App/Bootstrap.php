@@ -14,7 +14,7 @@ use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Mmi\Db\DbException;
 use Mmi\Http\ResponseTimingHeader;
-use Mmi\Orm\DoctrineFactory;
+use Mmi\Doctrine\DoctrineFactory;
 
 /**
  * Klasa rozruchu aplikacji
@@ -259,6 +259,9 @@ class Bootstrap implements BootstrapInterface
                 null,
                 false
             );
+            $reader = new \Doctrine\Common\Annotations\AnnotationReader();
+            $driver = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, $entities['entity']);
+            $mapperDefinition->setMetadataDriverImpl($driver);
             $cache = new FilesystemCache(
                 realpath(\App\Registry::$config->cache . '/doctrine-cache')
             );
