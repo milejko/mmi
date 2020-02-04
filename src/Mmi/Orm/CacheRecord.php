@@ -14,6 +14,8 @@ use Mmi\Db\DbException;
 
 /**
  * Rekord cache
+ *
+ * @deprecated since 3.8 to be removed in 4.0
  */
 class CacheRecord extends \Mmi\Orm\Record
 {

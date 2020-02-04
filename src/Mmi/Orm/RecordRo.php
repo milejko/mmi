@@ -12,6 +12,8 @@ namespace Mmi\Orm;
 
 /**
  * Klasa rekordu tylko do odczytu
+ *
+ * @deprecated since 3.8 to be removed in 4.0
  */
 class RecordRo
 {

@@ -12,6 +12,8 @@ namespace Mmi\Orm;
 
 /**
  * Rekord incrementala bazy danych
+ *
+ * @deprecated since 3.8 to be removed in 4.0
  */
 class ChangelogRecord extends \Mmi\Orm\Record
 {

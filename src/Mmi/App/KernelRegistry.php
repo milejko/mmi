@@ -21,7 +21,7 @@ abstract class KernelRegistry
 
     /**
      * Konfiguracja aplikacji
-     * @var \App\Config
+     * @var \App\Config|KernelConfig
      */
     public static $config;
 

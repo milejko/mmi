@@ -12,6 +12,8 @@ namespace Mmi\Orm;
 
 /**
  * Rekord sesji
+ *
+ * @deprecated since 3.8 to be removed in 4.0
  */
 class SessionRecord extends \Mmi\Orm\Record
 {

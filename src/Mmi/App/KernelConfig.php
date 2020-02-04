@@ -10,6 +10,8 @@
 
 namespace Mmi\App;
 
+use Mmi\Doctrine\DoctrineConfig;
+
 /**
  * Klasa konfiguracji aplikacji
  */
@@ -33,6 +35,9 @@ abstract class KernelConfig
      * @var \Mmi\Db\DbConfig
      */
     public $db;
+
+    /** @var DoctrineConfig */
+    public $doctrine;
 
     /**
      * Konfiguracja loggera

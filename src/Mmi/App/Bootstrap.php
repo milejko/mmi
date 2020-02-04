@@ -265,13 +265,13 @@ class Bootstrap implements BootstrapInterface
             $factory->setProxyDir(
                 realpath(\App\Registry::$config->cache . '/doctrine-proxy')
             );
-            $factory->setProxyNamespace('App\\Proxy');
+            $factory->setProxyNamespace(new \App\Registry::$config->doctrine->proxyNamespace);
             $factory->setDatabaseDriverClassName(
                 \App\Registry::$config->doctrine->databaseDriverClassName
             );
             $factory->setMappingDriver($mapperDefinition->getMetadataDriverImpl());
             $factory->setCacheDriver($cache);
-            $factory->setNamingStrategy(new UnderscoreNamingStrategy());
+            $factory->setNamingStrategy(new \App\Registry::$config->doctrine->namingStrategy);
             \App\Registry::$entityManager = $factory->create();
         }
         return $this;

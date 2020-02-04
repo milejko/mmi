@@ -12,6 +12,8 @@ namespace Mmi\Db\Adapter;
 
 /**
  * Klasa generująca kolejne klucze bind
+ *
+ * @deprecated since 3.8 to be removed in 4.0
  */
 class PdoBindHelper
 {
