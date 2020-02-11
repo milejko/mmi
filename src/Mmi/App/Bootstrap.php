@@ -201,7 +201,7 @@ class Bootstrap implements BootstrapInterface
                 'cache' => realpath(\App\Registry::$config->cache . '/twig')
             ]
         );
-        $loader->addPath(realpath(__DIR__).'/src/Mmi/Resource/template', 'MMI');
+        $loader->addPath(realpath(__DIR__).'/../Resource/template', 'MMI');
         \App\Registry::$twig = $twig;
     }
 
