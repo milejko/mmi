@@ -18,11 +18,12 @@ class BootstrapCli extends \Mmi\App\Bootstrap
 
     /**
      * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
+     * @param string $env
      */
-    public function __construct()
+    public function __construct(string $env)
     {
         \App\Registry::$config->session = null;
-        parent::__construct();
+        parent::__construct($env);
     }
 
     /**

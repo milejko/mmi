@@ -14,6 +14,8 @@ use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Mmi\Db\DbException;
 use Mmi\Http\ResponseTimingHeader;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Mmi\Doctrine\DoctrineFactory;
 
 /**
@@ -51,6 +53,7 @@ class Bootstrap implements BootstrapInterface
             ->_setupLocale()
             //konfiguracja sesji
             ->_setupSession()
+            ->_setupTwig();
         ;
     }
 
@@ -188,12 +191,27 @@ class Bootstrap implements BootstrapInterface
         return $this;
     }
 
+    protected function _setupTwig()
+    {
+        $loader = new FilesystemLoader();
+        $twig   = new Environment(
+            $loader,
+            [
+                'debug' => 'DEV' === strtoupper($this->env),
+                'cache' => realpath(\App\Registry::$config->cache . '/twig')
+            ]
+        );
+        $loader->addPath(realpath(__DIR__).'/src/Mmi/Resource/template', 'MMI');
+        \App\Registry::$twig = $twig;
+    }
+
     /**
      * Ustawianie przechowywania
      * @return \Mmi\App\Bootstrap
      */
     protected function _setupDatabase()
-    {        //brak konfiguracji bazy
+    {
+        //brak konfiguracji bazy
         if (!\App\Registry::$config->db || !\App\Registry::$config->db->driver) {
             return $this;
         }

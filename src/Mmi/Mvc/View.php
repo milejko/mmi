@@ -10,7 +10,7 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\FrontController;
+use Twig\TwigFunction;
 
 /**
  * Klasa widoku
@@ -20,6 +20,7 @@ use Mmi\App\FrontController;
  */
 class View extends \Mmi\DataObject
 {
+    const TEMPLATE_REGEX ='/(\@[a-zA-Z0-9\_\-]+)?([a-zA-Z\.\_\-0-9\/]+)(\.html\.twig|\.html)/m';
 
     /**
      * Bieżąca wersja językowa
@@ -309,13 +310,40 @@ class View extends \Mmi\DataObject
      */
     public function renderTemplate($path)
     {
+        if (true === \App\Registry::$twig->getLoader()->exists($path)) {
+            return $this->renderTwigTemplate($path);
+        }
+
         //wyszukiwanie template
         if (null === $template = $this->getTemplateByPath($path)) {
             //brak template
             return;
         }
+        $twigPath = preg_replace('/(.*)(\.tpl)/i', '$1.html.twig', $path);
+
+        if (true === \App\Registry::$twig->getLoader()->exists($twigPath)) {
+            return $this->renderTwigTemplate($twigPath);
+        }
+
         //kompilacja szablonu
         return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . \App\Registry::$translate->getLocale() . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+    }
+
+    public function renderTwigTemplate($path){
+        $data = [];
+        $reflect = new \ReflectionObject($this);
+        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $methods = $reflect->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+        foreach ($props as $property) {
+            $data[$property->getName()] = $this->{$property->getName()};
+        }
+
+        foreach ($methods as $method) {
+            \App\Registry::$twig->addFunction(new TwigFunction($method->getName(), [$this, $method->getName()]));
+        }
+
+        return \App\Registry::$twig->render($path, $data);
     }
 
     /**

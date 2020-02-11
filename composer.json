@@ -38,7 +38,8 @@
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.5.*",
         "symfony/console": "^5.0",
-        "doctrine/orm": "^2.7"
+        "doctrine/orm": "^2.7",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",

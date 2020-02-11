@@ -45,4 +45,7 @@ abstract class KernelRegistry
 
     /** @var EntityManager */
     public static $entityManager;
+
+    /** @var \Twig\Environment */
+    public static $twig;
 }
