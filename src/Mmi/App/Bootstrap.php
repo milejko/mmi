@@ -203,6 +203,7 @@ class Bootstrap implements BootstrapInterface
         );
         $loader->addPath(realpath(__DIR__).'/../Resource/template', 'MMI');
         \App\Registry::$twig = $twig;
+        return $this;
     }
 
     /**
