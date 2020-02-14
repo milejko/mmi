@@ -198,7 +198,7 @@ class Bootstrap implements BootstrapInterface
             $loader,
             [
                 'debug' => 'DEV' === strtoupper($this->env),
-                'cache' => realpath(\App\Registry::$config->cache . '/twig')
+                'cache' =>\App\Registry::$config->cache->path . DIRECTORY_SEPARATOR. 'twig'
             ]
         );
         $loader->addPath(realpath(__DIR__).'/../Resource/template', 'MMI');
