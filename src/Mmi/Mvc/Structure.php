@@ -104,6 +104,9 @@ class Structure
             if ($template->isDot()) {
                 continue;
             }
+            if(strpos($template->getPathname(), '.twig') > 0){
+                continue;
+            }
             if ($template->isFile()) {
                 $components[substr($template->getFilename(), 0, -4)] = $template->getPathname();
                 continue;
