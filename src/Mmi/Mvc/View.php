@@ -319,9 +319,13 @@ class View extends \Mmi\DataObject
             //brak template
             return;
         }
-        $twigPath = preg_replace('/(.*)(\.tpl)/i', '$1.html.twig', $path);
-
+        $twigPath = realpath(preg_replace('/(.*)(\.tpl)/i', '$1.html.twig', $template));
+        $templateModulePattern      = '/^([a-zA-Z\_\-]+)\/([a-zA-Z\_\-]+)\/([a-zA-Z\_\-]+)$/i';
+        if(preg_match($templateModulePattern, $path)){
+            $twigPath = preg_replace($templateModulePattern, '@$1/$2/$3.html.twig', $path);
+        }
         if (true === \App\Registry::$twig->getLoader()->exists($twigPath)) {
+            $this->setLayoutDisabled(true);
             return $this->renderTwigTemplate($twigPath);
         }
 
