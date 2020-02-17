@@ -10,6 +10,7 @@
 
 namespace Mmi\Mvc;
 
+use Mmi\Mvc\ViewHelper\HelperAbstract;
 use Twig\TwigFunction;
 
 /**
@@ -434,6 +435,10 @@ class View extends \Mmi\DataObject
         }
         //zwrot layoutu aplikacyjnego
         return 'app/layout';
+    }
+
+    public function registerHelper(HelperAbstract $helper){
+        $this->_helpers[get_class($helper)] = $helper;
     }
 
 }
