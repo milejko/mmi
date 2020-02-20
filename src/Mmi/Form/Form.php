@@ -240,7 +240,7 @@ abstract class Form extends \Mmi\OptionObject
      * @param \Mmi\Orm\Record $record
      * @return \Mmi\Form\Form
      */
-    public final function setFromRecord(\Mmi\Orm\Record $record)
+    public function setFromRecord(\Mmi\Orm\Record $record)
     {
         //dane z rekordu i z opcji
         return $this->setFromArray($record->toArray());
