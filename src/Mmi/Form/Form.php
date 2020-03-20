@@ -171,6 +171,17 @@ abstract class Form extends \Mmi\OptionObject
     }
 
     /**
+     * Ustawia czy wysłany formularz jest poprawny
+     * @param boolean $valid
+     * @return self
+     */
+    public final function setValid($valid = true)
+    {
+        $this->_valid = $valid;
+        return $this;
+    }
+
+    /**
      * Walidacja formularza
      * @return boolean
      */
