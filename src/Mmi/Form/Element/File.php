@@ -35,17 +35,26 @@ class File extends ElementAbstract
         parent::setForm($form);
         //nazwa pola
         $namespace = $form->getBaseName();
-        $fieldName = $this->getName();
+        $fieldName = str_replace(['[', ']'], '', $this->getName());
+        $fieldNameWithSquareBracket = $fieldName.'[]';
         //brak załadowanych plików
         if (\Mmi\App\FrontController::getInstance()->getRequest()->getFiles()->isEmpty()) {
             return $this;
         }
         $files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles()->getAsArray();
         //brak pliku
-        if (!isset($files[$namespace]) || !isset($files[$namespace][$fieldName])) {
+        if (!isset($files[$namespace])) {
             return $this;
         }
-        $this->_files = $files[$namespace][$fieldName];
+
+        if (true === array_key_exists($fieldName, $files[$namespace])) {
+            $this->_files = $files[$namespace][$fieldName];
+        }
+
+        if (true === array_key_exists($fieldNameWithSquareBracket, $files[$namespace])) {
+            $this->_files = $files[$namespace][$fieldNameWithSquareBracket];
+        }
+
         return $this;
     }
 
