@@ -84,7 +84,7 @@ class File extends ElementAbstract
     {
         $result = true;
         //waliduje poprawnie jeśli niewymagane, ale tylko gdy niepuste
-        if (!($this->getRequired() || empty($this->getFiles()))) {
+        if (false === $this->getRequired() && true === empty($this->getFiles())) {
             return $result;
         }
         //iteracja po walidatorach
