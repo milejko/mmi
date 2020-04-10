@@ -23,7 +23,7 @@ class DbDeployCommand extends CommandAbstract
     public function execute(InputInterface $input, OutputInterface $output)
     {
         (new \Mmi\Db\Deployer)->deploy();
-        return 1;
+        return 0;
     }
 
 }
