@@ -29,10 +29,7 @@ class PdoMysql extends PdoAbstract
      */
     public function setDefaultImportParams()
     {
-        $this->query('SET NAMES utf8;
-			SET time_zone = \'SYSTEM\';
-			SET sql_mode = \'NO_AUTO_VALUE_ON_ZERO\';
-		');
+        $this->query('SET time_zone = \'SYSTEM\';SET sql_mode = \'NO_AUTO_VALUE_ON_ZERO\';');
         return $this;
     }
 
