@@ -36,10 +36,8 @@ class Submit extends ElementAbstract
      */
     public function fetchField()
     {
-        //labelka jako value
-        if ($this->getLabel()) {
-            $this->setValue($this->getLabel());
-        }
+        //ustawianie wartości
+        $this->setValue($this->getValue() ? $this->getValue() : 1);
         //rendering szablonu
         return parent::fetchField();
     }
