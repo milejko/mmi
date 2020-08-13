@@ -53,7 +53,7 @@ class Cookie
         $this->_options['path'] = $path;
         $this->_options['secure'] = $secure;
         $this->_options['httpOnly'] = $httpOnly;
-        $this->_options['samesite'] = $sameSite;
+        $this->_options['sameSite'] = $sameSite;
     }
 
     /**
