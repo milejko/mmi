@@ -98,7 +98,7 @@ class RedisHandler implements CacheHandlerInterface
      */
     public function delete($key)
     {
-        $this->_server->delete($this->_namespace . '_' . $key);
+        $this->_server->del($this->_namespace . '_' . $key);
         return true;
     }
 
