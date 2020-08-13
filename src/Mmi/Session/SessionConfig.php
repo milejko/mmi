@@ -53,6 +53,12 @@ class SessionConfig
     public $cookieHttpOnly = false;
 
     /**
+     * Samesite cookie property
+     * @var string
+     */
+    public $cookieSameSite = 'None';
+
+    /**
      * Czas wygasania cache w sekundach
      * @var int
      */
