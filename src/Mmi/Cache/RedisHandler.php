@@ -87,7 +87,7 @@ class RedisHandler implements CacheHandlerInterface
      */
     public function save($key, $data, $lifeTime)
     {
-        $this->_server->set($this->_namespace . '_' . $key, $data);
+        $this->_server->set($this->_namespace . '_' . $key, $data, $lifeTime);
         return true;
     }
 
