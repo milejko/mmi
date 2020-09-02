@@ -133,7 +133,7 @@ class Bootstrap implements BootstrapInterface
             \Mmi\Session\Session::start(\App\Registry::$config->session);
         } catch (\Mmi\App\KernelException $e) {
             //błąd uruchamiania sesji
-            FrontController::getInstance()->getLogger()->error('Unable to start session');
+            FrontController::getInstance()->getLogger()->error('Unable to start session, reason: ' . $e->getMessage());
         }
         return $this;
     }
