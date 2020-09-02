@@ -100,7 +100,7 @@ class LoggerHelper
                 $logger->pushHandler(new Handler\StreamHandler($config->getPath(), $config->getLevel()));
                 break;
             case 'gelf':
-                $logger->pushHandler(new Handler\GelfHandler(new \Gelf\Publisher($config->getPath())));
+                $logger->pushHandler(new Handler\GelfHandler(new \Gelf\Publisher($config->getPath()), $config->getLevel()));
                 break;
             case 'slack':
                 $logger->pushHandler(new Handler\SlackHandler($config->getToken(), $config->getPath(), $logger->getName(), true, null, $config->getLevel()));
