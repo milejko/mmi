@@ -25,6 +25,7 @@ class WeblinksCommand extends CommandAbstract
     {
         ComposerInstaller::linkModuleWebResources();
         $output->writeln('Symlinks created');
+        return 0;
     }
 
 }
