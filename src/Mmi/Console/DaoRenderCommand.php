@@ -27,8 +27,8 @@ class DaoRenderCommand extends CommandAbstract
             //buduje struktruę dla tabeli
             \Mmi\Orm\Builder::buildFromTableName($tableName);
         }
-
         $output->writeln('DAO classess rendered');
+        return 0;
     }
 
 }

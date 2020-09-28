@@ -26,8 +26,8 @@ class FlushCacheCommand extends CommandAbstract
         \Mmi\App\FrontController::getInstance()->getLocalCache()->flush();
         //czyszczenie bufora aplikacyjnego
         \App\Registry::$cache->flush();
-
         $output->writeln('Cache flushed');
+        return 0;
     }
 
 }
