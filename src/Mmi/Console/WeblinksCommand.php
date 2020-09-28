@@ -23,7 +23,12 @@ class WeblinksCommand extends CommandAbstract
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        ComposerInstaller::linkModuleWebResources();
+        try {
+            ComposerInstaller::linkModuleWebResources();
+        } catch (\Exception $e) {
+            $output->writeln('Error');
+            return 1;
+        }
         $output->writeln('Symlinks created');
         return 0;
     }

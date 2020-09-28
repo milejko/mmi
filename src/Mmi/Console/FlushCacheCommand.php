@@ -22,10 +22,15 @@ class FlushCacheCommand extends CommandAbstract
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        //czyszczenie bufora systemowego
-        \Mmi\App\FrontController::getInstance()->getLocalCache()->flush();
-        //czyszczenie bufora aplikacyjnego
-        \App\Registry::$cache->flush();
+        try {
+            //czyszczenie bufora systemowego
+            \Mmi\App\FrontController::getInstance()->getLocalCache()->flush();
+            //czyszczenie bufora aplikacyjnego
+            \App\Registry::$cache->flush();
+        } catch (\Exception $e) {
+            $output->writeln('Error');
+            return 1;
+        }
         $output->writeln('Cache flushed');
         return 0;
     }
