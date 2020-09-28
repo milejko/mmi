@@ -22,7 +22,12 @@ class DbDeployCommand extends CommandAbstract
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        (new \Mmi\Db\Deployer)->deploy();
+        try {
+            (new \Mmi\Db\Deployer)->deploy();
+        } catch (\Exception $e) {
+            $output->writeln('Error');
+            return 1;
+        }
         return 0;
     }
 
