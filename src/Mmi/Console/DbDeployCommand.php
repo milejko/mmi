@@ -25,7 +25,7 @@ class DbDeployCommand extends CommandAbstract
         try {
             (new \Mmi\Db\Deployer)->deploy();
         } catch (\Exception $e) {
-            $output->writeln('Error');
+            $output->writeln($e->getMessage());
             return 1;
         }
         return 0;
