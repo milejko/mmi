@@ -43,7 +43,7 @@ class MemcacheHandler implements CacheHandlerInterface
      */
     public function __construct(Cache $cache)
     {
-        $this->_namespace = BASE_PATH;
+        $this->_namespace = md5(__FILE__);
         $this->_config = $cache->getConfig();
         $this->_connect();
     }
