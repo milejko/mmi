@@ -116,6 +116,8 @@ class FrontController
     {
         //dodawanie pluginu
         $this->_plugins[] = $plugin;
+        //metoda uruchamiana po zarejestrowaniu pluginu
+        $plugin->pluginRegistered();
         //zwrot siebie
         return $this;
     }

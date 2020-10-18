@@ -55,6 +55,10 @@ class Structure
             return $components;
         }
         $module = basename($path);
+        //dodawanie konfiguracji DI
+        if (file_exists($diPath = $path . '/di.php')) {
+            $components['di'][] = $diPath;
+        }
         //helpery widoku
         self::_parseAdditions($components['helper'], $module, $path . '/Mvc/ViewHelper');
         //filtry

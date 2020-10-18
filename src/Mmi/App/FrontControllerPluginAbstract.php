@@ -14,6 +14,14 @@ class FrontControllerPluginAbstract
 {
 
     /**
+     * Metoda wykonywana tu po rejestracji pluginu
+     */
+    public function pluginRegistered()
+    {
+        
+    }
+
+    /**
      * Metoda wykona się przed routingiem
      * @param \Mmi\Http\Request $request 
      */

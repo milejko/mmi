@@ -52,7 +52,7 @@ class StructureParser
             if (!$module->isDir() || $module->isDot() || !self::_moduleValid($module->getPathname())) {
                 continue;
             }
-            $modules[] = $module->getPathname();
+            $modules[] = realpath($module->getPathname());
         }
         return $modules;
     }
@@ -71,7 +71,7 @@ class StructureParser
                 if (!$module->isDir() || $module->isDot() || !self::_moduleValid($module->getPathname())) {
                     continue;
                 }
-                $modules[] = $module->getPathname();
+                $modules[] = realpath($module->getPathname());
             }
         }
         return $modules;
@@ -96,7 +96,7 @@ class StructureParser
                 if (!$vendorName->isDir() || $vendorName->isDot() || !file_exists($vendorName->getPathname() . '/src')) {
                     continue;
                 }
-                $vendors[] = $vendorName->getPathname() . '/src';
+                $vendors[] = realpath($vendorName->getPathname() . '/src');
             }
         }
         return $vendors;

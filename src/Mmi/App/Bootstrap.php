@@ -11,6 +11,7 @@
 namespace Mmi\App;
 
 use Mmi\Http\ResponseTimingHeader;
+use DI\ContainerBuilder;
 
 /**
  * Klasa rozruchu aplikacji
@@ -31,6 +32,8 @@ class Bootstrap implements BootstrapInterface
             ->_setupLocalCache()
             //konfiguracja front controllera
             ->_setupFrontController($router = $this->_setupRouter(), $this->_setupView($router))
+            //ustawienie DI
+            ->_setupDI()
             //konfiguracja cache
             ->_setupCache()
             //konfiguracja tłumaczeń
@@ -64,6 +67,30 @@ class Bootstrap implements BootstrapInterface
     }
 
     /**
+     * Ustawia dependency injection
+     * @return \Mmi\App\Bootstrap
+     */
+    protected function _setupDI()
+    {
+        //konfiguracja kontenera
+        $builder = new ContainerBuilder();
+        $builder->useAutowiring(true);
+        $builder->useAnnotations(true);
+        $builder->ignorePhpDocErrors(true);
+        //flaga compile wyłącza cache
+        if (!\App\Registry::$config->compile) {
+            $builder->enableCompilation(BASE_PATH . '/var/compile');
+            $builder->writeProxiesToFile(true, BASE_PATH . '/var/compile');
+        }
+        //dodawanie definicji DI
+        foreach (FrontController::getInstance()->getStructure('di') as $diConfigPath) {
+            $builder->addDefinitions($diConfigPath);
+        }
+        \App\Registry::$di = $builder->build();
+        return $this;
+    }
+
+    /**
      * Inicjalizacja lokalizacji
      * @return \Mmi\App\Bootstrap
      */
@@ -83,6 +110,10 @@ class Bootstrap implements BootstrapInterface
         return $this;
     }
 
+    /**
+     * Ustawia tłumaczenia
+     * @return \Mmi\App\Bootstrap
+     */
     protected function _setupTranslate()
     {
         //pobranie struktury translatora

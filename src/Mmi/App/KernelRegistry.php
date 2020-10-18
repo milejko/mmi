@@ -41,4 +41,10 @@ abstract class KernelRegistry
      */
     public static $db;
 
+    /**
+     * Kontener DI
+     * @var \DI\Container
+     */
+    public static $di;
+
 }

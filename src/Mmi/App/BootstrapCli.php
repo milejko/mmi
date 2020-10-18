@@ -13,7 +13,7 @@ namespace Mmi\App;
 /**
  * Bootstrap aplikacji CMD
  */
-class BootstrapCli extends \Mmi\App\Bootstrap
+class BootstrapCli extends Bootstrap
 {
 
     /**
