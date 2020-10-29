@@ -10,7 +10,8 @@
 
 namespace Mmi\Http;
 
-use Mmi\App\FrontController;
+use Mmi\App\App;
+use Mmi\Mvc\Router;
 
 /**
  * Klasa odpowiedzi aplikacji
@@ -47,6 +48,25 @@ class Response
      * @var integer
      */
     private $_code = 200;
+
+    /**
+     * Router
+     * @var Router
+     */
+    private $router;
+
+    /**
+     * HTTP server environment
+     * @var HttpServerEnv
+     */
+    private $httpServerEnv;
+
+    public function __construct(Router $router, HttpServerEnv $httpServerEnv)
+    {
+        //injects
+        $this->router        = $router;
+        $this->httpServerEnv = $httpServerEnv;
+    }
 
     /**
      * Rzutowanie na ciąg zwraca content
@@ -358,7 +378,7 @@ class Response
         //opcjonalne uruchomienie panelu deweloperskiego
         if ($this->_debug) {
             //debugger wykonuje zmianę w contencie
-            new \Mmi\Http\ResponseDebugger;
+            App::$di->get(ResponseDebugger::class);
         }
         //zwrot zawartości
         echo $this->_content;
@@ -374,15 +394,8 @@ class Response
      * @param array $params parametry
      * @param boolean $reset reset parametrów z URL - domyślnie włączony
      */
-    public function redirect($module, $controller = null, $action = null, array $params = [], $reset = true)
+    public function redirect($module, $controller = null, $action = null, array $params = [])
     {
-        //jeśli włączone resetowanie parametrów
-        if (!$reset) {
-            //parametry z requestu front controllera
-            $requestParams = \Mmi\App\FrontController::getInstance()->getRequest()->toArray();
-            //łączenie z parametrami z metody
-            $params = array_merge($requestParams, $params);
-        }
         //jeśli istnieje akcja
         if ($action !== null) {
             $params['action'] = $action;
@@ -404,7 +417,7 @@ class Response
     public function redirectToRoute(array $params = [])
     {
         //przekierowanie na url
-        $this->redirectToUrl(\Mmi\App\FrontController::getInstance()->getView()->url($params, true));
+        $this->redirectToUrl($this->httpServerEnv->baseUrl . $this->router->encodeUrl($params));
     }
 
     /**

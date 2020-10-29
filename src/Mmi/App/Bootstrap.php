@@ -163,9 +163,9 @@ class Bootstrap implements BootstrapInterface
             $this->_config->localCache->active = 0;
         }
         //ustawienie bufora systemowy aplikacji
-        //FrontController::getInstance()->setLocalCache(new \Mmi\Cache\Cache($this->_config->localCache));
+        FrontController::getInstance()->setLocalCache(new \Mmi\Cache\Cache($this->_config->localCache));
         //wstrzyknięcie cache do ORM
-        //\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getLocalCache());
+        \Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getLocalCache());
         return $this;
     }
 
@@ -223,7 +223,7 @@ class Bootstrap implements BootstrapInterface
             ->getResponse()->setDebug($this->_config->debug);
         //rejestracja pluginów
         foreach ($this->_config->plugins as $plugin) {
-            //FrontController::getInstance()->registerPlugin(new $plugin());
+            FrontController::getInstance()->registerPlugin(new $plugin());
         }
         return $this;
     }

@@ -4,21 +4,24 @@
  * Mmi Framework (https://github.com/milejko/mmi.git)
  *
  * @link       https://github.com/milejko/mmi.git
- * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
+ * @copyright  Copyright (c) 2010-2020 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
 namespace Mmi\App;
 
-use App\Config;
 use DI\ContainerBuilder;
 use DI\Container;
-use Mmi\Cache\CacheConfig;
 use Mmi\Mvc\Structure;
 use Dotenv\Dotenv;
+use Mmi\Http\Request;
+use Mmi\Http\Response;
+use Mmi\Mvc\ActionHelper;
+
+use function DI\autowire;
 
 /**
- * Klasa aplikacji
+ * Application class
  */
 class App
 {
@@ -32,48 +35,69 @@ class App
     public static $di;
 
     /**
-     * Konstruktor
+     * @var array
+     */
+    public static $structure;
+
+    /**
+     * @var AppPluginInterface[]
+     */
+    private static $plugins = [];
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
-        //wewnętrzne kodowanie znaków
+        //enable profiler
+        $profiler = new AppProfiler();
+        //start aplikacji
+        $profiler->event(self::PROFILER_PREFIX . 'application startup');
+        //encoding settings
         mb_internal_encoding('utf-8');
-        //domyślne kodowanie znaków PHP
         ini_set('default_charset', 'utf-8');
-        //locale
         setlocale(LC_ALL, 'pl_PL.utf-8');
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
         //.env loading (unsafe as PHP-DI uses getenv internally)
         $dotenv = Dotenv::createUnsafeImmutable(BASE_PATH);
         $dotenv->load();
-        //ładownie konfiguracji
-        $config = $this->_loadConfig();
-        //ustawianie konfiguracji loggera
-        //$config->log ? \Mmi\Log\LoggerHelper::setConfig($config->log) : null;
-        //włączenie profilera
-        FrontController::getInstance()->setProfiler(new KernelProfiler);        
-        //start aplikacji
-        FrontController::getInstance()->getProfiler()->event(self::PROFILER_PREFIX . 'application startup');
-
+        $profiler->event(self::PROFILER_PREFIX . '.env loaded');
         //konfiguracja kontenera
         $builder = new ContainerBuilder();
-        $builder->useAutowiring(true);
-        $builder->useAnnotations(true);
-        $builder->ignorePhpDocErrors(true);
-        //flaga compile wyłącza cache
-        if (!$config->compile) {
-            $builder->enableCompilation(self::APPLICATION_COMPILE_PATH);
-            $builder->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH);
+        $builder->useAutowiring(true)
+            ->useAnnotations(true)
+            ->ignorePhpDocErrors(true);
+        if (!isset($_ENV['CACHE_PRIVATE_ENABLED'])) {
+            throw new KernelException('CACHE_PRIVATE_ENABLED is not specified in the environment');
         }
-        //ustawianie struktury aplikacji
-        FrontController::getInstance()->setStructure($this->_getStructure($config->compile));
-        //dodawanie definicji DI
-        foreach (FrontController::getInstance()->getStructure('di') as $diConfigPath) {
+        //private cache enabled
+        if ($cacheEnabled = $_ENV['CACHE_PRIVATE_ENABLED']) {
+            $builder->enableCompilation(self::APPLICATION_COMPILE_PATH)
+                ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH);
+        }
+        self::$structure = $this->_getStructure($cacheEnabled);
+        //add container definitions
+        foreach (self::$structure['di'] as $diConfigPath) {
             $builder->addDefinitions($diConfigPath);
         }
+        foreach (self::$structure['module'] as $moduleName => $controllers) {
+            $definitions = [];
+            foreach ($controllers as $controller => $actions) {
+                $controllerClassName = \ucfirst($moduleName) . '\\' . \ucfirst($controller) . 'Controller';
+                $definitions[$controllerClassName] = autowire($controllerClassName);
+            }
+            $builder->addDefinitions($definitions);
+        }
+        $profiler->event(self::PROFILER_PREFIX . 'DI definitions added');
+        //build container
         self::$di = $builder->build();
-        //FrontController::getInstance()->setContainer($builder->build());
-        self::$di->get(KernelEventHandler::class);
+        //add previously created profiler
+        self::$di->set(AppProfilerInterface::class, $profiler);
+        //exception handler
+        set_exception_handler([self::$di->get(AppEventHandler::class), 'exceptionHandler']);
+        //error handler
+        set_error_handler([self::$di->get(AppEventHandler::class), 'errorHandler']);
+        $profiler->event(self::PROFILER_PREFIX . 'DI container built');
     }
 
     /**
@@ -81,61 +105,61 @@ class App
      */
     public function run(string $bootstrapClassName = null): void
     {
-        //sprawdzenie czy klasa konfiguracji istnieje
-        if (!class_exists($bootstrapClassName)) {
-            throw new KernelException('Application bootstrap class is missing: ' . $bootstrapClassName);
+        $request = self::$di->get(Request::class);
+        //plugins before dispatch
+        foreach (self::$plugins as $plugin) {
+            $plugin->beforeDispatch($request);
+            self::$di->get(AppProfilerInterface::class)->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeDispatch');
         }
-        //bootstrap start
-        FrontController::getInstance()->getProfiler()->event(self::PROFILER_PREFIX . 'bootstrap startup');
-        $bootstrap = new $bootstrapClassName();
-        //bootstrap nie implementuje właściwego interfeace'u
-        if (!($bootstrap instanceof \Mmi\App\BootstrapInterface)) {
-            throw new KernelException('Application bootstrap should be implementing \Mmi\App\Bootstrap\Interface');
+        //render content
+        $content = self::$di->get(ActionHelper::class)->forward($request);
+        //plugins before dispatch
+        foreach (self::$plugins as $plugin) {
+            $plugin->beforeSend($request);
+            self::$di->get(AppProfilerInterface::class)->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeSend');
         }
-        //bootstrap start
-        FrontController::getInstance()->run();
-        FrontController::getInstance()->getProfiler()->event(self::PROFILER_PREFIX . 'front controller run');
-        
+        //send content to user
+        self::$di->get(Response::class)
+            ->setContent($content)
+            ->send();
     }
 
     /**
-     * Ładuje konfigurację aplikacji
-     * @throws KernelException
+     * Registers plugins
      */
-    private function _loadConfig(): Config
+    public static function registerPlugin(AppPluginInterface $plugin): void
     {
-        //sprawdzenie czy klasa konfiguracji istnieje
-        if (!class_exists(Config::class)) {
-            throw new \Mmi\App\KernelException('Application configuration class is missing: ' . Config::class);
-        }
-        $config = new Config();
-        if (!($config instanceof AppConfig)) {
-            throw new \Mmi\App\KernelException('Application configuration class is not extending AppConfig class');
-        }
-        //konfiguracja dla danego środowiska
-        return new Config();
+        self::$plugins[] = $plugin;
+        $plugin->afterRegistered();
     }
 
-    private function _getStructure(bool $compile): array
+    /**
+     * Gets plugins
+     * @var AppPluginInterface[]
+     */
+    public static function getPlugins(): array
     {
-        if ($compile) {
+        return self::$plugins;
+    }
+
+    /**
+     * Gets the application structure
+     */
+    private function _getStructure(bool $cacheEnabled = false): array
+    {
+        //always parse structure in a non production mode
+        if (!$cacheEnabled) {
+            //overwrite cache
+            \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
             return Structure::getStructure();
         }
-        //struktura wczytana z json (compile)
+        //try fetch structure from a compiled json
         if (null !== $structure = @\json_decode(\file_get_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE), true)) {
             return $structure;
         }
+        //cache compiled json
         \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
         return $structure;
-    }
-
-    private function _setupPrivateCache(CacheConfig $config): self
-    {
-        //ustawienie bufora systemowy aplikacji
-        //FrontController::getInstance()->setLocalCache(new \Mmi\Cache\Cache($this->_config->localCache));
-        //wstrzyknięcie cache do ORM
-        //\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getLocalCache());
-        //return $this;
     }
 
 }

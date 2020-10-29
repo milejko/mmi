@@ -10,7 +10,9 @@
 
 namespace Mmi\Mvc;
 
+use Behatch\HttpCall\Request;
 use Mmi\App\FrontController;
+use Mmi\Http\Response;
 use \Mmi\Message\MessengerHelper;
 
 /**
@@ -40,12 +42,12 @@ class Controller
     /**
      * Konstruktor
      */
-    public function __construct(\Mmi\Http\Request $request, \Mmi\Mvc\View $view)
+    public function __construct(Request $request, Response $response, View $view)
     {
         //request
         $this->_request = $request;
         //ustawienie response
-        $this->_response = FrontController::getInstance()->getResponse();
+        $this->_response = $response;
         //ustawienie pola widoku
         $this->view = $view;
         //inicjacja programisty kontrolera

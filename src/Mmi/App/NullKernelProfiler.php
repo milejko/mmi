@@ -13,7 +13,7 @@ namespace Mmi\App;
 /**
  * Klasa pustego profilera aplikacji
  */
-class NullKernelProfiler implements KernelProfilerInterface
+class NullKernelProfiler implements AppProfilerInterface
 {
 
     /**

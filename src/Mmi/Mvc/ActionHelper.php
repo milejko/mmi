@@ -10,7 +10,8 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\FrontController;
+use Mmi\App\App;
+use Mmi\App\AppProfilerInterface;
 use Mmi\Http\Request;
 
 /**
@@ -41,13 +42,23 @@ class ActionHelper
     protected static $_instance;
 
     /**
+     * @var AppProfilerInterface
+     */
+    private $profiler;
+
+    /**
+     * @var View
+     */
+    private $view;
+
+    /**
      * Pobranie instancji
      * @return \Mmi\Mvc\ActionHelper
      */
-    public static function getInstance()
+    public function __construct(AppProfilerInterface $profiler, View $view)
     {
-        //zwrot instancji, lub utworzenie nowej
-        return self::$_instance ? self::$_instance : (self::$_instance = new self);
+        $this->profiler = $profiler;
+        $this->view     = $view;
     }
 
     /**
@@ -86,10 +97,10 @@ class ActionHelper
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
             //logowanie zablokowania akcji
-            return FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' blocked');
+            return $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' blocked');
         }
         //rendering szablonu jeśli akcja zwraca null
-        return $this->_renderAction($request, (FrontController::getInstance()->getView()->request ? FrontController::getInstance()->getView()->request : new Request), $main);
+        return $this->_renderAction($request, ($this->view->request ? $this->view->request : new Request), $main);
     }
 
     /**
@@ -107,16 +118,13 @@ class ActionHelper
         }
         //renderowanie akcji
         $content = $this->_renderAction($request, $request, true);
-        //iteracja po pluginach front controllera
-        foreach (FrontController::getInstance()->getPlugins() as $plugin) {
-            //post dispatch
-            $plugin->postDispatch($request);
-            FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PLUGIN_PREFIX . ': plugins post-dispatch');
+        //iteracja po pluginach aplikacji
+        foreach (App::getPlugins() as $plugin) {
+            $plugin->afterDispatch($request);
+            $this->profiler->event(self::KERNEL_PROFILER_PLUGIN_PREFIX . ': ' . \get_class($plugin ) . ' executed afterDispatch');
         }
         //zmiana requestu i render layoutu
-        return FrontController::getInstance()
-            ->setRequest($request)
-            ->getView()->renderLayout($content, $request);
+        return $this->view->renderLayout($content, $request);
     }
 
     /**
@@ -129,28 +137,28 @@ class ActionHelper
     private function _renderAction(Request $request, Request $resetRequest, $main)
     {
         //zapamiętanie stanu wyłączenia layoutu
-        $resetLayoutDisabled = FrontController::getInstance()->getView()->isLayoutDisabled();
+        $resetLayoutDisabled = $this->view->isLayoutDisabled();
         //ustawienia requestu
-        FrontController::getInstance()->getView()->setRequest($request);
+        $this->view->setRequest($request);
         //wywołanie akcji
         if (null !== $actionContent = $this->_invokeAction($request)) {
             //reset requestu i dla akcji głównej wyłączenie layoutu
-            FrontController::getInstance()->getView()
+            $this->view
                 ->setRequest($resetRequest)
                 //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-                ->setLayoutDisabled($main ? true : FrontController::getInstance()->getView()->isLayoutDisabled());
+                ->setLayoutDisabled($main ? true : $this->view->isLayoutDisabled());
             //zwrot danych z akcji
             return $actionContent;
         }
         //zwrot wyrenderowanego szablonu
-        $content = FrontController::getInstance()->getView()->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+        $content = $this->view->renderTemplate($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
         //pobranie widoku
-        FrontController::getInstance()->getView()
+        $this->view
             ->setRequest($resetRequest)
             //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
-            ->setLayoutDisabled($main ? FrontController::getInstance()->getView()->isLayoutDisabled() : $resetLayoutDisabled);
+            ->setLayoutDisabled($main ? $this->view->isLayoutDisabled() : $resetLayoutDisabled);
         //profiler wyrenderowaniu szablonu
-        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_TEMPLATE_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' rendered');
+        $this->profiler->event(self::KERNEL_PROFILER_TEMPLATE_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' rendered');
         //zwrot wyrenderowanego szablonu
         return $content;
     }
@@ -175,9 +183,9 @@ class ActionHelper
     private function _invokeAction(Request $request)
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
-        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' start');
+        $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
-        $structure = FrontController::getInstance()->getStructure('module');
+        $structure = App::$structure['module'];
         //sprawdzenie w strukturze
         if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
             //komponent nieodnaleziony
@@ -195,9 +203,9 @@ class ActionHelper
         //nazwa akcji
         $actionMethodName = $request->getActionName() . 'Action';
         //wywołanie akcji
-        $content = (new $controllerClassName($request, FrontController::getInstance()->getView()))->$actionMethodName();
+        $content = App::$di->get($controllerClassName)->$actionMethodName();
         //informacja o zakończeniu wykonywania akcji do profilera
-        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' done');
+        $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' done');
         return $content;
     }
 }
