@@ -18,7 +18,7 @@ class FrontController
 
     /**
      * Instancja front kontrolera
-     * @var \Mmi\App\FrontController
+     * @var FrontController
      */
     private static $_instance;
 
@@ -188,19 +188,6 @@ class FrontController
     }
 
     /**
-     * Ustawia lokalny bufor
-     * @param \Mmi\Cache\Cache $cache
-     * @return \Mmi\App\FrontController
-     */
-    public function setLocalCache(\Mmi\Cache\Cache $cache)
-    {
-        //ustawianie lokalnego bufora
-        $this->_cache = $cache;
-        //zwrot siebie
-        return $this;
-    }
-
-    /**
      * Ustawia widok
      * @param \Mmi\Mvc\View $view
      * @return \Mmi\App\FrontController
@@ -285,20 +272,6 @@ class FrontController
     {
         //zwraca logger
         return $this->_logger;
-    }
-
-    /**
-     * Pobiera lokalny bufor
-     * @return \Mmi\Cache\Cache
-     */
-    public function getLocalCache()
-    {
-        //brak bufora
-        if (!$this->_cache) {
-            throw new KernelException('\Mmi\Cache\Cache should be specified as localCache in \Mmi\App\FrontController');
-        }
-        //zwrot lokalnego bufora
-        return $this->_cache;
     }
 
     /**

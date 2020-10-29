@@ -10,6 +10,8 @@
 
 namespace Mmi\App;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Klasa obsługi zdarzeń PHP
  */
@@ -17,16 +19,23 @@ class KernelEventHandler
 {
 
     /**
+     * @var LoggerInterface
+     */
+    private static $logger;
+
+    /**
      * Konstruktor podpinający eventy
      */
-    public function __construct()
+    public function __construct(LoggerInterface $logger)
     {
+        //logger
+        self::$logger = $logger;
         //funkcja  zamknięcia aplikacji
         register_shutdown_function(['\\Mmi\\App\\KernelEventHandler', 'shutdownHandler']);
         //domyślne przechwycenie wyjątków
         set_exception_handler(['\\Mmi\\App\\KernelEventHandler', 'exceptionHandler']);
         //raportowanie błędów jest niepotrzebne - customowy error handler w kolejnej linii
-        error_reporting(0);
+        //error_reporting(0);
         //domyślne przechwycenie błędów
         set_error_handler(['\\Mmi\\App\\KernelEventHandler', 'errorHandler']);
     }
@@ -105,22 +114,22 @@ class KernelEventHandler
      * @param \Mmi\Http\Response $response obiekt odpowiedzi
      * @return mixed
      */
-    private static function _rawErrorResponse(\Mmi\Http\Response $response)
+    private static function _rawErrorResponse(\Mmi\Http\Response $response, string $message)
     {
         //wybór typów
         switch ($response->getType()) {
                 //plaintext
             case 'text/plain':
-                return 'Error 500' . "\n" . 'Something went wrong' . "\n";
+                return 'Error 500' . "\n" . $message . "\n";
                 //json
             case 'application/json':
                 return json_encode([
                     'status' => 500,
-                    'error' => 'something went wrong',
+                    'error' => $message,
                 ]);
         }
         //domyślnie html
-        return '<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>';
+        return '<html><body><h1>Error 500</h1><p>' . $message . ' </p></body></html>';
     }
 
     /**
@@ -131,11 +140,11 @@ class KernelEventHandler
     {
         //logowanie wyjątku aplikacyjnego
         if ($exception instanceof \Mmi\App\KernelException) {
-            FrontController::getInstance()->getLogger()->log($exception->getCode(), self::_formatException($exception));
+            self::$logger->log($exception->getCode(), self::_formatException($exception));
             return;
         }
         //logowanie pozostałych wyjątków
-        FrontController::getInstance()->getLogger()->alert(self::_formatException($exception));
+        self::$logger->alert(self::_formatException($exception));
     }
 
     /**

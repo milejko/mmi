@@ -4,8 +4,7 @@
 use Mmi\Console\Application;
 
 if (PHP_SAPI !== 'cli') {
-    echo 'Must be run as a CLI application';
-    exit(1);
+    die('Must be run as a CLI application');
 }
 
 set_time_limit(0);

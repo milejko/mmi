@@ -11,7 +11,6 @@
 namespace Mmi\App;
 
 use Mmi\Http\ResponseTimingHeader;
-use DI\ContainerBuilder;
 
 /**
  * Klasa rozruchu aplikacji
@@ -20,6 +19,11 @@ class Bootstrap implements BootstrapInterface
 {
 
     const KERNEL_PROFILER_PREFIX = 'App\Bootstrap';
+
+    /**
+     * @var Config
+     */
+    protected $_config;
 
     /**
      * Konstruktor, ustawia ścieżki, ładuje domyślne klasy, ustawia autoloadera
@@ -31,9 +35,7 @@ class Bootstrap implements BootstrapInterface
             //konfiguracja lokalnego bufora
             ->_setupLocalCache()
             //konfiguracja front controllera
-            ->_setupFrontController($router = $this->_setupRouter(), $this->_setupView($router))
-            //ustawienie DI
-            ->_setupDI()
+            ->_setupFrontController($this->_setupRouter(), $this->_setupView())
             //konfiguracja cache
             ->_setupCache()
             //konfiguracja tłumaczeń
@@ -63,31 +65,7 @@ class Bootstrap implements BootstrapInterface
     protected function _setupRouter()
     {
         //powołanie routera z konfiguracją
-        return new \Mmi\Mvc\Router(\App\Registry::$config->router ? \App\Registry::$config->router : new \Mmi\Mvc\RouterConfig);
-    }
-
-    /**
-     * Ustawia dependency injection
-     * @return \Mmi\App\Bootstrap
-     */
-    protected function _setupDI()
-    {
-        //konfiguracja kontenera
-        $builder = new ContainerBuilder();
-        $builder->useAutowiring(true);
-        $builder->useAnnotations(true);
-        $builder->ignorePhpDocErrors(true);
-        //flaga compile wyłącza cache
-        if (!\App\Registry::$config->compile) {
-            $builder->enableCompilation(BASE_PATH . '/var/compile');
-            $builder->writeProxiesToFile(true, BASE_PATH . '/var/compile');
-        }
-        //dodawanie definicji DI
-        foreach (FrontController::getInstance()->getStructure('di') as $diConfigPath) {
-            $builder->addDefinitions($diConfigPath);
-        }
-        \App\Registry::$di = $builder->build();
-        return $this;
+        return new \Mmi\Mvc\Router($this->_config->router ? $this->_config->router : new \Mmi\Mvc\RouterConfig);
     }
 
     /**
@@ -102,11 +80,11 @@ class Bootstrap implements BootstrapInterface
             return $this;
         }
         //brak języka ze zmiennej środowiskowej
-        if (!in_array(FrontController::getInstance()->getEnvironment()->lang, \App\Registry::$config->languages)) {
+        if (!in_array(FrontController::getInstance()->getEnvironment()->lang, $this->_config->languages)) {
             return $this;
         }
         //ustawianie locale ze środowiska
-        \App\Registry::$translate->setLocale(FrontController::getInstance()->getEnvironment()->lang);
+        $this->_translate->setLocale(FrontController::getInstance()->getEnvironment()->lang);
         return $this;
     }
 
@@ -125,21 +103,21 @@ class Bootstrap implements BootstrapInterface
         //próba załadowania z bufora
         if ($cache !== null && (null !== ($cachedTranslate = $cache->load($key)))) {
             //wczytanie obiektu translacji z bufora
-            \App\Registry::$translate = $cachedTranslate;
+            $this->_translate = $cachedTranslate;
             FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PREFIX . ': load translate cache');
             return $this;
         }
         //utworzenie obiektu tłumaczenia
-        \App\Registry::$translate = new \Mmi\Translate;
+        $this->_translate = new \Mmi\Translate;
         //dodawanie tłumaczeń do translatora
         foreach ($structure as $languageData) {
             foreach ($languageData as $lang => $translationData) {
-                \App\Registry::$translate->addTranslation(is_array($translationData) ? $translationData[0] : $translationData, $lang);
+                $this->_translate->addTranslation(is_array($translationData) ? $translationData[0] : $translationData, $lang);
             }
         }
         //zapis do cache
         if ($cache !== null) {
-            $cache->save(\App\Registry::$translate, $key, 0);
+            $cache->save($this->_translate, $key, 0);
         }
         //event profilera
         FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PREFIX . ': translations added');
@@ -153,19 +131,19 @@ class Bootstrap implements BootstrapInterface
     protected function _setupSession()
     {
         //brak sesji
-        if (!\App\Registry::$config->session || !\App\Registry::$config->session->name) {
+        if (!$this->_config->session || !$this->_config->session->name) {
             return $this;
         }
         //własna sesja, oparta na obiekcie implementującym SessionHandlerInterface
-        if (strtolower(\App\Registry::$config->session->handler) == 'user') {
+        if (strtolower($this->_config->session->handler) == 'user') {
             //nazwa klasy sesji
-            $sessionClass = \App\Registry::$config->session->path;
+            $sessionClass = $this->_config->session->path;
             //ustawienie handlera
             session_set_save_handler(new $sessionClass);
         }
         try {
             //uruchomienie sesji
-            \Mmi\Session\Session::start(\App\Registry::$config->session);
+            \Mmi\Session\Session::start($this->_config->session);
         } catch (\Mmi\App\KernelException $e) {
             //błąd uruchamiania sesji
             FrontController::getInstance()->getLogger()->error('Unable to start session, reason: ' . $e->getMessage());
@@ -180,14 +158,14 @@ class Bootstrap implements BootstrapInterface
     protected function _setupLocalCache()
     {
         //brak konfiguracji cache
-        if (!\App\Registry::$config->localCache) {
-            \App\Registry::$config->localCache = new \Mmi\Cache\CacheConfig;
-            \App\Registry::$config->localCache->active = 0;
+        if (!$this->_config->localCache) {
+            $this->_config->localCache = new \Mmi\Cache\CacheConfig;
+            $this->_config->localCache->active = 0;
         }
         //ustawienie bufora systemowy aplikacji
-        FrontController::getInstance()->setLocalCache(new \Mmi\Cache\Cache(\App\Registry::$config->localCache));
+        //FrontController::getInstance()->setLocalCache(new \Mmi\Cache\Cache($this->_config->localCache));
         //wstrzyknięcie cache do ORM
-        \Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getLocalCache());
+        //\Mmi\Orm\DbConnector::setCache(FrontController::getInstance()->getLocalCache());
         return $this;
     }
 
@@ -198,11 +176,11 @@ class Bootstrap implements BootstrapInterface
     protected function _setupCache()
     {
         //brak konfiguracji cache
-        if (!\App\Registry::$config->cache) {
+        if (!$this->_config->cache) {
             return $this;
         }
         //cache użytkownika
-        \App\Registry::$cache = new \Mmi\Cache\Cache(\App\Registry::$config->cache);
+        $this->_cache = new \Mmi\Cache\Cache($this->_config->cache);
         return $this;
     }
 
@@ -213,17 +191,17 @@ class Bootstrap implements BootstrapInterface
     protected function _setupDatabase()
     {
         //brak konfiguracji bazy
-        if (!\App\Registry::$config->db || !\App\Registry::$config->db->driver) {
+        if (!$this->_config->db || !$this->_config->db->driver) {
             return $this;
         }
         //obliczanie nazwy drivera
-        $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst(\App\Registry::$config->db->driver);
+        $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst($this->_config->db->driver);
         //próba powołania drivera
-        \App\Registry::$db = new $driver(\App\Registry::$config->db);
+        $this->_db = new $driver($this->_config->db);
         //wstrzyknięcie profilera do adaptera bazodanowego
-        \App\Registry::$db->setProfiler(new \Mmi\Db\DbProfiler);
+        $this->_db->setProfiler(new \Mmi\Db\DbProfiler);
         //wstrzyknięcie do ORM
-        \Mmi\Orm\DbConnector::setAdapter(\App\Registry::$db);
+        \Mmi\Orm\DbConnector::setAdapter($this->_db);
         return $this;
     }
 
@@ -235,40 +213,33 @@ class Bootstrap implements BootstrapInterface
      */
     protected function _setupFrontController(\Mmi\Mvc\Router $router, \Mmi\Mvc\View $view)
     {
-        //inicjalizacja frontu
-        $frontController = FrontController::getInstance();
-        //wczytywanie struktury frontu z cache
-        if (null === ($frontStructure = FrontController::getInstance()->getLocalCache()->load($cacheKey = 'mmi-structure'))) {
-            FrontController::getInstance()->getLocalCache()->save($frontStructure = \Mmi\Mvc\Structure::getStructure(), $cacheKey, 0);
-        }
         //konfiguracja frontu
-        FrontController::getInstance()->setStructure($frontStructure)
+        FrontController::getInstance()
             //ustawienie routera
             ->setRouter($router)
             //ustawienie widoku
             ->setView($view)
             //włączenie (lub nie) debugera
-            ->getResponse()->setDebug(\App\Registry::$config->debug);
+            ->getResponse()->setDebug($this->_config->debug);
         //rejestracja pluginów
-        foreach (\App\Registry::$config->plugins as $plugin) {
-            $frontController->registerPlugin(new $plugin());
+        foreach ($this->_config->plugins as $plugin) {
+            //FrontController::getInstance()->registerPlugin(new $plugin());
         }
         return $this;
     }
 
     /**
      * Inicjalizacja widoku
-     * @param \Mmi\Mvc\Router $router
      * @return \Mmi\Mvc\View
      */
-    protected function _setupView(\Mmi\Mvc\Router $router)
+    protected function _setupView()
     {
         //powołanie i konfiguracja widoku
         return (new \Mmi\Mvc\View)->setCache(FrontController::getInstance()->getLocalCache())
             //opcja kompilacji
-            ->setAlwaysCompile(\App\Registry::$config->compile)
+            ->setAlwaysCompile($this->_config->compile)
             //ustawienie cdn
-            ->setCdn(\App\Registry::$config->cdn)
+            ->setCdn($this->_config->cdn)
             //ustawienie requestu
             ->setRequest(FrontController::getInstance()->getRequest())
             //ustawianie baseUrl

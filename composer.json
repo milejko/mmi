@@ -38,7 +38,8 @@
         "monolog/monolog": "1.*",
         "graylog2/gelf-php": "1.5.*",
         "php-di/php-di": "^6.3",
-        "symfony/console": "^5.0"
+        "symfony/console": "^5.0",
+        "vlucas/phpdotenv": "^5.2"
     },
     "require-dev": {
         "php-console/php-console": "~3.1",

@@ -28,6 +28,7 @@ class Structure
             'translate' => [],
             'filter' => [],
             'helper' => [],
+            'di'     => [],
         ];
         //vendors na koniec
         foreach (array_reverse(\Mmi\Mvc\StructureParser::getModules()) as $module) {
@@ -49,16 +50,15 @@ class Structure
             'translate' => [],
             'filter' => [],
             'helper' => [],
+            'di'     => [],
         ];
         //brak modułów
         if (!file_exists($path)) {
             return $components;
         }
         $module = basename($path);
-        //dodawanie konfiguracji DI
-        if (file_exists($diPath = $path . '/di.php')) {
-            $components['di'][] = $diPath;
-        }
+        //dependency injection
+        self::_parseFiles($components['di'], $path . '/Di');
         //helpery widoku
         self::_parseAdditions($components['helper'], $module, $path . '/Mvc/ViewHelper');
         //filtry
@@ -154,6 +154,22 @@ class Structure
                 continue;
             }
             $components[$namespace][lcfirst(substr($object->getFilename(), 0, -4))] = substr($object->getFilename(), -3) == 'php' ? 1 : $object->getPathname();
+        }
+    }
+
+    /**
+     * Zwraca dostępne helpery i filtry w bibliotekach
+     */
+    private static function _parseFiles(array &$components, $path)
+    {
+        if (!file_exists($path)) {
+            return;
+        }
+        foreach (new \DirectoryIterator($path) as $object) {
+            if ($object->isDot() || $object->isDir()) {
+                continue;
+            }
+            $components[] = $object->getPathname();
         }
     }
 
