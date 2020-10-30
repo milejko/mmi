@@ -8,13 +8,16 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Message;
+namespace Mmi\Mvc;
+
+use Mmi\Translate;
 
 /**
  * Klasa wiadomości
  */
 class Messenger
 {
+    const SESSION_SPACE = 'mmi-messenger';
 
     /**
      * Przestrzeń w sesji zarezerwowana dla wiadomości
@@ -23,12 +26,18 @@ class Messenger
     private $_session;
 
     /**
-     * Konstruktor pozwala zdefiniować nazwę przestrzeni w sesji
-     * @param string $namespace
+     * @var Translate
      */
-    public function __construct($namespace)
+    private $translate;
+
+    /**
+     * Konstruktor pozwala zdefiniować nazwę przestrzeni w sesji
+     */
+    public function __construct(Translate $translate)
     {
-        $this->_session = new \Mmi\Session\SessionSpace($namespace);
+        //injections
+        $this->translate = $translate;
+        $this->_session = new \Mmi\Session\SessionSpace(self::SESSION_SPACE);
     }
 
     /**
@@ -106,7 +115,7 @@ class Messenger
      */
     public function prepareTranslatedMessage(array $message = [])
     {
-        $translatedMessage = \App\Registry::$translate->_($message['message']);
+        $translatedMessage = $this->translate->_($message['message']);
         array_unshift($message['vars'], $translatedMessage);
         return call_user_func_array('sprintf', $message['vars']);
     }

@@ -371,7 +371,7 @@ class Response
      * @param boolean $headers send headers?
      * @return \Mmi\Http\Response
      */
-    public function send($headers = true)
+    public function send($headers = true): void
     {
         //wysłanie nagłówków
         $headers ? $this->sendHeaders() : null;
@@ -383,7 +383,7 @@ class Response
         //zwrot zawartości
         echo $this->_content;
         //usunięcie zawartości
-        return $this->setContent('');
+        $this->setContent('');
     }
 
     /**

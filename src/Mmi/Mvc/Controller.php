@@ -12,7 +12,6 @@ namespace Mmi\Mvc;
 
 use Mmi\App\AppProfilerInterface;
 use Mmi\Http\Response;
-use \Mmi\Message\MessengerHelper;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -44,20 +43,27 @@ class Controller
     private $logger;
 
     /**
+     * @var Messenger
+     */
+    private $messenger;
+
+    /**
      * Konstruktor
      */
     public function __construct(
         Response $response, 
         View $view,
         AppProfilerInterface $profiler,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Messenger $messenger
     )
     {
         //injections
-        $this->view     = $view;
-        $this->response = $response;
-        $this->profiler = $profiler;
-        $this->logger   = $logger;
+        $this->view         = $view;
+        $this->response     = $response;
+        $this->profiler     = $profiler;
+        $this->logger       = $logger;
+        $this->messenger    = $messenger;
         //init method
         $this->init();
     }
@@ -72,20 +78,18 @@ class Controller
 
     /**
      * Pobiera response
-     * @return \Mmi\Http\Response
      */
-    public final function getResponse()
+    public final function getResponse(): Response
     {
         return $this->response;
     }
 
     /**
      * Pobiera helper messengera
-     * @return \Mmi\Message\Messenger
      */
-    public final function getMessenger()
+    public final function getMessenger(): Messenger
     {
-        return MessengerHelper::getMessenger();
+        return $this->messenger;
     }
 
     /**

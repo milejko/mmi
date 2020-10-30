@@ -131,7 +131,7 @@ class ActionHelper
      * Renderuje akcję (zwraca content akcji, lub template)
      * @param Request $request
      * @param Request $resetRequest request przekazywany do widoku po zakończeniu renderingu
-     * @param boolean $main określa czy akcja jest akcją główną (2 przypadki - gdy wywołana z front-controllera, lub forward)
+     * @param boolean $main określa czy akcja jest akcją główną (2 przypadki - wywoływana z app, lub forward)
      * @return string
      */
     private function _renderAction(Request $request, Request $resetRequest, $main)

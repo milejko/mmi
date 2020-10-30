@@ -1,18 +1,23 @@
 <?php
 
+use Mmi\App\AppProfilerInterface;
 use Mmi\Db\Adapter\PdoAbstract;
 use Mmi\Db\DbConfig;
+use Mmi\Db\DbProfiler;
 use Psr\Container\ContainerInterface;
 
+use function DI\autowire;
 use function DI\env;
 
 return [
     'db.driver'     => env('DB_DRIVER', 'mysql'),
     'db.password'   => env('DB_PASSWORD', ''),
     'db.host'       => env('DB_HOST', ''),
-    'db.name'       => env('DB_PORT', ''),
+    'db.name'       => env('DB_NAME', ''),
     'db.port'       => env('DB_PORT', 3306),
     'db.user'       => env('DB_USER', ''),
+
+    DbProfiler::class => autowire(DbProfiler::class),
 
     PdoAbstract::class => function (ContainerInterface $container) {
         //create db config
@@ -36,10 +41,8 @@ return [
         $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst($dbConfig->driver);
         //próba powołania drivera
         $db = new $driver($dbConfig);
-        //wstrzyknięcie profilera do adaptera bazodanowego
-        $db->setProfiler(new \Mmi\Db\DbProfiler);
-        //wstrzyknięcie do ORM
-        \Mmi\Orm\DbConnector::setAdapter($db);
+        //set DB profiler
+        $db->setProfiler($container->get(DbProfiler::class));
         return $db;
     },
 ];

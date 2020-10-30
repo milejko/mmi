@@ -10,6 +10,10 @@
 
 namespace Mmi\Orm;
 
+use Mmi\App\App;
+use Mmi\Cache\Cache;
+use Mmi\Db\Adapter\PdoAbstract;
+
 /**
  * Klasa dostępu do tabel w bazie danych
  */
@@ -38,39 +42,12 @@ class DbConnector
     ];
 
     /**
-     * Adapter DB
-     * @var \Mmi\Db\Adapter\PdoAbstract
-     */
-    protected static $_adapter;
-
-    /**
-     * Obiekt bufora
-     * @var \Mmi\Cache\Cache
-     */
-    protected static $_cache;
-
-    /**
      * Pobiera adapter bazodanowy
      * @return \Mmi\Db\Adapter\PdoAbstract
      */
     public static final function getAdapter()
     {
-        //brak lub nieprawidłowy adapter
-        if (!(static::$_adapter instanceof \Mmi\Db\Adapter\PdoAbstract)) {
-            throw new OrmException('Adapter not specified or invalid');
-        }
-        //zwrot adaptera
-        return static::$_adapter;
-    }
-
-    /**
-     * Ustawia adapter bazodanowy
-     * @param \Mmi\Db\Adapter\PdoAbstract $adapter
-     * @return \Mmi\Db\Adapter\PdoAbstract
-     */
-    public static final function setAdapter(\Mmi\Db\Adapter\PdoAbstract $adapter)
-    {
-        return static::$_adapter = $adapter;
+        return App::$di->get(PdoAbstract::class);
     }
 
     /**
@@ -79,17 +56,7 @@ class DbConnector
      */
     public static final function getCache()
     {
-        return static::$_cache;
-    }
-
-    /**
-     * Ustawia obiekt cache
-     * @param \Mmi\Cache $cache
-     * @return \Mmi\Cache
-     */
-    public static final function setCache(\Mmi\Cache\Cache $cache)
-    {
-        return static::$_cache = $cache;
+        return App::$di->get(Cache::class);
     }
 
     /**
@@ -105,14 +72,14 @@ class DbConnector
         }
         //pobranie z cache
         $cacheKey = 'mmi-orm-structure-' . self::getAdapter()->getConfig()->name . '-' . $tableName;
-        if (static::$_cache !== null && (null !== ($structure = static::$_cache->load($cacheKey)))) {
+        if (self::getCache()->isActive() && (null !== ($structure = self::getCache()->load($cacheKey)))) {
             return $structure;
         }
         //pobranie z adaptera
         $structure = static::getAdapter()->tableInfo($tableName);
         //zapis do bufora
-        if (static::$_cache !== null) {
-            static::$_cache->save($structure, $cacheKey, 0);
+        if (self::getCache()->isActive()) {
+            self::getCache()->save($structure, $cacheKey, 0);
         }
         //zwrot i zapis do tablicy zapisanych struktur
         return self::$_tableStructure[$tableName] = $structure;
@@ -126,7 +93,7 @@ class DbConnector
     {
         //usunięcie struktrur z cache
         foreach (self::getAdapter()->tableList() as $tableName) {
-            static::$_cache->remove('mmi-orm-structure-' . self::getAdapter()->getConfig()->name . '-' . $tableName);
+            self::getCache()->isActive() && self::getCache()->remove('mmi-orm-structure-' . self::getAdapter()->getConfig()->name . '-' . $tableName);
         }
         //usunięcie lokalnie zapisanych struktur
         self::$_tableStructure = [];

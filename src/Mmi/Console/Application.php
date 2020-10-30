@@ -2,10 +2,12 @@
 
 namespace Mmi\Console;
 
+use Mmi\App\App;
+use Mmi\Http\Response;
+use Mmi\Http\ResponseDebugger;
 use Mmi\Mvc\StructureParser;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
@@ -16,10 +18,8 @@ class Application extends BaseApplication
      */
     public function __construct()
     {
+        define(\BASE_PATH, realpath(__DIR__ . '../'));
         parent::__construct('MMi Console', '1.0');
-
-        $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED,
-            'The Environment name.'));
     }
 
     /**
@@ -30,15 +30,14 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $env = $input->getParameterOption(['--env', '-e'], 'DEV');
         //powołanie aplikacji
-        $app = new \Mmi\App\Kernel('\Mmi\App\BootstrapCli', $env);
-        //ustawienie typu odpowiedzi na plain
-        \Mmi\App\FrontController::getInstance()->getResponse()->setTypePlain();
-        //uruchomienie aplikacji
-        $app->run();
-
-        return parent::doRun($input, $output);
+        $app = new App();
+        //needed in case of an error (to be plain text)
+        $app::$di->get(Response::class)->setTypePlain();
+        $output->writeln($app::$di->get(Response::class)->getContent());
+        parent::doRun($input, $output);
+        $app::$di->get(ResponseDebugger::class);
+        $output->write($app::$di->get(Response::class)->getContent());
     }
 
     /**

@@ -8,10 +8,9 @@ use Mmi\Mvc\Router;
 use Psr\Container\ContainerInterface;
 
 use function DI\autowire;
-use function DI\create;
 
 return [
-    HttpServerEnv::class => create(HttpServerEnv::class),
+    HttpServerEnv::class => autowire(HttpServerEnv::class),
 
     Request::class => function (ContainerInterface $container) {
         return (new Request())->setParams(

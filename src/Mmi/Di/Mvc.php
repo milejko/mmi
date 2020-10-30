@@ -3,6 +3,7 @@
 use Mmi\Http\HttpServerEnv;
 use Mmi\Http\Request;
 use Mmi\Mvc\ActionHelper;
+use Mmi\Mvc\Messenger;
 use Mmi\Mvc\Router;
 use Mmi\Mvc\RouterConfig;
 use Mmi\Mvc\View;
@@ -14,6 +15,8 @@ use function DI\autowire;
 
 return [
     ActionHelper::class => autowire(ActionHelper::class),
+
+    Messenger::class    => autowire(Messenger::class),
 
     RouterConfig::class => autowire(\App\RouterConfig::class),
     Router::class       => autowire(Router::class),

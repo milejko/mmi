@@ -109,7 +109,9 @@ class AppEventHandler
             if ($this->view->isLayoutDisabled() || $this->response->getType() != \Mmi\Http\ResponseTypes::searchType('html')) {
                 $this->logException($exception);
                 //domyślna prezentacja błędów
-                $this->response->setContent($this->rawErrorResponse($this->response, $exception->getMessage()));
+                $this->response
+                    ->setContent($this->rawErrorResponse($this->response, $exception->getMessage()))
+                    ->send();
                 return;
             }
             //błąd z prezentacją HTML
@@ -128,20 +130,21 @@ class AppEventHandler
      */
     private function rawErrorResponse(\Mmi\Http\Response $response): string
     {
+        $message = '¯\_(ツ)_/¯ ups, something went wrong';
         //wybór typów
         switch ($response->getType()) {
                 //plaintext
             case 'text/plain':
-                return 'Error 500' . "\n";
+                return $message;
                 //json
             case 'application/json':
                 return json_encode([
                     'status' => 500,
-                    'error' => 'Something went wrong',
+                    'error' => $message,
                 ]);
         }
         //domyślnie html
-        return '<html><body><h1>Error 500</h1></body></html>';
+        return '<html><body><h1>Error 500</h1><p>' . $message . '</p></body></html>';
     }
 
     /**

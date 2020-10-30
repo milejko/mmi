@@ -26,11 +26,6 @@ class ResponseDebugger
     const PRE_OPEN = '<pre style="min-width: 450px; margin: 0px 0px 10px 0px; color: #666; background: #eee; padding: 3px; border: 1px solid #666;">';
 
     /**
-     * @var Response
-     */
-    private $response;
-
-    /**
      * @var Request
      */
     private $request;
@@ -68,7 +63,6 @@ class ResponseDebugger
     )
     {
         //inject
-        $this->response         = $response;
         $this->request          = $request;
         $this->profiler         = $profiler;
         $this->httpServerEnv    = $httpServerEnv;
@@ -79,7 +73,7 @@ class ResponseDebugger
                 $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
             break;
             case 'text/plain':
-                $response->setContent($response->getContent() . "\n" . round($this->profiler->elapsed(), 4) . 's');
+                $response->setContent($response->getContent() . "\n" . round($this->profiler->elapsed(), 4) . 's' . "\n");
             break;
         }
     }
@@ -142,35 +136,35 @@ class ResponseDebugger
         $html .= self::PRE_OPEN . ResponseDebugger\Part::getConfigHtml() . '</pre>';
 
         //profiler aplikacji
-        $html .= '<p style="margin: 0px;">Kernel Profiler: </p>';
+        $html .= '<p style="margin: 0px;">Application profiler: </p>';
         $html .= self::PRE_OPEN . ResponseDebugger\Part::getProfilerHtml($this->profiler) . '</pre>';
 
         //profiler bazy danych
-        $html .= '<p style="margin: 0px;">Database Profiler: </p>';
+        $html .= '<p style="margin: 0px;">Database profiler: </p>';
         $html .= self::PRE_OPEN . ResponseDebugger\Part::getDbProfilerHtml() . '</pre>';
 
         $html .= '</td><td style="vertical-align: top; padding-left: 5px;">';
 
         //zmienne requesta
-        $html .= '<p style="margin: 0px;">Request Variables: </p>';
+        $html .= '<p style="margin: 0px;">Request variables: </p>';
         $html .= self::PRE_OPEN;
         $html .= ResponseDebugger\Colorify::colorify(print_r($this->request->toArray(), true)) . '</pre>';
 
         //zmienne rejestru
-        $html .= '<p style="margin: 0px;">Registry Variables: </p>';
+        $html .= '<p style="margin: 0px;">DI container entries: </p>';
         $html .= self::PRE_OPEN;
-        $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray(get_class_vars('\App\Registry')), true)) . '</pre>';
+        $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray(App::$di->getKnownEntryNames()), true)) . '</pre>';
 
         //zmienne widoku
         if ($this->view !== null) {
-            $html .= '<p style="margin: 0px;">View Variables: </p>';
+            $html .= '<p style="margin: 0px;">View variables: </p>';
             $html .= self::PRE_OPEN;
             $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($this->view->getAllVariables()), true)) . '</pre>';
         }
 
         //zmienne cookie
         if (isset($_COOKIE) && count($_COOKIE) > 0) {
-            $html .= '<p style="margin: 0px;">Cookie Variables: </p>';
+            $html .= '<p style="margin: 0px;">Cookie variables: </p>';
             $html .= self::PRE_OPEN;
             $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($_COOKIE), true)) . '</pre>';
         }

@@ -67,7 +67,7 @@ class App
     /**
      * Uruchomienie aplikacji
      */
-    public function run(string $bootstrapClassName = null): void
+    public function run(): void
     {
         $profiler = self::$di->get(AppProfilerInterface::class);
         $request = self::$di->get(Request::class);
