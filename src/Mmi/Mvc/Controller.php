@@ -10,10 +10,10 @@
 
 namespace Mmi\Mvc;
 
-use Behatch\HttpCall\Request;
-use Mmi\App\FrontController;
+use Mmi\App\AppProfilerInterface;
 use Mmi\Http\Response;
 use \Mmi\Message\MessengerHelper;
+use Psr\Log\LoggerInterface;
 
 /**
  * Klasa kontrolera akcji
@@ -22,79 +22,44 @@ class Controller
 {
 
     /**
-     * Żądanie
-     * @var \Mmi\Http\Request
-     */
-    protected $_request;
-
-    /**
-     * Referencja do odpowiedzi z Front controllera
-     * @var \Mmi\Http\Response
-     */
-    protected $_response;
-
-    /**
      * Widok
-     * @var \Mmi\Mvc\View
+     * @var View
      */
     public $view;
 
     /**
+     * Referencja do odpowiedzi
+     * @var Response
+     */
+    private $response;
+
+    /**
+     * @var AppProfilerInterface
+     */
+    private $profiler;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Konstruktor
      */
-    public function __construct(Request $request, Response $response, View $view)
+    public function __construct(
+        Response $response, 
+        View $view,
+        AppProfilerInterface $profiler,
+        LoggerInterface $logger
+    )
     {
-        //request
-        $this->_request = $request;
-        //ustawienie response
-        $this->_response = $response;
-        //ustawienie pola widoku
-        $this->view = $view;
-        //inicjacja programisty kontrolera
+        //injections
+        $this->view     = $view;
+        $this->response = $response;
+        $this->profiler = $profiler;
+        $this->logger   = $logger;
+        //init method
         $this->init();
-    }
-
-    /**
-     * Magiczne pobranie zmiennej z requestu
-     * @param string $name nazwa zmiennej
-     * @return mixed
-     */
-    public final function __get($name)
-    {
-        //pobiera zmienną z requestu po nazwie zmiennej
-        return $this->_request->__get($name);
-    }
-
-    /**
-     * Magiczne sprawczenie istnienia pola w request
-     * @param string $key klucz
-     * @return bool
-     */
-    public function __isset($key)
-    {
-        //sprawdzenie istenia zmiennej w requescie
-        return $this->_request->__isset($key);
-    }
-
-    /**
-     * Magiczne pobranie zmiennej z requestu
-     * @param string $name nazwa zmiennej
-     * @param mixed $value wartość
-     */
-    public final function __set($name, $value)
-    {
-        //ustawienie zmiennej w requescie
-        return $this->_request->__set($name, $value);
-    }
-
-    /**
-     * Magiczne usunięcie zmiennej z requestu
-     * @param string $name nazwa zmiennej
-     */
-    public final function __unset($name)
-    {
-        //usunięcie zmiennej z requestu
-        return $this->_request->__unset($name);
     }
 
     /**
@@ -106,38 +71,12 @@ class Controller
     }
 
     /**
-     * Pobiera request
-     * @return \Mmi\Http\Request
-     */
-    public final function getRequest()
-    {
-        return $this->_request;
-    }
-
-    /**
-     * Zwraca dane post z requesta
-     * @return \Mmi\Http\RequestPost
-     */
-    public final function getPost()
-    {
-        return $this->getRequest()->getPost();
-    }
-
-    /**
-     * Zwraca pliki z requesta
-     */
-    public final function getFiles()
-    {
-        return $this->getRequest()->getFiles();
-    }
-
-    /**
      * Pobiera response
      * @return \Mmi\Http\Response
      */
     public final function getResponse()
     {
-        return $this->_response;
+        return $this->response;
     }
 
     /**
@@ -150,30 +89,19 @@ class Controller
     }
 
     /**
-     * Pobiera helper akcji
-     * @return \Mmi\Mvc\ActionHelper
-     */
-    public final function getActionHelper()
-    {
-        return ActionHelper::getInstance();
-    }
-
-    /**
      * Pobiera helper logowania
-     * @return \Psr\Log\LoggerInterface
      */
-    public final function getLogger()
+    public final function getLogger(): LoggerInterface
     {
-        return FrontController::getInstance()->getLogger();
+        return $this->logger;
     }
 
     /**
      * Pobiera profiler
-     * @return \Mmi\App\KernelProfiler
      */
-    public final function getProfiler()
+    public final function getProfiler(): AppProfilerInterface
     {
-        return FrontController::getInstance()->getProfiler();
+        return $this->profiler;
     }
 
 }

@@ -119,6 +119,8 @@ class AppEventHandler
             //domyślna prezentacja błędów
             $this->response->setContent($this->rawErrorResponse($this->response, $exception->getMessage()));
         }
+        //send response
+        $this->response->send();
     }
 
     /**
@@ -139,7 +141,7 @@ class AppEventHandler
                 ]);
         }
         //domyślnie html
-        return '<html><body><h1>Error 500</h1><p>Something went wrong</p></body></html>';
+        return '<html><body><h1>Error 500</h1></body></html>';
     }
 
     /**

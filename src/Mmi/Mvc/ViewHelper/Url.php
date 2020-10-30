@@ -10,6 +10,9 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
+use Mmi\App\App;
+use Mmi\Mvc\Router;
+
 class Url extends HelperAbstract
 {
 
@@ -23,7 +26,7 @@ class Url extends HelperAbstract
     public function url(array $params = [])
     {
         //wyznaczanie url
-        $url = $this->view->baseUrl . \Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params);
+        $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl($params);
         return $url ? $url : '/';
     }
 

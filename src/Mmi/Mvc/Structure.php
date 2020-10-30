@@ -133,10 +133,14 @@ class Structure
      */
     private static function _parseActions(array &$components, $controllerPath, $moduleName, $controllerName)
     {
+        $controllerCode = file_get_contents($controllerPath);
+        if (\strpos($controllerCode, 'abstract class')) {
+            return;
+        }
         //łapanie nazw akcji w kodzie
-        if (preg_match_all('/function ([a-zA-Z0-9]+Action)\(/', file_get_contents($controllerPath), $actions)) {
+        if (preg_match_all('/function ([a-zA-Z0-9]+)\(/', file_get_contents($controllerPath), $actions)) {
             foreach ($actions[1] as $action) {
-                $components[$moduleName][$controllerName][substr($action, 0, -6)] = 1;
+                $components[$moduleName][$controllerName][$action] = 1;
             }
         }
     }

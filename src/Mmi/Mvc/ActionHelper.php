@@ -201,9 +201,9 @@ class ActionHelper
         //ustalenie klasy kontrolera
         $controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
         //nazwa akcji
-        $actionMethodName = $request->getActionName() . 'Action';
+        $actionMethodName = $request->getActionName();
         //wywołanie akcji
-        $content = App::$di->get($controllerClassName)->$actionMethodName();
+        $content = App::$di->get($controllerClassName)->$actionMethodName($request);
         //informacja o zakończeniu wykonywania akcji do profilera
         $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' done');
         return $content;

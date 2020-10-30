@@ -10,7 +10,7 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\FrontController;
+use Mmi\App\App;
 
 /**
  * Klasa widoku
@@ -170,7 +170,7 @@ class View extends \Mmi\DataObject
     public function getHelper($name)
     {
         //wyszukiwanie helpera w strukturze
-        foreach (\Mmi\App\FrontController::getInstance()->getStructure('helper') as $namespace => $helpers) {
+        foreach (App::$structure['helper'] as $namespace => $helpers) {
             if (!isset($helpers[$name])) {
                 continue;
             }
@@ -182,7 +182,7 @@ class View extends \Mmi\DataObject
             return;
         }
         //zwrot helpera z rejestru, lub tworzenie nowego + rejestracja
-        return isset($this->_helpers[$className]) ? $this->_helpers[$className] : ($this->_helpers[$className] = new $className);
+        return isset($this->_helpers[$className]) ? $this->_helpers[$className] : ($this->_helpers[$className] = new $className($this));
     }
 
     /**
@@ -193,7 +193,7 @@ class View extends \Mmi\DataObject
     public function getFilter($name)
     {
         //wyszukiwanie filtra w strukturze
-        foreach (\Mmi\App\FrontController::getInstance()->getStructure('filter') as $namespace => $filters) {
+        foreach (App::$structure['filter'] as $namespace => $filters) {
             if (!isset($filters[$name])) {
                 continue;
             }
@@ -282,7 +282,7 @@ class View extends \Mmi\DataObject
             throw new \Mmi\Mvc\MvcException('Template path invalid.');
         }
         //pobranie struktury szablonów
-        $structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
+        $structure = App::$structure['template'];
         //wyszukiwanie ścieżki w strukturze
         foreach (explode('/', $path) as $dir) {
             if (!isset($structure[$dir])) {
@@ -315,7 +315,7 @@ class View extends \Mmi\DataObject
             return;
         }
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . \App\Registry::$translate->getLocale() . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . 'TODOlocale' . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
@@ -341,7 +341,7 @@ class View extends \Mmi\DataObject
     public function renderDirectly($templateCode)
     {
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . \App\Registry::$translate->getLocale() . '_direct_' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . 'TODOlocale' . '_direct_' . md5($templateCode) . '.php');
     }
 
     /**

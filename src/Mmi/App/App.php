@@ -45,59 +45,23 @@ class App
     private static $plugins = [];
 
     /**
+     * @var AppProfiler
+     */
+    private $profiler;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         //enable profiler
-        $profiler = new AppProfiler();
-        //start aplikacji
-        $profiler->event(self::PROFILER_PREFIX . 'application startup');
-        //encoding settings
-        mb_internal_encoding('utf-8');
-        ini_set('default_charset', 'utf-8');
-        setlocale(LC_ALL, 'pl_PL.utf-8');
-        setlocale(LC_NUMERIC, 'en_US.UTF-8');
-        //.env loading (unsafe as PHP-DI uses getenv internally)
-        $dotenv = Dotenv::createUnsafeImmutable(BASE_PATH);
-        $dotenv->load();
-        $profiler->event(self::PROFILER_PREFIX . '.env loaded');
-        //konfiguracja kontenera
-        $builder = new ContainerBuilder();
-        $builder->useAutowiring(true)
-            ->useAnnotations(true)
-            ->ignorePhpDocErrors(true);
-        if (!isset($_ENV['CACHE_PRIVATE_ENABLED'])) {
-            throw new KernelException('CACHE_PRIVATE_ENABLED is not specified in the environment');
-        }
-        //private cache enabled
-        if ($cacheEnabled = $_ENV['CACHE_PRIVATE_ENABLED']) {
-            $builder->enableCompilation(self::APPLICATION_COMPILE_PATH)
-                ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH);
-        }
-        self::$structure = $this->_getStructure($cacheEnabled);
-        //add container definitions
-        foreach (self::$structure['di'] as $diConfigPath) {
-            $builder->addDefinitions($diConfigPath);
-        }
-        foreach (self::$structure['module'] as $moduleName => $controllers) {
-            $definitions = [];
-            foreach ($controllers as $controller => $actions) {
-                $controllerClassName = \ucfirst($moduleName) . '\\' . \ucfirst($controller) . 'Controller';
-                $definitions[$controllerClassName] = autowire($controllerClassName);
-            }
-            $builder->addDefinitions($definitions);
-        }
-        $profiler->event(self::PROFILER_PREFIX . 'DI definitions added');
-        //build container
-        self::$di = $builder->build();
-        //add previously created profiler
-        self::$di->set(AppProfilerInterface::class, $profiler);
-        //exception handler
-        set_exception_handler([self::$di->get(AppEventHandler::class), 'exceptionHandler']);
-        //error handler
-        set_error_handler([self::$di->get(AppEventHandler::class), 'errorHandler']);
-        $profiler->event(self::PROFILER_PREFIX . 'DI container built');
+        $this->profiler = new AppProfiler();
+        //configure application
+        $this
+            ->configureEnvironment()
+            ->configureStructure()
+            ->configureContainer()
+            ->configureErrorHandler();
     }
 
     /**
@@ -105,19 +69,21 @@ class App
      */
     public function run(string $bootstrapClassName = null): void
     {
+        $profiler = self::$di->get(AppProfilerInterface::class);
         $request = self::$di->get(Request::class);
         //plugins before dispatch
         foreach (self::$plugins as $plugin) {
             $plugin->beforeDispatch($request);
-            self::$di->get(AppProfilerInterface::class)->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeDispatch');
+            $profiler->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeDispatch');
         }
         //render content
         $content = self::$di->get(ActionHelper::class)->forward($request);
         //plugins before dispatch
         foreach (self::$plugins as $plugin) {
             $plugin->beforeSend($request);
-            self::$di->get(AppProfilerInterface::class)->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeSend');
+            $profiler->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeSend');
         }
+        $profiler->event(self::PROFILER_PREFIX . 'start sending content');
         //send content to user
         self::$di->get(Response::class)
             ->setContent($content)
@@ -145,7 +111,7 @@ class App
     /**
      * Gets the application structure
      */
-    private function _getStructure(bool $cacheEnabled = false): array
+    private function getStructure(bool $cacheEnabled = false): array
     {
         //always parse structure in a non production mode
         if (!$cacheEnabled) {
@@ -160,6 +126,92 @@ class App
         //cache compiled json
         \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
         return $structure;
+    }
+
+    private function configureStructure(): self
+    {
+        $this->profiler->event(self::PROFILER_PREFIX . 'map application');
+        //always parse structure in a non production mode
+        if (!$_ENV['CACHE_PRIVATE_ENABLED']) {
+            //overwrite cache
+            \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
+            self::$structure = $structure;
+            $this->profiler->event(self::PROFILER_PREFIX . 'application mapped');
+            return $this;
+        }
+        //try fetch structure from a compiled json
+        if (null !== $structure = @\json_decode(\file_get_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE), true)) {
+            self::$structure = $structure;
+            $this->profiler->event(self::PROFILER_PREFIX . 'loaded cached application map');
+            return $this;
+        }
+        //cache compiled json
+        \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
+        self::$structure = $structure;
+        $this->profiler->event(self::PROFILER_PREFIX . 'application mapped and cached');
+        return $this;
+    }
+
+    private function configureContainer(): self
+    {
+        $this->profiler->event(self::PROFILER_PREFIX . 'build DI container');
+        //create container builder
+        $builder = new ContainerBuilder();
+        $builder->useAutowiring(true)
+            ->useAnnotations(true)
+            ->ignorePhpDocErrors(true);
+        if (!isset($_ENV['CACHE_PRIVATE_ENABLED'])) {
+            throw new KernelException('CACHE_PRIVATE_ENABLED is not specified in the environment');
+        }
+        //private cache enabled
+        if ($_ENV['CACHE_PRIVATE_ENABLED']) {
+            $builder->enableCompilation(self::APPLICATION_COMPILE_PATH)
+                ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH);
+        } else {
+            array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/*'));
+        }
+        //add module DI definitions
+        foreach (self::$structure['di'] as $diConfigPath) {
+            $builder->addDefinitions($diConfigPath);
+        }
+        //add controllers
+        foreach (self::$structure['module'] as $moduleName => $controllers) {
+            $definitions = [];
+            foreach ($controllers as $controller => $actions) {
+                $controllerClassName = \ucfirst($moduleName) . '\\' . \ucfirst($controller) . 'Controller';
+                $definitions[$controllerClassName] = autowire($controllerClassName);
+            }
+            $builder->addDefinitions($definitions);
+        }
+        //build container
+        self::$di = $builder->build();
+        //add previously created profiler
+        self::$di->set(AppProfilerInterface::class, $this->profiler);
+        $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');        
+        return $this;
+    }
+
+    private function configureErrorHandler(): self
+    {
+        //exception handler
+        set_exception_handler([self::$di->get(AppEventHandler::class), 'exceptionHandler']);
+        //error handler
+        set_error_handler([self::$di->get(AppEventHandler::class), 'errorHandler']);
+        return $this;        
+    }
+
+    private function configureEnvironment(): self
+    {
+        $this->profiler->event(self::PROFILER_PREFIX . 'configure environment');
+        //encoding settings
+        mb_internal_encoding('utf-8');
+        ini_set('default_charset', 'utf-8');
+        setlocale(LC_ALL, 'pl_PL.utf-8');
+        setlocale(LC_NUMERIC, 'en_US.UTF-8');
+        //.env loading (unsafe as PHP-DI uses getenv internally)
+        Dotenv::createUnsafeImmutable(BASE_PATH)->load();
+        $this->profiler->event(self::PROFILER_PREFIX . 'environment configured');
+        return $this;
     }
 
 }
