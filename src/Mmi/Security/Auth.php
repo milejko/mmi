@@ -10,6 +10,10 @@
 
 namespace Mmi\Security;
 
+use Mmi\App\App;
+use Mmi\Http\HttpServerEnv;
+use Mmi\Http\Response;
+
 /**
  * Klasa autoryzacji
  */
@@ -316,9 +320,10 @@ class Auth
      */
     public function httpAuth($realm = '', $errorMessage = '')
     {
+        $env = App::$di->get(HttpServerEnv::class);
         //pobieranie usera i hasła ze zmiennych środowiskowych
-        $this->setIdentity(\Mmi\App\FrontController::getInstance()->getEnvironment()->authUser)
-            ->setCredential(\Mmi\App\FrontController::getInstance()->getEnvironment()->authPassword);
+        $this->setIdentity($env->authUser)
+            ->setCredential($env->authPassword);
         //model autoryzacji
         $model = $this->_modelName;
         //autoryzacja
@@ -328,7 +333,7 @@ class Auth
             return;
         }
         //odpowiedź 401
-        \Mmi\App\FrontController::getInstance()->getResponse()
+        App::$di->get(Response::class)
             ->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
             ->setCodeUnauthorized()
             ->setContent($errorMessage);

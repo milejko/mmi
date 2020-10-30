@@ -11,6 +11,7 @@
 namespace Mmi\Mvc;
 
 use Mmi\App\App;
+use Mmi\Translate;
 
 /**
  * Klasa widoku
@@ -80,6 +81,19 @@ class View extends \Mmi\DataObject
      * @var string 
      */
     public $cdn;
+
+    /**
+     * @var Translate
+     */
+    private $translate;
+
+    /**
+     * Constructor
+     */
+    public function __construct(Translate $translate)
+    {
+        $this->translate = $translate;
+    }
 
     /**
      * Magicznie wywołuje metodę na widoku
@@ -315,7 +329,7 @@ class View extends \Mmi\DataObject
             return;
         }
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . 'TODOlocale' . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->_locale . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
@@ -341,7 +355,7 @@ class View extends \Mmi\DataObject
     public function renderDirectly($templateCode)
     {
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . 'TODOlocale' . '_direct_' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->_locale . '_direct_' . md5($templateCode) . '.php');
     }
 
     /**
@@ -352,7 +366,7 @@ class View extends \Mmi\DataObject
      */
     public function _($key, array $params = [])
     {
-        return \App\Registry::$translate->_($key, $params);
+        return $this->translate->_($key, $params);
     }
 
     /**

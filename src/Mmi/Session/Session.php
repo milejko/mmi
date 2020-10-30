@@ -10,20 +10,11 @@
 
 namespace Mmi\Session;
 
-use Mmi\App\FrontController;
-
 class Session
 {
-
     const FILE_HANDLER = 'files';
-    const REDIS_HANDLER = 'redis';
 
-    /**
-     * Rozpoczęcie sesji
-     * @param \Mmi\Session\SessionConfig $config
-     * @throws SessionException
-     */
-    public static function start(\Mmi\Session\SessionConfig $config)
+    public function __construct(SessionConfig $config)
     {
         session_name($config->name);
         session_set_cookie_params($config->cookieLifetime, $config->cookiePath, $config->cookieDomain, $config->cookieSecure, $config->cookieHttpOnly);
@@ -32,12 +23,22 @@ class Session
         ini_set('session.gc_divisor', $config->gcDivisor);
         ini_set('session.gc_maxlifetime', $config->gcMaxLifetime);
         ini_set('session.gc_probability', $config->gcProbability);
-        if ($config->handler == self::FILE_HANDLER || $config->handler == self::FILE_HANDLER) {
+        //file support
+        if (self::FILE_HANDLER == $config->handler) {
             ini_set('session.save_handler', $config->handler);
-        } else {
-            $handlerClass = $config->handler;
-            session_set_save_handler(new $handlerClass());
+            return;
         }
+        $handlerClass = $config->handler;
+        session_set_save_handler(new $handlerClass());
+    }
+
+    /**
+     * Rozpoczęcie sesji
+     * @param \Mmi\Session\SessionConfig $config
+     * @throws SessionException
+     */
+    public function start(): void
+    {
         session_start();
     }
 
@@ -47,27 +48,25 @@ class Session
      * @param string $id identyfikator
      * @return string
      */
-    public static function setId($id)
+    public function setId($id): void
     {
-        return session_id($id);
+        session_id($id);
     }
 
     /**
      * Pobiera identyfikator sesji
-     * @return string
      */
-    public static function getId()
+    public function getId(): string
     {
         return session_id();
     }
 
     /**
      * Pobiera przekształcony do integera identyfikator sesji
-     * @return int
      */
-    public static function getNumericId()
+    public function getNumericId(): int
     {
-        $hashId = self::getId();
+        $hashId = $this->getId();
         $id = (integer) substr(preg_replace('/[a-z]+/', '', $hashId), 0, 9);
         $letters = preg_replace('/[0-9]+/', '', $hashId);
         for ($i = 0, $length = strlen($letters); $i < $length; $i++) {
@@ -80,20 +79,19 @@ class Session
      * Niszczy sesję
      * @return boolean
      */
-    public static function destroy()
+    public function destroy(): void
     {
-        return session_destroy();
+        session_destroy();
     }
 
     /**
      * Regeneruje identyfikator sesji
      * kopiuje dane starej sesji do nowej
      * @param boolean $deleteOldSession kasuje starą sesję
-     * @return boolean
      */
-    public static function regenerateId($deleteOldSession = true)
+    public function regenerateId($deleteOldSession = true): void
     {
-        return session_regenerate_id($deleteOldSession);
+        session_regenerate_id($deleteOldSession);
     }
 
 }

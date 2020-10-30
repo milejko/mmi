@@ -10,8 +10,10 @@
 
 namespace Mmi\Http;
 
+use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\Cache;
+use Mmi\Mvc\View;
 
 /**
  * Klasa panelu debugowania aplikacji
@@ -49,6 +51,11 @@ class ResponseDebugger
     private $cache;
 
     /**
+     * @var View
+     */
+    private $view;
+
+    /**
      * Konstruktor - modyfikuje response o dane debbugera
      */
     public function __construct(
@@ -56,7 +63,8 @@ class ResponseDebugger
         Request $request,
         AppProfilerInterface $profiler,
         HttpServerEnv $httpServerEnv,
-        Cache $cache
+        Cache $cache,
+        View $view
     )
     {
         //inject
@@ -65,6 +73,7 @@ class ResponseDebugger
         $this->profiler         = $profiler;
         $this->httpServerEnv    = $httpServerEnv;
         $this->cache            = $cache;
+        $this->view             = $view;
         switch ($response->getType()) {
             case 'text/html':
                 $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
@@ -99,27 +108,28 @@ class ResponseDebugger
      */
     public function getHtml()
     {
+        $cacheInfo = 'cache private: %s - cache public: %s';
         //pobranie widoku
-        if ($this->cache->isActive()) {
-            $cacheInfo = '<span style="color: #f22;">no cache</span>';
-        } else {
-            $cacheInfo = '<span style="color: #99ff99;">cache on</span>';
-        }
+        $cacheInfo = \sprintf(
+            $cacheInfo, 
+            App::$di->get('cache.private.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>', 
+            $this->cache->isActive() ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>'
+        );
         //czasy i pamięci w wykonaniu
         $html = "\n";
         $html .= '<style>div#MmiPanel pre, div#MmiPanel table, div#MmiPanel table tr, div#MmiPanel table td, div#MmiPanel div, div#MmiPanel p {font: normal 11px Monospace!important;}</style><div id="MmiPanelBar" onclick="document.getElementById(\'MmiPanel\').style.display=\'block\'; window.scrollTo(0,document.getElementById(\'MmiPanel\').offsetTop);" style="';
-        $html .= 'text-align: center; position: fixed; padding: 0 10px; margin: 0; line-height: 0; background: #999; border-radius: 5px 5px 0 0; font: bold 10px Arial!important; color: #000; bottom: 0px; left: 45%; text-transform: none;">' . $this->_getElapsed() . ', ' . $this->_getPeakMemory() . ' - ' . $cacheInfo . '</div>';
+        $html .= 'text-align: center; position: fixed; padding: 3px 10px; margin: 0; line-height: 0; background: #000; border-radius: 5px 0 0 0; font: bold 10px Arial!important; color: #fff; bottom: 0; right: 0; text-transform: none;">' . $this->_getElapsed() . ', ' . $this->_getPeakMemory() . ' - ' . $cacheInfo . '</div>';
         $html .= '<div id="MmiPanel" ondblclick="this.style.display=\'none\';" style="';
-        /*if (null === $view->_exception) {
+        if (null === $this->view->_exception) {
             $html .= 'display: none; ';
-        }*/
+        }
         //rozszerzony podgląd
         $html .= 'position: relative; text-align: left; padding: 20px 10px 5px 10px; background: #ccc; color: #000; font: normal 11px Monospace!important;">';
-        /*if (null !== $view->_exception) {
-            $html .= '<h2 style="color: #bb0000; margin: 0px; font-size: 14px; text-transform: none;">' . get_class($view->_exception) . ': ' . $view->_exception->getMessage() . '</h2>';
-            $html .= '<p style="margin: 0px; padding: 0px 0px 10px 0px;">' . $view->_exception->getFile() . ' <strong>(' . $view->_exception->getLine() . ')</strong></p>';
-            $html .= '<pre>' . $view->_trace . '</pre><br />';
-        }*/
+        if (null !== $this->view->_exception) {
+            $html .= '<h2 style="color: #bb0000; margin: 0px; font-size: 14px; text-transform: none;">' . get_class($this->view->_exception) . ': ' . $this->view->_exception->getMessage() . '</h2>';
+            $html .= '<p style="margin: 0px; padding: 0px 0px 10px 0px;">' . $this->view->_exception->getFile() . ' <strong>(' . $this->view->_exception->getLine() . ')</strong></p>';
+            $html .= '<pre>' . $this->view->_trace . '</pre><br />';
+        }
         $html .= '<table cellspacing="0" cellpadding="0" border="0" style="width: 100%; padding: 0px; margin: 0px;"><tr><td style="vertical-align: top; padding-right: 5px;">';
 
         //środowisko
@@ -152,11 +162,11 @@ class ResponseDebugger
         $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray(get_class_vars('\App\Registry')), true)) . '</pre>';
 
         //zmienne widoku
-        /*if ($view !== null) {
+        if ($this->view !== null) {
             $html .= '<p style="margin: 0px;">View Variables: </p>';
             $html .= self::PRE_OPEN;
-            $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($view->getAllVariables()), true)) . '</pre>';
-        }*/
+            $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($this->view->getAllVariables()), true)) . '</pre>';
+        }
 
         //zmienne cookie
         if (isset($_COOKIE) && count($_COOKIE) > 0) {

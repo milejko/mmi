@@ -40,9 +40,9 @@ class Button extends ElementAbstract
             $this->setValue($this->getLabel());
         }
         //opcje do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_htmlOptions = $this->_getHtmlOptions();
+        $this->view->_htmlOptions = $this->_getHtmlOptions();
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_FIELD);
+        return $this->view->renderTemplate(static::TEMPLATE_FIELD);
     }
 
 }

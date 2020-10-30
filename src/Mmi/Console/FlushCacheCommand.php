@@ -2,6 +2,8 @@
 
 namespace Mmi\Console;
 
+use Mmi\App\App;
+use Mmi\Cache\Cache;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -24,9 +26,9 @@ class FlushCacheCommand extends CommandAbstract
     {
         try {
             //czyszczenie bufora systemowego
-            \Mmi\App\FrontController::getInstance()->getLocalCache()->flush();
+            App::$di->get('PrivateCacheService')->flush();
             //czyszczenie bufora aplikacyjnego
-            \App\Registry::$cache->flush();
+            App::$di->get(Cache::class)->flush();
         } catch (\Exception $e) {
             $output->writeln('Error');
             return 1;

@@ -209,7 +209,7 @@ class App
         setlocale(LC_ALL, 'pl_PL.utf-8');
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
         //.env loading (unsafe as PHP-DI uses getenv internally)
-        Dotenv::createUnsafeImmutable(BASE_PATH)->load();
+        Dotenv::createUnsafeImmutable(BASE_PATH)->safeLoad();
         $this->profiler->event(self::PROFILER_PREFIX . 'environment configured');
         return $this;
     }

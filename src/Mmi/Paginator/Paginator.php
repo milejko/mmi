@@ -10,6 +10,10 @@
 
 namespace Mmi\Paginator;
 
+use Mmi\App\App;
+use Mmi\Http\Request;
+use Mmi\Mvc\View;
+
 /**
  * Klasa paginatora
  *
@@ -43,7 +47,7 @@ class Paginator extends \Mmi\OptionObject
             ->setNextLabel('&#187;')
             ->setHashHref('')
             ->setPageVariable('p')
-            ->setRequest(\Mmi\App\FrontController::getInstance()->getView()->request); //domyślny request
+            ->setRequest(App::$di->get(Request::class)); //domyślny request
     }
 
     /**
@@ -130,9 +134,9 @@ class Paginator extends \Mmi\OptionObject
             return '';
         }
         //paginator do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_paginator = $this;
+        App::$di->get(View::class)->_paginator = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE);
+        return App::$di->get(View::class)->renderTemplate(static::TEMPLATE);
     }
 
 }

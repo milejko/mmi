@@ -10,10 +10,14 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-use function DI\get;
+use function DI\env;
 
 return [
-    LoggerInterface::class => DI\factory(function (ContainerInterface $container) {
+    'log.level'     => env('LOG_LEVEL', Logger::WARNING),
+    'log.handler'   => env('LOG_HANDLER', ''),
+    'log.path'      => env('LOG_PATH', ''),
+
+    LoggerInterface::class => function (ContainerInterface $container) {
         $logger = new Logger('mmi');
         //default handler
         $logger->pushHandler(new StreamHandler(BASE_PATH . '/var/log/app.log', $container->get('log.level')));
@@ -23,18 +27,17 @@ return [
         }
         //additional handler
         switch ($container->get('log.handler')) {
-            //graylog
+                //graylog
             case 'gelf':
                 $pathPort = explode(':', $container->get('log.path'));
                 $transport = new IgnoreErrorTransportWrapper(new UdpTransport($pathPort[0], isset($pathPort[1]) ? $pathPort[1] : 9000));
                 $logger->pushHandler(new GelfHandler(new Publisher($transport), $container->get('log.level')));
                 break;
-            //syslog
+                //syslog
             case 'syslog':
                 $logger->pushHandler(new SyslogHandler('mmi', LOG_USER, $container->get('log.level')));
                 break;
         }
         return $logger;
-    }),
-    'LoggerService' => get(LoggerInterface::class),
+    },
 ];

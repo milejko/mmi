@@ -10,7 +10,8 @@
 
 namespace Mmi\Db;
 
-use Mmi\App\FrontController;
+use Mmi\App\App;
+use Mmi\App\AppProfilerInterface;
 
 /**
  * Klasa profilera aplikacji
@@ -57,7 +58,7 @@ class DbProfiler
             'elapsed' => $elapsed,
         ];
         //event profilera
-        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PREFIX . ': ' . substr($sql, 0, strpos($sql, ' ')));
+        App::$di->get(AppProfilerInterface::class)->event(self::KERNEL_PROFILER_PREFIX . ': ' . substr($sql, 0, strpos($sql, ' ')));
         return $this;
     }
 

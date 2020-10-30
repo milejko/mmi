@@ -10,6 +10,9 @@
 
 namespace Mmi;
 
+use Mmi\App\App;
+use Psr\Log\LoggerInterface;
+
 /**
  * Obiekt tłumaczeń
  */
@@ -43,8 +46,8 @@ class Translate
         }
         //parser pliku tłumaczeń
         $data = $this->_parseTranslationFile($sourceFile);
-        //logowanie 
-        \Mmi\App\FrontController::getInstance()->getLogger()->debug('Parsing translation file: ' . realpath($sourceFile) . ' with: ' . count($data) . ' keys');
+        //logowanie
+        App::$di->get(LoggerInterface::class)->debug('Parsing translation file: ' . realpath($sourceFile) . ' with: ' . count($data) . ' keys');
         //istnieje tłumaczenie
         $this->_data[$locale] = isset($this->_data[$locale]) ? array_merge($data, $this->_data[$locale]) : $data;
         return $this;
@@ -132,7 +135,7 @@ class Translate
     private function _returnKeyAndLogUntranslated($key, array $params)
     {
         //debug log
-        \Mmi\App\FrontController::getInstance()->getLogger()->debug('Missing translation: ' . \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri . ' [' . $this->_locale . '] ' . $key);
+        App::$di->get(LoggerInterface::class)->debug('Missing translation: [' . $this->_locale . '] ' . $key);
         //zwrot klucza
         return $key;
     }

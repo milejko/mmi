@@ -10,6 +10,9 @@
 
 namespace Mmi\Form\Element;
 
+use Mmi\App\App;
+use Mmi\Mvc\View;
+
 /**
  * Abstrakcyjna klasa elementu formularza
  *
@@ -64,6 +67,11 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     protected $_renderingOrder = ['fetchBegin', 'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchEnd'];
 
+    /** 
+     * @var View
+     */
+    protected $view;
+
     //szablon początku pola
     CONST TEMPLATE_BEGIN = 'mmi/form/element/element-abstract/begin';
     //szablon opisu
@@ -89,6 +97,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             ->setIgnore(false)
             //dodaje klasę HTML (field)
             ->addClass('field');
+        //@TODO: some day better injection (container independent)
+        $this->view = App::$di->get(View::class);
     }
 
     /**
@@ -422,9 +432,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             $this->addClass('error');
         }
         //element do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        $this->view->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_BEGIN);
+        return $this->view->renderTemplate(static::TEMPLATE_BEGIN);
     }
 
     /**
@@ -434,9 +444,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     public final function fetchEnd()
     {
         //element do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        $this->view->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_END);
+        return $this->view->renderTemplate(static::TEMPLATE_END);
     }
 
     /**
@@ -453,9 +463,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             $this->addClass('required');
         }
         //element do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        $this->view->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_LABEL);
+        return $this->view->renderTemplate(static::TEMPLATE_LABEL);
     }
 
     /**
@@ -465,11 +475,11 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     public function fetchField()
     {
         //opcje do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_htmlOptions = $this->_getHtmlOptions();
+        $this->view->_htmlOptions = $this->_getHtmlOptions();
         //element do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        $this->view->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_FIELD);
+        return $this->view->renderTemplate(static::TEMPLATE_FIELD);
     }
 
     /**
@@ -483,9 +493,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             return;
         }
         //element do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        $this->view->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_DESCRIPTION);
+        return $this->view->renderTemplate(static::TEMPLATE_DESCRIPTION);
     }
 
     /**
@@ -495,9 +505,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     public final function fetchErrors()
     {
         //element do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_element = $this;
+        $this->view->_element = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_ERRORS);
+        return $this->view->renderTemplate(static::TEMPLATE_ERRORS);
     }
 
     /**

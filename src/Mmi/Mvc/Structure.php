@@ -115,7 +115,7 @@ class Structure
                 continue;
             }
             //plik nie jest kontrolerem
-            if (false === strpos($controller->getFilename(), 'Controller')) {
+            if (!\preg_match('/^[A-Z][a-z0-9]+Controller.php$/', $controller->getFilename())) {
                 continue;
             }
             $controllerName = lcfirst(substr($controller->getFilename(), 0, -14));
@@ -138,7 +138,7 @@ class Structure
             return;
         }
         //łapanie nazw akcji w kodzie
-        if (preg_match_all('/function ([a-zA-Z0-9]+)\(/', file_get_contents($controllerPath), $actions)) {
+        if (preg_match_all('/function ([a-zA-Z0-9]+)Action\(/', file_get_contents($controllerPath), $actions)) {
             foreach ($actions[1] as $action) {
                 $components[$moduleName][$controllerName][$action] = 1;
             }

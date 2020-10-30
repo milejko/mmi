@@ -22,7 +22,7 @@ class IndexController extends Mvc\Controller
     /**
      * Akcja główna
      */
-    public function index()
+    public function indexAction()
     {
         
     }
@@ -31,7 +31,7 @@ class IndexController extends Mvc\Controller
      * Akcja testowa
      * @return string
      */
-    public function test()
+    public function testAction()
     {
         return self::DEFAULT_LABEL;
     }
@@ -39,7 +39,7 @@ class IndexController extends Mvc\Controller
     /**
      * Akcja błędu
      */
-    public function error()
+    public function errorAction()
     {
         //pobranie response
         $this->getResponse()

@@ -90,8 +90,7 @@ class RouterMatcher
             }
             if ((preg_match('/\$([0-9]+)(\|[a-z]+)?/', $value, $mt) && isset($params[$key]))) {
                 if (!empty($mt) && count($mt) > 2) {
-                    $filter = \Mmi\App\FrontController::getInstance()->getView()->getFilter(ucfirst(ltrim($mt[2], '|')));
-                    $params[$key] = $filter->filter($params[$key]);
+                    throw new \Exception('Filters no longer supported');
                 }
                 $matches[$value] = $params[$key];
             } elseif (!isset($params[$key]) || $params[$key] != $value) {

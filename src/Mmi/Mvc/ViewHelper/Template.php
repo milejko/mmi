@@ -224,7 +224,7 @@ class Template extends HelperAbstract
     private function _translate(array $matches)
     {
         //tłumaczenie
-        return $matches[1];//\App\Registry::$translate->_($matches[1]);
+        return $this->view->_($matches[1]);
     }
 
     /**

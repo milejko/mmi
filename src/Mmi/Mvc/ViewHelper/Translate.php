@@ -28,7 +28,7 @@ class Translate extends HelperAbstract
      */
     public function _($key)
     {
-        return \App\Registry::$translate->_($key);
+        return $this->view->_($key);
     }
 
 }
