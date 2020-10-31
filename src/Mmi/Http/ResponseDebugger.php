@@ -135,25 +135,10 @@ class ResponseDebugger
         $html .= '<p style="margin: 0px;">Configuration:</p>';
         $html .= self::PRE_OPEN . ResponseDebugger\Part::getConfigHtml() . '</pre>';
 
-        //profiler aplikacji
-        $html .= '<p style="margin: 0px;">Application profiler: </p>';
-        $html .= self::PRE_OPEN . ResponseDebugger\Part::getProfilerHtml($this->profiler) . '</pre>';
-
-        //profiler bazy danych
-        $html .= '<p style="margin: 0px;">Database profiler: </p>';
-        $html .= self::PRE_OPEN . ResponseDebugger\Part::getDbProfilerHtml() . '</pre>';
-
-        $html .= '</td><td style="vertical-align: top; padding-left: 5px;">';
-
         //zmienne requesta
         $html .= '<p style="margin: 0px;">Request variables: </p>';
         $html .= self::PRE_OPEN;
         $html .= ResponseDebugger\Colorify::colorify(print_r($this->request->toArray(), true)) . '</pre>';
-
-        //zmienne rejestru
-        $html .= '<p style="margin: 0px;">DI container entries: </p>';
-        $html .= self::PRE_OPEN;
-        $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray(App::$di->getKnownEntryNames()), true)) . '</pre>';
 
         //zmienne widoku
         if ($this->view !== null) {
@@ -173,7 +158,23 @@ class ResponseDebugger
             $html .= '<p style="margin: 0px;">Session Variables: </p>';
             $html .= self::PRE_OPEN;
             $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($_SESSION), true)) . '</pre>';
-        }
+        }        
+
+        //profiler aplikacji
+        $html .= '<p style="margin: 0px;">Application profiler: </p>';
+        $html .= self::PRE_OPEN . ResponseDebugger\Part::getProfilerHtml($this->profiler) . '</pre>';
+
+        //profiler bazy danych
+        $html .= '<p style="margin: 0px;">Database profiler: </p>';
+        $html .= self::PRE_OPEN . ResponseDebugger\Part::getDbProfilerHtml() . '</pre>';
+
+        $html .= '</td><td style="vertical-align: top; padding-left: 5px;">';
+
+        //zmienne rejestru
+        $html .= '<p style="margin: 0px;">DI container entries: </p>';
+        $html .= self::PRE_OPEN;
+        $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray(App::$di->getKnownEntryNames()), true)) . '</pre>';
+
         $html .= '</pre>';
         $html .= '</td></tr></table></div>';
         return $html;

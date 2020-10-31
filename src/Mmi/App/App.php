@@ -118,10 +118,12 @@ class App
             $this->profiler->event(self::PROFILER_PREFIX . 'cached DI container loaded');
             return $this;
         } catch (NotFoundException $e) {
+            array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/*'));
+            //create container builder
+            $builder = $this->getContainerBuilder();
         }
-        //create container builder
-        $builder = $this->getContainerBuilder();
         $builder->addDefinitions(['app.structure' => $structure = Structure::getStructure()]);
+        $this->profiler->event(self::PROFILER_PREFIX . 'application structure mapped');
         //add module DI definitions
         foreach ($structure['di'] as $diConfigPath) {
             $builder->addDefinitions($diConfigPath);
