@@ -30,7 +30,7 @@ return [
             //ustawienie requestu
             ->setRequest($container->get(Request::class))
             //ustawianie baseUrl
-            ->setBaseUrl($container->get(HttpServerEnv::class));
+            ->setBaseUrl($container->get(HttpServerEnv::class)->baseUrl);
     },
     HelperAbstract::class => autowire(HelperAbstract::class),
 ];
