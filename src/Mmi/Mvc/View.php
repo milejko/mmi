@@ -184,7 +184,7 @@ class View extends \Mmi\DataObject
     public function getHelper($name)
     {
         //wyszukiwanie helpera w strukturze
-        foreach (App::$structure['helper'] as $namespace => $helpers) {
+        foreach (App::$di->get('app.structure')['helper'] as $namespace => $helpers) {
             if (!isset($helpers[$name])) {
                 continue;
             }
@@ -207,7 +207,7 @@ class View extends \Mmi\DataObject
     public function getFilter($name)
     {
         //wyszukiwanie filtra w strukturze
-        foreach (App::$structure['filter'] as $namespace => $filters) {
+        foreach (App::$di->get('app.structure')['filter'] as $namespace => $filters) {
             if (!isset($filters[$name])) {
                 continue;
             }
@@ -296,7 +296,7 @@ class View extends \Mmi\DataObject
             throw new \Mmi\Mvc\MvcException('Template path invalid.');
         }
         //pobranie struktury szablonów
-        $structure = App::$structure['template'];
+        $structure = App::$di->get('app.structure')['template'];
         //wyszukiwanie ścieżki w strukturze
         foreach (explode('/', $path) as $dir) {
             if (!isset($structure[$dir])) {

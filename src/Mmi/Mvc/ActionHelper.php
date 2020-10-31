@@ -185,7 +185,7 @@ class ActionHelper
         //informacja do profilera o rozpoczęciu wykonywania akcji
         $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
-        $structure = App::$structure['module'];
+        $structure = App::$di->get('app.structure')['module'];
         //sprawdzenie w strukturze
         if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
             //komponent nieodnaleziony

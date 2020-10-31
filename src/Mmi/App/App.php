@@ -12,6 +12,7 @@ namespace Mmi\App;
 
 use DI\ContainerBuilder;
 use DI\Container;
+use DI\NotFoundException;
 use Mmi\Mvc\Structure;
 use Dotenv\Dotenv;
 use Mmi\Http\Request;
@@ -35,11 +36,6 @@ class App
     public static $di;
 
     /**
-     * @var array
-     */
-    public static $structure;
-
-    /**
      * @var AppPluginInterface[]
      */
     private static $plugins = [];
@@ -59,7 +55,6 @@ class App
         //configure application
         $this
             ->configureEnvironment()
-            ->configureStructure()
             ->configureContainer()
             ->configureErrorHandler();
     }
@@ -108,74 +103,31 @@ class App
         return self::$plugins;
     }
 
-    /**
-     * Gets the application structure
-     */
-    private function getStructure(bool $cacheEnabled = false): array
-    {
-        //always parse structure in a non production mode
-        if (!$cacheEnabled) {
-            //overwrite cache
-            \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
-            return Structure::getStructure();
-        }
-        //try fetch structure from a compiled json
-        if (null !== $structure = @\json_decode(\file_get_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE), true)) {
-            return $structure;
-        }
-        //cache compiled json
-        \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
-        return $structure;
-    }
-
-    private function configureStructure(): self
-    {
-        $this->profiler->event(self::PROFILER_PREFIX . 'map application');
-        //always parse structure in a non production mode
-        if (!$_ENV['CACHE_PRIVATE_ENABLED']) {
-            //overwrite cache
-            \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
-            self::$structure = $structure;
-            $this->profiler->event(self::PROFILER_PREFIX . 'application mapped');
-            return $this;
-        }
-        //try fetch structure from a compiled json
-        if (null !== $structure = @\json_decode(\file_get_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE), true)) {
-            self::$structure = $structure;
-            $this->profiler->event(self::PROFILER_PREFIX . 'loaded cached application map');
-            return $this;
-        }
-        //cache compiled json
-        \file_put_contents(self::APPLICATION_COMPILE_STRUCTURE_FILE, \json_encode($structure = Structure::getStructure()));
-        self::$structure = $structure;
-        $this->profiler->event(self::PROFILER_PREFIX . 'application mapped and cached');
-        return $this;
-    }
-
     private function configureContainer(): self
     {
-        $this->profiler->event(self::PROFILER_PREFIX . 'build DI container');
-        //create container builder
-        $builder = new ContainerBuilder();
-        $builder->useAutowiring(true)
-            ->useAnnotations(true)
-            ->ignorePhpDocErrors(true);
-        if (!isset($_ENV['CACHE_PRIVATE_ENABLED'])) {
-            throw new KernelException('CACHE_PRIVATE_ENABLED is not specified in the environment');
-        }
-        //private cache enabled
-        if ($_ENV['CACHE_PRIVATE_ENABLED']) {
-            $builder->enableCompilation(self::APPLICATION_COMPILE_PATH)
-                ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH);
-        } else {
+        //remove previous compilation if cache disabled
+        if (!$_ENV['CACHE_PRIVATE_ENABLED']) {
             array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/*'));
         }
+        try {
+            //try to build from cache
+            $container = $this->getContainerBuilder()->build();
+            //below throws exception if container cache is empty
+            $container->get('app.structure');
+            self::$di = $container;
+            $this->profiler->event(self::PROFILER_PREFIX . 'cached DI container loaded');
+            return $this;
+        } catch (NotFoundException $e) {
+        }
+        //create container builder
+        $builder = $this->getContainerBuilder();
+        $builder->addDefinitions(['app.structure' => $structure = Structure::getStructure()]);
         //add module DI definitions
-        foreach (self::$structure['di'] as $diConfigPath) {
+        foreach ($structure['di'] as $diConfigPath) {
             $builder->addDefinitions($diConfigPath);
         }
         //add controllers
-        foreach (self::$structure['module'] as $moduleName => $controllers) {
+        foreach ($structure['module'] as $moduleName => $controllers) {
             $definitions = [];
             foreach ($controllers as $controller => $actions) {
                 $controllerClassName = \ucfirst($moduleName) . '\\' . \ucfirst($controller) . 'Controller';
@@ -185,10 +137,24 @@ class App
         }
         //build container
         self::$di = $builder->build();
-        //add previously created profiler
-        self::$di->set(AppProfilerInterface::class, $this->profiler);
         $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');        
         return $this;
+    }
+
+    private function getContainerBuilder(): ContainerBuilder
+    {
+        $this->profiler->event(self::PROFILER_PREFIX . 'build DI container');
+        //create container builder
+        $builder = new ContainerBuilder();
+        //configure builder
+        $builder
+            ->useAutowiring(true)
+            ->useAnnotations(true)
+            ->ignorePhpDocErrors(true)
+            ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
+            $builder->enableCompilation(self::APPLICATION_COMPILE_PATH)
+                ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH);
+        return $builder;
     }
 
     private function configureErrorHandler(): self
@@ -210,6 +176,10 @@ class App
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
         //.env loading (unsafe as PHP-DI uses getenv internally)
         Dotenv::createUnsafeImmutable(BASE_PATH)->safeLoad();
+        //ENV is invalid
+        if (!isset($_ENV['CACHE_PRIVATE_ENABLED'])) {
+            throw new KernelException('CACHE_PRIVATE_ENABLED is not specified in the environment');
+        }        
         $this->profiler->event(self::PROFILER_PREFIX . 'environment configured');
         return $this;
     }

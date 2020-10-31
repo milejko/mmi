@@ -17,7 +17,7 @@ class Router
 
     /**
      * Konfiguracja
-     * @var \Mmi\Mvc\RouterConfig
+     * @var RouterConfigAbstract
      */
     private $_config;
 
@@ -25,7 +25,7 @@ class Router
      * Konstruktor routera
      * @param \Mmi\Mvc\RouterConfig $config
      */
-    public function __construct(\Mmi\Mvc\RouterConfig $config)
+    public function __construct(RouterConfigAbstract $config)
     {
         $this->_config = $config;
     }

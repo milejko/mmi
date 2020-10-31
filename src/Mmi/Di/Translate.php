@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 return [
     Translate::class => function (ContainerInterface $container) {
         //get translator structure
-        $structure = App::$structure['translate'];
+        $structure = $container->get('app.structure')['translate'];
         //loading buffered translator
         $cache = $container->get('PrivateCacheService');
         //loading from cache

@@ -11,9 +11,9 @@
 namespace Mmi\Mvc;
 
 /**
- * Obiekt konfiguracji routera
+ * Router config abstract
  */
-class RouterConfig
+abstract class RouterConfigAbstract
 {
 
     /**
