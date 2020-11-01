@@ -11,6 +11,7 @@
 namespace Mmi\Mvc;
 
 use Mmi\App\App;
+use Mmi\App\AppEventInterceptorAbstract;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Http\Request;
 
@@ -19,9 +20,9 @@ use Mmi\Http\Request;
  */
 class ActionHelper
 {
-    const KERNEL_PROFILER_ACTION_PREFIX = 'Mvc\Controller';
-    const KERNEL_PROFILER_TEMPLATE_PREFIX = 'Mvc\View';
-    const KERNEL_PROFILER_PLUGIN_PREFIX = 'Mvc\Dispatcher';
+    const PROFILER_ACTION_PREFIX = 'Mmi\Mvc\Controller: ';
+    const PROFILER_TEMPLATE_PREFIX = 'Mmi\Mvc\View: ';
+    const PROFILER_PREFIX = 'Mmi\Mvc\ActionHelper: ';
 
     /**
      * Obiekt ACL
@@ -97,7 +98,7 @@ class ActionHelper
         //sprawdzenie ACL
         if (!$this->_checkAcl($request)) {
             //logowanie zablokowania akcji
-            return $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' blocked');
+            return $this->profiler->event(self::PROFILER_ACTION_PREFIX . $request->getAsColonSeparatedString() . ' blocked');
         }
         //rendering szablonu jeśli akcja zwraca null
         return $this->_renderAction($request, ($this->view->request ? $this->view->request : new Request), $main);
@@ -118,10 +119,10 @@ class ActionHelper
         }
         //renderowanie akcji
         $content = $this->_renderAction($request, $request, true);
-        //iteracja po pluginach aplikacji
-        foreach (App::getPlugins() as $plugin) {
-            $plugin->afterDispatch($request);
-            $this->profiler->event(self::KERNEL_PROFILER_PLUGIN_PREFIX . ': ' . \get_class($plugin ) . ' executed afterDispatch');
+        //intercept afterDispatch
+        if (App::$di->has(AppEventInterceptorAbstract::class)) {
+            App::$di->get(AppEventInterceptorAbstract::class)->afterDispatch();
+            $this->profiler->event(self::PROFILER_PREFIX . 'interceptor executed afterDispatch');
         }
         //zmiana requestu i render layoutu
         return $this->view->renderLayout($content, $request);
@@ -158,7 +159,7 @@ class ActionHelper
             //jeśli akcja główna - to ona decyduje o wyłączeniu layoutu, jeśli nie - reset do tego co było przed nią
             ->setLayoutDisabled($main ? $this->view->isLayoutDisabled() : $resetLayoutDisabled);
         //profiler wyrenderowaniu szablonu
-        $this->profiler->event(self::KERNEL_PROFILER_TEMPLATE_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' rendered');
+        $this->profiler->event(self::PROFILER_TEMPLATE_PREFIX . $request->getAsColonSeparatedString() . ' rendered');
         //zwrot wyrenderowanego szablonu
         return $content;
     }
@@ -183,7 +184,7 @@ class ActionHelper
     private function _invokeAction(Request $request)
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
-        $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' start');
+        $this->profiler->event(self::PROFILER_ACTION_PREFIX . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
         $structure = App::$di->get('app.structure')['module'];
         //sprawdzenie w strukturze
@@ -205,7 +206,7 @@ class ActionHelper
         //wywołanie akcji
         $content = App::$di->get($controllerClassName)->$actionMethodName($request);
         //informacja o zakończeniu wykonywania akcji do profilera
-        $this->profiler->event(self::KERNEL_PROFILER_ACTION_PREFIX . ': ' . $request->getAsColonSeparatedString() . ' done');
+        $this->profiler->event(self::PROFILER_ACTION_PREFIX . $request->getAsColonSeparatedString() . ' done');
         return $content;
     }
 }

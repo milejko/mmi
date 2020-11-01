@@ -12,7 +12,6 @@ namespace Mmi\App;
 
 use DI\ContainerBuilder;
 use DI\Container;
-use DI\NotFoundException;
 use Mmi\Mvc\Structure;
 use Dotenv\Dotenv;
 use Mmi\Http\Request;
@@ -26,7 +25,7 @@ use function DI\autowire;
  */
 class App
 {
-    const PROFILER_PREFIX                    = 'App: ';
+    const PROFILER_PREFIX                    = 'Mmi\App: ';
     const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
     const APPLICATION_COMPILE_STRUCTURE_FILE = self::APPLICATION_COMPILE_PATH . '/Structure.json';
 
@@ -34,11 +33,6 @@ class App
      * @var Container
      */
     public static $di;
-
-    /**
-     * @var AppPluginInterface[]
-     */
-    private static $plugins = [];
 
     /**
      * @var AppProfiler
@@ -53,10 +47,9 @@ class App
         //enable profiler
         $this->profiler = new AppProfiler();
         //configure application
-        $this
-            ->configureEnvironment()
-            ->configureContainer()
-            ->configureErrorHandler();
+        $this->configureEnvironment()
+            ->buildContainer()
+            ->setErrorHandler();
     }
 
     /**
@@ -65,63 +58,47 @@ class App
     public function run(): void
     {
         $profiler = self::$di->get(AppProfilerInterface::class);
-        $request = self::$di->get(Request::class);
-        //plugins before dispatch
-        foreach (self::$plugins as $plugin) {
-            $plugin->beforeDispatch($request);
-            $profiler->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeDispatch');
+        $request = self::$di->get(Request::class);            
+        $interceptor = self::$di->has(AppEventInterceptorAbstract::class) ? self::$di->get(AppEventInterceptorAbstract::class) : null;
+        //intercept before dispatch
+        if (null !== $interceptor) {
+            $interceptor->beforeDispatch();
+            $profiler->event(self::PROFILER_PREFIX . 'interceptor executed beforeDispatch');
         }
         //render content
         $content = self::$di->get(ActionHelper::class)->forward($request);
-        //plugins before dispatch
-        foreach (self::$plugins as $plugin) {
-            $plugin->beforeSend($request);
-            $profiler->event(self::PROFILER_PREFIX . ': ' . \get_class($plugin) . ' executed beforeSend');
+        //intercept before send
+        if (null !== $interceptor) {
+            $interceptor->beforeSend();
+            $profiler->event(self::PROFILER_PREFIX . 'interceptor executed beforeSend');
         }
-        $profiler->event(self::PROFILER_PREFIX . 'start sending content');
-        //send content to user
+        //set content to response
         self::$di->get(Response::class)
-            ->setContent($content)
-            ->send();
+            ->setContent($content);
+        //content send
+        $profiler->event(self::PROFILER_PREFIX . 'send to client');
+        self::$di->get(Response::class)->send();
     }
 
-    /**
-     * Registers plugins
-     */
-    public static function registerPlugin(AppPluginInterface $plugin): void
-    {
-        self::$plugins[] = $plugin;
-        $plugin->afterRegistered();
-    }
-
-    /**
-     * Gets plugins
-     * @var AppPluginInterface[]
-     */
-    public static function getPlugins(): array
-    {
-        return self::$plugins;
-    }
-
-    private function configureContainer(): self
+    private function buildContainer(): self
     {
         //remove previous compilation if cache disabled
         if (!$_ENV['CACHE_PRIVATE_ENABLED']) {
-            array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/*'));
+            array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
         }
-        try {
-            //try to build from cache
-            $container = $this->getContainerBuilder()->build();
-            //below throws exception if container cache is empty
-            $container->get('app.structure');
+        //try to build from cache
+        $container = $this->getContainerBuilder()->build();
+        //container is not empty ()
+        if ($container->has('app.structure')) {
             self::$di = $container;
             $this->profiler->event(self::PROFILER_PREFIX . 'cached DI container loaded');
             return $this;
-        } catch (NotFoundException $e) {
-            array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/*'));
-            //create container builder
-            $builder = $this->getContainerBuilder();
         }
+        //unlink previously cached container
+        array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
+        //create container builder
+        $builder = $this->getContainerBuilder();
+        //add structure to the container
         $builder->addDefinitions(['app.structure' => $structure = Structure::getStructure()]);
         $this->profiler->event(self::PROFILER_PREFIX . 'application structure mapped');
         //add module DI definitions
@@ -143,31 +120,23 @@ class App
         return $this;
     }
 
+    /**
+     * Gets configured container builder
+     */
     private function getContainerBuilder(): ContainerBuilder
     {
-        $this->profiler->event(self::PROFILER_PREFIX . 'build DI container');
-        //create container builder
-        $builder = new ContainerBuilder();
-        //configure builder
-        $builder
-            ->useAutowiring(true)
+        //configure and return builder
+        return (new ContainerBuilder())->useAutowiring(true)
             ->useAnnotations(true)
             ->ignorePhpDocErrors(true)
+            ->enableCompilation(self::APPLICATION_COMPILE_PATH)
+            ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH)
             ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
-            $builder->enableCompilation(self::APPLICATION_COMPILE_PATH)
-                ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH);
-        return $builder;
     }
 
-    private function configureErrorHandler(): self
-    {
-        //exception handler
-        set_exception_handler([self::$di->get(AppEventHandler::class), 'exceptionHandler']);
-        //error handler
-        set_error_handler([self::$di->get(AppEventHandler::class), 'errorHandler']);
-        return $this;        
-    }
-
+    /**
+     * Configures environment (ie. project encoding), and loads .env
+     */
     private function configureEnvironment(): self
     {
         $this->profiler->event(self::PROFILER_PREFIX . 'configure environment');
@@ -184,6 +153,18 @@ class App
         }        
         $this->profiler->event(self::PROFILER_PREFIX . 'environment configured');
         return $this;
+    }
+
+    /**
+     * Sets error and exception handler
+     */
+    private function setErrorHandler(): self
+    {
+        //exception handler
+        set_exception_handler([self::$di->get(AppErrorHandler::class), 'exceptionHandler']);
+        //error handler
+        set_error_handler([self::$di->get(AppErrorHandler::class), 'errorHandler']);
+        return $this;        
     }
 
 }

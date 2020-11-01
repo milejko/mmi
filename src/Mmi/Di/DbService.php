@@ -1,6 +1,5 @@
 <?php
 
-use Mmi\App\AppProfilerInterface;
 use Mmi\Db\Adapter\PdoAbstract;
 use Mmi\Db\DbConfig;
 use Mmi\Db\DbProfiler;

@@ -30,7 +30,7 @@ return [
             $cache->save($translate, $cacheKey, 0);
         }
         //event profilera
-        $container->get(AppProfilerInterface::class)->event('Translate: translations added');
+        $container->get(AppProfilerInterface::class)->event('Mmi\Translate: translations added');
         return $translate;
     },
 ];

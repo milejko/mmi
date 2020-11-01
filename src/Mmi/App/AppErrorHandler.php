@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Klasa obsługi zdarzeń PHP
  */
-class AppEventHandler
+class AppErrorHandler
 {
 
     /**

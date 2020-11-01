@@ -11,8 +11,6 @@
 namespace Mmi\Http;
 
 use Mmi\App\AppProfilerInterface;
-use Mmi\Db\DbProfiler;
-use Mmi\Mvc\ActionHelper;
 
 /**
  * Klasa nagłówka odpowiedzi

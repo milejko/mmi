@@ -19,7 +19,7 @@ use Mmi\App\AppProfilerInterface;
 class DbProfiler
 {
 
-    const EVENT_PREFIX = 'Db\Adapter\Pdo';
+    const EVENT_PREFIX = 'Mmi\Db\Adapter\Pdo';
 
     /**
      * Dane profilera

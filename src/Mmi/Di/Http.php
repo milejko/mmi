@@ -8,6 +8,7 @@ use Mmi\Mvc\Router;
 use Psr\Container\ContainerInterface;
 
 use function DI\autowire;
+use function DI\get;
 
 return [
     HttpServerEnv::class => autowire(HttpServerEnv::class),
@@ -18,9 +19,6 @@ return [
         );
     },
 
-    Response::class         => function (ContainerInterface $container) {
-        return (new Response($container->get(Router::class), $container->get(HttpServerEnv::class)))
-            ->setDebug($container->get('app.debug.enabled'));
-    },
+    Response::class         => autowire(Response::class)->method('setDebug', get('app.debug.enabled')),
     ResponseDebugger::class => autowire(ResponseDebugger::class),
 ];

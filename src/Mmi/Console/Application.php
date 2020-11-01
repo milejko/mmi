@@ -34,6 +34,7 @@ class Application extends BaseApplication
         $app = new App();
         //needed in case of an error (to be plain text)
         $app::$di->get(Response::class)->setTypePlain();
+        //create App interceptor
         $output->writeln($app::$di->get(Response::class)->getContent());
         parent::doRun($input, $output);
         $app::$di->get(ResponseDebugger::class);

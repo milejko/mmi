@@ -61,11 +61,21 @@ class Response
      */
     private $httpServerEnv;
 
-    public function __construct(Router $router, HttpServerEnv $httpServerEnv)
+    /**
+     * @var ResponseTimingHeader
+     */
+    private $responseTimingHeader;
+
+    public function __construct(
+        Router $router,
+        HttpServerEnv $httpServerEnv,
+        ResponseTimingHeader $responseTimingHeader
+    )
     {
         //injects
-        $this->router        = $router;
-        $this->httpServerEnv = $httpServerEnv;
+        $this->router               = $router;
+        $this->httpServerEnv        = $httpServerEnv;
+        $this->responseTimingHeader = $responseTimingHeader;
     }
 
     /**
@@ -345,6 +355,7 @@ class Response
      */
     public function sendHeaders()
     {
+        $this->_headers[] = $this->responseTimingHeader->getTimingHeader();
         //iteracja po nagłówkach
         foreach ($this->_headers as $key => $header) {
             //usuwanie nagłówka z rejestru
