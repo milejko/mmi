@@ -13,7 +13,7 @@ namespace Mmi\Navigation;
 /**
  * Klasa konfiguracji nawigatora
  */
-class NavigationConfig
+abstract class NavigationConfigAbstract
 {
 
     /**
@@ -37,12 +37,19 @@ class NavigationConfig
     /**
      * Dodaje element nawigatora
      * @param \Mmi\Navigation\NavigationConfigElement $element
-     * @return \Mmi\Navigation\NavigationConfig
      */
-    public function addElement(\Mmi\Navigation\NavigationConfigElement $element)
+    public function addElement(\Mmi\Navigation\NavigationConfigElement $element): self
     {
         $this->_data[$element->getId()] = $element;
         return $this;
+    }
+
+    /**
+     * Pobiera elementy
+     */
+    public function getElements(): array
+    {
+        return $this->_data;
     }
 
     /**

@@ -182,7 +182,8 @@ class AppErrorHandler
             $message .= isset($row['line']) ? '(' . $row['line'] . ')' : '';
             $message .= isset($row['class']) ? ' ' . $row['class'] . '::' : '';
             $message .= isset($row['function']) ? (isset($row['class']) ? '' : ' ') . $row['function'] . '(' : '';
-            $message .= isset($row['args']) ? json_encode($row['args']) . ')' : '';
+            $arguments = strip_tags(isset($row['args']) ? json_encode($row['args']) . ')' : '');
+            $message .= (strlen($arguments) < 120) ? $arguments : '...)';
         }
         return $message;
     }

@@ -39,14 +39,5 @@ return [
         ->method('setCdn', get('app.view.cdn'))
         ->method('setRequest', get(Request::class)),
     
-    /*function (ContainerInterface $container) {
-        return (new View($container->get(Translate::class), $container->get(PrivateCache::class)))
-            //ustawienie cdn
-            ->setCdn($container->get('app.view.cdn'))
-            //ustawienie requestu
-            ->setRequest($container->get(Request::class))
-            //ustawianie baseUrl
-            ->setBaseUrl($container->get(HttpServerEnv::class)->baseUrl);
-    },*/
     HelperAbstract::class => autowire(HelperAbstract::class),
 ];
