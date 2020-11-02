@@ -124,8 +124,10 @@ class ActionHelper
             App::$di->get(AppEventInterceptorAbstract::class)->afterDispatch();
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor executed afterDispatch');
         }
-        //zmiana requestu i render layoutu
-        return $this->view->renderLayout($content, $request);
+        //renderowanie layoutu
+        $rendered = $this->view->renderLayout($content, $request);
+        $this->profiler->event(self::PROFILER_PREFIX . 'layout rendered');
+        return $rendered;
     }
 
     /**

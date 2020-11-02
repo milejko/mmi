@@ -197,7 +197,7 @@ class ResponseDebugger
             }
             //jeśli jest tablicą - rekurencyjne zejście
             if (is_array($varValue)) {
-                ($depth < 1 && count($varValue) < 10) ? $simplifiedVars[$varName] = $this->_simplifyVarArray($varValue, $depth + 1) : $simplifiedVars[$varName] = 'Array(...)';
+                ($depth < 2 && count($varValue) < 10) ? $simplifiedVars[$varName] = $this->_simplifyVarArray($varValue, $depth + 1) : $simplifiedVars[$varName] = 'Array(...)';
                 continue;
             }
             //jeśli jest zwykłą zmienną - bez zmian
