@@ -1,19 +1,14 @@
 <?php
 
-use DI\Definition\Exception\InvalidDefinition;
 use Mmi\App\AppProfilerInterface;
-use Mmi\Cache\PrivateCache;
-use Mmi\Http\HttpServerEnv;
 use Mmi\Http\Request;
 use Mmi\Mvc\ActionHelper;
 use Mmi\Mvc\EmptyRouterConfig;
 use Mmi\Mvc\Messenger;
 use Mmi\Mvc\Router;
-use Mmi\Mvc\RouterConfig;
 use Mmi\Mvc\RouterConfigAbstract;
 use Mmi\Mvc\View;
 use Mmi\Mvc\ViewHelper\HelperAbstract;
-use Mmi\Translate;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -36,8 +31,8 @@ return [
     },
 
     View::class => autowire(View::class)
-        ->method('setCdn', get('app.view.cdn'))
-        ->method('setRequest', get(Request::class)),
+        ->method('setCdn', get('app.view.cdn')),
+        //->method('setRequest', get(Request::class)),
     
     HelperAbstract::class => autowire(HelperAbstract::class),
 ];

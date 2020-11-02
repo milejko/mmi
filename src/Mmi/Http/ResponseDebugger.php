@@ -112,13 +112,13 @@ class ResponseDebugger
         //czasy i pamięci w wykonaniu
         $html = "\n";
         $html .= '<style>div#MmiPanel pre, div#MmiPanel table, div#MmiPanel table tr, div#MmiPanel table td, div#MmiPanel div, div#MmiPanel p {font: normal 11px Monospace!important;}</style><div id="MmiPanelBar" onclick="document.getElementById(\'MmiPanel\').style.display=\'block\'; window.scrollTo(0,document.getElementById(\'MmiPanel\').offsetTop);" style="';
-        $html .= 'text-align: center; position: fixed; padding: 3px 10px; margin: 0; line-height: 0; background: #000; border-radius: 5px 0 0 0; font: bold 10px Arial!important; color: #fff; bottom: 0; right: 0; text-transform: none;">' . $this->_getElapsed() . ', ' . $this->_getPeakMemory() . ' - ' . $cacheInfo . '</div>';
+        $html .= 'text-align: center; position: fixed; padding: 3px 10px; margin: 0; line-height: 0; background: #000; border-radius: 5px 0 0 0; font: bold 10px Arial!important; color: #fff; bottom: 0; right: 0; text-transform: none; z-index: 10001;">' . $this->_getElapsed() . ', ' . $this->_getPeakMemory() . ' - ' . $cacheInfo . '</div>';
         $html .= '<div id="MmiPanel" ondblclick="this.style.display=\'none\';" style="';
         if (null === $this->view->_exception) {
             $html .= 'display: none; ';
         }
         //rozszerzony podgląd
-        $html .= 'position: relative; text-align: left; padding: 20px 10px 5px 10px; background: #ccc; color: #000; font: normal 11px Monospace!important;">';
+        $html .= 'position: relative; text-align: left; padding: 20px 10px 5px 10px; background: #ccc; color: #000; font: normal 11px Monospace!important; z-index: 10000;">';
         if (null !== $this->view->_exception) {
             $html .= '<h2 style="color: #bb0000; margin: 0px; font-size: 14px; text-transform: none;">' . get_class($this->view->_exception) . ': ' . $this->view->_exception->getMessage() . '</h2>';
             $html .= '<p style="margin: 0px; padding: 0px 0px 10px 0px;">' . $this->view->_exception->getFile() . ' <strong>(' . $this->view->_exception->getLine() . ')</strong></p>';
@@ -197,7 +197,7 @@ class ResponseDebugger
             }
             //jeśli jest tablicą - rekurencyjne zejście
             if (is_array($varValue)) {
-                ($depth < 2 && count($varValue) < 10) ? $simplifiedVars[$varName] = $this->_simplifyVarArray($varValue, $depth + 1) : $simplifiedVars[$varName] = 'Array(...)';
+                ($depth < 1 && count($varValue) < 10) ? $simplifiedVars[$varName] = $this->_simplifyVarArray($varValue, $depth + 1) : $simplifiedVars[$varName] = 'Array(...)';
                 continue;
             }
             //jeśli jest zwykłą zmienną - bez zmian

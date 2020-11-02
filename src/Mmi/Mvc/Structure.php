@@ -115,7 +115,7 @@ class Structure
                 continue;
             }
             //plik nie jest kontrolerem
-            if (!\preg_match('/^[A-Z][a-z0-9]+Controller.php$/', $controller->getFilename())) {
+            if (!\preg_match('/^[A-Z][a-zA-Z0-9]+Controller.php$/', $controller->getFilename())) {
                 continue;
             }
             $controllerName = lcfirst(substr($controller->getFilename(), 0, -14));

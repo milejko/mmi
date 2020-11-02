@@ -268,7 +268,7 @@ class View extends \Mmi\DataObject
     public function getAllVariables(): array
     {
         //pobranie danych widoku
-        $data = $this->_data;
+        $data = array_merge($this->_data, \get_object_vars($this));
         //iteracja po danych
         foreach ($data as $key => $value) {
             //kasowanie danych prywatnych mmi (zaczynają się od _)
