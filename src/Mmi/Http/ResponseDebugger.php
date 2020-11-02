@@ -84,7 +84,7 @@ class ResponseDebugger
      */
     protected function _getElapsed()
     {
-        return round($this->profiler->elapsed(), 4) . 's';
+        return round(1000 * $this->profiler->elapsed()) . 'ms';
     }
 
     /**
@@ -93,7 +93,7 @@ class ResponseDebugger
      */
     protected function _getPeakMemory()
     {
-        return round(memory_get_peak_usage() / (1024 * 1024), 2) . 'MB';
+        return round(memory_get_peak_usage() / (1024 * 1024), 0) . 'MB';
     }
 
     /**

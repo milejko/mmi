@@ -10,9 +10,6 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
-use Mmi\App\App;
-use Mmi\Mvc\Messenger as MvcMessenger;
-
 /**
  * Messenger
  */
@@ -27,11 +24,10 @@ class Messenger extends HelperAbstract
      */
     public function messenger()
     {
-        $messenger = App::$di->get(MvcMessenger::class);
-        if (!$messenger->hasMessages()) {
+        
+        if (!$this->view->getMessenger()->hasMessages()) {
             return;
         }
-        $this->view->_messenger = $messenger;
         return $this->view->renderTemplate(static::TEMPLATE);
     }
 

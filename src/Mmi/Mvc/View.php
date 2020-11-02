@@ -11,6 +11,10 @@
 namespace Mmi\Mvc;
 
 use Mmi\App\App;
+use Mmi\Cache\Cache;
+use Mmi\Http\HttpServerEnv;
+use Mmi\Security\Acl;
+use Mmi\Security\Auth;
 use Mmi\Translate;
 
 /**
@@ -21,12 +25,6 @@ use Mmi\Translate;
  */
 class View extends \Mmi\DataObject
 {
-
-    /**
-     * Bieżąca wersja językowa
-     * @var string
-     */
-    private $_locale;
 
     /**
      * Tabela z załadowanymi helperami
@@ -54,15 +52,29 @@ class View extends \Mmi\DataObject
 
     /**
      * Obiekt buforujący
-     * @var \Mmi\Cache\Cache
+     * @var Cache
      */
-    private $_cache;
+    private $cache;
 
     /**
-     * Włączone buforowanie
-     * @var boolean
+     * @var Translate
      */
-    private $_alwaysCompile = true;
+    private $translate;
+
+    /**
+     * 
+     */
+    private $acl;
+
+    /**
+     * 
+     */
+    private $auth;
+
+    /**
+     * @var Messenger
+     */
+    private $messenger;
 
     /**
      * Obiekt requestu
@@ -83,16 +95,14 @@ class View extends \Mmi\DataObject
     public $cdn;
 
     /**
-     * @var Translate
-     */
-    private $translate;
-
-    /**
      * Constructor
      */
-    public function __construct(Translate $translate)
+    public function __construct(Translate $translate, Cache $cache, HttpServerEnv $env, Messenger $messenger)
     {
         $this->translate = $translate;
+        $this->cache     = $cache;
+        $this->messenger = $messenger;
+        $this->baseUrl   = $env->baseUrl;
     }
 
     /**
@@ -124,39 +134,6 @@ class View extends \Mmi\DataObject
     }
 
     /**
-     * Ustawia obiekt cache
-     * @param \Mmi\Cache\Cache $cache
-     * @return \Mmi\Mvc\View
-     */
-    public function setCache(\Mmi\Cache\Cache $cache)
-    {
-        $this->_cache = $cache;
-        return $this;
-    }
-
-    /**
-     * Ustawia opcję zawsze kompiluj szablony
-     * @param boolean $compile
-     * @return \Mmi\Mvc\View
-     */
-    public function setAlwaysCompile($compile = true)
-    {
-        $this->_alwaysCompile = $compile;
-        return $this;
-    }
-
-    /**
-     * Ustawia bazowy url
-     * @param string $baseUrl
-     * @return \Mmi\Mvc\View
-     */
-    public function setBaseUrl($baseUrl)
-    {
-        $this->baseUrl = $baseUrl;
-        return $this;
-    }
-
-    /**
      * Ustawia adres CDN
      * @param string $cdn
      * @return \Mmi\Mvc\View
@@ -168,12 +145,53 @@ class View extends \Mmi\DataObject
     }
 
     /**
-     * Zwraca obiekt cache
-     * @return \Mmi\Cache
+     * Set ACL object
      */
-    public function getCache()
+    public function setAcl(Acl $acl): self
     {
-        return $this->_cache;
+        $this->acl = $acl;
+        return $this;
+    }
+
+    /**
+     * Gets acl
+     */
+    public function getAcl(): ?Acl
+    {
+        return $this->acl;
+    }
+
+    /**
+     * Set Auth object
+     */
+    public function setAuth(Auth $auth): self
+    {
+        $this->auth = $auth;
+        return $this;
+    }
+
+    /**
+     * Gets auth
+     */
+    public function getAuth(): ?Auth
+    {
+        return $this->auth;
+    }
+
+    /**
+     * Zwraca obiekt cache
+     */
+    public function getCache(): Cache
+    {
+        return $this->cache;
+    }
+
+    /**
+     * Gets messenger object
+     */
+    public function getMessenger(): Messenger
+    {
+        return $this->messenger;
     }
 
     /**
@@ -246,9 +264,8 @@ class View extends \Mmi\DataObject
 
     /**
      * Pobiera wszystkie zmienne w postaci tablicy
-     * @return array
      */
-    public function getAllVariables()
+    public function getAllVariables(): array
     {
         //pobranie danych widoku
         $data = $this->_data;
@@ -267,9 +284,8 @@ class View extends \Mmi\DataObject
     /**
      * Ustawia wyłączenie layoutu
      * @param boolean $disabled wyłączony
-     * @return \Mmi\Mvc\View
      */
-    public function setLayoutDisabled($disabled = true)
+    public function setLayoutDisabled($disabled = true): self
     {
         $this->_layoutDisabled = ($disabled === true) ? true : false;
         return $this;
@@ -329,16 +345,15 @@ class View extends \Mmi\DataObject
             return;
         }
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->_locale . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->translate->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
      * Renderuje i zwraca wynik wykonania layoutu z ustawionym contentem
      * @param string $content
      * @param \Mmi\Http\Request $request
-     * @return string
      */
-    public function renderLayout($content, \Mmi\Http\Request $request)
+    public function renderLayout($content, \Mmi\Http\Request $request): string
     {
         return $this->isLayoutDisabled() ? $content : $this
                 //ustawianie treści w placeholder 'content'
@@ -350,21 +365,19 @@ class View extends \Mmi\DataObject
     /**
      * Generowanie kodu PHP z kodu szablonu w locie
      * @param string $templateCode kod szablonu
-     * @return string kod PHP
      */
-    public function renderDirectly($templateCode)
+    public function renderDirectly($templateCode): string
     {
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->_locale . '_direct_' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->translate->getLocale() . '-' . md5($templateCode) . '.php');
     }
 
     /**
      * Skrót translatora
      * @param string $key
      * @param array $params
-     * @return string
      */
-    public function _($key, array $params = [])
+    public function _($key, array $params = []): string
     {
         return $this->translate->_($key, $params);
     }
@@ -373,14 +386,13 @@ class View extends \Mmi\DataObject
      * Uruchomienie szablonu
      * @param string $templateCode kod szablonu
      * @param string $compilationFile adres kompilanta
-     * @return string
      */
-    private function _compileTemplate($templateCode, $compilationFile)
+    private function _compileTemplate($templateCode, $compilationFile): string
     {
         //start bufora
         ob_start();
         //wymuszona kompilacja
-        if ($this->_alwaysCompile) {
+        if (!$this->getCache()->isActive()) {
             file_put_contents($compilationFile, $this->template($templateCode));
         }
         //próba włączenia skompilowanego pliku
@@ -399,10 +411,9 @@ class View extends \Mmi\DataObject
     /**
      * Pobiera dostępny layout
      * @param \Mmi\Http\Request $request
-     * @return string
      * @throws \Mmi\Mvc\MvcException brak layoutów
      */
-    private function _getLayout(\Mmi\Http\Request $request)
+    private function _getLayout(\Mmi\Http\Request $request): string
     {
         //test layoutu dla modułu i kontrolera
         if ($this->getTemplateByPath($request->getModuleName() . '/' . $request->getControllerName() . '/layout')) {

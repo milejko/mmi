@@ -1,7 +1,7 @@
 <?php
 
-use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
+use Mmi\Cache\PrivateCache;
 use Mmi\Translate;
 use Psr\Container\ContainerInterface;
 
@@ -10,15 +10,15 @@ return [
         //get translator structure
         $structure = $container->get('app.structure')['translate'];
         //loading buffered translator
-        $cache = $container->get('PrivateCacheService');
+        $cache = $container->get(PrivateCache::class);
         //loading from cache
         if ($cache->isActive() && (null !== ($translate = $cache->load($cacheKey = 'mmi-translate')))) {
             //wczytanie obiektu translacji z bufora
-            $container->get(AppProfilerInterface::class)->event('Translate: load translate cache');
+            $container->get(AppProfilerInterface::class)->event('Mmi\Translate: load translate cache');
             return $translate;
         }
         //utworzenie obiektu tłumaczenia
-        $translate = new \Mmi\Translate;
+        $translate = new Translate;
         //dodawanie tłumaczeń do translatora
         foreach ($structure as $languageData) {
             foreach ($languageData as $lang => $translationData) {

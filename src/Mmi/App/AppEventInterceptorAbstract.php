@@ -33,25 +33,21 @@ abstract class AppEventInterceptorAbstract
     /**
      * Executed right after interceptor is added
      */
-    public function init(): void
-    {}
+    abstract public function init(): void;
 
     /**
      * Executed before dispatching
      */
-    public function beforeDispatch(): void
-    {}
+    abstract public function beforeDispatch(): void;
 
     /**
      * Executed after dispatching
      */
-    public function afterDispatch(): void
-    {}
+    abstract public function afterDispatch(): void;
 
     /**
      * Executed before sending content
      */
-    public function beforeSend(): void
-    {}
+    abstract public function beforeSend(): void;
 
 }

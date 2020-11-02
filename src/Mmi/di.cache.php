@@ -2,10 +2,10 @@
 
 use Mmi\Cache\Cache;
 use Mmi\Cache\CacheConfig;
+use Mmi\Cache\PrivateCache;
 use Psr\Container\ContainerInterface;
 
 use function DI\env;
-use function DI\get;
 
 return [
     'cache.private.enabled'     => env('CACHE_PRIVATE_ENABLED'),
@@ -14,7 +14,7 @@ return [
     'cache.public.path'         => env('CACHE_PUBLIC_PATH', BASE_PATH . '/var/cache'),
     'cache.public.distributed'  => env('CACHE_PUBLIC_DISTRIBUTED', false),
 
-    'PrivateCacheService' => function (ContainerInterface $container) {
+    PrivateCache::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
         $config->active  = $container->get('cache.private.enabled');
         $config->handler = 'file';
@@ -29,5 +29,4 @@ return [
         $config->distributed = $container->get('cache.public.distributed');
         return new Cache($config);
     },
-    'PublicCacheService' => get(Cache::class),
 ];

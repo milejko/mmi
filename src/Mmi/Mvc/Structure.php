@@ -58,7 +58,7 @@ class Structure
         }
         $module = basename($path);
         //dependency injection
-        self::_parseFiles($components['di'], $path . '/Di');
+        self::_parseDi($components['di'], $path . '/di.*php');
         //helpery widoku
         self::_parseAdditions($components['helper'], $module, $path . '/Mvc/ViewHelper');
         //filtry
@@ -162,18 +162,12 @@ class Structure
     }
 
     /**
-     * Zwraca dostępne helpery i filtry w bibliotekach
+     * Parses DI configuration files
      */
-    private static function _parseFiles(array &$components, $path)
+    private static function _parseDi(array &$components, $path)
     {
-        if (!file_exists($path)) {
-            return;
-        }
-        foreach (new \DirectoryIterator($path) as $object) {
-            if ($object->isDot() || $object->isDir()) {
-                continue;
-            }
-            $components[] = $object->getPathname();
+        foreach (glob($path) as $object) {
+            $components[] = $object;
         }
     }
 

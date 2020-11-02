@@ -13,7 +13,9 @@ namespace Mmi\App;
 use Mmi\Http\HttpServerEnv;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
+use Mmi\Http\ResponseTypes;
 use Mmi\Mvc\ActionHelper;
+use Mmi\Mvc\MvcNotFoundException;
 use Mmi\Mvc\View;
 use Psr\Log\LoggerInterface;
 
@@ -32,11 +34,6 @@ class AppErrorHandler
      * @var HttpServerEnv
      */
     private $httpServerEnv;
-
-    /**
-     * @var Request
-     */
-    private $request;
 
     /**
      * @var Response
@@ -59,7 +56,6 @@ class AppErrorHandler
     public function __construct(
         LoggerInterface $logger,
         HttpServerEnv $httpServerEnv,
-        Request $request,
         Response $response,
         View $view,
         ActionHelper $actionHelper
@@ -68,7 +64,6 @@ class AppErrorHandler
         //assigning injections
         $this->logger           = $logger;
         $this->httpServerEnv    = $httpServerEnv;
-        $this->request          = $request;
         $this->response         = $response;
         $this->view             = $view;
         $this->actionHelper     = $actionHelper;
@@ -97,7 +92,7 @@ class AppErrorHandler
         //logowanie wyjątku
         $this->logException($exception);
         //kod błędu ustawiany dla wyjątków poza nieodnalezionymi
-        if (!($exception instanceof \Mmi\Mvc\MvcNotFoundException)) {
+        if (!($exception instanceof MvcNotFoundException)) {
             //ustawienie kodu 500
             $this->response->setCodeError();
         }
@@ -106,7 +101,7 @@ class AppErrorHandler
             $this->view->_exception = $exception;
             $this->view->_trace = $this->formatTrace($exception);
             //błąd bez layoutu lub nie HTML
-            if ($this->view->isLayoutDisabled() || $this->response->getType() != \Mmi\Http\ResponseTypes::searchType('html')) {
+            if ($this->view->isLayoutDisabled() || $this->response->getType() != ResponseTypes::searchType('html')) {
                 $this->logException($exception);
                 //domyślna prezentacja błędów
                 $this->response
@@ -115,7 +110,7 @@ class AppErrorHandler
                 return;
             }
             //błąd z prezentacją HTML
-            $this->response->setContent($this->actionHelper->forward(new \Mmi\Http\Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error'])));
+            $this->response->setContent($this->actionHelper->forward(new Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error'])));
         } catch (\Exception $e) {
             $this->logException($exception);
             //domyślna prezentacja błędów
@@ -128,7 +123,7 @@ class AppErrorHandler
     /**
      * Zwraca sformatowany błąd dla danego typu odpowiedzi
      */
-    private function rawErrorResponse(\Mmi\Http\Response $response): string
+    private function rawErrorResponse(Response $response): string
     {
         $message = '¯\_(ツ)_/¯ ups, something went wrong';
         //wybór typów
@@ -153,7 +148,7 @@ class AppErrorHandler
     private function logException($exception): void
     {
         //logowanie wyjątku aplikacyjnego
-        if ($exception instanceof \Mmi\App\KernelException) {
+        if ($exception instanceof KernelException) {
             $this->logger->log($exception->getCode(), $this->formatException($exception));
             return;
         }
