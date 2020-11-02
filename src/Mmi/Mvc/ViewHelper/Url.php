@@ -11,6 +11,7 @@
 namespace Mmi\Mvc\ViewHelper;
 
 use Mmi\App\App;
+use Mmi\Http\Request;
 use Mmi\Mvc\Router;
 
 class Url extends HelperAbstract
@@ -26,7 +27,7 @@ class Url extends HelperAbstract
     public function url(array $params = [])
     {
         //wyznaczanie url
-        $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl($params);
+        $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl(array_merge(App::$di->get(Request::class)->toArray(), $params));
         return $url ? $url : '/';
     }
 
