@@ -16,7 +16,7 @@ namespace Mmi\Mvc\ViewHelper;
 class Messenger extends HelperAbstract
 {
     //szablon
-    CONST TEMPLATE = 'mmi/mvc/view-helper/messenger';
+    const TEMPLATE = 'mmi/mvc/view-helper/messenger';
 
     /**
      * Metoda główna, wyświetla i czyści dostępne wiadomości

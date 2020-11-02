@@ -7,7 +7,7 @@ use function DI\env;
 
 return [
     'app.debug.enabled' => env('APP_DEBUG_ENABLED', true),
-    'app.view.cdn'      => env('APP_VIEW_CDN'),
+    'app.view.cdn'      => env('APP_VIEW_CDN', ''),
 
     AppErrorHandler::class => autowire(AppErrorHandler::class),
 ];

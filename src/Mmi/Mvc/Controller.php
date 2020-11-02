@@ -10,9 +10,7 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\AppProfilerInterface;
 use Mmi\Http\Response;
-use Psr\Log\LoggerInterface;
 
 /**
  * Klasa kontrolera akcji
@@ -24,23 +22,13 @@ class Controller
      * Widok
      * @var View
      */
-    public $view;
+    protected $view;
 
     /**
      * Referencja do odpowiedzi
      * @var Response
      */
     private $response;
-
-    /**
-     * @var AppProfilerInterface
-     */
-    private $profiler;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * @var Messenger
@@ -51,18 +39,14 @@ class Controller
      * Konstruktor
      */
     public function __construct(
-        Response $response, 
         View $view,
-        AppProfilerInterface $profiler,
-        LoggerInterface $logger,
+        Response $response, 
         Messenger $messenger
     )
     {
         //injections
         $this->view         = $view;
         $this->response     = $response;
-        $this->profiler     = $profiler;
-        $this->logger       = $logger;
         $this->messenger    = $messenger;
         //init method
         $this->init();
@@ -72,9 +56,7 @@ class Controller
      * Funkcja dla użytkownika ładowana na końcu konstruktora
      */
     public function init()
-    {
-        
-    }
+    {}
 
     /**
      * Pobiera response
@@ -90,22 +72,6 @@ class Controller
     public final function getMessenger(): Messenger
     {
         return $this->messenger;
-    }
-
-    /**
-     * Pobiera helper logowania
-     */
-    public final function getLogger(): LoggerInterface
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Pobiera profiler
-     */
-    public final function getProfiler(): AppProfilerInterface
-    {
-        return $this->profiler;
     }
 
 }
