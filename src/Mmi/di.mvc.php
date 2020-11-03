@@ -1,7 +1,8 @@
 <?php
 
+use Mmi\App\AppEventInterceptorAbstract;
+use Mmi\App\AppProfiler;
 use Mmi\App\AppProfilerInterface;
-use Mmi\Http\Request;
 use Mmi\Mvc\ActionHelper;
 use Mmi\Mvc\EmptyRouterConfig;
 use Mmi\Mvc\Messenger;
@@ -16,7 +17,14 @@ use function DI\autowire;
 use function DI\get;
 
 return [
-    ActionHelper::class => autowire(ActionHelper::class),
+    ActionHelper::class => function (ContainerInterface $container) {
+        return new ActionHelper(
+            $container->get(AppProfiler::class),
+            $container->get(View::class),
+            //optional injection
+            $container->has(AppEventInterceptorAbstract::class) ? $container->get(AppEventInterceptorAbstract::class) : null
+        );
+    },
 
     Messenger::class => autowire(Messenger::class),
 

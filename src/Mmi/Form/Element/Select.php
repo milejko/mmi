@@ -62,13 +62,13 @@ class Select extends ElementAbstract
             if (is_array($caption)) {
                 $html .= '<optgroup label="' . $key . '">';
                 foreach ($caption as $k => $c) {
-                    $html .= '<option value="' . $k . '" ' . $this->_calculateSelected($k, $value) . $disabled . '>' . App::$di->get(View::class)->_($c) . '</option>';
+                    $html .= '<option value="' . $k . '" ' . $this->_calculateSelected($k, $value) . $disabled . '>' . $this->view->_($c) . '</option>';
                 }
                 $html .= '</optgroup>';
                 continue;
             }
             //dodawanie pojedynczej opcji
-            $html .= '<option value="' . $key . '"' . $this->_calculateSelected($key, $value) . $disabled . '>' . App::$di->get(View::class)->_($caption) . '</option>';
+            $html .= '<option value="' . $key . '"' . $this->_calculateSelected($key, $value) . $disabled . '>' . $this->view->_($caption) . '</option>';
         }
         $html .= '</select>';
         return $html;

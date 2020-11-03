@@ -10,6 +10,9 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
+use Mmi\App\App;
+use Mmi\Mvc\ActionHelper;
+
 class Widget extends HelperAbstract
 {
 
@@ -23,7 +26,7 @@ class Widget extends HelperAbstract
      */
     public function widget($module, $controller = 'index', $action = 'index', array $params = [])
     {
-        return \Mmi\Mvc\ActionHelper::getInstance()->action((new \Mmi\Http\Request($params))
+        return App::$di->get(ActionHelper::class)->action((new \Mmi\Http\Request($params))
                 ->setModuleName($module)
                 ->setControllerName($controller)
                 ->setActionName($action));

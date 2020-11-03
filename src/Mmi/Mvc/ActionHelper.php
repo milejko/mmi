@@ -53,13 +53,19 @@ class ActionHelper
     private $view;
 
     /**
+     * @var AppEventInterceptorAbstract
+     */
+    private $appEventInterceptor;
+
+    /**
      * Pobranie instancji
      * @return \Mmi\Mvc\ActionHelper
      */
-    public function __construct(AppProfilerInterface $profiler, View $view)
+    public function __construct(AppProfilerInterface $profiler, View $view, AppEventInterceptorAbstract $appEventInterceptor = null)
     {
-        $this->profiler = $profiler;
-        $this->view     = $view;
+        $this->profiler             = $profiler;
+        $this->view                 = $view;
+        $this->appEventInterceptor  = $appEventInterceptor;
     }
 
     /**
@@ -120,8 +126,8 @@ class ActionHelper
         //renderowanie akcji
         $content = $this->_renderAction($request, $request, true);
         //intercept afterDispatch
-        if (App::$di->has(AppEventInterceptorAbstract::class)) {
-            App::$di->get(AppEventInterceptorAbstract::class)->afterDispatch();
+        if ($this->appEventInterceptor) {
+            $this->appEventInterceptor->afterDispatch();
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor executed afterDispatch');
         }
         //renderowanie layoutu
@@ -188,6 +194,7 @@ class ActionHelper
         //informacja do profilera o rozpoczęciu wykonywania akcji
         $this->profiler->event(self::PROFILER_ACTION_PREFIX . $request->getAsColonSeparatedString() . ' start');
         //pobranie struktury
+        //@TODO: inject via inject parameter
         $structure = App::$di->get('app.structure')['module'];
         //sprawdzenie w strukturze
         if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {

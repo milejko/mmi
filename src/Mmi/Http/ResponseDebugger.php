@@ -106,6 +106,7 @@ class ResponseDebugger
         //pobranie widoku
         $cacheInfo = \sprintf(
             $cacheInfo, 
+            //@TODO: inject via inject parameter
             App::$di->get('cache.private.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>', 
             $this->cache->isActive() ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>'
         );

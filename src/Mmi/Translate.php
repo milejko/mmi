@@ -46,8 +46,6 @@ class Translate
         }
         //parser pliku tłumaczeń
         $data = $this->_parseTranslationFile($sourceFile);
-        //logowanie
-        App::$di->get(LoggerInterface::class)->debug('Parsing translation file: ' . realpath($sourceFile) . ' with: ' . count($data) . ' keys');
         //istnieje tłumaczenie
         $this->_data[$locale] = isset($this->_data[$locale]) ? array_merge($data, $this->_data[$locale]) : $data;
         return $this;
@@ -134,8 +132,6 @@ class Translate
      */
     private function _returnKeyAndLogUntranslated($key, array $params)
     {
-        //debug log
-        App::$di->get(LoggerInterface::class)->debug('Missing translation: [' . $this->_locale . '] ' . $key);
         //zwrot klucza
         return $key;
     }

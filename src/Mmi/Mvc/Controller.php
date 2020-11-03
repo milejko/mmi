@@ -74,4 +74,9 @@ class Controller
         return $this->messenger;
     }
 
+    public function __get($name)
+    {
+        throw new MvcException('Direct accessing request is no longer available: use Request parameter for controller actions ie. function someAction(Request $request) and access variables via $request->' . $name);
+    }
+
 }
