@@ -11,10 +11,10 @@ use function DI\env;
 return [
     'db.driver'     => env('DB_DRIVER', 'mysql'),
     'db.password'   => env('DB_PASSWORD', ''),
-    'db.host'       => env('DB_HOST', ''),
-    'db.name'       => env('DB_NAME', ''),
+    'db.host'       => env('DB_HOST', '127.0.0.1'),
+    'db.name'       => env('DB_NAME', 'test'),
     'db.port'       => env('DB_PORT', 3306),
-    'db.user'       => env('DB_USER', ''),
+    'db.user'       => env('DB_USER', 'test'),
 
     DbProfiler::class => autowire(DbProfiler::class),
 

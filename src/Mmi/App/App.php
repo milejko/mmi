@@ -147,10 +147,6 @@ class App
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
         //.env loading (unsafe as PHP-DI uses getenv internally)
         Dotenv::createUnsafeImmutable(BASE_PATH)->safeLoad();
-        //ENV missing CACHE_PRIVATE_ENABLED
-        if (!\getenv('CACHE_PRIVATE_ENABLED')) {
-            \putenv('CACHE_PRIVATE_ENABLED=1');
-        }        
         $this->profiler->event(self::PROFILER_PREFIX . 'environment configuration loaded');
         return $this;
     }

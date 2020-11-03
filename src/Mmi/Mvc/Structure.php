@@ -110,17 +110,10 @@ class Structure
         if (!file_exists($path)) {
             return;
         }
-        foreach (new \DirectoryIterator($path) as $controller) {
-            if ($controller->isDot()) {
-                continue;
-            }
-            //plik nie jest kontrolerem
-            if (!\preg_match('/^[A-Z][a-zA-Z0-9]+Controller.php$/', $controller->getFilename())) {
-                continue;
-            }
-            $controllerName = lcfirst(substr($controller->getFilename(), 0, -14));
+        foreach (glob($path . '/*Controller.php') as $controller) {
+            $controllerName = lcfirst(substr(substr($controller, strrpos($controller, '/') + 1), 0, -14));
             //parsuje akcje z kontrolera
-            self::_parseActions($components, $controller->getPathname(), $moduleName, $controllerName);
+            self::_parseActions($components, $controller, $moduleName, $controllerName);
         }
     }
 

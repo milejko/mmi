@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 use function DI\env;
 
 return [
-    'cache.private.enabled'     => env('CACHE_PRIVATE_ENABLED'),
+    'cache.private.enabled'     => env('CACHE_PRIVATE_ENABLED', false),
     'cache.public.enabled'      => env('CACHE_PUBLIC_ENABLED', false),
     'cache.public.handler'      => env('CACHE_PUBLIC_HANDLER', 'file'),
     'cache.public.path'         => env('CACHE_PUBLIC_PATH', BASE_PATH . '/var/cache'),

@@ -19,6 +19,6 @@ return [
         );
     },
 
-    Response::class         => autowire(Response::class)->method('setDebug', get('app.debug.enabled')),
+    Response::class => autowire(Response::class)->method('setDebug', get('app.debug.enabled')),
     ResponseDebugger::class => autowire(ResponseDebugger::class),
 ];
