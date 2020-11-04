@@ -10,12 +10,12 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\App;
 use Mmi\Cache\Cache;
 use Mmi\Http\HttpServerEnv;
 use Mmi\Security\Acl;
 use Mmi\Security\Auth;
 use Mmi\Translate;
+use Psr\Container\ContainerInterface;
 
 /**
  * Klasa widoku
@@ -25,18 +25,6 @@ use Mmi\Translate;
  */
 class View extends \Mmi\DataObject
 {
-
-    /**
-     * Tabela z załadowanymi helperami
-     * @var array
-     */
-    private $_helpers = [];
-
-    /**
-     * Tabela z załadowanymi filtrami
-     * @var array
-     */
-    private $_filters = [];
 
     /**
      * Przechowuje dane placeholderów
@@ -51,17 +39,6 @@ class View extends \Mmi\DataObject
     private $_layoutDisabled = false;
 
     /**
-     * Obiekt buforujący
-     * @var Cache
-     */
-    private $cache;
-
-    /**
-     * @var Translate
-     */
-    private $translate;
-
-    /**
      * 
      */
     private $acl;
@@ -72,9 +49,9 @@ class View extends \Mmi\DataObject
     private $auth;
 
     /**
-     * @var Messenger
+     * @var ContainerInteface
      */
-    private $messenger;
+    private $container;
 
     /**
      * Obiekt requestu
@@ -97,12 +74,10 @@ class View extends \Mmi\DataObject
     /**
      * Constructor
      */
-    public function __construct(Translate $translate, Cache $cache, HttpServerEnv $env, Messenger $messenger)
+    public function __construct(ContainerInterface $container)
     {
-        $this->translate = $translate;
-        $this->cache     = $cache;
-        $this->messenger = $messenger;
-        $this->baseUrl   = $env->baseUrl;
+        $this->baseUrl   = $container->get(HttpServerEnv::class)->baseUrl;
+        $this->container = $container;
     }
 
     /**
@@ -183,7 +158,7 @@ class View extends \Mmi\DataObject
      */
     public function getCache(): Cache
     {
-        return $this->cache;
+        return $this->container->get(Cache::class);
     }
 
     /**
@@ -191,7 +166,7 @@ class View extends \Mmi\DataObject
      */
     public function getMessenger(): Messenger
     {
-        return $this->messenger;
+        return $this->container->get(Messenger::class);
     }
 
     /**
@@ -201,20 +176,7 @@ class View extends \Mmi\DataObject
      */
     public function getHelper($name)
     {
-        //wyszukiwanie helpera w strukturze
-        foreach (App::$di->get('app.structure')['helper'] as $namespace => $helpers) {
-            if (!isset($helpers[$name])) {
-                continue;
-            }
-            //helper znaleziony
-            $className = '\\' . $namespace . '\\Mvc\\ViewHelper\\' . ucfirst($name);
-        }
-        //brak helpera
-        if (!isset($className)) {
-            return;
-        }
-        //zwrot helpera z rejestru, lub tworzenie nowego + rejestracja
-        return isset($this->_helpers[$className]) ? $this->_helpers[$className] : ($this->_helpers[$className] = new $className($this));
+        return $this->container->has('helper\\' . $name) ? $this->container->get('helper\\' . $name) : null;
     }
 
     /**
@@ -224,20 +186,7 @@ class View extends \Mmi\DataObject
      */
     public function getFilter($name)
     {
-        //wyszukiwanie filtra w strukturze
-        foreach (App::$di->get('app.structure')['filter'] as $namespace => $filters) {
-            if (!isset($filters[$name])) {
-                continue;
-            }
-            //filtr znaleziony
-            $className = '\\' . $namespace . '\\Filter\\' . ucfirst($name);
-        }
-        //brak filtra
-        if (!isset($className)) {
-            throw new \Mmi\Mvc\MvcException('Filter not found: ' . $name);
-        }
-        //zwrot zarejestrowanego filtra, lub tworzenie nowego + rejestracja
-        return isset($this->_filters[$className]) ? $this->_filters[$className] : ($this->_filters[$className] = new $className);
+        return $this->container->has('filter\\' . $name) ? $this->container->get('filter\\' . $name) : null;
     }
 
     /**
@@ -312,7 +261,7 @@ class View extends \Mmi\DataObject
             throw new \Mmi\Mvc\MvcException('Template path invalid.');
         }
         //pobranie struktury szablonów
-        $structure = App::$di->get('app.structure')['template'];
+        $structure = $this->container->get('app.structure.template');
         //wyszukiwanie ścieżki w strukturze
         foreach (explode('/', $path) as $dir) {
             if (!isset($structure[$dir])) {
@@ -345,7 +294,7 @@ class View extends \Mmi\DataObject
             return;
         }
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->translate->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->container->get(Translate::class)->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
@@ -369,7 +318,7 @@ class View extends \Mmi\DataObject
     public function renderDirectly($templateCode): string
     {
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->translate->getLocale() . '-' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->container->get(Translate::class)->getLocale() . '-' . md5($templateCode) . '.php');
     }
 
     /**
@@ -379,7 +328,7 @@ class View extends \Mmi\DataObject
      */
     public function _($key, array $params = []): string
     {
-        return $this->translate->_($key, $params);
+        return $this->container->get(Translate::class)->_($key, $params);
     }
 
     /**

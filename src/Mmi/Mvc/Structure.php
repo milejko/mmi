@@ -110,31 +110,13 @@ class Structure
         if (!file_exists($path)) {
             return;
         }
-        foreach (glob($path . '/*Controller.php') as $controller) {
-            $controllerName = lcfirst(substr(substr($controller, strrpos($controller, '/') + 1), 0, -14));
-            //parsuje akcje z kontrolera
-            self::_parseActions($components, $controller, $moduleName, $controllerName);
-        }
-    }
-
-    /**
-     * Parsowanie akcji w kontrolerze
-     * @param array $components
-     * @param string $controllerPath
-     * @param string $moduleName
-     * @param string $controllerName
-     */
-    private static function _parseActions(array &$components, $controllerPath, $moduleName, $controllerName)
-    {
-        $controllerCode = file_get_contents($controllerPath);
-        if (\strpos($controllerCode, 'abstract class')) {
-            return;
-        }
-        //łapanie nazw akcji w kodzie
-        if (preg_match_all('/function ([a-zA-Z0-9]+)Action\(/', file_get_contents($controllerPath), $actions)) {
-            foreach ($actions[1] as $action) {
-                $components[$moduleName][$controllerName][$action] = 1;
+        foreach (glob($path . '/*Controller.php') as $controllerPath) {
+            $controllerName = lcfirst(substr(substr($controllerPath, strrpos($controllerPath, '/') + 1), 0, -14));
+            $controllerCode = file_get_contents($controllerPath);
+            if (\strpos($controllerCode, 'abstract class')) {
+                continue;
             }
+            $components[$moduleName][$controllerName] = 1;
         }
     }
 
@@ -148,6 +130,14 @@ class Structure
         }
         foreach (new \DirectoryIterator($path) as $object) {
             if ($object->isDot() || $object->isDir()) {
+                continue;
+            }
+            $classCode = file_get_contents($object->getRealPath());
+            //print_r($classCode);exit;
+            if (\strpos($classCode, 'abstract class')) {
+                continue;
+            }
+            if (!\strpos($classCode, 'class')) {
                 continue;
             }
             $components[$namespace][lcfirst(substr($object->getFilename(), 0, -4))] = substr($object->getFilename(), -3) == 'php' ? 1 : $object->getPathname();

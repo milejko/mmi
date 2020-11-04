@@ -2,13 +2,12 @@
 
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\PrivateCache;
+use Mmi\Mvc\Structure;
 use Mmi\Translate;
 use Psr\Container\ContainerInterface;
 
 return [
     Translate::class => function (ContainerInterface $container) {
-        //get translator structure
-        $structure = $container->get('app.structure')['translate'];
         //loading buffered translator
         $cache = $container->get(PrivateCache::class);
         //loading from cache
@@ -20,7 +19,7 @@ return [
         //utworzenie obiektu tłumaczenia
         $translate = new Translate;
         //dodawanie tłumaczeń do translatora
-        foreach ($structure as $languageData) {
+        foreach (Structure::getStructure()['translate'] as $languageData) {
             foreach ($languageData as $lang => $translationData) {
                 $translate->addTranslation(is_array($translationData) ? $translationData[0] : $translationData, $lang);
             }

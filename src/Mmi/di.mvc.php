@@ -17,14 +17,7 @@ use function DI\autowire;
 use function DI\get;
 
 return [
-    ActionHelper::class => function (ContainerInterface $container) {
-        return new ActionHelper(
-            $container->get(AppProfiler::class),
-            $container->get(View::class),
-            //optional injection
-            $container->has(AppEventInterceptorAbstract::class) ? $container->get(AppEventInterceptorAbstract::class) : null
-        );
-    },
+    ActionHelper::class => autowire(ActionHelper::class),
 
     Messenger::class => autowire(Messenger::class),
 
@@ -40,7 +33,6 @@ return [
 
     View::class => autowire(View::class)
         ->method('setCdn', get('app.view.cdn')),
-        //->method('setRequest', get(Request::class)),
     
     HelperAbstract::class => autowire(HelperAbstract::class),
 ];

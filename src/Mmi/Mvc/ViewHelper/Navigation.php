@@ -11,7 +11,9 @@
 namespace Mmi\Mvc\ViewHelper;
 
 use Mmi\App\App;
+use Mmi\Mvc\View;
 use Mmi\Navigation\Navigation as NavigationNavigation;
+use Psr\Container\ContainerInterface;
 
 /**
  * Helper nawigatora
@@ -91,15 +93,26 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     protected $_description;
 
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
     //szablon menu
     CONST TEMPLATE = 'mmi/mvc/view-helper/navigation/menu-item';
+
+    public function __construct(View $view, ContainerInterface $container)
+    {
+        $this->container = $container;
+        parent::__construct($view);
+    }
 
     /**
      * Gets navigation from the DI container (not clean) @TODO: refactor this one
      */
     protected function _getNavigation(): ?NavigationNavigation
     {
-        return App::$di->has(NavigationNavigation::class) ? App::$di->get(NavigationNavigation::class) : null;
+        return $this->container->has(NavigationNavigation::class) ? $this->container->get(NavigationNavigation::class) : null;
     }
 
     /**

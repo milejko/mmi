@@ -21,15 +21,8 @@ class StructureParser
      * @var array
      */
     protected static $_moduleRequirements = [
-        'IndexController.php',
-        'WidgetController.php',
-        'Resource',
-        'Filter',
-        'Model',
-        'Orm',
-        'Resource',
-        'View',
-        'Form'
+        '*Controller.php',
+        'di.*php'
     ];
 
     /**
@@ -111,6 +104,9 @@ class StructureParser
     {
         //iteracja po wymaganych katalogach
         foreach (self::$_moduleRequirements as $req) {
+            if (!empty(glob($modulePath . '/' . $req))) {
+                return true;
+            }
             //sprawdzanie istnienia katalogu
             if (file_exists($modulePath . '/' . $req)) {
                 return true;

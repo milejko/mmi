@@ -30,9 +30,15 @@ class App
     const APPLICATION_COMPILE_STRUCTURE_FILE = self::APPLICATION_COMPILE_PATH . '/Structure.json';
 
     /**
+     * @TODO: remove after all legacy dependencies are removed
      * @var Container
      */
     public static $di;
+
+    /**
+     * @var Container
+     */
+    private $container;
 
     /**
      * @var AppProfiler
@@ -57,27 +63,29 @@ class App
      */
     public function run(): void
     {
-        $profiler = self::$di->get(AppProfilerInterface::class);
-        $request = self::$di->get(Request::class);            
-        $interceptor = self::$di->has(AppEventInterceptorAbstract::class) ? self::$di->get(AppEventInterceptorAbstract::class) : null;
+        //@TODO: remove after target refactoring
+        self::$di = $this->container;
+        $profiler = $this->container->get(AppProfilerInterface::class);
+        $request = $this->container->get(Request::class);            
+        $interceptor = $this->container->has(AppEventInterceptorAbstract::class) ? $this->container->get(AppEventInterceptorAbstract::class) : null;
         //intercept before dispatch
         if (null !== $interceptor) {
             $interceptor->beforeDispatch();
             $profiler->event(self::PROFILER_PREFIX . 'interceptor executed beforeDispatch');
         }
         //render content
-        $content = self::$di->get(ActionHelper::class)->forward($request);
+        $content = $this->container->get(ActionHelper::class)->forward($request);
         //intercept before send
         if (null !== $interceptor) {
             $interceptor->beforeSend();
             $profiler->event(self::PROFILER_PREFIX . 'interceptor executed beforeSend');
         }
         //set content to response
-        self::$di->get(Response::class)
+        $this->container->get(Response::class)
             ->setContent($content);
         //content send
         $profiler->event(self::PROFILER_PREFIX . 'send to client');
-        self::$di->get(Response::class)->send();
+        $this->container->get(Response::class)->send();
     }
 
     private function buildContainer(): self
@@ -87,10 +95,9 @@ class App
             array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
         }
         //try to build from cache
-        $container = $this->getContainerBuilder()->build();
+        $this->container = $this->getContainerBuilder()->build();
         //container is not empty ()
-        if ($container->has('app.structure')) {
-            self::$di = $container;
+        if ($this->container->has('app.structure.template')) {
             $this->profiler->event(self::PROFILER_PREFIX . 'cached DI container loaded');
             return $this;
         }
@@ -98,8 +105,10 @@ class App
         array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
         //create container builder
         $builder = $this->getContainerBuilder();
+        //get structure
+        $structure = Structure::getStructure();
         //add structure to the container
-        $builder->addDefinitions(['app.structure' => $structure = Structure::getStructure()]);
+        $builder->addDefinitions(['app.structure.template' => $structure['template']]);
         $this->profiler->event(self::PROFILER_PREFIX . 'application structure mapped');
         //add module DI definitions
         foreach ($structure['di'] as $diConfigPath) {
@@ -107,15 +116,27 @@ class App
         }
         //add controllers
         foreach ($structure['module'] as $moduleName => $controllers) {
-            $definitions = [];
-            foreach ($controllers as $controller => $actions) {
+            foreach ($controllers as $controller => $count) {
                 $controllerClassName = \ucfirst($moduleName) . '\\' . \ucfirst($controller) . 'Controller';
-                $definitions[$controllerClassName] = autowire($controllerClassName);
+                $builder->addDefinitions([$controllerClassName => autowire($controllerClassName)]);
             }
-            $builder->addDefinitions($definitions);
+        }
+        //add view helpers
+        foreach ($structure['helper'] as $moduleName => $helpers) {
+            foreach ($helpers as $helperName => $count) {
+                $helperClassName = \ucfirst($moduleName) . '\\Mvc\\ViewHelper\\' . \ucfirst($helperName);
+                $builder->addDefinitions(['helper\\' . $helperName => autowire($helperClassName)]);
+            }
+        }
+        //add filters
+        foreach ($structure['filter'] as $moduleName => $filters) {
+            foreach ($filters as $filterName => $count) {
+                $filterClassName = \ucfirst($moduleName) . '\\Filter\\' . \ucfirst($filterName);
+                $builder->addDefinitions(['filter\\' . $filterName => autowire($filterClassName)]);
+            }
         }
         //build container
-        self::$di = $builder->build();
+        $this->container = $builder->build();
         $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');        
         return $this;
     }
@@ -157,9 +178,9 @@ class App
     private function setErrorHandler(): self
     {
         //exception handler
-        set_exception_handler([self::$di->get(AppErrorHandler::class), 'exceptionHandler']);
+        set_exception_handler([$this->container->get(AppErrorHandler::class), 'exceptionHandler']);
         //error handler
-        set_error_handler([self::$di->get(AppErrorHandler::class), 'errorHandler']);
+        set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
         $this->profiler->event(self::PROFILER_PREFIX . 'error handler setup');
         return $this;        
     }

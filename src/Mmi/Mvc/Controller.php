@@ -4,16 +4,17 @@
  * Mmi Framework (https://github.com/milejko/mmi.git)
  * 
  * @link       https://github.com/milejko/mmi.git
- * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
+ * @copyright  Copyright (c) 2010-2020 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
 namespace Mmi\Mvc;
 
+use Mmi\Http\Request;
 use Mmi\Http\Response;
 
 /**
- * Klasa kontrolera akcji
+ * Action controller
  */
 class Controller
 {
@@ -31,23 +32,16 @@ class Controller
     private $response;
 
     /**
-     * @var Messenger
-     */
-    private $messenger;
-
-    /**
      * Konstruktor
      */
     public function __construct(
         View $view,
-        Response $response, 
-        Messenger $messenger
+        Response $response
     )
     {
         //injections
         $this->view         = $view;
         $this->response     = $response;
-        $this->messenger    = $messenger;
         //init method
         $this->init();
     }
@@ -59,7 +53,15 @@ class Controller
     {}
 
     /**
-     * Pobiera response
+     * Gets request
+     */
+    public final function getRequest(): Request
+    {
+        return $this->view->request;
+    }
+
+    /**
+     * Gets response
      */
     public final function getResponse(): Response
     {
@@ -67,16 +69,19 @@ class Controller
     }
 
     /**
-     * Pobiera helper messengera
+     * Gets messenger
      */
     public final function getMessenger(): Messenger
     {
-        return $this->messenger;
+        return $this->view->getMessenger();
     }
 
-    public function __get($name)
+    /**
+     * Get from request (deprecated)
+     */
+    public function __get(string $name)
     {
-        throw new MvcException('Direct accessing request is no longer available: use Request parameter for controller actions ie. function someAction(Request $request) and access variables via $request->' . $name);
+        return $this->getRequest()->__get($name);
     }
 
 }

@@ -24,10 +24,11 @@ class Url extends HelperAbstract
      * @param boolean $reset nie łączy z bieżącym requestem
      * @return string
      */
-    public function url(array $params = [])
+    public function url(array $params = [], $reset = false)
     {
+        $urlParams = $reset ? $params : array_merge(App::$di->get(Request::class)->toArray(), $params);
         //wyznaczanie url
-        $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl(array_merge(App::$di->get(Request::class)->toArray(), $params));
+        $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl($urlParams);
         return $url ? $url : '/';
     }
 

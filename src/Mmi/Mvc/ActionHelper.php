@@ -10,10 +10,11 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\App;
 use Mmi\App\AppEventInterceptorAbstract;
+use Mmi\App\AppProfiler;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Http\Request;
+use Psr\Container\ContainerInterface;
 
 /**
  * Helper akcji
@@ -58,14 +59,19 @@ class ActionHelper
     private $appEventInterceptor;
 
     /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
      * Pobranie instancji
      * @return \Mmi\Mvc\ActionHelper
      */
-    public function __construct(AppProfilerInterface $profiler, View $view, AppEventInterceptorAbstract $appEventInterceptor = null)
-    {
-        $this->profiler             = $profiler;
-        $this->view                 = $view;
-        $this->appEventInterceptor  = $appEventInterceptor;
+    public function __construct(ContainerInterface $container) {
+        $this->profiler             = $container->get(AppProfilerInterface::class);
+        $this->view                 = $container->get(View::class);
+        $this->appEventInterceptor  = $container->has(AppEventInterceptorAbstract::class) ? $container->get(AppEventInterceptorAbstract::class) : null;
+        $this->container            = $container;
     }
 
     /**
@@ -193,14 +199,6 @@ class ActionHelper
     {
         //informacja do profilera o rozpoczęciu wykonywania akcji
         $this->profiler->event(self::PROFILER_ACTION_PREFIX . $request->getAsColonSeparatedString() . ' start');
-        //pobranie struktury
-        //@TODO: inject via inject parameter
-        $structure = App::$di->get('app.structure')['module'];
-        //sprawdzenie w strukturze
-        if (!isset($structure[$request->getModuleName()][$request->getControllerName()][$request->getActionName()])) {
-            //komponent nieodnaleziony
-            throw new MvcNotFoundException('Component not found: ' . $request->getAsColonSeparatedString());
-        }
         //rozbijanie po myślniku
         $controllerParts = explode('-', $request->getControllerName());
         //iteracja po częściach
@@ -212,8 +210,12 @@ class ActionHelper
         $controllerClassName = ucfirst($request->getModuleName()) . '\\' . implode('\\', $controllerParts) . 'Controller';
         //nazwa akcji
         $actionMethodName = $request->getActionName() . 'Action';
+        //check for controller existence
+        if (!$this->container->has($controllerClassName) || !\method_exists($this->container->get($controllerClassName), $actionMethodName)) {
+            throw new MvcNotFoundException('Component not found: ' . $request->getAsColonSeparatedString());
+        }
         //wywołanie akcji
-        $content = App::$di->get($controllerClassName)->$actionMethodName($request);
+        $content = \call_user_func([$this->container->get($controllerClassName), $actionMethodName], $request);
         //informacja o zakończeniu wykonywania akcji do profilera
         $this->profiler->event(self::PROFILER_ACTION_PREFIX . $request->getAsColonSeparatedString() . ' done');
         return $content;
