@@ -12,8 +12,10 @@ namespace Mmi\App;
 
 use DI\ContainerBuilder;
 use DI\Container;
+use DI\Definition\Exception\InvalidDefinition;
 use Mmi\Mvc\Structure;
 use Dotenv\Dotenv;
+use Exception;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Mvc\ActionHelper;
@@ -114,26 +116,9 @@ class App
         foreach ($structure['di'] as $diConfigPath) {
             $builder->addDefinitions($diConfigPath);
         }
-        //add controllers
-        foreach ($structure['module'] as $moduleName => $controllers) {
-            foreach ($controllers as $controller => $count) {
-                $controllerClassName = \ucfirst($moduleName) . '\\' . \ucfirst($controller) . 'Controller';
-                $builder->addDefinitions([$controllerClassName => autowire($controllerClassName)]);
-            }
-        }
-        //add view helpers
-        foreach ($structure['helper'] as $moduleName => $helpers) {
-            foreach ($helpers as $helperName => $count) {
-                $helperClassName = \ucfirst($moduleName) . '\\Mvc\\ViewHelper\\' . \ucfirst($helperName);
-                $builder->addDefinitions(['helper\\' . $helperName => autowire($helperClassName)]);
-            }
-        }
-        //add filters
-        foreach ($structure['filter'] as $moduleName => $filters) {
-            foreach ($filters as $filterName => $count) {
-                $filterClassName = \ucfirst($moduleName) . '\\Filter\\' . \ucfirst($filterName);
-                $builder->addDefinitions(['filter\\' . $filterName => autowire($filterClassName)]);
-            }
+        //controllers, add view helpers, commands
+        foreach ($structure['classes'] as $classAlias => $classFqn) {
+            $builder->addDefinitions([$classAlias => autowire($classFqn)]);
         }
         //build container
         $this->container = $builder->build();

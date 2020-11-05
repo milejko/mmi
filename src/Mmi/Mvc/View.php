@@ -10,6 +10,7 @@
 
 namespace Mmi\Mvc;
 
+use Mmi\App\KernelException;
 use Mmi\Cache\Cache;
 use Mmi\Http\HttpServerEnv;
 use Mmi\Security\Acl;
@@ -176,7 +177,9 @@ class View extends \Mmi\DataObject
      */
     public function getHelper($name)
     {
-        return $this->container->has('helper\\' . $name) ? $this->container->get('helper\\' . $name) : null;
+        return $this->container->has('ViewHelper\\' . \ucfirst($name)) ? 
+            $this->container->get('ViewHelper\\' . \ucfirst($name)) : 
+            null;
     }
 
     /**
@@ -186,7 +189,9 @@ class View extends \Mmi\DataObject
      */
     public function getFilter($name)
     {
-        return $this->container->has('filter\\' . $name) ? $this->container->get('filter\\' . $name) : null;
+        return $this->container->has('Filter\\' . \ucfirst($name)) ? 
+            $this->container->get('Filter\\' . \ucfirst($name)) : 
+            null;
     }
 
     /**
@@ -258,7 +263,7 @@ class View extends \Mmi\DataObject
     {
         //ścieżka nie jest stringiem
         if (!is_string($path)) {
-            throw new \Mmi\Mvc\MvcException('Template path invalid.');
+            throw new \Mmi\Mvc\MvcException('View tpl path invalid');
         }
         //pobranie struktury szablonów
         $structure = $this->container->get('app.structure.template');
@@ -286,12 +291,11 @@ class View extends \Mmi\DataObject
      * @param bool $fetch przekaż wynik wywołania w zmiennej
      * @return string
      */
-    public function renderTemplate($path)
+    public function renderTemplate($path): string
     {
         //wyszukiwanie template
         if (null === $template = $this->getTemplateByPath($path)) {
-            //brak template
-            return;
+            throw new KernelException('View tpl not found: ' . $path);
         }
         //kompilacja szablonu
         return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->container->get(Translate::class)->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));

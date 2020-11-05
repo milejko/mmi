@@ -22,6 +22,10 @@ class StructureParser
      */
     protected static $_moduleRequirements = [
         '*Controller.php',
+        'Console/*Command.php',
+        'Resource',
+        'Mvc',
+        'Orm',
         'di.*php'
     ];
 

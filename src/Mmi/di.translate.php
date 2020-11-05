@@ -19,10 +19,8 @@ return [
         //utworzenie obiektu tłumaczenia
         $translate = new Translate;
         //dodawanie tłumaczeń do translatora
-        foreach (Structure::getStructure()['translate'] as $languageData) {
-            foreach ($languageData as $lang => $translationData) {
-                $translate->addTranslation(is_array($translationData) ? $translationData[0] : $translationData, $lang);
-            }
+        foreach (Structure::getStructure('translate') as $translationFile) {
+            $translate->addTranslation($translationFile, substr(basename($translationFile), 0, -4));
         }
         //zapis do cache
         if ($cache->isActive()) {
