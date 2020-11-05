@@ -8,19 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\App;
+namespace Mmi\Mvc;
 
-interface BootstrapInterface
+/**
+ * Empty router config
+ */
+class EmptyRouterConfig extends RouterConfigAbstract
 {
-
-    /**
-     * Parametryzowanie bootstrapa
-     * @param string $env nazwa środowiska
-     */
-    public function __construct();
-
-    /**
-     * Uruchomienie bootstrapa
-     */
-    public function run();
 }

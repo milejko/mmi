@@ -13,7 +13,7 @@ namespace Mmi\App;
 /**
  * Klasa konfiguracji aplikacji
  */
-abstract class KernelConfig
+abstract class AppConfig
 {
 
     /**

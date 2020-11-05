@@ -10,15 +10,13 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
-use Mmi\Message\MessengerHelper;
-
 /**
  * Messenger
  */
 class Messenger extends HelperAbstract
 {
     //szablon
-    CONST TEMPLATE = 'mmi/mvc/view-helper/messenger';
+    const TEMPLATE = 'mmi/mvc/view-helper/messenger';
 
     /**
      * Metoda główna, wyświetla i czyści dostępne wiadomości
@@ -26,11 +24,10 @@ class Messenger extends HelperAbstract
      */
     public function messenger()
     {
-        $messenger = MessengerHelper::getMessenger();
-        if (!$messenger->hasMessages()) {
+        
+        if (!$this->view->getMessenger()->hasMessages()) {
             return;
         }
-        $this->view->_messenger = $messenger;
         return $this->view->renderTemplate(static::TEMPLATE);
     }
 

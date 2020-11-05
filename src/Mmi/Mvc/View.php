@@ -10,7 +10,14 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\FrontController;
+use Mmi\App\KernelException;
+use Mmi\Cache\Cache;
+use Mmi\Cache\PrivateCache;
+use Mmi\Http\HttpServerEnv;
+use Mmi\Security\Acl;
+use Mmi\Security\Auth;
+use Mmi\Translate;
+use Psr\Container\ContainerInterface;
 
 /**
  * Klasa widoku
@@ -20,24 +27,6 @@ use Mmi\App\FrontController;
  */
 class View extends \Mmi\DataObject
 {
-
-    /**
-     * Bieżąca wersja językowa
-     * @var string
-     */
-    private $_locale;
-
-    /**
-     * Tabela z załadowanymi helperami
-     * @var array
-     */
-    private $_helpers = [];
-
-    /**
-     * Tabela z załadowanymi filtrami
-     * @var array
-     */
-    private $_filters = [];
 
     /**
      * Przechowuje dane placeholderów
@@ -52,16 +41,19 @@ class View extends \Mmi\DataObject
     private $_layoutDisabled = false;
 
     /**
-     * Obiekt buforujący
-     * @var \Mmi\Cache\Cache
+     * 
      */
-    private $_cache;
+    private $acl;
 
     /**
-     * Włączone buforowanie
-     * @var boolean
+     * 
      */
-    private $_alwaysCompile = true;
+    private $auth;
+
+    /**
+     * @var ContainerInteface
+     */
+    private $container;
 
     /**
      * Obiekt requestu
@@ -80,6 +72,15 @@ class View extends \Mmi\DataObject
      * @var string 
      */
     public $cdn;
+
+    /**
+     * Constructor
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->baseUrl   = $container->get(HttpServerEnv::class)->baseUrl;
+        $this->container = $container;
+    }
 
     /**
      * Magicznie wywołuje metodę na widoku
@@ -110,39 +111,6 @@ class View extends \Mmi\DataObject
     }
 
     /**
-     * Ustawia obiekt cache
-     * @param \Mmi\Cache\Cache $cache
-     * @return \Mmi\Mvc\View
-     */
-    public function setCache(\Mmi\Cache\Cache $cache)
-    {
-        $this->_cache = $cache;
-        return $this;
-    }
-
-    /**
-     * Ustawia opcję zawsze kompiluj szablony
-     * @param boolean $compile
-     * @return \Mmi\Mvc\View
-     */
-    public function setAlwaysCompile($compile = true)
-    {
-        $this->_alwaysCompile = $compile;
-        return $this;
-    }
-
-    /**
-     * Ustawia bazowy url
-     * @param string $baseUrl
-     * @return \Mmi\Mvc\View
-     */
-    public function setBaseUrl($baseUrl)
-    {
-        $this->baseUrl = $baseUrl;
-        return $this;
-    }
-
-    /**
      * Ustawia adres CDN
      * @param string $cdn
      * @return \Mmi\Mvc\View
@@ -154,12 +122,53 @@ class View extends \Mmi\DataObject
     }
 
     /**
-     * Zwraca obiekt cache
-     * @return \Mmi\Cache
+     * Set ACL object
      */
-    public function getCache()
+    public function setAcl(Acl $acl): self
     {
-        return $this->_cache;
+        $this->acl = $acl;
+        return $this;
+    }
+
+    /**
+     * Gets acl
+     */
+    public function getAcl(): ?Acl
+    {
+        return $this->acl;
+    }
+
+    /**
+     * Set Auth object
+     */
+    public function setAuth(Auth $auth): self
+    {
+        $this->auth = $auth;
+        return $this;
+    }
+
+    /**
+     * Gets auth
+     */
+    public function getAuth(): ?Auth
+    {
+        return $this->auth;
+    }
+
+    /**
+     * Zwraca obiekt cache
+     */
+    public function getCache(): Cache
+    {
+        return $this->container->get(PrivateCache::class);
+    }
+
+    /**
+     * Gets messenger object
+     */
+    public function getMessenger(): Messenger
+    {
+        return $this->container->get(Messenger::class);
     }
 
     /**
@@ -169,20 +178,9 @@ class View extends \Mmi\DataObject
      */
     public function getHelper($name)
     {
-        //wyszukiwanie helpera w strukturze
-        foreach (\Mmi\App\FrontController::getInstance()->getStructure('helper') as $namespace => $helpers) {
-            if (!isset($helpers[$name])) {
-                continue;
-            }
-            //helper znaleziony
-            $className = '\\' . $namespace . '\\Mvc\\ViewHelper\\' . ucfirst($name);
-        }
-        //brak helpera
-        if (!isset($className)) {
-            return;
-        }
-        //zwrot helpera z rejestru, lub tworzenie nowego + rejestracja
-        return isset($this->_helpers[$className]) ? $this->_helpers[$className] : ($this->_helpers[$className] = new $className);
+        return $this->container->has('ViewHelper\\' . \ucfirst($name)) ? 
+            $this->container->get('ViewHelper\\' . \ucfirst($name)) : 
+            null;
     }
 
     /**
@@ -192,20 +190,9 @@ class View extends \Mmi\DataObject
      */
     public function getFilter($name)
     {
-        //wyszukiwanie filtra w strukturze
-        foreach (\Mmi\App\FrontController::getInstance()->getStructure('filter') as $namespace => $filters) {
-            if (!isset($filters[$name])) {
-                continue;
-            }
-            //filtr znaleziony
-            $className = '\\' . $namespace . '\\Filter\\' . ucfirst($name);
-        }
-        //brak filtra
-        if (!isset($className)) {
-            throw new \Mmi\Mvc\MvcException('Filter not found: ' . $name);
-        }
-        //zwrot zarejestrowanego filtra, lub tworzenie nowego + rejestracja
-        return isset($this->_filters[$className]) ? $this->_filters[$className] : ($this->_filters[$className] = new $className);
+        return $this->container->has('Filter\\' . \ucfirst($name)) ? 
+            $this->container->get('Filter\\' . \ucfirst($name)) : 
+            null;
     }
 
     /**
@@ -232,12 +219,11 @@ class View extends \Mmi\DataObject
 
     /**
      * Pobiera wszystkie zmienne w postaci tablicy
-     * @return array
      */
-    public function getAllVariables()
+    public function getAllVariables(): array
     {
         //pobranie danych widoku
-        $data = $this->_data;
+        $data = array_merge($this->_data, \get_object_vars($this));
         //iteracja po danych
         foreach ($data as $key => $value) {
             //kasowanie danych prywatnych mmi (zaczynają się od _)
@@ -253,9 +239,8 @@ class View extends \Mmi\DataObject
     /**
      * Ustawia wyłączenie layoutu
      * @param boolean $disabled wyłączony
-     * @return \Mmi\Mvc\View
      */
-    public function setLayoutDisabled($disabled = true)
+    public function setLayoutDisabled($disabled = true): self
     {
         $this->_layoutDisabled = ($disabled === true) ? true : false;
         return $this;
@@ -279,10 +264,10 @@ class View extends \Mmi\DataObject
     {
         //ścieżka nie jest stringiem
         if (!is_string($path)) {
-            throw new \Mmi\Mvc\MvcException('Template path invalid.');
+            throw new \Mmi\Mvc\MvcException('View tpl path invalid');
         }
         //pobranie struktury szablonów
-        $structure = \Mmi\App\FrontController::getInstance()->getStructure('template');
+        $structure = $this->container->get('app.structure.template');
         //wyszukiwanie ścieżki w strukturze
         foreach (explode('/', $path) as $dir) {
             if (!isset($structure[$dir])) {
@@ -307,24 +292,22 @@ class View extends \Mmi\DataObject
      * @param bool $fetch przekaż wynik wywołania w zmiennej
      * @return string
      */
-    public function renderTemplate($path)
+    public function renderTemplate($path): string
     {
         //wyszukiwanie template
         if (null === $template = $this->getTemplateByPath($path)) {
-            //brak template
-            return;
+            throw new KernelException('View tpl not found: ' . $path);
         }
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . \App\Registry::$translate->getLocale() . '_' . str_replace(['/', '\\', '_Resource_template_'], '_', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->container->get(Translate::class)->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
      * Renderuje i zwraca wynik wykonania layoutu z ustawionym contentem
      * @param string $content
      * @param \Mmi\Http\Request $request
-     * @return string
      */
-    public function renderLayout($content, \Mmi\Http\Request $request)
+    public function renderLayout($content, \Mmi\Http\Request $request): string
     {
         return $this->isLayoutDisabled() ? $content : $this
                 //ustawianie treści w placeholder 'content'
@@ -336,37 +319,34 @@ class View extends \Mmi\DataObject
     /**
      * Generowanie kodu PHP z kodu szablonu w locie
      * @param string $templateCode kod szablonu
-     * @return string kod PHP
      */
-    public function renderDirectly($templateCode)
+    public function renderDirectly($templateCode): string
     {
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . \App\Registry::$translate->getLocale() . '_direct_' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->container->get(Translate::class)->getLocale() . '-' . md5($templateCode) . '.php');
     }
 
     /**
      * Skrót translatora
      * @param string $key
      * @param array $params
-     * @return string
      */
-    public function _($key, array $params = [])
+    public function _($key, array $params = []): string
     {
-        return \App\Registry::$translate->_($key, $params);
+        return $this->container->get(Translate::class)->_($key, $params);
     }
 
     /**
      * Uruchomienie szablonu
      * @param string $templateCode kod szablonu
      * @param string $compilationFile adres kompilanta
-     * @return string
      */
-    private function _compileTemplate($templateCode, $compilationFile)
+    private function _compileTemplate($templateCode, $compilationFile): string
     {
         //start bufora
         ob_start();
         //wymuszona kompilacja
-        if ($this->_alwaysCompile) {
+        if (!$this->getCache()->isActive()) {
             file_put_contents($compilationFile, $this->template($templateCode));
         }
         //próba włączenia skompilowanego pliku
@@ -385,10 +365,9 @@ class View extends \Mmi\DataObject
     /**
      * Pobiera dostępny layout
      * @param \Mmi\Http\Request $request
-     * @return string
      * @throws \Mmi\Mvc\MvcException brak layoutów
      */
-    private function _getLayout(\Mmi\Http\Request $request)
+    private function _getLayout(\Mmi\Http\Request $request): string
     {
         //test layoutu dla modułu i kontrolera
         if ($this->getTemplateByPath($request->getModuleName() . '/' . $request->getControllerName() . '/layout')) {

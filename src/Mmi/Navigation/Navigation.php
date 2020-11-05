@@ -30,9 +30,8 @@ class Navigation
 
     /**
      * Konstruktor, buduje drzewo na podstawie struktury zagnieżdżonej
-     * @param \Mmi\Navigation\NavigationConfig $config konfiguracja nawigatora
      */
-    public function __construct(\Mmi\Navigation\NavigationConfig $config)
+    public function __construct(NavigationConfigAbstract $config)
     {
         $this->_config = $config;
         $config->build();

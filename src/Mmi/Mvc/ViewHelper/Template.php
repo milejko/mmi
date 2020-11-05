@@ -25,7 +25,6 @@ class Template extends HelperAbstract
     {
         //buforowanie renderowanie szablonu
         $input = preg_replace_callback('/\{\'([a-zA-Z\-\/]+)\'\}/', [&$this, '_render'], $input);
-
         /**
          * obsługa klamr
          * obsługa zakończeń linii windows
@@ -48,7 +47,7 @@ class Template extends HelperAbstract
         ], $input);
 
         //buforowanie linkowanie aplikacji
-        $input = preg_replace_callback('/\{@([\*]+)?(.[^@\^]+)?[\^]?(.[^@\^]+)?@\}/', [&$this, '_url'], $input);
+        $input = preg_replace_callback('/\{@(.[^@\^]+)?[\^]?(.[^@\^]+)?@\}/', [&$this, '_url'], $input);
 
         //zmiana zmiennych obiektowych w linkach np. $request->test
         $input = preg_replace_callback('/%7B((%3E|%28|%29|%24)?([a-zA-Z\.\-\_\[\]\'\"\(\)]+)?)+%7D/', [&$this, '_routerLinks'], $input);
@@ -168,25 +167,15 @@ class Template extends HelperAbstract
     private function _url(array $matches)
     {
         $params = [];
-        if (isset($matches[2])) {
-            parse_str($matches[2], $params);
+        if (isset($matches[1])) {
+            parse_str($matches[1], $params);
         }
         foreach ($params as $key => $param) {
-            if ($param == 'null') {
+            if ('null' === $param || '' === $param) {
                 $params[$key] = null;
             }
         }
-        $https = null;
-        $flags = (isset($matches[1]) ? $matches[1] : null);
-        switch (substr_count($flags, '*')) {
-            case 1:
-                $https = false;
-                break;
-            case 2:
-                $https = true;
-                break;
-        }
-        return \Mmi\App\FrontController::getInstance()->getView()->getHelper('url')->url($params, true, $https);
+        return $this->view->getHelper('url')->url($params);
     }
 
     /**
@@ -206,7 +195,7 @@ class Template extends HelperAbstract
      */
     private function _text(array $matches)
     {
-        return \Mmi\App\FrontController::getInstance()->getView()->getHelper('text')->text($matches[1]);
+        return $this->view->getHelper('text')->text($matches[1]);
     }
 
     /**
@@ -235,7 +224,7 @@ class Template extends HelperAbstract
     private function _translate(array $matches)
     {
         //tłumaczenie
-        return \App\Registry::$translate->_($matches[1]);
+        return $this->view->_($matches[1]);
     }
 
     /**

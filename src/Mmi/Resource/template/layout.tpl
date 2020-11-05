@@ -6,6 +6,6 @@
     <body>
         {content()}
         <hr />
-        <i>MMi Framework/3.9</i>
+        <i>MMi 4.0</i>
     </body>
 </html>

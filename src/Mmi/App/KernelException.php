@@ -36,8 +36,7 @@ class KernelException extends \Exception
                 $info .= ' ' . $position['file'] . '(' . $position['line'] . '): ' . $position['function'];
             }
         }
-        $requestUri = \Mmi\App\FrontController::getInstance()->getEnvironment()->requestUri;
-        return $requestUri . ' ' . strip_tags(parent::getMessage() . ': ' . $this->getFile() . '(' . $this->getLine() . ')' . $info);
+        return trim((isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '') . ' ') . strip_tags(parent::getMessage() . ': ' . $this->getFile() . '(' . $this->getLine() . ')' . $info);
     }
 
 }

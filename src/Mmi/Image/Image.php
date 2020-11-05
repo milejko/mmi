@@ -10,8 +10,6 @@
 
 namespace Mmi\Image;
 
-use Mmi\App\FrontController;
-
 /**
  * Klasa obróbki obrazów
  */

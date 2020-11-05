@@ -315,8 +315,18 @@ class Query
      */
     public final function find()
     {
-        return (new QueryData($this))
-                ->find();
+        return (new QueryData($this))->find();
+    }
+
+    /**
+     * Delete complete collection
+     */
+    public final function delete()
+    {
+        //iterate records
+        foreach ((new QueryData($this))->find() as $record) {
+            $record->delete();
+        }
     }
 
     /**

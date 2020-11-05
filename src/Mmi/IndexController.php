@@ -17,14 +17,14 @@ class IndexController extends Mvc\Controller
 {
 
     //domyślna labelka
-    CONST DEFAULT_LABEL = 'It works!';
+    CONST DEFAULT_LABEL = '<html><body><h1>It works!</h1></body></html>';
 
     /**
      * Akcja główna
      */
     public function indexAction()
     {
-        
+        return self::DEFAULT_LABEL;
     }
 
     /**

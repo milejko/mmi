@@ -4,174 +4,84 @@
  * Mmi Framework (https://github.com/milejko/mmi.git)
  * 
  * @link       https://github.com/milejko/mmi.git
- * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
+ * @copyright  Copyright (c) 2010-2020 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
 namespace Mmi\Mvc;
 
-use Mmi\App\FrontController;
-use \Mmi\Message\MessengerHelper;
+use Mmi\Http\Request;
+use Mmi\Http\Response;
 
 /**
- * Klasa kontrolera akcji
+ * Action controller
  */
 class Controller
 {
 
     /**
-     * Żądanie
-     * @var \Mmi\Http\Request
-     */
-    protected $_request;
-
-    /**
-     * Referencja do odpowiedzi z Front controllera
-     * @var \Mmi\Http\Response
-     */
-    protected $_response;
-
-    /**
      * Widok
-     * @var \Mmi\Mvc\View
+     * @var View
      */
-    public $view;
+    protected $view;
+
+    /**
+     * Referencja do odpowiedzi
+     * @var Response
+     */
+    private $response;
 
     /**
      * Konstruktor
      */
-    public function __construct(\Mmi\Http\Request $request, \Mmi\Mvc\View $view)
+    public function __construct(
+        View $view,
+        Response $response
+    )
     {
-        //request
-        $this->_request = $request;
-        //ustawienie response
-        $this->_response = FrontController::getInstance()->getResponse();
-        //ustawienie pola widoku
-        $this->view = $view;
-        //inicjacja programisty kontrolera
+        //injections
+        $this->view         = $view;
+        $this->response     = $response;
+        //init method
         $this->init();
-    }
-
-    /**
-     * Magiczne pobranie zmiennej z requestu
-     * @param string $name nazwa zmiennej
-     * @return mixed
-     */
-    public final function __get($name)
-    {
-        //pobiera zmienną z requestu po nazwie zmiennej
-        return $this->_request->__get($name);
-    }
-
-    /**
-     * Magiczne sprawczenie istnienia pola w request
-     * @param string $key klucz
-     * @return bool
-     */
-    public function __isset($key)
-    {
-        //sprawdzenie istenia zmiennej w requescie
-        return $this->_request->__isset($key);
-    }
-
-    /**
-     * Magiczne pobranie zmiennej z requestu
-     * @param string $name nazwa zmiennej
-     * @param mixed $value wartość
-     */
-    public final function __set($name, $value)
-    {
-        //ustawienie zmiennej w requescie
-        return $this->_request->__set($name, $value);
-    }
-
-    /**
-     * Magiczne usunięcie zmiennej z requestu
-     * @param string $name nazwa zmiennej
-     */
-    public final function __unset($name)
-    {
-        //usunięcie zmiennej z requestu
-        return $this->_request->__unset($name);
     }
 
     /**
      * Funkcja dla użytkownika ładowana na końcu konstruktora
      */
     public function init()
+    {}
+
+    /**
+     * Gets request
+     */
+    public final function getRequest(): Request
     {
-        
+        return $this->view->request;
     }
 
     /**
-     * Pobiera request
-     * @return \Mmi\Http\Request
+     * Gets response
      */
-    public final function getRequest()
+    public final function getResponse(): Response
     {
-        return $this->_request;
+        return $this->response;
     }
 
     /**
-     * Zwraca dane post z requesta
-     * @return \Mmi\Http\RequestPost
+     * Gets messenger
      */
-    public final function getPost()
+    public final function getMessenger(): Messenger
     {
-        return $this->getRequest()->getPost();
+        return $this->view->getMessenger();
     }
 
     /**
-     * Zwraca pliki z requesta
+     * Get from request (deprecated)
      */
-    public final function getFiles()
+    public function __get(string $name)
     {
-        return $this->getRequest()->getFiles();
-    }
-
-    /**
-     * Pobiera response
-     * @return \Mmi\Http\Response
-     */
-    public final function getResponse()
-    {
-        return $this->_response;
-    }
-
-    /**
-     * Pobiera helper messengera
-     * @return \Mmi\Message\Messenger
-     */
-    public final function getMessenger()
-    {
-        return MessengerHelper::getMessenger();
-    }
-
-    /**
-     * Pobiera helper akcji
-     * @return \Mmi\Mvc\ActionHelper
-     */
-    public final function getActionHelper()
-    {
-        return ActionHelper::getInstance();
-    }
-
-    /**
-     * Pobiera helper logowania
-     * @return \Psr\Log\LoggerInterface
-     */
-    public final function getLogger()
-    {
-        return FrontController::getInstance()->getLogger();
-    }
-
-    /**
-     * Pobiera profiler
-     * @return \Mmi\App\KernelProfiler
-     */
-    public final function getProfiler()
-    {
-        return FrontController::getInstance()->getProfiler();
+        return $this->getRequest()->__get($name);
     }
 
 }

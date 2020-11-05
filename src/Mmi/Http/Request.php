@@ -10,6 +10,8 @@
 
 namespace Mmi\Http;
 
+use Mmi\App\App;
+
 /**
  * Klasa requesta
  * 
@@ -26,7 +28,7 @@ class Request extends \Mmi\DataObject
      */
     public function getContentType()
     {
-        return \Mmi\App\FrontController::getInstance()->getEnvironment()->contentType;
+        return filter_var($_SERVER['CONTENT_TYPE'], \FILTER_SANITIZE_SPECIAL_CHARS);
     }
 
     /**
@@ -35,7 +37,7 @@ class Request extends \Mmi\DataObject
      */
     public function getRequestMethod()
     {
-        return \Mmi\App\FrontController::getInstance()->getEnvironment()->requestMethod;
+        return filter_var($_SERVER['REQUEST_METHOD'], \FILTER_SANITIZE_SPECIAL_CHARS);
     }
 
     /**
@@ -82,7 +84,7 @@ class Request extends \Mmi\DataObject
      */
     public function getReferer()
     {
-        return \Mmi\App\FrontController::getInstance()->getEnvironment()->httpReferer;
+        return filter_var($_SERVER['HTTP_REFERER'], \FILTER_SANITIZE_STRING);
     }
 
     /**

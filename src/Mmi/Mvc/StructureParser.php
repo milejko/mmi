@@ -21,15 +21,12 @@ class StructureParser
      * @var array
      */
     protected static $_moduleRequirements = [
-        'IndexController.php',
-        'WidgetController.php',
+        '*Controller.php',
+        'Console/*Command.php',
         'Resource',
-        'Filter',
-        'Model',
+        'Mvc',
         'Orm',
-        'Resource',
-        'View',
-        'Form'
+        'di.*php'
     ];
 
     /**
@@ -48,7 +45,7 @@ class StructureParser
     public static function getSrcModules()
     {
         $modules = [];
-        foreach (new \DirectoryIterator(BASE_PATH . 'src') as $module) {
+        foreach (new \DirectoryIterator(BASE_PATH . '/src') as $module) {
             if (!$module->isDir() || $module->isDot() || !self::_moduleValid($module->getPathname())) {
                 continue;
             }
@@ -85,10 +82,10 @@ class StructureParser
     {
         $vendors = [];
         //brak vendorów
-        if (!file_exists(BASE_PATH . 'vendor')) {
+        if (!file_exists(BASE_PATH . '/vendor')) {
             return $vendors;
         }
-        foreach (new \DirectoryIterator(BASE_PATH . 'vendor') as $vendor) {
+        foreach (new \DirectoryIterator(BASE_PATH . '/vendor') as $vendor) {
             if (!$vendor->isDir() || $vendor->isDot()) {
                 continue;
             }
@@ -111,6 +108,9 @@ class StructureParser
     {
         //iteracja po wymaganych katalogach
         foreach (self::$_moduleRequirements as $req) {
+            if (!empty(glob($modulePath . '/' . $req))) {
+                return true;
+            }
             //sprawdzanie istnienia katalogu
             if (file_exists($modulePath . '/' . $req)) {
                 return true;

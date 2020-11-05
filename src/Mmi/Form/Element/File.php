@@ -10,6 +10,9 @@
 
 namespace Mmi\Form\Element;
 
+use Mmi\App\App;
+use Mmi\Http\Request;
+
 /**
  * Element plikowy
  */
@@ -38,10 +41,10 @@ class File extends ElementAbstract
         $fieldName = str_replace(['[', ']'], '', $this->getName());
         $fieldNameWithSquareBracket = $fieldName.'[]';
         //brak załadowanych plików
-        if (\Mmi\App\FrontController::getInstance()->getRequest()->getFiles()->isEmpty()) {
+        if (App::$di->get(Request::class)->getFiles()->isEmpty()) {
             return $this;
         }
-        $files = \Mmi\App\FrontController::getInstance()->getRequest()->getFiles()->getAsArray();
+        $files = App::$di->get(Request::class)->getFiles()->getAsArray();
         //brak pliku
         if (!isset($files[$namespace])) {
             return $this;

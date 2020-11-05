@@ -20,7 +20,7 @@ class Structure
      * Zwraca dostępne komponenty aplikacji
      * @return array 
      */
-    public static function getStructure()
+    public static function getStructure($object = null)
     {
         $components = [
             'module' => [],
@@ -28,12 +28,13 @@ class Structure
             'translate' => [],
             'filter' => [],
             'helper' => [],
+            'di'     => [],
         ];
         //vendors na koniec
         foreach (array_reverse(\Mmi\Mvc\StructureParser::getModules()) as $module) {
-            $components = array_merge_recursive(self::_parseModule($module), $components);
+            $components = array_merge_recursive(self::_parseModule($module, $object), $components);
         }
-        return $components;
+        return $object ? $components[$object] : $components;
     }
 
     /**
@@ -41,35 +42,34 @@ class Structure
      * @param string $path
      * @return array
      */
-    private static function _parseModule($path)
+    private static function _parseModule($path, $object = null)
     {
         $components = [
-            'module' => [],
+            'classes' => [],
             'template' => [],
             'translate' => [],
-            'filter' => [],
-            'helper' => [],
+            'di'     => [],
         ];
-        //brak modułów
+        //module does not exist
         if (!file_exists($path)) {
             return $components;
         }
         $module = basename($path);
-        //dodawanie konfiguracji DI
-        if (file_exists($diPath = $path . '/di.php')) {
-            $components['di'][] = $diPath;
-        }
-        //helpery widoku
-        self::_parseAdditions($components['helper'], $module, $path . '/Mvc/ViewHelper');
-        //filtry
-        self::_parseAdditions($components['filter'], $module, $path . '/Filter');
-        //tłumaczenia
-        self::_parseAdditions($components['translate'], lcfirst($module), $path . '/Resource/i18n');
-        //kontrolery
-        self::_parseControllers($components['module'], lcfirst($module), $path);
-        //szablony
-        $components['template'][lcfirst($module)] = [];
-        self::_parseTemplates($components['template'][lcfirst($module)], $path . '/Resource/template');
+        //dependency injection
+        (!$object || 'di' == $object) && self::_parseFiles($components['di'], $path . '/di.*php');
+        //view helpers
+        (!$object || 'classes' == $object) && self::_parseClasses($components['classes'], $module . '\\Mvc\\ViewHelper', $path . '/Mvc/ViewHelper/*.php', 'ViewHelper');
+        //filters
+        (!$object || 'classes' == $object) && self::_parseClasses($components['classes'], $module . '\\Filter', $path . '/Filter/*.php', 'Filter');
+        //controllers
+        (!$object || 'classes' == $object) && self::_parseClasses($components['classes'], $module, $path . '/*Controller.php');
+        //commands
+        (!$object || 'classes' == $object) && self::_parseClasses($components['classes'], $module . '\\Command', $path . '/Command/*Command.php');
+        //translate
+        (!$object || 'translate' == $object) && self::_parseFiles($components['translate'], $path . '/Resource/i18n/*.ini');
+        //templates
+        $components['template'][\lcfirst($module)] = [];
+        (!$object || 'template' == $object) && self::_parseTemplates($components['template'][\lcfirst($module)], $path . '/Resource/template');
         return $components;
     }
 
@@ -100,60 +100,29 @@ class Structure
     }
 
     /**
-     * Parser kontrolerów
-     * @param array $components
-     * @param string $moduleName
-     * @param string $path
-     */
-    private static function _parseControllers(array &$components, $moduleName, $path)
-    {
-        if (!file_exists($path)) {
-            return;
-        }
-        foreach (new \DirectoryIterator($path) as $controller) {
-            if ($controller->isDot()) {
-                continue;
-            }
-            //plik nie jest kontrolerem
-            if (false === strpos($controller->getFilename(), 'Controller')) {
-                continue;
-            }
-            $controllerName = lcfirst(substr($controller->getFilename(), 0, -14));
-            //parsuje akcje z kontrolera
-            self::_parseActions($components, $controller->getPathname(), $moduleName, $controllerName);
-        }
-    }
-
-    /**
-     * Parsowanie akcji w kontrolerze
-     * @param array $components
-     * @param string $controllerPath
-     * @param string $moduleName
-     * @param string $controllerName
-     */
-    private static function _parseActions(array &$components, $controllerPath, $moduleName, $controllerName)
-    {
-        //łapanie nazw akcji w kodzie
-        if (preg_match_all('/function ([a-zA-Z0-9]+Action)\(/', file_get_contents($controllerPath), $actions)) {
-            foreach ($actions[1] as $action) {
-                $components[$moduleName][$controllerName][substr($action, 0, -6)] = 1;
-            }
-        }
-    }
-
-    /**
      * Zwraca dostępne helpery i filtry w bibliotekach
      */
-    private static function _parseAdditions(array &$components, $namespace, $path)
+    private static function _parseClasses(array &$components, $namespace, $path, $namespaceAlias = null)
     {
-        if (!file_exists($path)) {
-            return;
-        }
-        foreach (new \DirectoryIterator($path) as $object) {
-            if ($object->isDot() || $object->isDir()) {
+        foreach (glob($path) as $file) {
+            $classCode = file_get_contents($file);
+            //making sure that class is not an abstract
+            //@TODO: change to reflection
+            if (\strpos($classCode, 'abstract class')) {
                 continue;
             }
-            $components[$namespace][lcfirst(substr($object->getFilename(), 0, -4))] = substr($object->getFilename(), -3) == 'php' ? 1 : $object->getPathname();
+            $objectName = substr(basename($file), 0, -4);
+            $components[($namespaceAlias ? : $namespace) . '\\' . $objectName] = $namespace . '\\' . $objectName;
+        }
+    }
+
+    /**
+     * Parses DI configuration files
+     */
+    private static function _parseFiles(array &$components, $path)
+    {
+        foreach (glob($path) as $file) {
+            $components[] = $file;
         }
     }
 

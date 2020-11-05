@@ -10,6 +10,11 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
+use Mmi\App\App;
+use Mmi\Mvc\View;
+use Mmi\Navigation\Navigation as NavigationNavigation;
+use Psr\Container\ContainerInterface;
+
 /**
  * Helper nawigatora
  */
@@ -89,57 +94,25 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
     protected $_description;
 
     /**
-     * Obiekt nawigatora
-     * @var \Mmi\Navigation
+     * @var ContainerInterface
      */
-    protected static $_navigation;
-
-    /**
-     * Obiekt ACL
-     * @var \Mmi\Security\Acl
-     */
-    protected static $_acl;
-
-    /**
-     * Obiekt Auth
-     * @var \Mmi\Security\Auth
-     */
-    protected static $_auth;
+    private $container;
 
     //szablon menu
     CONST TEMPLATE = 'mmi/mvc/view-helper/navigation/menu-item';
 
-    /**
-     * Ustawia obiekt nawigatora
-     * @param \Mmi\Navigation\Navigation $navigation
-     * @return \Mmi\Navigation\Navigation
-     */
-    public static function setNavigation(\Mmi\Navigation\Navigation $navigation)
+    public function __construct(View $view, ContainerInterface $container)
     {
-        //ustawienie nawigatora
-        return self::$_navigation = $navigation;
+        $this->container = $container;
+        parent::__construct($view);
     }
 
     /**
-     * Ustawia obiekt ACL
-     * @param \Mmi\Security\Acl $acl
-     * @return \Mmi\Security\Acl
+     * Gets navigation from the DI container (not clean) @TODO: refactor this one
      */
-    public static function setAcl(\Mmi\Security\Acl $acl)
+    protected function _getNavigation(): ?NavigationNavigation
     {
-        //acl
-        return self::$_acl = $acl;
-    }
-
-    /**
-     * Ustawia obiekt autoryzacji
-     * @param \Mmi\Security\Auth $auth
-     * @return \Mmi\Security\Auth
-     */
-    public static function setAuth(\Mmi\Security\Auth $auth)
-    {
-        //auth
-        return self::$_auth = $auth;
+        return $this->container->has(NavigationNavigation::class) ? $this->container->get(NavigationNavigation::class) : null;
     }
 
     /**
@@ -170,9 +143,9 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
             return true;
         }
         //sprawdzanie czy auth i acl włączone
-        if ($this->_allowedOnly && self::$_auth && self::$_acl) {
+        if ($this->_allowedOnly && $this->view->getAuth() && $this->view->getAcl()) {
             //sprawdzenie na acl
-            return self::$_acl->isAllowed(self::$_auth->getRoles(), strtolower($component))
+            return $this->view->getAcl()->isAllowed($this->view->getAuth()->getRoles(), strtolower($component))
 				&& $this->_checkRoles($leaf);
         }
         return true;
@@ -189,7 +162,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
 			return true;
 		}
 		//czy jest część wspólna
-		return [] !== array_intersect(self::$_auth->getRoles(), $leaf['roles']);
+		return [] !== array_intersect($this->view->getAuth()->getRoles(), $leaf['roles']);
     }
 
     /**
@@ -199,7 +172,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
     protected function _buildBreadcrumbs()
     {
         //obiekt nawigatora niezdefiniowany
-        if (null === self::$_navigation) {
+        if (null === $this->_getNavigation()) {
             return $this;
         }
         //pobieranie breadcrumbów
@@ -419,7 +392,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
     public function getBreadcrumbsData()
     {
         //ustawianie danych breadcrumbów
-        return is_array($this->_breadcrumbsData) ? $this->_breadcrumbsData : ($this->_breadcrumbsData = self::$_navigation->getBreadcrumbs());
+        return is_array($this->_breadcrumbsData) ? $this->_breadcrumbsData : ($this->_breadcrumbsData = $this->_getNavigation()->getBreadcrumbs());
     }
 
     /**
@@ -601,7 +574,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
     public function menu()
     {
         //buduje menu jeśli podano root i jest nawigator
-        return $this->_getHtml(($this->_root && self::$_navigation) ? self::$_navigation->seek($this->_root) : []);
+        return $this->_getHtml(($this->_root && $this->_getNavigation()) ? $this->_getNavigation()->seek($this->_root) : []);
     }
 
 }

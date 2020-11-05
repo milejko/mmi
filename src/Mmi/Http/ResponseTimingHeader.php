@@ -10,9 +10,7 @@
 
 namespace Mmi\Http;
 
-use Mmi\App\KernelProfilerInterface;
-use Mmi\Db\DbProfiler;
-use Mmi\Mvc\ActionHelper;
+use Mmi\App\AppProfilerInterface;
 
 /**
  * Klasa nagłówka odpowiedzi
@@ -22,11 +20,11 @@ class ResponseTimingHeader
 
     const HEADER_NAME = 'Server-Timing';
     /**
-     * @var KernelProfilerInterface
+     * @var AppProfilerInterface
      */
     private $_profiler;
 
-    public function __construct(KernelProfilerInterface $profiler)
+    public function __construct(AppProfilerInterface $profiler)
     {
         $this->_profiler = $profiler;
     }

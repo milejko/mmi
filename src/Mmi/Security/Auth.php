@@ -10,6 +10,9 @@
 
 namespace Mmi\Security;
 
+use Mmi\App\App;
+use Mmi\Http\Response;
+
 /**
  * Klasa autoryzacji
  */
@@ -314,11 +317,11 @@ class Auth
      * @param string $realm identyfikator przestrzeni chronionej
      * @param string $errorMessage treść komunikatu zwrotnego - błędnego
      */
-    public function httpAuth($realm = '', $errorMessage = '')
+    public function httpAuth($user, $password, Response $response, $realm = '', $errorMessage = '')
     {
         //pobieranie usera i hasła ze zmiennych środowiskowych
-        $this->setIdentity(\Mmi\App\FrontController::getInstance()->getEnvironment()->authUser)
-            ->setCredential(\Mmi\App\FrontController::getInstance()->getEnvironment()->authPassword);
+        $this->setIdentity($user)
+            ->setCredential($password);
         //model autoryzacji
         $model = $this->_modelName;
         //autoryzacja
@@ -328,7 +331,7 @@ class Auth
             return;
         }
         //odpowiedź 401
-        \Mmi\App\FrontController::getInstance()->getResponse()
+        $response
             ->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
             ->setCodeUnauthorized()
             ->setContent($errorMessage);

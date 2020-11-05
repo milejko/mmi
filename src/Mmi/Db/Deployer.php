@@ -10,6 +10,8 @@
 
 namespace Mmi\Db;
 
+use Mmi\App\App;
+use Mmi\Db\Adapter\PdoAbstract;
 use \Mmi\Orm;
 
 /**
@@ -19,25 +21,33 @@ class Deployer
 {
 
     /**
+     * @var PdoAbstract
+     */
+    private $db;
+
+    public function __construct()
+    {
+        //@TODO: better injection
+        $this->db = App::$di->get(PdoAbstract::class);
+    }
+
+    /**
      * Metoda uruchamiająca
      * @throws DbException
      */
     public function deploy()
     {
-        //wyłączenie bufora lokalnego
-        \App\Registry::$config->localCache->active = false;
-        //wyłączenie bufora aplikacji
-        \App\Registry::$config->cache->active = false;
         //inicjalizacja tablicy inkrementali
         $incrementals = [];
+        $driver = App::$di->get('db.driver');
         //iteracja po modułach aplikacji
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
             //moduł nie zawiera incrementali
-            if (!file_exists($module . '/Resource/incremental/' . \App\Registry::$config->db->driver)) {
+            if (!file_exists($module . '/Resource/incremental/' . $driver)) {
                 continue;
             }
             //iteracja po incrementalach
-            foreach (glob($module . '/Resource/incremental/' . \App\Registry::$config->db->driver . '/*.sql') as $file) {
+            foreach (glob($module . '/Resource/incremental/' . $driver . '/*.sql') as $file) {
                 //dodawanie incrementala do tablicy
                 $incrementals[basename($file)] = $file;
             }
@@ -48,8 +58,6 @@ class Deployer
         foreach ($incrementals as $incremental) {
             //importowanie incrementala
             $this->_importIncremental($incremental);
-            //flush wyniku na ekran
-            flush();
         }
     }
 
@@ -65,12 +73,12 @@ class Deployer
         //hash pliku
         $md5file = md5_file($file);
         //ustawianie domyślnych parametrów importu
-        \App\Registry::$db->setDefaultImportParams();
+        $this->db->setDefaultImportParams();
         //pobranie rekordu
         try {
             $dc = (new Orm\ChangelogQuery)->whereFilename()->equals(basename($file))->findFirst();
         } catch (\Exception $e) {
-            echo 'INITIAL IMPORT.' . "\n";
+            echo 'INITIAL IMPORT.' . $e->getMessage() . "\n";
             $dc = null;
         }
         //restore istnieje md5 zgodne
@@ -122,16 +130,16 @@ class Deployer
             return;
         }
         //start transakcji
-        \App\Registry::$db->beginTransaction();
+        $this->db->beginTransaction();
         //quera jeśli błędna rollback i die, jeśli poprawna commit
         try {
             //wykonanie zapytania
-            \App\Registry::$db->query($query);
+            $this->db->query($query);
             //commit
-            \App\Registry::$db->commit();
+            $this->db->commit();
         } catch (\Mmi\Db\DbException $e) {
             //rollback
-            \App\Registry::$db->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
     }

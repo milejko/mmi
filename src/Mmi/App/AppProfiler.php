@@ -13,7 +13,7 @@ namespace Mmi\App;
 /**
  * Klasa profilera aplikacji
  */
-class KernelProfiler implements KernelProfilerInterface
+class AppProfiler implements AppProfilerInterface
 {
 
     /**
@@ -51,7 +51,6 @@ class KernelProfiler implements KernelProfilerInterface
             'time' => $time,
             'elapsed' => $elapsed,
         ];
-        FrontController::getInstance()->getLogger()->debug($name . ' ' . number_format($elapsed, 6) . 's)');
         $this->_elapsed += $elapsed;
         $this->_counter++;
     }

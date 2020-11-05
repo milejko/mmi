@@ -10,7 +10,8 @@
 
 namespace Mmi\Db;
 
-use Mmi\App\FrontController;
+use Mmi\App\App;
+use Mmi\App\AppProfilerInterface;
 
 /**
  * Klasa profilera aplikacji
@@ -18,7 +19,7 @@ use Mmi\App\FrontController;
 class DbProfiler
 {
 
-    const KERNEL_PROFILER_PREFIX = 'Db\Adapter\Pdo';
+    const EVENT_PREFIX = 'Mmi\Db\Adapter\Pdo';
 
     /**
      * Dane profilera
@@ -27,12 +28,25 @@ class DbProfiler
     protected $_data = [];
 
     /**
+     * @var AppProfilerInterface
+     */
+    private $profiler;
+
+    /**
+     * Constructor
+     */
+    public function __construct(AppProfilerInterface $profiler)
+    {
+        $this->profiler = $profiler;
+    }
+
+    /**
      * Rejestruje zdarzeni
      * @param PDOStatement $statement
      * @param array $bind
      * @param float $elapsed
      */
-    public function event(\PDOStatement $statement, array $bind, $elapsed = null)
+    public function event(\PDOStatement $statement, array $bind, $elapsed = null): void
     {
         //zapytanie SQL bez bindów
         $sql = $statement->queryString;
@@ -57,8 +71,7 @@ class DbProfiler
             'elapsed' => $elapsed,
         ];
         //event profilera
-        FrontController::getInstance()->getProfiler()->event(self::KERNEL_PROFILER_PREFIX . ': ' . substr($sql, 0, strpos($sql, ' ')));
-        return $this;
+        $this->profiler->event(self::EVENT_PREFIX . ': ' . substr($sql, 0, strpos($sql, ' ')));
     }
 
     /**

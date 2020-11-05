@@ -17,7 +17,7 @@ class Router
 
     /**
      * Konfiguracja
-     * @var \Mmi\Mvc\RouterConfig
+     * @var RouterConfigAbstract
      */
     private $_config;
 
@@ -25,7 +25,7 @@ class Router
      * Konstruktor routera
      * @param \Mmi\Mvc\RouterConfig $config
      */
-    public function __construct(\Mmi\Mvc\RouterConfig $config)
+    public function __construct(RouterConfigAbstract $config)
     {
         $this->_config = $config;
     }
@@ -106,6 +106,12 @@ class Router
     {
         //pusty url
         $url = '';
+        //usuwanie nullowych parametrów
+        foreach ($params as $key => $param) {
+            if (null === $param) {
+                unset($params[$key]);
+            }
+        }        
         //aplikacja rout
         foreach ($this->getRoutes() as $route) {
             /* @var $route \Mmi\Mvc\RouterConfigRoute */
@@ -132,7 +138,7 @@ class Router
         //jeśli puste parametry
         if (empty($params)) {
             return $url;
-        }
+        }        
         //budowanie zapytania
         return $url . ($url == '/' ? '?' : '/?') . http_build_query($params);
     }

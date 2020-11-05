@@ -10,7 +10,10 @@
 
 namespace Mmi\Http\ResponseDebugger;
 
-use Mmi\App\FrontController;
+use Mmi\App\App;
+use Mmi\App\AppProfilerInterface;
+use Mmi\Db\Adapter\PdoAbstract;
+use Mmi\Http\HttpServerEnv;
 
 /**
  * Klasa danych częściowych panelu deweloperskiego
@@ -22,9 +25,8 @@ class Part
      * Zmienne środowiskowe
      * @return string
      */
-    public static function getEnvHtml()
+    public static function getEnvHtml(HttpServerEnv $env)
     {
-        $env = \Mmi\App\FrontController::getInstance()->getEnvironment();
         return '<p style="margin: 0; padding: 0;">Connection: <b>' . $env->serverAddress . ':' . $env->serverPort . '</b> <---> <b>' . $env->remoteAddress . ':' . $env->remotePort . '</b></p>' .
             '<p style="margin: 0; padding: 0;">Browser: <b>' . substr($env->httpUserAgent, 0, 93) . '</b></p>' .
             '<p style="margin: 0; padding: 0;">PHP: <b>' . phpversion() . ' (' . php_sapi_name() . ', ' . php_uname('s') . ' ' . php_uname('m') . ': ' . php_uname('n') . ')</b></p>' .
@@ -51,12 +53,12 @@ class Part
      * Profiler
      * @return string
      */
-    public static function getProfilerHtml()
+    public static function getProfilerHtml(AppProfilerInterface $profiler)
     {
         $percentSum = 0;
         $html = '';
         //pętla po profilerze
-        foreach (FrontController::getInstance()->getProfiler()->get() as $event) {
+        foreach ($profiler->get() as $event) {
             $percentSum += $event['percent'];
             $html .= '<div style="color: #' . self::_colorifyPercent($event['percent']) . '"><div style="float: left; width: 450px; margin-right: 20px; font-size: 10px; word-wrap: break-word; white-space: pre-wrap;">' . $event['name'] . '</div><div style="float: left; width: 60px;"><b>' . round($event['elapsed'], 4) . 's</b></div><div style="float: left; width: 60px;"><b>' . round($event['percent'], 2) . '%</b></div><div style="float: left;"><b>' . round($percentSum, 2) . '%</b></div></div><div style="clear: both"></div>';
         }
@@ -71,7 +73,7 @@ class Part
     {
         $percentSum = 0;
         $html = '';
-        $profilerData = \App\Registry::$db && \App\Registry::$db->getProfiler() ? \App\Registry::$db->getProfiler()->get() : [];
+        $profilerData = App::$di->get(PdoAbstract::class) && App::$di->get(PdoAbstract::class)->getProfiler() ? App::$di->get(PdoAbstract::class)->getProfiler()->get() : [];
         //brak zapytań
         if (!count($profilerData)) {
             return 'No SQL queries';

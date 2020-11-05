@@ -10,6 +10,10 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
+use Mmi\App\App;
+use Mmi\Http\Request;
+use Mmi\Mvc\Router;
+
 class Url extends HelperAbstract
 {
 
@@ -18,35 +22,14 @@ class Url extends HelperAbstract
      * @see \Mmi\Mvc\Router::encodeUrl()
      * @param array $params parametry
      * @param boolean $reset nie łączy z bieżącym requestem
-     * @param boolean | null $https czy wymusić https: tak, nie https, null = bez zmiany protokołu
      * @return string
      */
-    public function url(array $params = [], $reset = false, $https = null)
+    public function url(array $params = [], $reset = false)
     {
-        //łączenie parametrów z requestem widoku
-        if (!$reset) {
-            $params = array_merge($this->view->request->toArray(), $params);
-        }
-        //usuwanie nullowych parametrów
-        foreach ($params as $key => $param) {
-            if (null === $param) {
-                unset($params[$key]);
-            }
-        }
+        $urlParams = $reset ? $params : array_merge(App::$di->get(Request::class)->toArray(), $params);
         //wyznaczanie url
-        $url = $this->view->baseUrl . \Mmi\App\FrontController::getInstance()->getRouter()->encodeUrl($params);
-        //gdy aplikacja działa w środowisku https => wymuszony https
-        if (\Mmi\App\FrontController::getInstance()->getEnvironment()->httpSecure) {
-            $https = true;
-        }
-        //zwrot samego url (bez zmiany protokołu)
-        if (null === $https) {
-            return $url ? $url : '/';
-        }
-        //host środowiskowy, lub z konfiguracji (jeśli brak)
-        $host = \Mmi\App\FrontController::getInstance()->getEnvironment()->httpHost ?: \App\Registry::$config->host;
-        //link absolutny
-        return ($https ? 'https' : 'http') . '://' . $host . $url;
+        $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl($urlParams);
+        return $url ? $url : '/';
     }
 
 }

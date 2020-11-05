@@ -26,7 +26,7 @@ class FileHandler extends DistributedCacheHandlerAbstract
     {
         //próba odczytu pliku
         try {
-            return file_get_contents($this->_cache->getConfig()->path . '/' . $key);
+            return @file_get_contents($this->_cache->getConfig()->path . '/' . $key);
         } catch (KernelException $e) {
             //brak akcji
         }

@@ -43,7 +43,7 @@ class ComposerInstaller
         //linkowanie zasobów web 
         self::linkModuleWebResources();
         //kopiowanie binariów z modułów 
-        self::_copyModuleBinaries(); 
+        self::_copyExecutables(); 
     } 
  
     /** 
@@ -59,7 +59,7 @@ class ComposerInstaller
         //linkowanie zasobów web 
         self::linkModuleWebResources();
         //kopiowanie binariów z modułów 
-        self::_copyModuleBinaries(); 
+        self::_copyExecutables(); 
     } 
  
     /** 
@@ -71,7 +71,7 @@ class ComposerInstaller
         //określenie katalogu vendorów 
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir'); 
         //ustawianie ścieżki bazowej projektu 
-        define('BASE_PATH', $vendorDir . '/../'); 
+        define('BASE_PATH', realpath($vendorDir . '/../')); 
         //kopiowanie plików dist 
         self::_createSysDirs(); 
         self::_copyDistFiles(); 
@@ -143,18 +143,11 @@ class ComposerInstaller
     /** 
      * Kopiuje binaria do /bin 
      */ 
-    protected static function _copyModuleBinaries() 
+    protected static function _copyExecutables() 
     {
-        copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/mmi', BASE_PATH . '/bin/mmi');
-        //iteracja po binarkach
-        foreach (new \DirectoryIterator(BASE_PATH . '/bin') as $file) { 
-            //katalog (lub wyjście wyżej) 
-            if ($file->isDot() || $file->isDir()) { 
-                continue; 
-            } 
-            //zmiana uprawnień 
-            chmod($file->getPathname(), 0755); 
-        } 
+        copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/index.php', BASE_PATH . '/web/index.php');
+        copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/mmi', BASE_PATH . '/bin/mmi');
+        chmod(BASE_PATH . '/bin/mmi', 0755);
     } 
  
 } 

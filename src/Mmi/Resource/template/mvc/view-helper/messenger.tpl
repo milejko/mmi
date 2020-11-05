@@ -1,5 +1,5 @@
 <ul id="messenger" class="messenger">
-    {foreach $_messenger->getMessages() as $message}
+    {foreach getMessenger()->getMessages() as $message}
         {$class = 'warning'}
         {$icon = 'warning-sign'}
         {if $message.type}

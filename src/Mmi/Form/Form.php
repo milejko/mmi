@@ -10,7 +10,10 @@
 
 namespace Mmi\Form;
 
+use Mmi\App\App;
 use Mmi\Form\Element;
+use Mmi\Http\Request;
+use Mmi\Mvc\View;
 
 /**
  * Abstrakcyjna klasa komponentu formularza
@@ -88,7 +91,7 @@ abstract class Form extends \Mmi\OptionObject
         $this->hasNotEmptyRecord() && $this->setFromRecord($this->_record);
 
         //dane z POST
-        $this->isMine() && $this->setFromPost(\Mmi\App\FrontController::getInstance()->getRequest()->getPost());
+        $this->isMine() && $this->setFromPost(App::$di->get(Request::class)->getPost());
 
         //zapis formularza
         $this->save();
@@ -164,8 +167,7 @@ abstract class Form extends \Mmi\OptionObject
     public final function isMine()
     {
         //sprawdzenie istnienia w POST przestrzeni formularza
-        return \Mmi\App\FrontController::getInstance()
-                ->getRequest()
+        return App::$di->get(Request::class)
                 ->getPost()
                 ->__isset($this->_formBaseName);
     }
@@ -432,9 +434,9 @@ abstract class Form extends \Mmi\OptionObject
     public function start()
     {
         //form do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_form = $this;
+        App::$di->get(View::class)->_form = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_START);
+        return App::$di->get(View::class)->renderTemplate(static::TEMPLATE_START);
     }
 
     /**
@@ -444,9 +446,9 @@ abstract class Form extends \Mmi\OptionObject
     public function end()
     {
         //form do widoku
-        \Mmi\App\FrontController::getInstance()->getView()->_form = $this;
+        App::$di->get(View::class)->_form = $this;
         //render szablonu
-        return \Mmi\App\FrontController::getInstance()->getView()->renderTemplate(static::TEMPLATE_END);
+        return App::$di->get(View::class)->renderTemplate(static::TEMPLATE_END);
     }
 
     /**

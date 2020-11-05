@@ -62,7 +62,7 @@ class SessionConfig
      * Mnożnik GC
      * @var int
      */
-    public $gcDivisor = 1000;
+    public $gcDivisor = 5000;
 
     /**
      * Czas życia GC

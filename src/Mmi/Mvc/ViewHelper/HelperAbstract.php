@@ -10,6 +10,8 @@
 
 namespace Mmi\Mvc\ViewHelper;
 
+use Mmi\Mvc\View;
+
 class HelperAbstract
 {
 
@@ -30,9 +32,9 @@ class HelperAbstract
     /**
      * Konstruktor, ustawia widok
      */
-    public function __construct()
+    public function __construct(View $view)
     {
-        $this->view = \Mmi\App\FrontController::getInstance()->getView();
+        $this->view = $view;
         $this->init();
     }
 
