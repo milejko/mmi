@@ -12,6 +12,7 @@ namespace Mmi\Orm;
 
 use Mmi\App\App;
 use Mmi\Cache\Cache;
+use Mmi\Cache\PrivateCache;
 use Mmi\Db\Adapter\PdoAbstract;
 
 /**
@@ -56,7 +57,7 @@ class DbConnector
      */
     public static final function getCache()
     {
-        return App::$di->get(Cache::class);
+        return App::$di->get(PrivateCache::class);
     }
 
     /**

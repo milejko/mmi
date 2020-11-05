@@ -13,10 +13,10 @@ namespace Mmi\App;
 use DI\ContainerBuilder;
 use DI\Container;
 use Mmi\Mvc\Structure;
-use Dotenv\Dotenv;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Mvc\ActionHelper;
+use Symfony\Component\Dotenv\Dotenv;
 
 use function DI\autowire;
 
@@ -95,7 +95,7 @@ class App
     private function buildContainer(): self
     {
         //remove previous compilation if cache disabled
-        getenv('CACHE_PRIVATE_ENABLED') || $this->unlinkCompiledContainer();
+        \getenv('CACHE_PRIVATE_ENABLED') || $this->unlinkCompiledContainer();
         //try to build from cache
         $this->container = $this->getContainerBuilder()->build();
         //container is not empty ()
@@ -132,12 +132,16 @@ class App
     private function getContainerBuilder(): ContainerBuilder
     {
         //configure and return builder
-        return (new ContainerBuilder())->useAutowiring(true)
+        $builder = (new ContainerBuilder())
+            ->useAutowiring(true)
             ->useAnnotations(true)
             ->ignorePhpDocErrors(true)
             ->enableCompilation(self::APPLICATION_COMPILE_PATH)
             ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH)
             ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
+        $this->apcuEnabled() && $builder->enableDefinitionCache(\BASE_PATH);
+        return $builder;
+
     }
 
     /**
@@ -151,8 +155,8 @@ class App
         ini_set('default_charset', 'utf-8');
         setlocale(LC_ALL, 'pl_PL.utf-8');
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
-        //.env loading (unsafe as PHP-DI uses getenv internally)
-        Dotenv::createUnsafeImmutable(BASE_PATH)->safeLoad();
+        //.env loading
+        (new Dotenv())->usePutenv()->load(BASE_PATH . '/.env');
         $this->profiler->event(self::PROFILER_PREFIX . 'environment configuration loaded');
         return $this;
     }
@@ -175,7 +179,15 @@ class App
      */
     private function unlinkCompiledContainer(): void
     {
-        array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
+        $this->apcuEnabled() && \apcu_clear_cache();
+        array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer.php'));
+    }
+
+    private function apcuEnabled(): bool
+    {
+        return function_exists('apcu_fetch')
+            && ini_get('apc.enabled')
+            && ! ('cli' === \PHP_SAPI && !ini_get('apc.enable_cli'));
     }
 
 }

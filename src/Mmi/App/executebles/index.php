@@ -9,10 +9,10 @@
  */
 
 //define base path
-define('BASE_PATH', __DIR__ . '/../');
+define('BASE_PATH', realpath(__DIR__ . '/../'));
 
 //autoloader definition
-require BASE_PATH . 'vendor/autoload.php';
+require BASE_PATH . '/vendor/autoload.php';
 
 //run application
 (new \Mmi\App\App())->run();

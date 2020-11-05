@@ -17,7 +17,7 @@ return [
     PrivateCache::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
         $config->active  = $container->get('cache.private.enabled');
-        $config->handler = 'file';
+        $config->handler = \function_exists('apcu_fetch') ? 'apc' : 'file';
         $config->path    = BASE_PATH . '/var/cache';
         return new Cache($config);
     },
@@ -26,6 +26,7 @@ return [
         $config->active      = $container->get('cache.public.enabled');
         $config->handler     = $container->get('cache.public.handler');
         $config->path        = $container->get('cache.public.path');
+        #for clusters shared cache must be distributed for non shared backends
         $config->distributed = $container->get('cache.public.distributed');
         return new Cache($config);
     },

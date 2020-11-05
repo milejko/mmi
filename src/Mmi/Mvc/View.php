@@ -12,6 +12,7 @@ namespace Mmi\Mvc;
 
 use Mmi\App\KernelException;
 use Mmi\Cache\Cache;
+use Mmi\Cache\PrivateCache;
 use Mmi\Http\HttpServerEnv;
 use Mmi\Security\Acl;
 use Mmi\Security\Auth;
@@ -159,7 +160,7 @@ class View extends \Mmi\DataObject
      */
     public function getCache(): Cache
     {
-        return $this->container->get(Cache::class);
+        return $this->container->get(PrivateCache::class);
     }
 
     /**

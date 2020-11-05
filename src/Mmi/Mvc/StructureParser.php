@@ -45,7 +45,7 @@ class StructureParser
     public static function getSrcModules()
     {
         $modules = [];
-        foreach (new \DirectoryIterator(BASE_PATH . 'src') as $module) {
+        foreach (new \DirectoryIterator(BASE_PATH . '/src') as $module) {
             if (!$module->isDir() || $module->isDot() || !self::_moduleValid($module->getPathname())) {
                 continue;
             }
@@ -82,10 +82,10 @@ class StructureParser
     {
         $vendors = [];
         //brak vendorów
-        if (!file_exists(BASE_PATH . 'vendor')) {
+        if (!file_exists(BASE_PATH . '/vendor')) {
             return $vendors;
         }
-        foreach (new \DirectoryIterator(BASE_PATH . 'vendor') as $vendor) {
+        foreach (new \DirectoryIterator(BASE_PATH . '/vendor') as $vendor) {
             if (!$vendor->isDir() || $vendor->isDot()) {
                 continue;
             }

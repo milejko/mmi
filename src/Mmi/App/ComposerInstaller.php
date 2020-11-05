@@ -71,7 +71,7 @@ class ComposerInstaller
         //określenie katalogu vendorów 
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir'); 
         //ustawianie ścieżki bazowej projektu 
-        define('BASE_PATH', $vendorDir . '/../'); 
+        define('BASE_PATH', realpath($vendorDir . '/../')); 
         //kopiowanie plików dist 
         self::_createSysDirs(); 
         self::_copyDistFiles(); 
