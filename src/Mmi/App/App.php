@@ -12,10 +12,8 @@ namespace Mmi\App;
 
 use DI\ContainerBuilder;
 use DI\Container;
-use DI\Definition\Exception\InvalidDefinition;
 use Mmi\Mvc\Structure;
 use Dotenv\Dotenv;
-use Exception;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Mvc\ActionHelper;
@@ -61,7 +59,7 @@ class App
     }
 
     /**
-     * Uruchomienie aplikacji
+     * Application run
      */
     public function run(): void
     {
@@ -90,12 +88,13 @@ class App
         $this->container->get(Response::class)->send();
     }
 
+    /**
+     * Builds container
+     */
     private function buildContainer(): self
     {
         //remove previous compilation if cache disabled
-        if (!getenv('CACHE_PRIVATE_ENABLED')) {
-            array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
-        }
+        getenv('CACHE_PRIVATE_ENABLED') || $this->unlinkCompiledContainer();
         //try to build from cache
         $this->container = $this->getContainerBuilder()->build();
         //container is not empty ()
@@ -104,7 +103,7 @@ class App
             return $this;
         }
         //unlink previously cached container
-        array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
+        $this->unlinkCompiledContainer();
         //create container builder
         $builder = $this->getContainerBuilder();
         //get structure
@@ -168,6 +167,14 @@ class App
         set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
         $this->profiler->event(self::PROFILER_PREFIX . 'error handler setup');
         return $this;        
+    }
+
+    /**
+     * Unlinks compiled container
+     */
+    private function unlinkCompiledContainer(): void
+    {
+        array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer*'));
     }
 
 }
