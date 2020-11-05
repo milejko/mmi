@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Mmi Framework (https://bitbucket.org/mariuszmilejko/mmicms/)
+ *
+ * @link       https://bitbucket.org/mariuszmilejko/mmicms/
+ * @copyright  Copyright (c) 2010-2020 Mariusz Miłejko (http://milejko.com)
+ * @license    http://milejko.com/new-bsd.txt New BSD License
+ */
+
+//definicja katalogu bazowego
+define('BASE_PATH', __DIR__ . '/../');
+
+//dołączenie autoloadera
+require BASE_PATH . 'vendor/autoload.php';
+
+//run cli application
+(new \Mmi\App\AppCli())->run();

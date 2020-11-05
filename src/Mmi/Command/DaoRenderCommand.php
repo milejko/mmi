@@ -1,6 +1,6 @@
 <?php
 
-namespace Mmi\Console;
+namespace Mmi\Command;
 
 use Mmi\App\App;
 use Mmi\Db\Adapter\PdoAbstract;

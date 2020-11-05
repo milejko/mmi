@@ -1,18 +1,20 @@
 <?php
 
-namespace Mmi\Console;
+namespace Mmi\Command;
 
-use Mmi\App\ComposerInstaller;
+use Mmi\App\App;
+use Mmi\Cache\Cache;
+use Mmi\Cache\PrivateCache;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class WeblinksCommand extends CommandAbstract
+class FlushCacheCommand extends CommandAbstract
 {
 
     public function configure()
     {
-        $this->setName('resource:create-symlinks');
-        $this->setDescription('Create symlinks');
+        $this->setName('cache:flush');
+        $this->setDescription('Flush cache');
         parent::configure();
     }
 
@@ -24,12 +26,15 @@ class WeblinksCommand extends CommandAbstract
     public function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            ComposerInstaller::linkModuleWebResources();
+            //czyszczenie bufora systemowego
+            App::$di->get(PrivateCache::class)->flush();
+            //czyszczenie bufora aplikacyjnego
+            App::$di->get(Cache::class)->flush();
         } catch (\Exception $e) {
             $output->writeln('Error');
             return 1;
         }
-        $output->writeln('Symlinks created');
+        $output->writeln('Cache flushed');
         return 0;
     }
 

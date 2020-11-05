@@ -63,6 +63,8 @@ class Structure
         (!$object || 'classes' == $object) && self::_parseClasses($components['classes'], $module . '\\Filter', $path . '/Filter/*.php', 'Filter');
         //controllers
         (!$object || 'classes' == $object) && self::_parseClasses($components['classes'], $module, $path . '/*Controller.php');
+        //commands
+        (!$object || 'classes' == $object) && self::_parseClasses($components['classes'], $module . '\\Command', $path . '/Command/*Command.php');
         //translate
         (!$object || 'translate' == $object) && self::_parseFiles($components['translate'], $path . '/Resource/i18n/*.ini');
         //templates

@@ -38,12 +38,12 @@ class App
     /**
      * @var Container
      */
-    private $container;
+    protected $container;
 
     /**
      * @var AppProfiler
      */
-    private $profiler;
+    protected $profiler;
 
     /**
      * Constructor
@@ -54,8 +54,7 @@ class App
         $this->profiler = new AppProfiler();
         //configure application
         $this->configureEnvironment()
-            ->buildContainer()
-            ->setErrorHandler();
+            ->buildContainer();
     }
 
     /**
@@ -63,6 +62,8 @@ class App
      */
     public function run(): void
     {
+        //set error handler
+        $this->setErrorHandler();
         //@TODO: remove after target refactoring
         self::$di = $this->container;
         $profiler = $this->container->get(AppProfilerInterface::class);
