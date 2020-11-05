@@ -139,8 +139,9 @@ class App
             ->enableCompilation(self::APPLICATION_COMPILE_PATH)
             ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH)
             ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
-        $this->apcuEnabled() && $builder->enableDefinitionCache(\BASE_PATH);
-        return $builder;
+        return $this->isApcuEnabled() ?
+            $builder->enableDefinitionCache(\BASE_PATH) :
+            $builder;
 
     }
 
@@ -179,11 +180,14 @@ class App
      */
     private function unlinkCompiledContainer(): void
     {
-        $this->apcuEnabled() && \apcu_clear_cache();
+        $this->isApcuEnabled() && \apcu_clear_cache();
         array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer.php'));
     }
 
-    private function apcuEnabled(): bool
+    /**
+     * APCu enabled
+     */
+    private function isApcuEnabled(): bool
     {
         return function_exists('apcu_fetch')
             && ini_get('apc.enabled')

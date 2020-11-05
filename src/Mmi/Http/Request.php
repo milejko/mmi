@@ -28,7 +28,7 @@ class Request extends \Mmi\DataObject
      */
     public function getContentType()
     {
-        return App::$di->get(HttpServerEnv::class)->contentType;
+        return filter_var($_SERVER['CONTENT_TYPE'], \FILTER_SANITIZE_SPECIAL_CHARS);
     }
 
     /**
@@ -37,7 +37,7 @@ class Request extends \Mmi\DataObject
      */
     public function getRequestMethod()
     {
-        return App::$di->get(HttpServerEnv::class)->requestMethod;
+        return filter_var($_SERVER['REQUEST_METHOD'], \FILTER_SANITIZE_SPECIAL_CHARS);
     }
 
     /**
@@ -84,7 +84,7 @@ class Request extends \Mmi\DataObject
      */
     public function getReferer()
     {
-        return App::$di->get(HttpServerEnv::class)->httpReferer;
+        return filter_var($_SERVER['HTTP_REFERER'], \FILTER_SANITIZE_STRING);
     }
 
     /**

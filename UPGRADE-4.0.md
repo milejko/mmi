@@ -23,6 +23,8 @@ Registry::$config->others => no shortcuts - just get/inject proper value from th
 proper way:
 use dependency injection(*)
 
+Request 
+
 Commands (CLI) MUST be placed inside module/Command/ and have "Command" suffix folder
 (ie. Cms/Command/SomeCommand.php) and also:
 namespace Mmi\Console; => namespace Mmi\Command;
