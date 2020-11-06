@@ -68,7 +68,7 @@ class App
         //@TODO: remove after target refactoring
         self::$di = $this->container;
         $profiler = $this->container->get(AppProfilerInterface::class);
-        $request = $this->container->get(Request::class);            
+        $request = $this->container->get(Request::class);
         $interceptor = $this->container->has(AppEventInterceptorAbstract::class) ? $this->container->get(AppEventInterceptorAbstract::class) : null;
         //intercept before dispatch
         if (null !== $interceptor) {
@@ -123,7 +123,7 @@ class App
         }
         //build container
         $this->container = $builder->build();
-        $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');        
+        $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');
         return $this;
     }
 
@@ -143,7 +143,6 @@ class App
         return $this->isApcuEnabled() ?
             $builder->enableDefinitionCache(\BASE_PATH) :
             $builder;
-
     }
 
     /**
@@ -157,13 +156,13 @@ class App
         ini_set('default_charset', 'utf-8');
         setlocale(LC_ALL, 'pl_PL.utf-8');
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
-        //.env loading
+        //try to load .env
         try {
             (new Dotenv())->usePutenv()->load(BASE_PATH . '/.env');
+            $this->profiler->event(self::PROFILER_PREFIX . '.env configuration file loaded');
         } catch (PathException $e) {
-            
+            $this->profiler->event(self::PROFILER_PREFIX . 'no .env configuration file found');
         }
-        $this->profiler->event(self::PROFILER_PREFIX . 'environment configuration loaded');
         return $this;
     }
 
@@ -177,7 +176,7 @@ class App
         //error handler
         set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
         $this->profiler->event(self::PROFILER_PREFIX . 'error handler setup');
-        return $this;        
+        return $this;
     }
 
     /**
@@ -196,7 +195,6 @@ class App
     {
         return function_exists('apcu_fetch')
             && ini_get('apc.enabled')
-            && ! ('cli' === \PHP_SAPI && !ini_get('apc.enable_cli'));
+            && !('cli' === \PHP_SAPI && !ini_get('apc.enable_cli'));
     }
-
 }
