@@ -17,6 +17,7 @@ use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Mvc\ActionHelper;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Dotenv\Exception\PathException;
 
 use function DI\autowire;
 
@@ -157,7 +158,11 @@ class App
         setlocale(LC_ALL, 'pl_PL.utf-8');
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
         //.env loading
-        (new Dotenv())->usePutenv()->load(BASE_PATH . '/.env');
+        try {
+            (new Dotenv())->usePutenv()->load(BASE_PATH . '/.env');
+        } catch (PathException $e) {
+            
+        }
         $this->profiler->event(self::PROFILER_PREFIX . 'environment configuration loaded');
         return $this;
     }
