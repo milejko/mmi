@@ -10,7 +10,6 @@ class DbDeployCommand extends CommandAbstract
 
     public function configure()
     {
-        $this->setName('db:deploy');
         $this->setDescription('Deploy database incremental');
         parent::configure();
     }

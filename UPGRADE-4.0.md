@@ -30,6 +30,10 @@ Commands (CLI) MUST be placed inside module/Command/ and have "Command" suffix f
 namespace Mmi\Console; => namespace Mmi\Command;
 Mmi\Console\CommandAbstract => \Mmi\Command\CommandAbstract
 
+Commands also are auto-named (by namespace and class name):
+db:deploy => Mmi:DbDeploy
+cms:cron:execute => Cms:CronExecute
+
 Using dependency injection:
 DI config files should name like di.php di.something.php and placed in the module main folder
 (ie. Cms/di.translate.php, User/di.services.php)

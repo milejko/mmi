@@ -55,7 +55,8 @@ class App
         $this->profiler = new AppProfiler();
         //configure application
         $this->configureEnvironment()
-            ->buildContainer();
+            ->buildContainer()
+            ->setErrorHandler();
     }
 
     /**
@@ -63,30 +64,27 @@ class App
      */
     public function run(): void
     {
-        //set error handler
-        $this->setErrorHandler();
-        //@TODO: remove after target refactoring
-        self::$di = $this->container;
-        $profiler = $this->container->get(AppProfilerInterface::class);
         $request = $this->container->get(Request::class);
         $interceptor = $this->container->has(AppEventInterceptorAbstract::class) ? $this->container->get(AppEventInterceptorAbstract::class) : null;
         //intercept before dispatch
         if (null !== $interceptor) {
+            $interceptor->init();
+            $this->profiler->event(self::PROFILER_PREFIX . 'interceptor init()');
             $interceptor->beforeDispatch();
-            $profiler->event(self::PROFILER_PREFIX . 'interceptor executed beforeDispatch');
+            $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeDispatch()');
         }
         //render content
         $content = $this->container->get(ActionHelper::class)->forward($request);
         //intercept before send
         if (null !== $interceptor) {
             $interceptor->beforeSend();
-            $profiler->event(self::PROFILER_PREFIX . 'interceptor executed beforeSend');
+            $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeSend()');
         }
         //set content to response
         $this->container->get(Response::class)
             ->setContent($content);
         //content send
-        $profiler->event(self::PROFILER_PREFIX . 'send to client');
+        $this->profiler->event(self::PROFILER_PREFIX . 'send to client');
         $this->container->get(Response::class)->send();
     }
 
@@ -97,9 +95,9 @@ class App
     {
         //remove previous compilation if cache disabled
         \getenv('CACHE_PRIVATE_ENABLED') || $this->unlinkCompiledContainer();
-        //try to build from cache
-        $this->container = $this->getContainerBuilder()->build();
-        //container is not empty ()
+        //try to build from cache (@TODO remove static $di after refactoring)
+        $this->container = self::$di = $this->getContainerBuilder()->build();
+        //container has app.structure.template, so it is properly built
         if ($this->container->has('app.structure.template')) {
             $this->profiler->event(self::PROFILER_PREFIX . 'cached DI container loaded');
             return $this;
@@ -110,9 +108,9 @@ class App
         $builder = $this->getContainerBuilder();
         //get structure
         $structure = Structure::getStructure();
+        $this->profiler->event(self::PROFILER_PREFIX . 'application structure mapped');
         //add structure to the container
         $builder->addDefinitions(['app.structure.template' => $structure['template']]);
-        $this->profiler->event(self::PROFILER_PREFIX . 'application structure mapped');
         //add module DI definitions
         foreach ($structure['di'] as $diConfigPath) {
             $builder->addDefinitions($diConfigPath);
@@ -121,8 +119,8 @@ class App
         foreach ($structure['classes'] as $classAlias => $classFqn) {
             $builder->addDefinitions([$classAlias => autowire($classFqn)]);
         }
-        //build container
-        $this->container = $builder->build();
+        //build container (@TODO remove static $di after refactoring)
+        $this->container = self::$di = $builder->build();
         $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');
         return $this;
     }
@@ -139,6 +137,7 @@ class App
             ->ignorePhpDocErrors(true)
             ->enableCompilation(self::APPLICATION_COMPILE_PATH)
             ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH)
+            //adding profiler instance
             ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
         return $this->isApcuEnabled() ?
             $builder->enableDefinitionCache(\BASE_PATH) :
@@ -169,7 +168,7 @@ class App
     /**
      * Sets error and exception handler
      */
-    private function setErrorHandler(): self
+    protected function setErrorHandler(): self
     {
         //exception handler
         set_exception_handler([$this->container->get(AppErrorHandler::class), 'exceptionHandler']);
@@ -191,10 +190,9 @@ class App
     /**
      * APCu enabled
      */
-    private function isApcuEnabled(): bool
+    protected function isApcuEnabled(): bool
     {
-        return function_exists('apcu_fetch')
-            && ini_get('apc.enabled')
+        return function_exists('apcu_fetch') && ini_get('apc.enabled')
             && !('cli' === \PHP_SAPI && !ini_get('apc.enable_cli'));
     }
 }

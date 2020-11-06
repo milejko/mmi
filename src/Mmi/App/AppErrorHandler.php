@@ -10,30 +10,28 @@
 
 namespace Mmi\App;
 
-use Mmi\Http\HttpServerEnv;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Http\ResponseTypes;
 use Mmi\Mvc\ActionHelper;
 use Mmi\Mvc\MvcNotFoundException;
 use Mmi\Mvc\View;
-use Psr\Log\LoggerInterface;
 
 /**
- * Klasa obsługi zdarzeń PHP
+ * Application error handler
  */
 class AppErrorHandler
 {
 
     /**
-     * @var LoggerInterface
+     * @var AppExceptionLogger
      */
     private $logger;
 
     /**
-     * @var HttpServerEnv
+     * @var AppExceptionFormatter
      */
-    private $httpServerEnv;
+    private $formatter;
 
     /**
      * @var Response
@@ -54,8 +52,8 @@ class AppErrorHandler
      * Konstruktor podpinający eventy
      */
     public function __construct(
-        LoggerInterface $logger,
-        HttpServerEnv $httpServerEnv,
+        AppExceptionLogger $logger,
+        AppExceptionFormatter $formatter,
         Response $response,
         View $view,
         ActionHelper $actionHelper
@@ -63,14 +61,14 @@ class AppErrorHandler
     {
         //assigning injections
         $this->logger           = $logger;
-        $this->httpServerEnv    = $httpServerEnv;
+        $this->formatter        = $formatter;
         $this->response         = $response;
         $this->view             = $view;
         $this->actionHelper     = $actionHelper;
     }
 
     /**
-     * Obsługuje błędy, ostrzeżenia
+     * Errors, warnings, notices, etc. as exception
      * @throws KernelException
      */
     public function errorHandler(string $errno, string $errstr, string $errfile, string $errline): void
@@ -90,7 +88,7 @@ class AppErrorHandler
             //nie było bufora
         }
         //logowanie wyjątku
-        $this->logException($exception);
+        $this->logger->logException($exception);
         //kod błędu ustawiany dla wyjątków poza nieodnalezionymi
         if (!($exception instanceof MvcNotFoundException)) {
             //ustawienie kodu 500
@@ -99,7 +97,7 @@ class AppErrorHandler
         try {
             //widok
             $this->view->_exception = $exception;
-            $this->view->_trace = $this->formatTrace($exception);
+            $this->view->_trace = $this->formatter->formatTrace($exception);
             //błąd bez layoutu lub nie HTML
             if ($this->view->isLayoutDisabled() || $this->response->getType() != ResponseTypes::searchType('html')) {
                 //domyślna prezentacja błędów
@@ -111,7 +109,7 @@ class AppErrorHandler
             //błąd z prezentacją HTML
             $this->response->setContent($this->actionHelper->forward(new Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error'])));
         } catch (\Exception $renderException) {
-            $this->logException($renderException);
+            $this->logger->logException($renderException);
             //domyślna prezentacja błędów
             $this->response->setContent($this->rawErrorResponse($this->response));
         }
@@ -141,49 +139,4 @@ class AppErrorHandler
         return '<html><body><h1>Error 500</h1><p>' . $message . '</p></body></html>';
     }
 
-    /**
-     * Logowanie wyjątków
-     */
-    private function logException($exception): void
-    {
-        //logowanie wyjątku aplikacyjnego
-        if ($exception instanceof KernelException) {
-            $this->logger->log($exception->getCode(), $this->formatException($exception));
-            return;
-        }
-        //logowanie pozostałych wyjątków
-        $this->logger->alert($this->formatException($exception));
-    }
-
-    /**
-     * Formatuje obiekt wyjątku do pojedynczej wiadomości
-     */
-    private function formatException($exception): string
-    {
-        return str_replace(realpath(BASE_PATH), '', $this->httpServerEnv->requestUri . ' (' . $exception->getMessage() . ') @' .
-            $exception->getFile() . '(' . $exception->getLine() . ') ' .
-            $this->formatTrace($exception));
-    }
-
-    /**
-     * Format trace
-     */
-    private function formatTrace($exception): string
-    {
-        $message = '';
-        $i = 0;
-        $trace = $exception->getTrace();
-        array_shift($trace);
-        foreach ($trace as $row) {
-            $i++;
-            $message .= "\n" . '#' . $i;
-            $message .= isset($row['file']) ? ' ' . $row['file'] : '';
-            $message .= isset($row['line']) ? '(' . $row['line'] . ')' : '';
-            $message .= isset($row['class']) ? ' ' . $row['class'] . '::' : '';
-            $message .= isset($row['function']) ? (isset($row['class']) ? '' : ' ') . $row['function'] . '(' : '';
-            $arguments = strip_tags(isset($row['args']) ? json_encode($row['args']) . ')' : '');
-            $message .= (strlen($arguments) < 120) ? $arguments : '...)';
-        }
-        return $message;
-    }
 }

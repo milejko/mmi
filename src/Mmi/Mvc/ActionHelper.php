@@ -134,7 +134,7 @@ class ActionHelper
         //intercept afterDispatch
         if ($this->appEventInterceptor) {
             $this->appEventInterceptor->afterDispatch();
-            $this->profiler->event(self::PROFILER_PREFIX . 'interceptor executed afterDispatch');
+            $this->profiler->event(self::PROFILER_PREFIX . 'interceptor afterDispatch()');
         }
         //renderowanie layoutu
         $rendered = $this->view->renderLayout($content, $request);

@@ -27,7 +27,6 @@ abstract class AppEventInterceptorAbstract
      */
     public final function __construct(ContainerInterface $container) {
         $this->container = $container;
-        $this->init();
     }
 
     /**
