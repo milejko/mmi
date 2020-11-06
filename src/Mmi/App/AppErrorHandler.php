@@ -102,19 +102,18 @@ class AppErrorHandler
             $this->view->_trace = $this->formatTrace($exception);
             //błąd bez layoutu lub nie HTML
             if ($this->view->isLayoutDisabled() || $this->response->getType() != ResponseTypes::searchType('html')) {
-                $this->logException($exception);
                 //domyślna prezentacja błędów
                 $this->response
-                    ->setContent($this->rawErrorResponse($this->response, $exception->getMessage()))
+                    ->setContent($this->rawErrorResponse($this->response))
                     ->send();
                 return;
             }
             //błąd z prezentacją HTML
             $this->response->setContent($this->actionHelper->forward(new Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error'])));
-        } catch (\Exception $e) {
-            $this->logException($exception);
+        } catch (\Exception $renderException) {
+            $this->logException($renderException);
             //domyślna prezentacja błędów
-            $this->response->setContent($this->rawErrorResponse($this->response, $exception->getMessage()));
+            $this->response->setContent($this->rawErrorResponse($this->response));
         }
         //send response
         $this->response->send();

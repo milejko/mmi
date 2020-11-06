@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 use function DI\env;
 
 return [
-    'log.level'     => env('LOG_LEVEL', Logger::WARNING),
+    'log.level'     => env('LOG_LEVEL', Logger::DEBUG),
     'log.handler'   => env('LOG_HANDLER', ''),
     'log.path'      => env('LOG_PATH', ''),
 

@@ -10,10 +10,12 @@
 
 namespace Mmi;
 
+use Mmi\Mvc\Controller;
+
 /**
  * Kontroler powitalny
  */
-class IndexController extends Mvc\Controller
+class IndexController extends Controller
 {
 
     //domyślna labelka

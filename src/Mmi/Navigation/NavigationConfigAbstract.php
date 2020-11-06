@@ -38,10 +38,15 @@ abstract class NavigationConfigAbstract
      * Dodaje element nawigatora
      * @param \Mmi\Navigation\NavigationConfigElement $element
      */
-    public function addElement(\Mmi\Navigation\NavigationConfigElement $element): self
+    public function addElement(NavigationConfigElement $element): self
     {
         $this->_data[$element->getId()] = $element;
         return $this;
+    }
+
+    public function getElementById(string $id): ?NavigationConfigElement
+    {
+        return isset($this->_data[$id]) ? $this->_data[$id] : null;
     }
 
     /**

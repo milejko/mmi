@@ -24,7 +24,7 @@ class Url extends HelperAbstract
      * @param boolean $reset nie łączy z bieżącym requestem
      * @return string
      */
-    public function url(array $params = [], $reset = false)
+    public function url(array $params = [], $reset = true)
     {
         $urlParams = $reset ? $params : array_merge(App::$di->get(Request::class)->toArray(), $params);
         //wyznaczanie url

@@ -68,14 +68,10 @@ class ResponseDebugger
         $this->httpServerEnv    = $httpServerEnv;
         $this->cache            = $cache;
         $this->view             = $view;
-        switch ($response->getType()) {
-            case 'text/html':
-                $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
-            break;
-            case 'text/plain':
-                $response->setContent($response->getContent() . "\n" . round($this->profiler->elapsed(), 4) . 's' . "\n");
-            break;
+        if ('text/html' != $response->getType()) {
+            return;
         }
+        $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
     }
 
     /**
