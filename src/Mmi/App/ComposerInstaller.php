@@ -118,7 +118,7 @@ class ComposerInstaller
      * Linkuje zasoby publiczne do /web 
      */ 
     public static function linkModuleWebResources()
-    { 
+    {
         //iteracja po modułach 
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) { 
             //kalkulacja ścieżki linku 

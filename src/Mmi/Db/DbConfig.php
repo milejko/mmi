@@ -10,6 +10,9 @@
 
 namespace Mmi\Db;
 
+/**
+ * Database config
+ */
 class DbConfig
 {
 

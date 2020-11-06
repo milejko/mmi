@@ -8,14 +8,26 @@ use Mmi\Cache\PrivateCache;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Flush cache
+ */
 class FlushCacheCommand extends CommandAbstract
 {
+    /**
+     * @var Cache
+     */
+    private $cache;
 
-    public function configure()
+    /**
+     * @var PrivateCache
+     */
+    private $privateCache;
+
+    public function __construct(Cache $cache, PrivateCache $privateCache)
     {
-        $this->setName('cache:flush');
-        $this->setDescription('Flush cache');
-        parent::configure();
+        $this->cache        = $cache;
+        $this->privateCache = $privateCache;
+        parent::__construct();
     }
 
     /**
@@ -23,17 +35,12 @@ class FlushCacheCommand extends CommandAbstract
      * @param OutputInterface $output
      * @return int|null|void
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            //czyszczenie bufora systemowego
-            App::$di->get(PrivateCache::class)->flush();
-            //czyszczenie bufora aplikacyjnego
-            App::$di->get(Cache::class)->flush();
-        } catch (\Exception $e) {
-            $output->writeln('Error');
-            return 1;
-        }
+        //czyszczenie bufora systemowego
+        $this->privateCache->flush();
+        //czyszczenie bufora aplikacyjnego
+        $this->cache->flush();
         $output->writeln('Cache flushed');
         return 0;
     }

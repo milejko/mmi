@@ -53,6 +53,7 @@ class App
     {
         //enable profiler
         $this->profiler = new AppProfiler();
+        $this->profiler->event(self::PROFILER_PREFIX . 'application create');
         //configure application
         $this->configureEnvironment()
             ->buildContainer()
@@ -84,7 +85,7 @@ class App
         $this->container->get(Response::class)
             ->setContent($content);
         //content send
-        $this->profiler->event(self::PROFILER_PREFIX . 'send to client');
+        $this->profiler->event(self::PROFILER_PREFIX . 'send response to the client');
         $this->container->get(Response::class)->send();
     }
 
@@ -149,7 +150,6 @@ class App
      */
     private function configureEnvironment(): self
     {
-        $this->profiler->event(self::PROFILER_PREFIX . 'configure environment');
         //encoding settings
         mb_internal_encoding('utf-8');
         ini_set('default_charset', 'utf-8');

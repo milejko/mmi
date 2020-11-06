@@ -14,6 +14,7 @@ use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\Cache;
 use Mmi\Mvc\View;
+use Psr\Container\ContainerInterface;
 
 /**
  * Klasa panelu debugowania aplikacji
@@ -51,15 +52,20 @@ class ResponseDebugger
     private $view;
 
     /**
+     * @var Container
+     */
+    private $container;
+
+    /**
      * Konstruktor - modyfikuje response o dane debbugera
      */
     public function __construct(
-        Response $response,
         Request $request,
         AppProfilerInterface $profiler,
         HttpServerEnv $httpServerEnv,
         Cache $cache,
-        View $view
+        View $view,
+        ContainerInterface $container
     )
     {
         //inject
@@ -68,10 +74,7 @@ class ResponseDebugger
         $this->httpServerEnv    = $httpServerEnv;
         $this->cache            = $cache;
         $this->view             = $view;
-        if ('text/html' != $response->getType()) {
-            return;
-        }
-        $response->setContent(str_replace('</body>', $this->getHtml() . '</body>', $response->getContent()));
+        $this->container        = $container;
     }
 
     /**
@@ -102,8 +105,7 @@ class ResponseDebugger
         //pobranie widoku
         $cacheInfo = \sprintf(
             $cacheInfo, 
-            //@TODO: inject via inject parameter
-            App::$di->get('cache.private.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>', 
+            $this->container->get('cache.private.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>', 
             $this->cache->isActive() ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>'
         );
         //czasy i pamięci w wykonaniu
@@ -170,7 +172,7 @@ class ResponseDebugger
         //zmienne rejestru
         $html .= '<p style="margin: 0px;">DI container entries: </p>';
         $html .= self::PRE_OPEN;
-        $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray(App::$di->getKnownEntryNames()), true)) . '</pre>';
+        $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($this->container->getKnownEntryNames()), true)) . '</pre>';
 
         $html .= '</pre>';
         $html .= '</td></tr></table></div>';

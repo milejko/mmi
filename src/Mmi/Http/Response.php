@@ -62,6 +62,11 @@ class Response
     private $httpServerEnv;
 
     /**
+     * @var ResponseDebugger
+     */
+    private $responseDebugger;
+
+    /**
      * @var ResponseTimingHeader
      */
     private $responseTimingHeader;
@@ -69,13 +74,15 @@ class Response
     public function __construct(
         Router $router,
         HttpServerEnv $httpServerEnv,
-        ResponseTimingHeader $responseTimingHeader
+        ResponseTimingHeader $responseTimingHeader,
+        ResponseDebugger $responseDebugger
     )
     {
         //injects
         $this->router               = $router;
         $this->httpServerEnv        = $httpServerEnv;
         $this->responseTimingHeader = $responseTimingHeader;
+        $this->responseDebugger     = $responseDebugger;
     }
 
     /**
@@ -388,13 +395,11 @@ class Response
         $headers ? $this->sendHeaders() : null;
         //opcjonalne uruchomienie panelu deweloperskiego
         if ($this->_debug) {
-            //debugger wykonuje zmianę w contencie
-            App::$di->get(ResponseDebugger::class);
+            //content decorate with debug data
+            $this->setContent(str_replace('</body>', $this->responseDebugger->getHtml() . '</body>', $this->getContent()));
         }
         //zwrot zawartości
         echo $this->_content;
-        //usunięcie zawartości
-        $this->setContent('');
     }
 
     /**

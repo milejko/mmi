@@ -19,7 +19,7 @@ return [
         $config->active  = $container->get('cache.private.enabled');
         $config->handler = \function_exists('apcu_fetch') ? 'apc' : 'file';
         $config->path    = BASE_PATH . '/var/cache';
-        return new Cache($config);
+        return new PrivateCache($config);
     },
     Cache::class => function (ContainerInterface $container) {
         $config = new CacheConfig();

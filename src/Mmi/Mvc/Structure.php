@@ -30,11 +30,16 @@ class Structure
             'helper' => [],
             'di'     => [],
         ];
-        //vendors na koniec
-        foreach (array_reverse(\Mmi\Mvc\StructureParser::getModules()) as $module) {
+        //pobiera moduły
+        foreach (self::getModules() as $module) {
             $components = array_merge_recursive(self::_parseModule($module, $object), $components);
         }
         return $object ? $components[$object] : $components;
+    }
+
+    public static function getModules(): array
+    {
+        return StructureParser::getModules();
     }
 
     /**

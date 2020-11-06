@@ -11,8 +11,7 @@ class WeblinksCommand extends CommandAbstract
 
     public function configure()
     {
-        $this->setName('resource:create-symlinks');
-        $this->setDescription('Create symlinks');
+        $this->setDescription('Create symlinks from modules to /web');
         parent::configure();
     }
 
@@ -21,14 +20,9 @@ class WeblinksCommand extends CommandAbstract
      * @param OutputInterface $output
      * @return int|null|void
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            ComposerInstaller::linkModuleWebResources();
-        } catch (\Exception $e) {
-            $output->writeln('Error');
-            return 1;
-        }
+        ComposerInstaller::linkModuleWebResources();
         $output->writeln('Symlinks created');
         return 0;
     }

@@ -10,7 +10,6 @@
 
 namespace Mmi\Db;
 
-use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
 
 /**

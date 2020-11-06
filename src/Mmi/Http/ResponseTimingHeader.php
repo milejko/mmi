@@ -22,11 +22,11 @@ class ResponseTimingHeader
     /**
      * @var AppProfilerInterface
      */
-    private $_profiler;
+    private $profiler;
 
     public function __construct(AppProfilerInterface $profiler)
     {
-        $this->_profiler = $profiler;
+        $this->profiler = $profiler;
     }
 
     /**
@@ -37,8 +37,8 @@ class ResponseTimingHeader
     {
         $eventGroups = [];
         //grupowanie zdażeń
-        foreach ($this->_profiler->get() as $event) {
-            $groupName = substr($event['name'], 0, strpos($event['name'], ':'));
+        foreach ($this->profiler->get() as $event) {
+            $groupName = str_replace(['Mmi'], '', substr($event['name'], 0, strpos($event['name'], ':')));
             $eventGroups[$groupName] = isset($eventGroups[$groupName]) ? $eventGroups[$groupName] + $event['elapsed'] : $event['elapsed'];
         }
         $headerValue = '';
@@ -48,6 +48,6 @@ class ResponseTimingHeader
         }
         return (new ResponseHeader)
             ->setName(self::HEADER_NAME)
-            ->setValue('App;dur=' . 1000 * $this->_profiler->elapsed() . ',' . $headerValue);
+            ->setValue('App;dur=' . 1000 * $this->profiler->elapsed() . ',' . $headerValue);
     }
 }

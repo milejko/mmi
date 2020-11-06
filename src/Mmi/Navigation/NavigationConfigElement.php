@@ -91,21 +91,6 @@ class NavigationConfigElement extends \Mmi\OptionObject
     }
 
     /**
-     * Ustawia HTTPS
-     * @param boolean $https
-     * @return \Mmi\Navigation\NavigationConfigElement
-     */
-    public function setHttps($https = null)
-    {
-        //jeśli https null (bez zmiany)
-        if ($https === null) {
-            return $this->setOption('https', null);
-        }
-        //w pozostałych sytuacjach wymuszamy bool
-        return $this->setOption('https', (bool) $https);
-    }
-
-    /**
      * Ustawia typ linku na follow
      * @param boolean $follow
      * @return \Mmi\Navigation\NavigationConfigElement
