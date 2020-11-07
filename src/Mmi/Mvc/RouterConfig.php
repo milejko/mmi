@@ -13,7 +13,7 @@ namespace Mmi\Mvc;
 /**
  * Router config class
  */
-abstract class RouterConfigAbstract
+class RouterConfig
 {
 
     /**

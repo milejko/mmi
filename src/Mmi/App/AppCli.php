@@ -40,7 +40,7 @@ class AppCli extends App
         ini_set('memory_limit', '2048M');
 
         //run interceptor init
-        $this->container->has(AppEventInterceptorAbstract::class) && $this->container->get(AppEventInterceptorAbstract::class)->init();
+        $this->container->has(AppEventInterceptorInterface::class) && $this->container->get(AppEventInterceptorInterface::class)->init();
         //add commands and run
         $this->symfonyConsoleApplication->addCommands($this->getApplicationCommands());
         $this->symfonyConsoleApplication->run();

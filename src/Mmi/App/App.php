@@ -66,7 +66,7 @@ class App
     public function run(): void
     {
         $request = $this->container->get(Request::class);
-        $interceptor = $this->container->has(AppEventInterceptorAbstract::class) ? $this->container->get(AppEventInterceptorAbstract::class) : null;
+        $interceptor = $this->container->has(AppEventInterceptorInterface::class) ? $this->container->get(AppEventInterceptorInterface::class) : null;
         //intercept before dispatch
         if (null !== $interceptor) {
             $interceptor->init();

@@ -10,8 +10,7 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\App\AppEventInterceptorAbstract;
-use Mmi\App\AppProfiler;
+use Mmi\App\AppEventInterceptorInterface;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Http\Request;
 use Psr\Container\ContainerInterface;
@@ -70,7 +69,7 @@ class ActionHelper
     public function __construct(ContainerInterface $container) {
         $this->profiler             = $container->get(AppProfilerInterface::class);
         $this->view                 = $container->get(View::class);
-        $this->appEventInterceptor  = $container->has(AppEventInterceptorAbstract::class) ? $container->get(AppEventInterceptorAbstract::class) : null;
+        $this->appEventInterceptor  = $container->has(AppEventInterceptorInterface::class) ? $container->get(AppEventInterceptorInterface::class) : null;
         $this->container            = $container;
     }
 

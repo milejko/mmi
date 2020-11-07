@@ -13,7 +13,7 @@ namespace Mmi\Navigation;
 /**
  * Klasa konfiguracji nawigatora
  */
-abstract class NavigationConfigAbstract
+class NavigationConfig
 {
 
     /**

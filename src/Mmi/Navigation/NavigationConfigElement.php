@@ -44,7 +44,7 @@ class NavigationConfigElement extends \Mmi\OptionObject
     {
         //ustawienie danych (parent)
         parent::__construct([
-            'id' => ($id === null) ? \Mmi\Navigation\NavigationConfigAbstract::getAutoIndex() : $id,
+            'id' => ($id === null) ? \Mmi\Navigation\NavigationConfig::getAutoIndex() : $id,
             //wyłączony
             'disabled' => false,
             'module' => null,

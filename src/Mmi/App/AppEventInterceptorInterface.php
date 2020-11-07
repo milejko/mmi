@@ -13,40 +13,34 @@ namespace Mmi\App;
 use Psr\Container\ContainerInterface;
 
 /**
- * Application event interceptor abstract class
+ * Application event interceptor interface
  */
-abstract class AppEventInterceptorAbstract implements AppEventInterceptorInterface
+interface AppEventInterceptorInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
 
     /**
-     * Inject complete container
+     * Constructor
      */
-    public final function __construct(ContainerInterface $container) {
-        $this->container = $container;
-    }
+    public function __construct(ContainerInterface $container);
 
     /**
      * Executed right after interceptor is added
      */
-    abstract public function init(): void;
+    public function init(): void;
 
     /**
      * Executed before dispatching
      */
-    abstract public function beforeDispatch(): void;
+    public function beforeDispatch(): void;
 
     /**
      * Executed after dispatching
      */
-    abstract public function afterDispatch(): void;
+    public function afterDispatch(): void;
 
     /**
      * Executed before sending content
      */
-    abstract public function beforeSend(): void;
+    public function beforeSend(): void;
 
 }

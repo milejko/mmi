@@ -25,7 +25,7 @@ class Router
      * Konstruktor routera
      * @param \Mmi\Mvc\RouterConfig $config
      */
-    public function __construct(RouterConfigAbstract $config)
+    public function __construct(RouterConfig $config)
     {
         $this->_config = $config;
     }
