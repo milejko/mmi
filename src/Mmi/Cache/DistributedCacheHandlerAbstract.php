@@ -81,7 +81,7 @@ abstract class DistributedCacheHandlerAbstract implements CacheHandlerInterface
     public final function __construct(Cache $cache)
     {
         //namespace
-        $this->_namespace = md5(__FILE__);
+        $this->_namespace = __DIR__;
         //przypisanie obiektu bufora
         $this->_cache = $cache;
         //bufor nierozproszony

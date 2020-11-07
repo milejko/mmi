@@ -141,7 +141,7 @@ class App
             //adding profiler instance
             ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
         return $this->isApcuEnabled() ?
-            $builder->enableDefinitionCache(\BASE_PATH) :
+            $builder->enableDefinitionCache(__DIR__) :
             $builder;
     }
 
