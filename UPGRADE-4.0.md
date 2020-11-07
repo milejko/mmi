@@ -34,7 +34,7 @@ Commands also are auto-named (by namespace and class name):
 db:deploy => Mmi:DbDeploy
 cms:cron:execute => Cms:CronExecute
 
-Using dependency injection:
+(*) Using dependency injection:
 DI config files should name like di.php di.something.php and placed in the module main folder
 (ie. Cms/di.translate.php, User/di.services.php)
 Engine docs: https://php-di.org/doc/

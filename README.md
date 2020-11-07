@@ -1,18 +1,18 @@
 README
 What is MMi?
 
-MMi is a PHP 5.4 full-stack web framework. It is written with speed and flexibility in mind. It allows developers to build better and easy to maintain websites with PHP.
+MMi is a PHP7 full-stack web framework. It is written with speed and flexibility in mind. It allows developers to build better and easy to maintain websites with PHP.
 
-MMi can be used to develop all kind of websites, from your personal blog to high traffic ones like Dlanauczyciela Empiktravel!
+MMi can be used to develop all kind of websites, from your personal blog to high traffic ones.
 
 Requirements
 
-MMi is only supported on PHP 5.4.0 and up.
+MMi is only supported on PHP 7.3.x and up.
 
 Installation
 
 The best way to install MMi is to use composer:
 
-1). composer install
-2). configure Your environment in src/App/ConfigXXX.php (where XXX is Your ENV)
-3). php bin/DbDeploy.php <ENV>
+1). composer require mmi/mmi
+2). configure Your environment in .env (.env.sample can be found in this repository)
+3). if you are using database probably you need to run ./bin/mmi Mmi:DbDeploy
