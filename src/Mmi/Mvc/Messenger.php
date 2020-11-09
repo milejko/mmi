@@ -10,7 +10,7 @@
 
 namespace Mmi\Mvc;
 
-use Mmi\Translate;
+use Mmi\Translate\TranslateInterface;
 
 /**
  * Klasa wiadomości
@@ -26,14 +26,14 @@ class Messenger
     private $_session;
 
     /**
-     * @var Translate
+     * @var TranslateInterface
      */
     private $translate;
 
     /**
      * Konstruktor pozwala zdefiniować nazwę przestrzeni w sesji
      */
-    public function __construct(Translate $translate)
+    public function __construct(TranslateInterface $translate)
     {
         //injections
         $this->translate = $translate;
@@ -110,12 +110,10 @@ class Messenger
 
     /**
      * Przygotowuje przetłumaczoną wiadomość
-     * @param array $message
-     * @return string
      */
-    public function prepareTranslatedMessage(array $message = [])
+    public function prepareTranslatedMessage(array $message = []): string
     {
-        $translatedMessage = $this->translate->_($message['message']);
+        $translatedMessage = $this->translate->translate($message['message']);
         array_unshift($message['vars'], $translatedMessage);
         return call_user_func_array('sprintf', $message['vars']);
     }

@@ -10,10 +10,13 @@
 
 namespace Mmi\Session;
 
-class Session
+class Session implements SessionInterface
 {
     const FILE_HANDLER = 'files';
 
+    /**
+     * Constructor depends on SessionConfig object
+     */
     public function __construct(SessionConfig $config)
     {
         session_name($config->name);
@@ -33,8 +36,7 @@ class Session
     }
 
     /**
-     * Rozpoczęcie sesji
-     * @param \Mmi\Session\SessionConfig $config
+     * Start session
      * @throws SessionException
      */
     public function start(): void
@@ -43,18 +45,15 @@ class Session
     }
 
     /**
-     * Ustawia identyfikator sesji
-     * zwraca ustawiony identyfikator
-     * @param string $id identyfikator
-     * @return string
+     * Sets session id
      */
-    public function setId($id): void
+    public function setId(string $id): void
     {
         session_id($id);
     }
 
     /**
-     * Pobiera identyfikator sesji
+     * Gets session id
      */
     public function getId(): string
     {
@@ -62,7 +61,7 @@ class Session
     }
 
     /**
-     * Pobiera przekształcony do integera identyfikator sesji
+     * Gets numeric projection of session id
      */
     public function getNumericId(): int
     {
@@ -76,8 +75,7 @@ class Session
     }
 
     /**
-     * Niszczy sesję
-     * @return boolean
+     * Destroys session
      */
     public function destroy(): void
     {
@@ -85,11 +83,9 @@ class Session
     }
 
     /**
-     * Regeneruje identyfikator sesji
-     * kopiuje dane starej sesji do nowej
-     * @param boolean $deleteOldSession kasuje starą sesję
+     * Regenerates session id
      */
-    public function regenerateId($deleteOldSession = true): void
+    public function regenerateId(bool $deleteOldSession = true): void
     {
         session_regenerate_id($deleteOldSession);
     }

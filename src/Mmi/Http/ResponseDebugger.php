@@ -10,9 +10,9 @@
 
 namespace Mmi\Http;
 
-use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\Cache;
+use Mmi\Cache\CacheInterface;
 use Mmi\Mvc\View;
 use Psr\Container\ContainerInterface;
 
@@ -63,7 +63,7 @@ class ResponseDebugger
         Request $request,
         AppProfilerInterface $profiler,
         HttpServerEnv $httpServerEnv,
-        Cache $cache,
+        CacheInterface $cache,
         View $view,
         ContainerInterface $container
     )
@@ -105,7 +105,7 @@ class ResponseDebugger
         //pobranie widoku
         $cacheInfo = \sprintf(
             $cacheInfo, 
-            $this->container->get('cache.private.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>', 
+            $this->container->get('cache.system.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>', 
             $this->cache->isActive() ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>'
         );
         //czasy i pamięci w wykonaniu

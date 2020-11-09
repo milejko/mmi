@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-use Exception;
+use Throwable;
 
 /**
  * Application exception logger interface
@@ -21,6 +21,6 @@ interface AppExceptionLoggerInterface
     /**
      * Exception logger
      */
-    public function logException(Exception $exception): void;
+    public function logException(Throwable $exception): void;
 
  }

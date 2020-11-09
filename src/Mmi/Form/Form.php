@@ -11,6 +11,7 @@
 namespace Mmi\Form;
 
 use Mmi\App\App;
+use Mmi\Db\DbInterface;
 use Mmi\Form\Element;
 use Mmi\Http\Request;
 use Mmi\Mvc\View;
@@ -370,14 +371,14 @@ abstract class Form extends \Mmi\OptionObject
             return $this->_saved = (false !== $this->beforeSave()) && (false !== $this->afterSave());
         }
         //wybranie DAO i rozpoczęcie transakcji
-        \Mmi\Orm\DbConnector::getAdapter()->beginTransaction();
+        App::$di->get(DbInterface::class)->beginTransaction();
         //ustawianie danych rekordu
         $this->_setRecordData();
         //metoda przed zapisem, zapis rekordu
         //transakcja jest odrzucana w przypadku niepowodzenia którejkolwiek
         if (false === $this->beforeSave() || false === $this->_record->save()) {
             //odrzucenie transakcji
-            \Mmi\Orm\DbConnector::getAdapter()->rollback();
+            App::$di->get(DbInterface::class)->rollback();
             return $this->_saved = false;
         }
         //powiadomienie elementów o zapisie rekordu - znamy już PK
@@ -393,11 +394,11 @@ abstract class Form extends \Mmi\OptionObject
         //operacje po zapisie rekordu
         if (false === $this->afterSave()) {
             //odrzucenie transakcji
-            \Mmi\Orm\DbConnector::getAdapter()->rollback();
+            App::$di->get(DbInterface::class)->rollback();
             return $this->_saved = false;
         }
         //zatwierdzenie transakcji
-        \Mmi\Orm\DbConnector::getAdapter()->commit();
+        App::$di->get(DbInterface::class)->commit();
         return $this->_saved = true;
     }
 

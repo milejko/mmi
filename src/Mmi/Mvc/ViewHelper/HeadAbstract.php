@@ -22,14 +22,12 @@ class HeadAbstract extends HelperAbstract
     {
         $cacheKey = 'mmi-head-ts-' . md5($location);
         $cache = $this->view->getSystemCache();
-        if (null !== $cache && (null !== ($ts = $cache->load($cacheKey)))) {
+        if (null !== $ts = $cache->load($cacheKey)) {
             return $ts;
         }
         //obliczanie timestampu
         $ts = file_exists($path = BASE_PATH . '/web' . $location) ? filemtime($path) : 0;
-        if (null !== $cache) {
-            $cache->save($ts, $cacheKey, 0);
-        }
+        $cache->save($ts, $cacheKey, 0);
         return $ts;
     }
 

@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use function DI\env;
 
 return [
-    'cache.private.enabled'     => env('CACHE_PRIVATE_ENABLED', false),
+    'cache.system.enabled'      => env('CACHE_SYSTEM_ENABLED', false),
     'cache.public.enabled'      => env('CACHE_PUBLIC_ENABLED', false),
     'cache.public.handler'      => env('CACHE_PUBLIC_HANDLER', 'file'),
     'cache.public.path'         => env('CACHE_PUBLIC_PATH', BASE_PATH . '/var/cache'),
@@ -15,7 +15,7 @@ return [
 
     SystemCacheInterface::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
-        $config->active  = $container->get('cache.private.enabled');
+        $config->active  = $container->get('cache.system.enabled');
         $config->handler = \function_exists('apcu_fetch') ? 'apc' : 'file';
         $config->path    = BASE_PATH . '/var/cache';
         return new Cache($config);

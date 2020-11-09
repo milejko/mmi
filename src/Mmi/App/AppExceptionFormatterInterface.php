@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-use Exception;
+use Throwable;
 
 /**
  * Exception formatter interface
@@ -21,11 +21,11 @@ interface AppExceptionFormatterInterface
     /**
      * Formatuje obiekt wyjątku do pojedynczej wiadomości
      */
-    public function formatException(Exception $exception): string;
+    public function formatException(Throwable $exception): string;
 
     /**
      * Format trace
      */
-    public function formatTrace(Exception $exception): string;
+    public function formatTrace(Throwable $exception): string;
 
 }

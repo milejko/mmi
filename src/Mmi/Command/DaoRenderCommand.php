@@ -2,7 +2,7 @@
 
 namespace Mmi\Command;
 
-use Mmi\Db\Adapter\PdoAbstract;
+use Mmi\Db\DbInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -12,17 +12,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DaoRenderCommand extends CommandAbstract
 {
     /**
-     * @var PdoAbstract
+     * @var DbInterface
      */
-    private $pdo;
+    private $db;
 
     /**
      * Constructor
      */
-    public function __construct(PdoAbstract $pdo)
+    public function __construct(DbInterface $db)
     {
         //injects
-        $this->pdo = $pdo;
+        $this->db = $db;
         parent::__construct();
     }
 
@@ -32,7 +32,7 @@ class DaoRenderCommand extends CommandAbstract
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         //odbudowanie wszystkich DAO/Record/Query/Field/Join
-        foreach ($this->pdo->tableList() as $tableName) {
+        foreach ($this->db->tableList() as $tableName) {
             //buduje struktruę dla tabeli
             \Mmi\Orm\Builder::buildFromTableName($tableName);
         }

@@ -69,7 +69,7 @@ class Cache implements CacheInterface, SystemCacheInterface
     {
         //bufor nieaktywny
         if (!$this->isActive()) {
-            return;
+            return null;
         }
         //pobranie z rejestru aplikacji jeśli istnieje
         if ($this->getRegistry()->issetOption($key)) {

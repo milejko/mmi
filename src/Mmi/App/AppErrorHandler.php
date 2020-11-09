@@ -16,6 +16,7 @@ use Mmi\Http\ResponseTypes;
 use Mmi\Mvc\ActionHelper;
 use Mmi\Mvc\MvcNotFoundException;
 use Mmi\Mvc\View;
+use Throwable;
 
 /**
  * Application error handler
@@ -79,7 +80,7 @@ class AppErrorHandler implements AppErrorHandlerInterface
     /**
      * Obsługuje wyjątki
      */
-    public function exceptionHandler($exception): void
+    public function exceptionHandler(Throwable $exception): void
     {
         //próba czyszczenie bufora
         try {

@@ -10,6 +10,8 @@
 
 namespace Mmi\Session;
 
+use Mmi\App\App;
+use Mmi\Db\DbInterface;
 use \Mmi\Orm;
 
 /**
@@ -127,7 +129,7 @@ class DbHandler implements \SessionHandlerInterface
     public function gc($maxLifetime)
     {
         //uproszczone usuwanie - jednym zapytaniem
-        \Mmi\Orm\DbConnector::getAdapter()->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp <= :time', [':time' => (time() - $maxLifetime)]);
+        App::$di->get(DbInterface::class)->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp <= :time', [':time' => (time() - $maxLifetime)]);
         return true;
     }
 

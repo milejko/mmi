@@ -10,7 +10,7 @@
  */
 
 //definicja katalogu bazowego
-define('BASE_PATH', __DIR__ . '/../');
+define('BASE_PATH', realpath(__DIR__ . '/../'));
 
 //dołączenie autoloadera
 require BASE_PATH . 'vendor/autoload.php';

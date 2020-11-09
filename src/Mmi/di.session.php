@@ -2,6 +2,7 @@
 
 use Mmi\Session\Session;
 use Mmi\Session\SessionConfig;
+use Mmi\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 
 use function DI\env;
@@ -13,7 +14,7 @@ return [
     'session.cookie.secure' => env('SESSION_COOKIE_SECURE', false),
     'session.cookie.http'   => env('SESSION_COOKIE_HTTP', false),
 
-    Session::class => function(ContainerInterface $container) {
+    SessionInterface::class => function(ContainerInterface $container) {
         //creating config
         $sessionConfig = new SessionConfig();
         $sessionConfig->name            = $container->get('session.name');
@@ -21,7 +22,7 @@ return [
         $sessionConfig->path            = $container->get('session.path');
         $sessionConfig->cookieSecure    = $container->get('session.cookie.secure');
         $sessionConfig->cookieHttpOnly  = $container->get('session.cookie.http');
-        //własna sesja, oparta na obiekcie implementującym SessionHandlerInterface
+        //creating session instance
         return new Session($sessionConfig);
     },
 ];

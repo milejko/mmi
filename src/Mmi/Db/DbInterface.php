@@ -48,6 +48,16 @@ interface DbInterface
     public function prepareNullCheck(string $fieldName, bool $positive = true): string;
 
     /**
+     * Prepare field
+     */
+    public function prepareTable(string $tableName): string;
+
+    /**
+     * Prepare field
+     */
+    public function prepareField(string $fieldName): string;
+
+    /**
      * Like
      */
     public function prepareLike(string $fieldName): string;

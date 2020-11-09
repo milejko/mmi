@@ -8,6 +8,7 @@ use function DI\autowire;
 use function DI\env;
 
 return [
+    //db env
     'db.driver'     => env('DB_DRIVER', 'mysql'),
     'db.password'   => env('DB_PASSWORD', ''),
     'db.host'       => env('DB_HOST', '127.0.0.1'),
@@ -15,8 +16,10 @@ return [
     'db.port'       => env('DB_PORT', 3306),
     'db.user'       => env('DB_USER', 'test'),
 
-    DbProfiler::class => autowire(DbProfiler::class),
+    //db profiler
+    DbProfilerInterface::class => autowire(DbProfiler::class),
 
+    //db service
     DbInterface::class => function (ContainerInterface $container) {
         //create db config
         $dbConfig = new DbConfig();
@@ -40,7 +43,10 @@ return [
         //próba powołania drivera
         $db = new $driver($dbConfig);
         //set DB profiler
-        $db->setProfiler($container->get(DbProfiler::class));
+        $db->setProfiler($container->get(DbProfilerInterface::class));
         return $db;
     },
+
+    //db information service
+    DbInformationInterface::class => autowire(DbInformation::class),
 ];

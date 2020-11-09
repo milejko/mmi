@@ -15,7 +15,7 @@ use Mmi\App\AppProfilerInterface;
 /**
  * Klasa profilera aplikacji
  */
-class DbProfiler
+class DbProfiler implements DbProfilerInterface
 {
 
     const EVENT_PREFIX = 'Mmi\Db\Adapter\Pdo';
@@ -75,9 +75,8 @@ class DbProfiler
 
     /**
      * Pobiera dane z profilera
-     * @return array
      */
-    public function get()
+    public function get(): array
     {
         $elapsed = $this->elapsed();
         //iteracja po danych
@@ -93,18 +92,16 @@ class DbProfiler
 
     /**
      * Zwraca ilość zapytań w profilerze
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_data);
     }
 
     /**
      * Pobiera sumaryczny czas wszystkich zapytań
-     * @return float
      */
-    public function elapsed()
+    public function elapsed(): float
     {
         $elapsed = 0;
         foreach ($this->_data as $record) {

@@ -41,7 +41,7 @@ class Record extends \Mmi\Orm\RecordRo
         }
         $query = $this->_queryClass;
         $bindKey = PdoBindHelper::generateBindKey();
-        $result = DbConnector::getAdapter()->delete((new $query)->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
+        $result = $this->db->delete((new $query)->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
         return ($result > 0) ? true : false;
     }
 
@@ -53,10 +53,10 @@ class Record extends \Mmi\Orm\RecordRo
     {
         $query = $this->_queryClass;
         $table = (new $query)->getTableName();
-        $result = DbConnector::getAdapter()->insert($table, $this->_truncateToStructure());
+        $result = $this->db->insert($table, $this->_truncateToStructure());
         //odczyt id z sekwencji
         if ($result && property_exists($this, 'id') && $this->getPk() === null) {
-            $this->id = DbConnector::getAdapter()->lastInsertId();
+            $this->id = $this->db->lastInsertId();
         }
         //utrwalanie bieżącego stanu
         $this->clearModified();
@@ -71,7 +71,7 @@ class Record extends \Mmi\Orm\RecordRo
     {
         $query = $this->_queryClass;
         $bindKey = PdoBindHelper::generateBindKey();
-        $result = DbConnector::getAdapter()->update((new $query)->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
+        $result = $this->db->update((new $query)->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
         //utrwalanie bieżącego stanu
         $this->clearModified();
         return ($result >= 0);
@@ -86,7 +86,7 @@ class Record extends \Mmi\Orm\RecordRo
     {
         $tableData = [];
         $query = $this->_queryClass;
-        $structure = DbConnector::getTableStructure((new $query)->getTableName());
+        $structure = $this->dbInformation->getTableStructure((new $query)->getTableName());
         foreach ($this as $field => $value) {
             //jeśli tylko zmodyfikowane i pole nie jest modyfikowane - omijanie
             if ($modifiedOnly && !$this->isModified($field)) {

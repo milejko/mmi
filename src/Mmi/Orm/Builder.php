@@ -10,6 +10,9 @@
 
 namespace Mmi\Orm;
 
+use Mmi\App\App;
+use Mmi\Db\DbInformationInterface;
+
 /**
  * Klasa budowniczego struktur DAO/Record/Query
  */
@@ -61,10 +64,10 @@ class Builder
             $recordCode = file_get_contents($path);
         }
         //odczyt struktury tabeli
-        $structure = DbConnector::getTableStructure($tableName);
+        $structure = App::$di->get(DbInformationInterface::class)->getTableStructure($tableName);
         //błędna struktrura lub brak
         if (empty($structure)) {
-            throw new rmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
+            throw new OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
         }
         $variableString = "\n";
         //generowanie pól rekordu
@@ -98,7 +101,7 @@ class Builder
         //prefixy nazw
         $queryClassName = self::_getNamespace($tableName) . '\\' . self::_getNamePrefix($tableName) . 'Query';
         //odczyt struktury
-        $structure = DbConnector::getTableStructure($tableName);
+        $structure = App::$di->get(DbInformationInterface::class)->getTableStructure($tableName);
         $methods = '';
         //budowanie komentarzy do metod
         foreach ($structure as $fieldName => $fieldDetails) {
@@ -189,7 +192,7 @@ class Builder
             $queryCode = file_get_contents($path);
         }
         //odczyt struktury
-        $structure = DbConnector::getTableStructure($tableName);
+        $structure = App::$di->get(DbInformationInterface::class)->getTableStructure($tableName);
         //pusta, lub błędna struktura
         if (empty($structure)) {
             throw new OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);

@@ -8,15 +8,12 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi;
-
-use Mmi\App\App;
-use Psr\Log\LoggerInterface;
+namespace Mmi\Translate;
 
 /**
  * Obiekt tłumaczeń
  */
-class Translate
+class Translate implements TranslateInterface
 {
 
     /**
@@ -32,12 +29,9 @@ class Translate
     private $_locale;
 
     /**
-     * Dodaje tłumaczenie
-     * @param string $sourceFile ścieżka do pliku
-     * @param string $locale wersja językowa podanego pliku
-     * @return \Mmi\Translate
+     * Adds translation file
      */
-    public function addTranslation($sourceFile, $locale)
+    public function addTranslationFile(string $sourceFile, string $locale): self
     {
         //jeśli brak locale
         if (!$locale) {
@@ -52,20 +46,17 @@ class Translate
     }
 
     /**
-     * Pobiera bieżącą wersję językową
-     * @return string
+     * Gets locale
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->_locale;
     }
 
     /**
-     * Ustawia bieżącą wersję językową
-     * @param string $locale wersja językowa
-     * @return \Mmi\Translate
+     * Sets locale
      */
-    public function setLocale($locale)
+    public function setLocale($locale): self
     {
         //ustawia locale
         $this->_locale = $locale;
@@ -73,11 +64,10 @@ class Translate
     }
 
     /**
-     * Tłumaczy ciąg znaków, działając analogicznie do sprintf
-     * przykład : :translate('number %d', 12) wyświetli np. "liczba 12"
-     * @return string
+     * Translate string using sprintf notation
+     * ->translate('number %d', [12]) returns "number 12"
      */
-    public function _($key, array $params = [])
+    public function translate($key, array $params = []): string
     {
         //jeśli brak locale - zwrot klucza
         if (null === $this->_locale) {
@@ -95,8 +85,8 @@ class Translate
         if (isset($this->_data[$this->_locale][$key])) {
             return strtr($this->_data[$this->_locale][$key], $params);
         }
-        //logowanie braku tłumaczenia i zwrot klucza
-        return $this->_returnKeyAndLogUntranslated($key, $params);
+        //key return
+        return strtr($key, $params);
     }
 
     /**
@@ -126,13 +116,4 @@ class Translate
         return $output;
     }
 
-    /**
-     * Loguje nieprzetłumaczone teksty do pliku
-     * @param string $key klucz
-     */
-    private function _returnKeyAndLogUntranslated($key, array $params)
-    {
-        //zwrot klucza
-        return $key;
-    }
 }

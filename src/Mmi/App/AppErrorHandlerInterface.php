@@ -10,6 +10,8 @@
 
 namespace Mmi\App;
 
+use Throwable;
+
 /**
  * Application error handler interface
  */
@@ -24,6 +26,6 @@ interface AppErrorHandlerInterface
     /**
      * Obsługuje wyjątki
      */
-    public function exceptionHandler($exception): void;
+    public function exceptionHandler(Throwable $exception): void;
 
 }

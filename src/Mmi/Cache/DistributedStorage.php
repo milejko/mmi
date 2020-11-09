@@ -10,6 +10,8 @@
 
 namespace Mmi\Cache;
 
+use Mmi\App\App;
+use Mmi\Db\DbInformation;
 use Mmi\Orm\CacheQuery,
     Mmi\Orm\CacheRecord;
 
@@ -78,7 +80,7 @@ class DistributedStorage extends \Mmi\OptionObject
     public function gc()
     {
         //uproszczone usuwanie - jedynm zapytaniem
-        \Mmi\Orm\DbConnector::getAdapter()->delete((new CacheQuery)->getTableName());
+        App::$di->get(DbInformation::class)->delete((new CacheQuery)->getTableName());
     }
 
 }

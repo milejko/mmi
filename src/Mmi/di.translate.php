@@ -1,33 +1,33 @@
 <?php
 
+namespace Mmi\Translate;
+
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\SystemCacheInterface;
 use Mmi\Mvc\Structure;
-use Mmi\Translate;
+use Mmi\Translate\TranslateInterface;
 use Psr\Container\ContainerInterface;
 
 return [
-    Translate::class => function (ContainerInterface $container) {
+    TranslateInterface::class => function (ContainerInterface $container) {
         //loading buffered translator
         $cache = $container->get(SystemCacheInterface::class);
         //loading from cache
-        if ($cache->isActive() && (null !== ($translate = $cache->load($cacheKey = 'mmi-translate')))) {
+        if (null !== ($translate = $cache->load($cacheKey = 'mmi-translate'))) {
             //wczytanie obiektu translacji z bufora
-            $container->get(AppProfilerInterface::class)->event('Mmi\Translate: load translate cache');
+            $container->get(AppProfilerInterface::class)->event(Translate::class . ': load translate cache');
             return $translate;
         }
         //utworzenie obiektu tłumaczenia
         $translate = new Translate;
         //dodawanie tłumaczeń do translatora
         foreach (Structure::getStructure('translate') as $translationFile) {
-            $translate->addTranslation($translationFile, substr(basename($translationFile), 0, -4));
+            $translate->addTranslationFile($translationFile, substr(basename($translationFile), 0, -4));
         }
         //zapis do cache
-        if ($cache->isActive()) {
-            $cache->save($translate, $cacheKey, 0);
-        }
+        $cache->save($translate, $cacheKey, 0);
         //event profilera
-        $container->get(AppProfilerInterface::class)->event('Mmi\Translate: translations added');
+        $container->get(AppProfilerInterface::class)->event(Translate::class . ': translations added');
         return $translate;
     },
 ];

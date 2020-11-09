@@ -2,10 +2,11 @@
 
 namespace Mmi\Command;
 
-use Mmi\Db\Adapter\PdoAbstract;
+use Mmi\Db\DbInformation;
+use Mmi\Db\DbInformationInterface;
+use Mmi\Db\DbInterface;
 use Mmi\Orm\ChangelogQuery;
 use Mmi\Orm\ChangelogRecord;
-use Mmi\Orm\DbConnector;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,9 +18,14 @@ class DbDeployCommand extends CommandAbstract
 {
 
     /**
-     * @var PdoAbstract
+     * @var DbInterface
      */
-    private $pdo;
+    private $db;
+
+    /**
+     * @var DbInformation
+     */
+    private $dbInformation;
 
     /**
      * @var ContainerInterface
@@ -29,10 +35,15 @@ class DbDeployCommand extends CommandAbstract
     /**
      * Constructor
      */
-    public function __construct(PdoAbstract $pdo, ContainerInterface $container)
+    public function __construct(
+        DbInterface $db,
+        DbInformationInterface $dbInformation,
+        ContainerInterface $container
+    )
     {
-        $this->pdo          = $pdo;
-        $this->container    = $container;
+        $this->db               = $db;
+        $this->dbInformation    = $dbInformation;
+        $this->container        = $container;
         parent::__construct();
     }
 
@@ -79,7 +90,7 @@ class DbDeployCommand extends CommandAbstract
         //hash pliku
         $md5file = md5_file($file);
         //ustawianie domyślnych parametrów importu
-        $this->pdo->setDefaultImportParams();
+        $this->db->setDefaultImportParams();
         //pobranie rekordu
         try {
             $dc = (new ChangelogQuery())->whereFilename()->equals(basename($file))->findFirst();
@@ -101,7 +112,7 @@ class DbDeployCommand extends CommandAbstract
         //import danych
         $this->_importSql($file);
         //resetowanie struktur tabeli
-        DbConnector::resetTableStructures();
+        $this->dbInformation->reset();
         //brak restore - zakłada nowy rekord
         $newDc = new ChangelogRecord();
         //zapis informacji o incrementalu
@@ -136,16 +147,16 @@ class DbDeployCommand extends CommandAbstract
             return;
         }
         //start transakcji
-        $this->pdo->beginTransaction();
+        $this->db->beginTransaction();
         //quera jeśli błędna rollback i exception, jeśli poprawna commit
         try {
             //wykonanie zapytania
-            $this->pdo->query($query);
+            $this->db->query($query);
             //commit
-            $this->pdo->commit();
+            $this->db->commit();
         } catch (\Mmi\Db\DbException $e) {
             //rollback
-            $this->pdo->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
     }

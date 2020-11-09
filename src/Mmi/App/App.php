@@ -90,12 +90,25 @@ class App
     }
 
     /**
+     * Sets error and exception handler
+     */
+    protected function setErrorHandler(): self
+    {
+        //exception handler
+        set_exception_handler([$this->container->get(AppErrorHandler::class), 'exceptionHandler']);
+        //error handler
+        set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
+        $this->profiler->event(self::PROFILER_PREFIX . 'error handler setup');
+        return $this;
+    }
+
+    /**
      * Builds container
      */
     private function buildContainer(): self
     {
         //remove previous compilation if cache disabled
-        \getenv('CACHE_PRIVATE_ENABLED') || $this->unlinkCompiledContainer();
+        \getenv('CACHE_SYSTEM_ENABLED') || $this->unlinkCompiledContainer();
         //try to build from cache (@TODO remove static $di after refactoring)
         $this->container = self::$di = $this->getContainerBuilder()->build();
         //container has app.structure.template, so it is properly built
@@ -166,19 +179,6 @@ class App
     }
 
     /**
-     * Sets error and exception handler
-     */
-    protected function setErrorHandler(): self
-    {
-        //exception handler
-        set_exception_handler([$this->container->get(AppErrorHandler::class), 'exceptionHandler']);
-        //error handler
-        set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
-        $this->profiler->event(self::PROFILER_PREFIX . 'error handler setup');
-        return $this;
-    }
-
-    /**
      * Unlinks compiled container
      */
     private function unlinkCompiledContainer(): void
@@ -190,7 +190,7 @@ class App
     /**
      * APCu enabled
      */
-    protected function isApcuEnabled(): bool
+    private function isApcuEnabled(): bool
     {
         return function_exists('apcu_fetch') && ini_get('apc.enabled')
             && !('cli' === \PHP_SAPI && !ini_get('apc.enable_cli'));

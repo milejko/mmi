@@ -10,6 +10,10 @@
 
 namespace Mmi\Orm;
 
+use Mmi\App\App;
+use Mmi\Db\DbInformationInterface;
+use Mmi\Db\DbInterface;
+
 /**
  * Klasa zapytania
  * umożliwia odpytywanie DAO o Rekordy
@@ -30,12 +34,25 @@ class Query
     protected $_tableName;
 
     /**
+     * @var DbInterface
+     */
+    protected $db;
+
+    /**
+     * @var DbInformationInterface
+     */
+    protected $dbInformation;
+
+    /**
      * Konstruktor tworzy nowe skompilowane zapytanie
      * @throws \Mmi\Orm\OrmException tabela niewyspecyfikowana
      * @param string $tableName nazwa tabeli
      */
     public final function __construct($tableName = null)
     {
+        //@TODO: proper DI (could be impossible)
+        $this->db            = App::$di->get(DbInterface::class);
+        $this->dbInformation = App::$di->get(DbInformationInterface::class);
         //nowa kompilacja
         $this->_compile = new QueryCompile;
         //klasa DAO na podstawie parametru konstruktora
@@ -440,18 +457,18 @@ class Query
     {
         //funkcja sortująca rand()
         if ($fieldName == 'RAND()') {
-            return DbConnector::getAdapter()->prepareField('RAND()');
+            return $this->db->prepareField('RAND()');
         }
         //nazwa tabeli
         $tableName = ($forcedTableName === null) ? $this->_tableName : $forcedTableName;
         //przygotowany prefix tabeli
-        $tablePrefix = DbConnector::getAdapter()->prepareTable($tableName);
+        $tablePrefix = $this->db->prepareTable($tableName);
         //pole występuje w tabeli (jeden do jednego bez żadnych konwersji)
-        if (DbConnector::fieldInTable($fieldName, $tableName)) {
-            return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField($fieldName);
+        if ($this->dbInformation->isTableContainsField($tableName, $fieldName)) {
+            return $tablePrefix . '.' . $this->db->prepareField($fieldName);
         }
         //konwersja camelcase na podkreślenia
-        return $tablePrefix . '.' . DbConnector::getAdapter()->prepareField(Convert::camelcaseToUnderscore($fieldName));
+        return $tablePrefix . '.' . $this->db->prepareField(Convert::camelcaseToUnderscore($fieldName));
     }
 
     /**

@@ -10,10 +10,12 @@
 
 namespace Mmi\Orm\QueryHelper;
 
-use Mmi\Db\Adapter\PdoBindHelper,
-    Mmi\Orm\DbConnector,
-    Mmi\Orm\OrmException,
-    Mmi\Orm\Query;
+use Mmi\App\App;
+use Mmi\Db\Adapter\PdoBindHelper;
+use Mmi\Db\DbInformationInterface;
+use Mmi\Db\DbInterface;
+use Mmi\Orm\OrmException;
+use Mmi\Orm\Query;
 
 /**
  * Klasa pola zapytania
@@ -40,6 +42,16 @@ class QueryField
     protected $_query;
 
     /**
+     * @var DbInterface
+     */
+    protected $db;
+
+    /**
+     * @var DbInformationInterface
+     */
+    protected $dbInformation;
+
+    /**
      * Ustawia parametry pola
      * @param Query $query zapytanie nadrzędne
      * @param string $fieldName nazwa pola
@@ -47,6 +59,9 @@ class QueryField
      */
     public function __construct(Query $query, $fieldName, $logic = 'AND')
     {
+        //@TODO: proper DI (could be impossible)
+        $this->db            = App::$di->get(DbInterface::class);
+        $this->dbInformation = App::$di->get(DbInformationInterface::class);
         $this->_fieldName = $fieldName;
         $this->_logic = ($logic == 'OR') ? 'OR' : 'AND';
         $this->_query = $query;
@@ -247,7 +262,7 @@ class QueryField
         $this->_initQuery();
         //przygotowanie wartości null
         if (null === $value) {
-            $this->_query->getQueryCompile()->where .= DbConnector::getAdapter()->prepareNullCheck($this->_fieldName, ($condition == '='));
+            $this->_query->getQueryCompile()->where .= $this->db->prepareNullCheck($this->_fieldName, ($condition == '='));
             return $this->_query;
         }
         //przygotowanie pustych tabel (kompatybilne tylko z == i <>)
@@ -271,7 +286,7 @@ class QueryField
         }
         //like powinien działać jak ilike
         if ('LIKE' == $condition) {
-            $this->_query->getQueryCompile()->where .= DbConnector::getAdapter()->prepareLike($this->_fieldName) . ' :' . $bindKey;
+            $this->_query->getQueryCompile()->where .= $this->db->prepareLike($this->_fieldName) . ' :' . $bindKey;
             return $this->_query;
         }
         //zwykłe porównanie
@@ -290,7 +305,7 @@ class QueryField
         //inicjalizacja zapytania
         $this->_initQuery();
         //porównanie z kolumną
-        $this->_query->getQueryCompile()->where .= $this->_fieldName . ' ' . $condition . ' ' . DbConnector::getAdapter()->prepareTable((null === $tableName) ? $this->_query->getTableName() : $tableName) . '.' . DbConnector::getAdapter()->prepareField($columnName);
+        $this->_query->getQueryCompile()->where .= $this->_fieldName . ' ' . $condition . ' ' . $this->db->prepareTable((null === $tableName) ? $this->_query->getTableName() : $tableName) . '.' . $this->db->prepareField($columnName);
         return $this->_query;
     }
 

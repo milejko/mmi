@@ -16,7 +16,7 @@ use Mmi\Cache\SystemCacheInterface;
 use Mmi\Http\HttpServerEnv;
 use Mmi\Security\Acl;
 use Mmi\Security\Auth;
-use Mmi\Translate;
+use Mmi\Translate\TranslateInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -299,7 +299,7 @@ class View extends \Mmi\DataObject
             throw new KernelException('View tpl not found: ' . $path);
         }
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->container->get(Translate::class)->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->container->get(TranslateInterface::class)->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
@@ -323,7 +323,7 @@ class View extends \Mmi\DataObject
     public function renderDirectly($templateCode): string
     {
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->container->get(Translate::class)->getLocale() . '-' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->container->get(TranslateInterface::class)->getLocale() . '-' . md5($templateCode) . '.php');
     }
 
     /**
@@ -333,7 +333,7 @@ class View extends \Mmi\DataObject
      */
     public function _($key, array $params = []): string
     {
-        return $this->container->get(Translate::class)->_($key, $params);
+        return $this->container->get(TranslateInterface::class)->translate($key, $params);
     }
 
     /**

@@ -10,6 +10,10 @@
 
 namespace Mmi\Orm;
 
+use Mmi\App\App;
+use Mmi\Db\DbInformationInterface;
+use Mmi\Db\DbInterface;
+
 /**
  * Klasa danych zapytania
  */
@@ -23,11 +27,24 @@ class QueryData
     protected $_query;
 
     /**
+     * @var DbInterface
+     */
+    protected $db;
+
+    /**
+     * @var DbInformationInterface
+     */
+    protected $dbInformation;
+
+    /**
      * Konstruktor
      * @param Query $query
      */
     public function __construct(Query $query)
     {
+        //@TODO: proper DI (could be impossible)
+        $this->db            = App::$di->get(DbInterface::class);
+        $this->dbInformation = App::$di->get(DbInformationInterface::class);
         $this->_query = $query;
     }
 
@@ -40,12 +57,12 @@ class QueryData
         //wykonanie zapytania zliczającego na adapter
         $result = $this->_query->getQueryCompile()->groupBy ?
             //grupowanie zlicza podzapytanie
-            DbConnector::getAdapter()->select('COUNT(1)', '(SELECT COUNT(1) FROM ' .
+            $this->db->select('COUNT(1)', '(SELECT COUNT(1) FROM ' .
                 $this->_prepareFrom() .
                 ' ' . $this->_query->getQueryCompile()->where .
                 ' ' . $this->_query->getQueryCompile()->groupBy . ') AS tmp', '', '', '', null, null, $this->_query->getQueryCompile()->bind) :
             //zliczenie bez grupowania
-            DbConnector::getAdapter()->select('COUNT(' . ($column === '*' ? '*' : DbConnector::getAdapter()->prepareField($column)) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, '', null, null, $this->_query->getQueryCompile()->bind);
+            $this->db->select('COUNT(' . ($column === '*' ? '*' : $this->db->prepareField($column)) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, '', null, null, $this->_query->getQueryCompile()->bind);
         //pobieranie rezultatu
         return isset($result[0]) ? current($result[0]) : 0;
     }
@@ -63,7 +80,7 @@ class QueryData
         //tworznie pustej kolekcji
         $collection = new $collectionName();
         //iteracja po danych z bazy
-        foreach (DbConnector::getAdapter()->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
+        foreach ($this->db->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
             //tworzenie i dodawanie rekordu
             $collection->append((new $recordName)->setFromArray($row)->clearModified());
         }
@@ -80,7 +97,7 @@ class QueryData
     public final function findFirst()
     {
         //odpytanie adaptera o rekordy
-        $result = DbConnector::getAdapter()->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind);
+        $result = $this->db->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind);
         //null jeśli brak danych
         if (!is_array($result) || !isset($result[0])) {
             return null;
@@ -103,7 +120,7 @@ class QueryData
         //inicjalizacja pustej tablicy
         $kv = [];
         //iteracja po danych
-        foreach (DbConnector::getAdapter()->select(DbConnector::getAdapter()->prepareField($keyName) . ', ' . DbConnector::getAdapter()->prepareField($valueName), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
+        foreach ($this->db->select($this->db->prepareField($keyName) . ', ' . $this->db->prepareField($valueName), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
             //przy wybieraniu tych samych pól tabela ma tylko jeden wiersz
             $row = (count($row) == 1) ? current($row) : $row;
             //klucz to pierwszy element, wartość - drugi
@@ -120,7 +137,7 @@ class QueryData
     public final function findMax($keyName)
     {
         //odpytanie adaptera o rekord
-        $result = DbConnector::getAdapter()->select('MAX(' . DbConnector::getAdapter()->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
+        $result = $this->db->select('MAX(' . $this->db->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
         return isset($result[0]) ? current($result[0]) : null;
     }
 
@@ -132,7 +149,7 @@ class QueryData
     public final function findMin($keyName)
     {
         //odpytanie adaptera o rekord
-        $result = DbConnector::getAdapter()->select('MIN(' . DbConnector::getAdapter()->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
+        $result = $this->db->select('MIN(' . $this->db->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
         return isset($result[0]) ? current($result[0]) : null;
     }
 
@@ -144,7 +161,7 @@ class QueryData
     public final function findSum($keyName)
     {
         //odpytanie adaptera o rekord
-        $result = DbConnector::getAdapter()->select('SUM(' . DbConnector::getAdapter()->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
+        $result = $this->db->select('SUM(' . $this->db->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
         return isset($result[0]) ? current($result[0]) : null;
     }
 
@@ -158,7 +175,7 @@ class QueryData
         //inicjalizacja pustej tabeli
         $result = [];
         //iteracja po danych
-        foreach (DbConnector::getAdapter()->select('DISTINCT(' . DbConnector::getAdapter()->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, null, null, $this->_query->getQueryCompile()->bind) as $row) {
+        foreach ($this->db->select('DISTINCT(' . $this->db->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, null, null, $this->_query->getQueryCompile()->bind) as $row) {
             //dodawanie kolumny
             $result[] = current($row);
         }
@@ -177,23 +194,23 @@ class QueryData
         }
         $fields = '';
         //pobranie struktury tabeli
-        $mainStructure = DbConnector::getTableStructure($this->_query->getTableName());
+        $mainStructure = $this->dbInformation->getTableStructure($this->_query->getTableName());
         //przygotowanie tabeli
-        $table = DbConnector::getAdapter()->prepareTable($this->_query->getTableName());
+        $table = $this->db->prepareTable($this->_query->getTableName());
         //iteracja po polach tabeli głównej
         foreach ($mainStructure as $fieldName => $info) {
             //dodawanie pola
-            $fields .= $table . '.' . DbConnector::getAdapter()->prepareField($fieldName) . ', ';
+            $fields .= $table . '.' . $this->db->prepareField($fieldName) . ', ';
         }
         //pola z tabel dołączonych
         foreach ($this->_query->getQueryCompile()->joinSchema as $schema) {
             //pobranie struktury tabeli dołączonej
-            $structure = DbConnector::getTableStructure($schema[0]);
+            $structure = $this->dbInformation->getTableStructure($schema[0]);
             //alias połączenia
             $joinAlias = isset($schema[5]) ? $schema[5] : $schema[0];
             //pola tabeli dołączonej
             foreach ($structure as $fieldName => $info) {
-                $fields .= DbConnector::getAdapter()->prepareTable($joinAlias) . '.' . DbConnector::getAdapter()->prepareField($fieldName) . ' AS ' . DbConnector::getAdapter()->prepareField($joinAlias . '__' . $schema[0] . '__' . $fieldName) . ', ';
+                $fields .= $this->db->prepareTable($joinAlias) . '.' . $this->db->prepareField($fieldName) . ' AS ' . $this->db->prepareField($joinAlias . '__' . $schema[0] . '__' . $fieldName) . ', ';
             }
         }
         return rtrim($fields, ', ');
@@ -206,7 +223,7 @@ class QueryData
     protected final function _prepareFrom()
     {
         //przygotowanie tabeli
-        $table = DbConnector::getAdapter()->prepareTable($this->_query->getTableName());
+        $table = $this->db->prepareTable($this->_query->getTableName());
         //jeśli brak joinów sama tabela
         if (empty($this->_query->getQueryCompile()->joinSchema)) {
             return $table;
@@ -222,9 +239,9 @@ class QueryData
             //alias
             $joinAlias = isset($schema[5]) ? $schema[5] : $schema[0];
             //przygotowanie sql
-            $table .= ' ' . $joinType . ' ' . DbConnector::getAdapter()->prepareTable($schema[0]) . ' AS ' . DbConnector::getAdapter()->prepareTable($joinAlias) . ' ON ' .
-                DbConnector::getAdapter()->prepareTable($joinAlias) . '.' . DbConnector::getAdapter()->prepareField($schema[1]) .
-                ' = ' . DbConnector::getAdapter()->prepareTable($targetTable) . '.' . DbConnector::getAdapter()->prepareField($schema[2]);
+            $table .= ' ' . $joinType . ' ' . $this->db->prepareTable($schema[0]) . ' AS ' . $this->db->prepareTable($joinAlias) . ' ON ' .
+                $this->db->prepareTable($joinAlias) . '.' . $this->db->prepareField($schema[1]) .
+                ' = ' . $this->db->prepareTable($targetTable) . '.' . $this->db->prepareField($schema[2]);
         }
         return $table;
     }

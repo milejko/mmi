@@ -10,6 +10,10 @@
 
 namespace Mmi\Orm;
 
+use Mmi\App\App;
+use Mmi\Db\DbInformationInterface;
+use Mmi\Db\DbInterface;
+
 /**
  * Klasa rekordu tylko do odczytu
  */
@@ -47,12 +51,25 @@ class RecordRo
     protected $_queryClass;
 
     /**
+     * @var DbInterface
+     */
+    protected $db;
+
+    /**
+     * @var DbInformationInterface
+     */
+    protected $dbInformation;
+
+    /**
      * Konstruktor
      * @param mixed $id identyfikator do tworzenia obiektu
      * @throws RecordNotFoundException
      */
     public final function __construct($id = null)
     {
+        //@TODO: proper DI (could be impossible)
+        $this->db            = App::$di->get(DbInterface::class);
+        $this->dbInformation = App::$di->get(DbInformationInterface::class);
         $this->_queryClass = substr(get_called_class(), 0, -6) . 'Query';
         if ($id === null) {
             return;
@@ -173,7 +190,7 @@ class RecordRo
         //podpięcie joinów pod główny rekord
         foreach ($joinedRows as $alias => $tables) {
             foreach ($tables as $tableName => $fields) {
-                $recordClass = \Mmi\Orm\DbConnector::getRecordNameByTable($tableName);
+                $recordClass = $this->getRecordNameByTable($tableName);
                 $record = new $recordClass;
                 $record->setFromArray($fields)
                     ->clearModified();
@@ -268,7 +285,24 @@ class RecordRo
      */
     protected function _pkWhere($bindKey)
     {
-        return 'WHERE ' . \Mmi\Orm\DbConnector::getAdapter()->prepareField('id') . ' = :' . $bindKey;
+        return 'WHERE ' . $this->db->prepareField('id') . ' = :' . $bindKey;
+    }
+
+    /**
+     * Returns record name by table name
+     */
+    protected function getRecordNameByTable(string $tableName): string
+    {
+        //rozdzielenie po podkreślniku
+        $tableArray = explode('_', $tableName);
+        $namespace = ucfirst($tableArray[0]) . '\\Orm\\';
+        $tableArray[] = 'Record';
+        //dołączenie pozostałych parametrów
+        foreach ($tableArray as $key => $element) {
+            $tableArray[$key] = ucfirst($element);
+        }
+        //łączenie z namespace
+        return $namespace . implode('', $tableArray);
     }
 
 }
