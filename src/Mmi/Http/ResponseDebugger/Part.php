@@ -13,7 +13,7 @@ namespace Mmi\Http\ResponseDebugger;
 use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Db\DbInterface;
-use Mmi\Http\HttpServerEnv;
+use Mmi\Http\RequestServer;
 
 /**
  * Klasa danych częściowych panelu deweloperskiego
@@ -25,12 +25,12 @@ class Part
      * Zmienne środowiskowe
      * @return string
      */
-    public static function getEnvHtml(HttpServerEnv $env)
+    public static function getServerHtml(RequestServer $requestServer)
     {
-        return '<p style="margin: 0; padding: 0;">Connection: <b>' . $env->serverAddress . ':' . $env->serverPort . '</b> <---> <b>' . $env->remoteAddress . ':' . $env->remotePort . '</b></p>' .
-            '<p style="margin: 0; padding: 0;">Browser: <b>' . substr($env->httpUserAgent, 0, 93) . '</b></p>' .
+        return '<p style="margin: 0; padding: 0;">Connection: <b>' . $requestServer->serverAddress . ':' . $requestServer->serverPort . '</b> <---> <b>' . $requestServer->remoteAddress . ':' . $requestServer->remotePort . '</b></p>' .
+            '<p style="margin: 0; padding: 0;">Browser: <b>' . substr($requestServer->httpUserAgent, 0, 93) . '</b></p>' .
             '<p style="margin: 0; padding: 0;">PHP: <b>' . phpversion() . ' (' . php_sapi_name() . ', ' . php_uname('s') . ' ' . php_uname('m') . ': ' . php_uname('n') . ')</b></p>' .
-            '<p style="margin: 0; padding: 0;">Path: <b>' . $env->scriptFileName . '</b></p>';
+            '<p style="margin: 0; padding: 0;">Path: <b>' . $requestServer->scriptFileName . '</b></p>';
     }
 
     /**

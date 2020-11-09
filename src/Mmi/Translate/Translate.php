@@ -48,7 +48,7 @@ class Translate implements TranslateInterface
     /**
      * Gets locale
      */
-    public function getLocale(): string
+    public function getLocale(): ?string
     {
         return $this->_locale;
     }

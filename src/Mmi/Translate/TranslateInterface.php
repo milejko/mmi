@@ -20,7 +20,7 @@ interface TranslateInterface
     /**
      * Gets locale
      */
-    public function getLocale(): string;
+    public function getLocale(): ?string;
 
     /**
      * Translate string using sprintf notation

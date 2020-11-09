@@ -14,6 +14,7 @@ namespace Mmi\Http;
  * Klasa środowiska serwera HTTP
  *
  * @property string $lang do ustawienia jako zmienna serwera dla stron wielojęzycznych
+ * @property string $phpSelf uri żądania HTTP
  * @property string $requestUri uri żądania HTTP
  * @property string $requestMethod metoda żądania
  * @property string $contentType typ treści
@@ -36,14 +37,20 @@ namespace Mmi\Http;
  * @property string $httpUserAgent przeglądarka
  * @property string $httpRange zakres bajtów pliku
  */
-class HttpServerEnv extends \Mmi\DataObject
+class RequestServer extends \Mmi\DataObject
 {
+    /**
+     * @var array
+     */
+    private $rawData;
 
     /**
      * Konstruktor
      */
-    public function __construct()
+    public function __construct(array $data)
     {
+        //initial injection
+        $this->rawData = $data;
         //x-forwarded-for
         $xForwarderFor = $this->_filter('HTTP_X_FORWARDED_FOR');
         //ustawianie zmiennych środowiskowych
@@ -52,6 +59,7 @@ class HttpServerEnv extends \Mmi\DataObject
             'authUser' => $this->_filter('PHP_AUTH_USER'),
             'authPassword' => $this->_filter('PHP_AUTH_PW'),
             'baseUrl' => '',
+            'phpSelf' => $this->_filter('PHP_SELF'),
             'requestMethod' => $this->_filter('REQUEST_METHOD'),
             'contentType' => $this->_filter('CONTENT_TYPE'),
             'scriptFileName' => $this->_filter('SCRIPT_FILENAME'),
@@ -68,16 +76,7 @@ class HttpServerEnv extends \Mmi\DataObject
             'httpRange' => $this->_filter('HTTP_RANGE'),
         ];
         //dekodowanie url
-        if (null === $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim($this->_filter('REQUEST_URI'), '/'))) {
-            return;
-        }
-        //PHP_SELF wskazuje na aplikację w podkatalogu
-        if (null === $newBaseUrl = str_replace('/index.php', '', $this->_filter('PHP_SELF'))) {
-            return;
-        }
-        //nadpisanie zmiennych po wykryciu apki w podkatalogu
-        $this->_data['baseUrl'] = $newBaseUrl;
-        $this->_data['requestUri'] = substr($this->_data['requestUri'], strlen($newBaseUrl));
+        $this->_data['requestUri'] = str_replace(['&amp;', '&#38;'], '&', trim($this->_filter('REQUEST_URI'), '/'));
     }
 
     /**
@@ -99,7 +98,7 @@ class HttpServerEnv extends \Mmi\DataObject
      */
     private function _filter($name, $filter = FILTER_SANITIZE_SPECIAL_CHARS)
     {
-        return isset($_SERVER[$name]) ? filter_var($_SERVER[$name], $filter) : null;
+        return isset($this->rawData[$name]) ? filter_var($this->rawData[$name], $filter) : null;
     }
 
 }

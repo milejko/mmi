@@ -147,8 +147,7 @@ class ComposerInstaller
     {
         copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/index.php', BASE_PATH . '/web/index.php');
         copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/mmi', BASE_PATH . '/bin/mmi');
-        chmod(BASE_PATH . '/bin/mmi', 0555);
-        chmod(BASE_PATH . '/bin/index.php', 0444);
+        chmod(BASE_PATH . '/bin/mmi', 0755);
     } 
  
 } 

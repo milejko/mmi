@@ -37,11 +37,6 @@ class ResponseDebugger
     private $profiler;
 
     /**
-     * @var HttpServerEnv
-     */
-    private $httpServerEnv;
-
-    /**
      * @var Cache
      */
     private $cache;
@@ -62,7 +57,6 @@ class ResponseDebugger
     public function __construct(
         Request $request,
         AppProfilerInterface $profiler,
-        HttpServerEnv $httpServerEnv,
         CacheInterface $cache,
         View $view,
         ContainerInterface $container
@@ -71,7 +65,6 @@ class ResponseDebugger
         //inject
         $this->request          = $request;
         $this->profiler         = $profiler;
-        $this->httpServerEnv    = $httpServerEnv;
         $this->cache            = $cache;
         $this->view             = $view;
         $this->container        = $container;
@@ -125,10 +118,10 @@ class ResponseDebugger
         }
         $html .= '<table cellspacing="0" cellpadding="0" border="0" style="width: 100%; padding: 0px; margin: 0px;"><tr><td style="vertical-align: top; padding-right: 5px;">';
 
-        //środowisko
-        $html .= '<p style="margin: 0px;">Environment:</p>';
+        //serwer
+        $html .= '<p style="margin: 0px;">Server:</p>';
         $html .= self::PRE_OPEN_BREAK . '<p style="margin: 0; padding: 0;">Time: <b>' . $this->_getElapsed() . ' (' . $this->_getPeakMemory() . ', ' . $cacheInfo . ')</b></p>';
-        $html .= ResponseDebugger\Part::getEnvHtml($this->httpServerEnv) . '</pre>';
+        $html .= ResponseDebugger\Part::getServerHtml($this->request->getServer()) . '</pre>';
 
         //konfiguracja
         $html .= '<p style="margin: 0px;">Configuration:</p>';

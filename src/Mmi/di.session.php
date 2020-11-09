@@ -1,8 +1,7 @@
 <?php
 
-use Mmi\Session\Session;
-use Mmi\Session\SessionConfig;
-use Mmi\Session\SessionInterface;
+namespace Mmi\Session;
+
 use Psr\Container\ContainerInterface;
 
 use function DI\env;

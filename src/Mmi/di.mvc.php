@@ -1,9 +1,7 @@
 <?php
 
-use Mmi\Mvc\ActionHelper;
-use Mmi\Mvc\Messenger;
-use Mmi\Mvc\Router;
-use Mmi\Mvc\View;
+namespace Mmi\Mvc;
+
 use Mmi\Mvc\ViewHelper\HelperAbstract;
 
 use function DI\autowire;

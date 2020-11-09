@@ -7,7 +7,7 @@
 * FrontController::getInstance()->getResponse() => App::$di->get(\Mmi\Http\Response::class)
 * FrontController::getInstance()->getRequest() => App::$di->get(\Mmi\Http\Request::class)
 * FrontController::getInstance()->getLogger() => App::$di->get(\Psr\Log\LoggerInterface::class)
-* FrontController::getInstance()->getEnvironment() => App::$di->get(\Mmi\Http\::class)
+* FrontController::getInstance()->getEnvironment() => App::$di->get(\Mmi\Http\Request::class)->getServer()
 * ...note that you should be using "use" :) instead of FQN
 
 ### proper way:

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Application;
 /**
  * CLI application class
  */
-class AppCli extends App
+class AppCli extends AppAbstract
 {
 
     private $symfonyConsoleApplication;
@@ -28,6 +28,17 @@ class AppCli extends App
         ('cli' == PHP_SAPI) || die('CLI commands are only available to run via the console');
         $this->symfonyConsoleApplication = new Application('mmi', '4.0');
         parent::__construct();
+    }
+
+    /**
+     * Sets error and exception handler
+     */
+    protected function setErrorHandler(): self
+    {
+        //error handler
+        set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
+        //exception handler is not needed (symfony handles it)
+        return $this;
     }
 
     /**
@@ -74,17 +85,6 @@ class AppCli extends App
         }
         $this->container->get(SystemCacheInterface::class)->save($commands, $cacheKey);
         return $commands;
-    }
-
-    /**
-     * Sets error and exception handler
-     */
-    protected function setErrorHandler(): self
-    {
-        //error handler
-        set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
-        //exception handler is not needed (symfony handles it)
-        return $this;
     }
 
 }

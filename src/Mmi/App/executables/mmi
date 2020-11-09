@@ -9,11 +9,13 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
+use Mmi\App\AppCli;
+
 //definicja katalogu bazowego
 define('BASE_PATH', realpath(__DIR__ . '/../'));
 
 //dołączenie autoloadera
-require BASE_PATH . 'vendor/autoload.php';
+require BASE_PATH . '/vendor/autoload.php';
 
 //run cli application
-(new \Mmi\App\AppCli())->run();
+(new AppCli())->run();

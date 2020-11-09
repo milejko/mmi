@@ -8,6 +8,9 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
+use Mmi\App\App;
+use Mmi\Http\Request;
+
 //define base path
 define('BASE_PATH', realpath(__DIR__ . '/../'));
 
@@ -15,4 +18,4 @@ define('BASE_PATH', realpath(__DIR__ . '/../'));
 require BASE_PATH . '/vendor/autoload.php';
 
 //run application
-(new \Mmi\App\App())->run();
+(new App())->run();

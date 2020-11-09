@@ -13,7 +13,6 @@ namespace Mmi\Mvc;
 use Mmi\App\KernelException;
 use Mmi\Cache\Cache;
 use Mmi\Cache\SystemCacheInterface;
-use Mmi\Http\HttpServerEnv;
 use Mmi\Security\Acl;
 use Mmi\Security\Auth;
 use Mmi\Translate\TranslateInterface;
@@ -78,7 +77,7 @@ class View extends \Mmi\DataObject
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->baseUrl   = $container->get(HttpServerEnv::class)->baseUrl;
+        $this->baseUrl   = $container->get('app.base.url');
         $this->container = $container;
     }
 

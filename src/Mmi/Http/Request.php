@@ -10,8 +10,6 @@
 
 namespace Mmi\Http;
 
-use Mmi\App\App;
-
 /**
  * Klasa requesta
  * 
@@ -21,6 +19,86 @@ use Mmi\App\App;
  */
 class Request extends \Mmi\DataObject
 {
+    /**
+     * Get values
+     * @var array
+     */
+    private $get;
+
+    /**
+     * Post values
+     * @var array
+     */
+    private $post;
+
+    /**
+     * Cookie valuew
+     */
+    private $cookie;
+
+    /**
+     * File values
+     */
+    private $files;
+
+    /**
+     * Server values
+     */
+    private $server;
+
+    public function __construct(
+        array $query        = [],
+        array $post         = [],
+        array $attributes   = [],
+        array $cookie       = [],
+        array $files        = [],
+        array $server       = []
+    )
+    {
+        //populate for use with ::__get()
+        parent::__construct($query);
+        $this->get    = $query;
+        $this->post   = $post;
+        $this->cookie = $cookie;
+        $this->files  = $files;
+        $this->server = $server;
+    }
+
+    /**
+     * Creates request from globals
+     */
+    public static function createFromGlobals(): self
+    {
+        //returns the new instance
+        return new self(
+            $_GET,
+            $_POST,
+            [],
+            $_COOKIE,
+            $_FILES,
+            $_SERVER
+        );
+    }
+
+    public function getPost(): RequestPost
+    {
+        return new RequestPost($this->post);
+    }
+
+    public function getServer(): RequestServer
+    {
+        return new RequestServer($this->server);
+    }
+
+    public function getQuery(): RequestGet
+    {
+        return new RequestGet($this->get);
+    }
+
+    public function getFiles(): RequestFiles
+    {
+        return new RequestFiles($this->files);
+    }
 
     /**
      * Zwraca Content-Type żądania
@@ -28,7 +106,7 @@ class Request extends \Mmi\DataObject
      */
     public function getContentType()
     {
-        return filter_var($_SERVER['CONTENT_TYPE'], \FILTER_SANITIZE_SPECIAL_CHARS);
+        return $this->getServer()->contentType;
     }
 
     /**
@@ -37,7 +115,7 @@ class Request extends \Mmi\DataObject
      */
     public function getRequestMethod()
     {
-        return filter_var($_SERVER['REQUEST_METHOD'], \FILTER_SANITIZE_SPECIAL_CHARS);
+        return $this->getServer()->requestMethod;
     }
 
     /**
@@ -48,43 +126,16 @@ class Request extends \Mmi\DataObject
     public function getHeader($name)
     {
         $headerName = strtoupper(preg_replace("/[^a-zA-Z0-9_]/", '_', $name));
-        return filter_input(INPUT_SERVER, 'HTTP_' . $headerName, FILTER_SANITIZE_SPECIAL_CHARS);
-    }
-
-    /**
-     * Zwraca zmienne POST w postaci tabeli
-     * @return RequestPost
-     */
-    public function getPost()
-    {
-        return new RequestPost($_POST);
-    }
-
-    /**
-     * Zwraca zmienne GET w postaci tabeli
-     * @return RequestGet
-     */
-    public function getGet()
-    {
-        return new RequestGet($_GET);
-    }
-
-    /**
-     * Pobiera informacje o zuploadowanych plikach FILES
-     * @return RequestFiles
-     */
-    public function getFiles()
-    {
-        return new RequestFiles($_FILES);
+        return $this->getServer()->__get('HTTP_' . $headerName);
     }
 
     /**
      * Zwraca referer, lub stronę główną jeśli brak
      * @return string
      */
-    public function getReferer()
+    public function getReferer(): string
     {
-        return filter_var($_SERVER['HTTP_REFERER'], \FILTER_SANITIZE_STRING);
+        return filter_var($this->server['HTTP_REFERER'], \FILTER_SANITIZE_STRING);
     }
 
     /**
