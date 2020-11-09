@@ -43,6 +43,21 @@ interface DbInterface
     public function setDefaultImportParams(): self;
 
     /**
+     * Null check
+     */
+    public function prepareNullCheck(string $fieldName, bool $positive = true): string;
+
+    /**
+     * Like
+     */
+    public function prepareLike(string $fieldName): string;
+
+    /**
+     * Prepare limit
+     */
+    public function prepareLimit($limit = null, $offset = null): ?string;
+
+    /**
      * Zwraca konfigurację
      */
     public function getConfig(): DbConfig;

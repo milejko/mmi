@@ -131,19 +131,10 @@ class PdoSqlite extends PdoAbstract
     /**
      * Tworzy konstrukcję sprawdzającą null w silniku bazy danych
      */
-    protected function prepareNullCheck(string $fieldName, bool $positive = true): string
+    public function prepareNullCheck(string $fieldName, bool $positive = true): string
     {
         //sprawdzanie czy null lub nie null
         return $positive ? ('(' . $fieldName . ' is null OR ' . $fieldName . ' = ' . $this->quote('') . ')') : ($fieldName . ' is not null');
-    }
-
-    /**
-     * Tworzy konstrukcję sprawdzającą ILIKE, jeśli dostępna w silniku
-     */
-    protected function prepareLike(string $fieldName): string
-    {
-        //ilike jak like
-        return $fieldName . ' LIKE';
     }
 
     /**

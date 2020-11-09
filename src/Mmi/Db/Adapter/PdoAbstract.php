@@ -343,7 +343,7 @@ abstract class PdoAbstract implements DbInterface
      * @param int $offset
      * @return string
      */
-    protected final function prepareLimit($limit = null, $offset = null): ?string
+    public final function prepareLimit($limit = null, $offset = null): ?string
     {
         //wyjście jeśli brak limitu
         if (!($limit > 0)) {
@@ -356,6 +356,21 @@ abstract class PdoAbstract implements DbInterface
         //sam limit
         return 'LIMIT ' . intval($limit);
     }
+
+
+    /**
+     * Tworzy konstrukcję sprawdzającą ILIKE, jeśli dostępna w silniku
+     */
+    public final function prepareLike(string $fieldName): string
+    {
+        //filed like
+        return $fieldName . ' LIKE';
+    }
+
+    /**
+     * Null check
+     */
+    abstract public function prepareNullCheck(string $fieldName, bool $positive = true): string;
 
     /**
      * Ustawia profiler

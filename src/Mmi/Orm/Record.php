@@ -56,7 +56,7 @@ class Record extends \Mmi\Orm\RecordRo
         $result = DbConnector::getAdapter()->insert($table, $this->_truncateToStructure());
         //odczyt id z sekwencji
         if ($result && property_exists($this, 'id') && $this->getPk() === null) {
-            $this->id = DbConnector::getAdapter()->lastInsertId(DbConnector::getAdapter()->prepareSequenceName($table));
+            $this->id = DbConnector::getAdapter()->lastInsertId();
         }
         //utrwalanie bieżącego stanu
         $this->clearModified();

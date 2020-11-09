@@ -137,19 +137,9 @@ class PdoMysql extends PdoAbstract
      * @param boolean $positive sprawdza czy null, lub czy nie null
      * @return string 
      */
-    protected function prepareNullCheck(string $fieldName, bool $positive = true): string
+    public function prepareNullCheck(string $fieldName, bool $positive = true): string
     {
         return ($positive ? '' : '!') . 'ISNULL(' . $fieldName . ')';
-    }
-
-    /**
-     * Tworzy konstrukcję sprawdzającą ILIKE, jeśli dostępna w silniku
-     * @param string $fieldName nazwa pola
-     * @return string
-     */
-    protected function prepareLike(string $fieldName): string
-    {
-        return $fieldName . ' LIKE';
     }
 
     /**
