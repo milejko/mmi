@@ -14,20 +14,9 @@ class PdoMysql extends PdoAbstract
 {
 
     /**
-     * Ustawia schemat
-     * @param string $schemaName nazwa schematu
-     * @return \Mmi\Db\Adapter\PdoMysql
-     */
-    public function selectSchema($schemaName)
-    {
-        return $this;
-    }
-
-    /**
      * Ustawia domyślne parametry dla importu (długie zapytania)
-     * @return \Mmi\Db\Adapter\PdoMysql
      */
-    public function setDefaultImportParams()
+    public function setDefaultImportParams(): self
     {
         $this->query('
             SET NAMES utf8;
@@ -41,7 +30,7 @@ class PdoMysql extends PdoAbstract
     /**
      * Tworzy połączenie z bazą danych
      */
-    public function connect()
+    public function connect(): self
     {
         $this->_config->port = $this->_config->port ? $this->_config->port : 3306;
         //nowy obiekt PDO do odczytu danych
@@ -62,7 +51,7 @@ class PdoMysql extends PdoAbstract
      * @param string $fieldName nazwa pola
      * @return string
      */
-    public function prepareField($fieldName)
+    public function prepareField(string $fieldName): string
     {
         //funkcja sortująca
         if ($fieldName == 'RAND()') {
@@ -80,7 +69,7 @@ class PdoMysql extends PdoAbstract
      * @param string $tableName nazwa tabeli
      * @return string
      */
-    public function prepareTable($tableName)
+    public function prepareTable(string $tableName): string
     {
         //dla mysql tak jak pola
         return $this->prepareField($tableName);
@@ -88,11 +77,8 @@ class PdoMysql extends PdoAbstract
 
     /**
      * Zwraca informację o kolumnach tabeli
-     * @param string $tableName nazwa tabeli
-     * @param array $schema schemat nieistotny w MySQL
-     * @return array
      */
-    public function tableInfo($tableName, $schema = null)
+    public function tableInfo(string $tableName, string $schema = null): array
     {
         return $this->_associateTableMeta($this->fetchAll('SELECT `column_name` as `name`, `data_type` AS `dataType`, `character_maximum_length` AS `maxLength`, `is_nullable` AS `null`, `column_default` AS `default`, `extra` AS `extra`, `column_key` AS `column_key` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = :name AND `table_schema` = :schema ORDER BY `ordinal_position`', [
                     ':name' => $tableName,
@@ -102,10 +88,8 @@ class PdoMysql extends PdoAbstract
 
     /**
      * Listuje tabele w schemacie bazy danych
-     * @param string $schema nie istotny w MySQL
-     * @return array
      */
-    public function tableList($schema = null)
+    public function tableList(string $schema = null): array
     {
         $list = $this->fetchAll('SHOW TABLES;');
         $tables = [];
@@ -118,12 +102,42 @@ class PdoMysql extends PdoAbstract
     }
 
     /**
+     * Wstawianie wielu rekordów
+     */
+    public function insertAll(string $table, array $data = []): int
+    {
+        $fields = '';
+        $fieldsCompleted = false;
+        $values = '';
+        $bind = [];
+        //dla każdego rekordu te same operacje
+        foreach ($data as $row) {
+            if (empty($row)) {
+                continue;
+            }
+            $cur = '';
+            //wiązanie placeholderów "?" w zapytaniu z parametrami do wstawienia
+            foreach ($row as $key => $value) {
+                if (!$fieldsCompleted) {
+                    $fields .= $this->prepareField($key) . ', ';
+                }
+                $cur .= '?, ';
+                $bind[] = $value;
+            }
+            $values .= '(' . rtrim($cur, ', ') . '), ';
+            $fieldsCompleted = true;
+        }
+        $sql = 'INSERT INTO ' . $this->prepareTable($table) . ' (' . rtrim($fields, ', ') . ') VALUES ' . rtrim($values, ', ');
+        return $this->query($sql, $bind)->rowCount();
+    }
+
+    /**
      * Tworzy konstrukcję sprawdzającą null w silniku bazy danych
      * @param string $fieldName nazwa pola
      * @param boolean $positive sprawdza czy null, lub czy nie null
      * @return string 
      */
-    public function prepareNullCheck($fieldName, $positive = true)
+    protected function prepareNullCheck(string $fieldName, bool $positive = true): string
     {
         return ($positive ? '' : '!') . 'ISNULL(' . $fieldName . ')';
     }
@@ -133,9 +147,29 @@ class PdoMysql extends PdoAbstract
      * @param string $fieldName nazwa pola
      * @return string
      */
-    public function prepareLike($fieldName)
+    protected function prepareLike(string $fieldName): string
     {
         return $fieldName . ' LIKE';
+    }
+
+    /**
+     * Konwertuje do tabeli asocjacyjnej meta dane tabel
+     * @param array $meta meta data
+     * @return array
+     */
+    private function _associateTableMeta(array $meta): array
+    {
+        $associativeMeta = [];
+        foreach ($meta as $column) {
+            //przekształcanie odpowiedzi do standardowej postaci
+            $associativeMeta[$column['name']] = [
+                'dataType' => $column['dataType'],
+                'maxLength' => $column['maxLength'],
+                'null' => ($column['null'] == 'YES') ? true : false,
+                'default' => $column['default']
+            ];
+        }
+        return $associativeMeta;
     }
 
 }

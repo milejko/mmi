@@ -21,7 +21,7 @@ class HeadAbstract extends HelperAbstract
     protected function _getLocationTimestamp($location)
     {
         $cacheKey = 'mmi-head-ts-' . md5($location);
-        $cache = $this->view->getCache();
+        $cache = $this->view->getSystemCache();
         if (null !== $cache && (null !== ($ts = $cache->load($cacheKey)))) {
             return $ts;
         }

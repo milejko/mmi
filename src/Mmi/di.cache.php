@@ -1,8 +1,7 @@
 <?php
 
-use Mmi\Cache\Cache;
-use Mmi\Cache\CacheConfig;
-use Mmi\Cache\PrivateCache;
+namespace Mmi\Cache;
+
 use Psr\Container\ContainerInterface;
 
 use function DI\env;
@@ -14,14 +13,14 @@ return [
     'cache.public.path'         => env('CACHE_PUBLIC_PATH', BASE_PATH . '/var/cache'),
     'cache.public.distributed'  => env('CACHE_PUBLIC_DISTRIBUTED', false),
 
-    PrivateCache::class => function (ContainerInterface $container) {
+    SystemCacheInterface::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
         $config->active  = $container->get('cache.private.enabled');
         $config->handler = \function_exists('apcu_fetch') ? 'apc' : 'file';
         $config->path    = BASE_PATH . '/var/cache';
-        return new PrivateCache($config);
+        return new Cache($config);
     },
-    Cache::class => function (ContainerInterface $container) {
+    CacheInterface::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
         $config->active      = $container->get('cache.public.enabled');
         $config->handler     = $container->get('cache.public.handler');

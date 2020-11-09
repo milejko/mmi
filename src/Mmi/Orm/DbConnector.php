@@ -11,9 +11,8 @@
 namespace Mmi\Orm;
 
 use Mmi\App\App;
-use Mmi\Cache\Cache;
-use Mmi\Cache\PrivateCache;
-use Mmi\Db\Adapter\PdoAbstract;
+use Mmi\Cache\SystemCacheInterface;
+use Mmi\Db\DbInterface;
 
 /**
  * Klasa dostępu do tabel w bazie danych
@@ -48,7 +47,7 @@ class DbConnector
      */
     public static final function getAdapter()
     {
-        return App::$di->get(PdoAbstract::class);
+        return App::$di->get(DbInterface::class);
     }
 
     /**
@@ -57,7 +56,7 @@ class DbConnector
      */
     public static final function getCache()
     {
-        return App::$di->get(PrivateCache::class);
+        return App::$di->get(SystemCacheInterface::class);
     }
 
     /**

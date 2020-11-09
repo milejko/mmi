@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-use Mmi\Cache\PrivateCache;
+use Mmi\Cache\SystemCacheInterface;
 use Mmi\Mvc\Structure;
 use Symfony\Component\Console\Application;
 
@@ -63,7 +63,7 @@ class AppCli extends App
      */
     private function getApplicationCommandNames(): array
     {
-        if (null !== $commands = $this->container->get(PrivateCache::class)->load($cacheKey = 'mmi-commands')) {
+        if (null !== $commands = $this->container->get(SystemCacheInterface::class)->load($cacheKey = 'mmi-commands')) {
             return $commands;
         }
         //iterating classes
@@ -72,7 +72,7 @@ class AppCli extends App
                 $commands[] = $entryName;
             }
         }
-        $this->container->get(PrivateCache::class)->save($commands, $cacheKey);
+        $this->container->get(SystemCacheInterface::class)->save($commands, $cacheKey);
         return $commands;
     }
 

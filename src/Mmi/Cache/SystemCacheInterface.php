@@ -11,7 +11,8 @@
 namespace Mmi\Cache;
 
 /**
- * Private cache class
+ * System Cache (aka Private Cache) interface
  */
-class PrivateCache extends Cache
-{}
+interface SystemCacheInterface extends CacheInterface
+{
+}

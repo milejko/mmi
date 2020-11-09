@@ -1,8 +1,7 @@
 <?php
 
-use Mmi\Db\Adapter\PdoAbstract;
-use Mmi\Db\DbConfig;
-use Mmi\Db\DbProfiler;
+namespace Mmi\Db;
+
 use Psr\Container\ContainerInterface;
 
 use function DI\autowire;
@@ -18,7 +17,7 @@ return [
 
     DbProfiler::class => autowire(DbProfiler::class),
 
-    PdoAbstract::class => function (ContainerInterface $container) {
+    DbInterface::class => function (ContainerInterface $container) {
         //create db config
         $dbConfig = new DbConfig();
         //note: no upstream host/port supported here
@@ -34,7 +33,7 @@ return [
         }
         //compatible drivers
         if (!in_array($dbConfig->driver, ['mysql', 'sqlite'])) {
-            throw new \Exception('Unsupported driver: ' . $dbConfig->driver);
+            throw new DbException('Unsupported driver: ' . $dbConfig->driver);
         }
         //obliczanie nazwy drivera
         $driver = '\\Mmi\\Db\\Adapter\\Pdo' . ucfirst($dbConfig->driver);

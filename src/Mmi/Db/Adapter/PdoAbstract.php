@@ -10,12 +10,16 @@
 
 namespace Mmi\Db\Adapter;
 
+use Mmi\Db\DbConfig;
 use Mmi\Db\DbException;
+use Mmi\Db\DbInterface;
+use Mmi\Db\DbProfiler;
+use PDOStatement;
 
 /**
  * Abstrakcyjna klasa adaptera PDO
  */
-abstract class PdoAbstract
+abstract class PdoAbstract implements DbInterface
 {
 
     /**
@@ -55,24 +59,17 @@ abstract class PdoAbstract
     protected $_transactionInProgress = false;
 
     /**
+     * Konstruktor wczytujący konfigurację
+     */
+    public function __construct(DbConfig $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
      * Tworzy połączenie z bazą danych
-     * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
      */
-    abstract public function connect();
-
-    /**
-     * Otacza nazwę pola odpowiednimi znacznikami
-     * @param string $fieldName nazwa pola
-     * @return string
-     */
-    abstract public function prepareField($fieldName);
-
-    /**
-     * Otacza nazwę tabeli odpowiednimi znacznikami
-     * @param string $tableName nazwa tabeli
-     * @return string
-     */
-    abstract public function prepareTable($tableName);
+    abstract public function connect(): self;
 
     /**
      * Zwraca informację o kolumnach tabeli
@@ -80,67 +77,24 @@ abstract class PdoAbstract
      * @param array $schema schemat
      * @return array
      */
-    abstract public function tableInfo($tableName, $schema = null);
+    abstract public function tableInfo(string $tableName, string $schema = null): array;
 
     /**
      * Listuje tabele w schemacie bazy danych
      * @param string $schema
      * @return array
      */
-    abstract public function tableList($schema = null);
-
-    /**
-     * Tworzy konstrukcję sprawdzającą null w silniku bazy danych
-     * @param string $fieldName nazwa pola
-     * @param boolean $positive sprawdza czy null, lub czy nie null
-     * @return string
-     */
-    abstract public function prepareNullCheck($fieldName, $positive = true);
-
-    /**
-     * Tworzy konstrukcję sprawdzającą ILIKE, jeśli dostępna w silniku
-     * @param string $fieldName nazwa pola
-     * @return string
-     */
-    abstract public function prepareLike($fieldName);
-
-    /**
-     * Ustawia schemat
-     * @param string $schemaName nazwa schematu
-     * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
-     */
-    abstract public function selectSchema($schemaName);
+    abstract public function tableList(string $schema = null): array;
 
     /**
      * Ustawia domyślne parametry dla importu (długie zapytania)
-     * @return \Mmi\Db\Adapter\Pdo\PdoAbstract
      */
-    abstract public function setDefaultImportParams();
-
-    /**
-     * Zwraca nazwę sekwencji dla tabeli
-     * @param string $tableName nazwa tabeli
-     * @return string
-     */
-    public function prepareSequenceName($tableName)
-    {
-        return $tableName . '_id_seq';
-    }
-
-    /**
-     * Konstruktor wczytujący konfigurację
-     * @param \Mmi\Db\DbConfig $config
-     */
-    public function __construct(\Mmi\Db\DbConfig $config)
-    {
-        $this->_config = $config;
-    }
+    abstract public function setDefaultImportParams(): self;
 
     /**
      * Zwraca konfigurację
-     * @return \Mmi\Db\DbConfig
      */
-    public final function getConfig()
+    public final function getConfig(): DbConfig
     {
         return $this->_config;
     }
@@ -151,7 +105,7 @@ abstract class PdoAbstract
      * @param array $params
      * @throws DbException
      */
-    public final function __call($method, $params)
+    public final function __call($method, array $params = [])
     {
         throw new DbException(get_called_class() . ': method not found: ' . $method);
     }
@@ -161,11 +115,8 @@ abstract class PdoAbstract
      * @see \PDO::quote()
      * @see \PDO::PARAM_STR
      * @see \PDO::PARAM_INT
-     * @param string $value wartość
-     * @param string $paramType
-     * @return string
      */
-    public final function quote($value, $paramType = \PDO::PARAM_STR)
+    protected final function quote(string $value, int $paramType = \PDO::PARAM_STR): string
     {
         //łączy jeśli niepołączony
         if (!$this->_connected) {
@@ -187,14 +138,9 @@ abstract class PdoAbstract
     /**
      * Wydaje zapytanie \PDO prepare, execute
      * rzuca wyjątki
-     * @see \PDO::prepare()
-     * @see \PDO::execute()
-     * @param string $sql zapytanie
-     * @param array $bind tabela w formacie akceptowanym przez \PDO::prepare()
      * @throws DbException
-     * @return \PDOStatement
      */
-    public function query($sql, array $bind = [])
+    public final function query(string $sql, array $bind = []): PDOStatement
     {
         //łączy jeśli niepołączony
         if (!$this->_connected) {
@@ -243,46 +189,37 @@ abstract class PdoAbstract
 
     /**
      * Zwraca ostatnio wstawione ID
-     * @param string $name opcjonalnie nazwa serii (ważne w PostgreSQL)
      * @return mixed
      */
-    public function lastInsertId($name = null)
+    public final function lastInsertId()
     {
         //łączy jeśli niepołączony
         if (!$this->_connected) {
             $this->connect();
         }
-        return $this->_upstreamPdo->lastInsertId($name);
+        return $this->_upstreamPdo->lastInsertId();
     }
 
     /**
      * Zwraca wszystkie rekordy (rządki)
-     * @param string $sql zapytanie
-     * @param array $bind tabela w formacie akceptowanym przez \PDO::prepare()
-     * @return array
      */
-    public final function fetchAll($sql, array $bind = [])
+    public final function fetchAll(string $sql, array $bind = []): array
     {
         return $this->query($sql, $bind)->fetchAll(\PDO::FETCH_NAMED);
     }
 
     /**
      * Zwraca pierwszy rekord (rządek)
-     * @param string $sql zapytanie
-     * @param array $bind tabela w formacie akceptowanym przez \PDO::prepare()
-     * @return array
      */
-    public final function fetchRow($sql, array $bind = [])
+    public final function fetchRow(string $sql, array $bind = []): array
     {
         return $this->query($sql, $bind)->fetch(\PDO::FETCH_NAMED);
     }
 
     /**
      * Wstawianie rekordu
-     * @param string $table nazwa tabeli
-     * @param array $data tabela w postaci: klucz => wartość
      */
-    public function insert($table, array $data = [])
+    public final function insert(string $table, array $data = []): int
     {
         $fields = '';
         $values = '';
@@ -298,47 +235,12 @@ abstract class PdoAbstract
         return $this->query($sql, $bind)->rowCount();
     }
 
-    /**
-     * Wstawianie wielu rekordów
-     * @param string $table nazwa tabeli
-     * @param array $data tabela tabel w postaci: klucz => wartość
-     * @return integer
-     */
-    public function insertAll($table, array $data = [])
-    {
-        $fields = '';
-        $fieldsCompleted = false;
-        $values = '';
-        $bind = [];
-        //dla każdego rekordu te same operacje
-        foreach ($data as $row) {
-            if (empty($row)) {
-                continue;
-            }
-            $cur = '';
-            //wiązanie placeholderów "?" w zapytaniu z parametrami do wstawienia
-            foreach ($row as $key => $value) {
-                if (!$fieldsCompleted) {
-                    $fields .= $this->prepareField($key) . ', ';
-                }
-                $cur .= '?, ';
-                $bind[] = $value;
-            }
-            $values .= '(' . rtrim($cur, ', ') . '), ';
-            $fieldsCompleted = true;
-        }
-        $sql = 'INSERT INTO ' . $this->prepareTable($table) . ' (' . rtrim($fields, ', ') . ') VALUES ' . rtrim($values, ', ');
-        return $this->query($sql, $bind)->rowCount();
-    }
+    abstract public function insertAll(string $table, array $data = []): int;
 
     /**
      * Aktualizacja rekordów
-     * @param string $table nazwa tabeli
-     * @param array $data tabela w postaci: klucz => wartość
-     * @param array $whereBind warunek w postaci zagnieżdżonego bind
-     * @return integer
      */
-    public function update($table, array $data = [], $where = '', array $whereBind = [])
+    public final function update(string $table, array $data = [], string $where = '', array $whereBind = []): int
     {
         $fields = '';
         $bind = [];
@@ -359,11 +261,8 @@ abstract class PdoAbstract
 
     /**
      * Kasowanie rekordu
-     * @param string $table nazwa tabeli
-     * @param array $whereBind warunek w postaci zagnieżdżonego bind
-     * @return integer
      */
-    public function delete($table, $where = '', array $whereBind = [])
+    public final function delete(string $table, string $where = '', array $whereBind = []): int
     {
         return $this->query('DELETE FROM ' . $this->prepareTable($table) . ' ' . $where, $whereBind)
                 ->rowCount();
@@ -371,16 +270,17 @@ abstract class PdoAbstract
 
     /**
      * Pobieranie rekordów
-     * @param string $fields pola do wybrania
-     * @param string $from część zapytania po FROM
-     * @param string $where warunek
-     * @param string $order sortowanie
-     * @param int $limit limit
-     * @param int $offset ofset
-     * @param array $whereBind parametry
-     * @return array
      */
-    public function select($fields = '*', $from = '', $where = '', $groupBy = '', $order = '', $limit = null, $offset = null, array $whereBind = [])
+    public final function select(
+        string $fields = '*', 
+        string $from = '',
+        string $where = null,
+        string $groupBy = null,
+        string $order = null,
+        int $limit = null,
+        int $offset = null,
+        array $whereBind = []
+    ): array
     {
         $sql = 'SELECT' .
             ' ' . $fields .
@@ -397,7 +297,7 @@ abstract class PdoAbstract
      * Rozpoczyna transakcję
      * @return boolean
      */
-    public final function beginTransaction()
+    public final function beginTransaction(): bool
     {
         //łączenie jeśli niepołączony
         if (!$this->_connected) {
@@ -412,7 +312,7 @@ abstract class PdoAbstract
      * Zatwierdza transakcję
      * @return boolean
      */
-    public final function commit()
+    public final function commit(): bool
     {
         //brak transakcji
         if (!$this->_transactionInProgress) {
@@ -426,7 +326,7 @@ abstract class PdoAbstract
     /**
      * Odrzuca transakcję
      */
-    public final function rollBack()
+    public final function rollBack(): bool
     {
         //brak transakcji
         if (!$this->_transactionInProgress) {
@@ -443,11 +343,11 @@ abstract class PdoAbstract
      * @param int $offset
      * @return string
      */
-    public function prepareLimit($limit = null, $offset = null)
+    protected final function prepareLimit($limit = null, $offset = null): ?string
     {
         //wyjście jeśli brak limitu
         if (!($limit > 0)) {
-            return;
+            return null;
         }
         //limit z offsetem
         if ($offset > 0) {
@@ -459,10 +359,8 @@ abstract class PdoAbstract
 
     /**
      * Ustawia profiler
-     * @param \Mmi\Db\DbProfiler $profiler
-     * @return \Mmi\Db\Adapter\PdoAbstract
      */
-    public function setProfiler(\Mmi\Db\DbProfiler $profiler)
+    public final function setProfiler(DbProfiler $profiler): self
     {
         $this->_profiler = $profiler;
         return $this;
@@ -470,31 +368,10 @@ abstract class PdoAbstract
 
     /**
      * Zwraca profiler
-     * @return \Mmi\Db\DbProfiler
      */
-    public function getProfiler()
+    public final function getProfiler(): DbProfiler
     {
         return $this->_profiler;
-    }
-
-    /**
-     * Konwertuje do tabeli asocjacyjnej meta dane tabel
-     * @param array $meta meta data
-     * @return array
-     */
-    protected function _associateTableMeta(array $meta)
-    {
-        $associativeMeta = [];
-        foreach ($meta as $column) {
-            //przekształcanie odpowiedzi do standardowej postaci
-            $associativeMeta[$column['name']] = [
-                'dataType' => $column['dataType'],
-                'maxLength' => $column['maxLength'],
-                'null' => ($column['null'] == 'YES') ? true : false,
-                'default' => $column['default']
-            ];
-        }
-        return $associativeMeta;
     }
 
 }

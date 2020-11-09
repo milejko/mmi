@@ -13,12 +13,12 @@ use dependency injection (see below)
 Registry::class is no longer available:
 
 shortcut:
-Registry::$auth => App::$di->get(\Mmi\Security\Auth::class)
-Registry::$cache => App::$di->get(\Mmi\Cache\Cache::class)
-Registry::$db => App::$di->get(Mmi\Db\Adapter\PdoAbstract::class)
+Registry::$auth => App::$di->get(\Mmi\Security\AuthInterface::class)
+Registry::$cache => App::$di->get(\Mmi\Cache\CacheInterface::class)
+Registry::$db => App::$di->get(Mmi\Db\DbInterface::class)
 Registry::$config->skinset => App::$di->get(\Cms\App\CmsSkinsetConfig::class)
 
-Registry::$config->others => no shortcuts - just get/inject proper value from the DI
+Registry::$config->others => no shortcuts - just get proper value from the DI
 
 proper way:
 use dependency injection (see below)

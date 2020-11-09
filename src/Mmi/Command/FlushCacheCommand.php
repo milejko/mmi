@@ -2,9 +2,8 @@
 
 namespace Mmi\Command;
 
-use Mmi\App\App;
 use Mmi\Cache\Cache;
-use Mmi\Cache\PrivateCache;
+use Mmi\Cache\SystemCacheInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,14 +18,14 @@ class FlushCacheCommand extends CommandAbstract
     private $cache;
 
     /**
-     * @var PrivateCache
+     * @var SystemCacheInterface
      */
-    private $privateCache;
+    private $systemCache;
 
-    public function __construct(Cache $cache, PrivateCache $privateCache)
+    public function __construct(Cache $cache, SystemCacheInterface $systemCache)
     {
         $this->cache        = $cache;
-        $this->privateCache = $privateCache;
+        $this->systemCache  = $systemCache;
         parent::__construct();
     }
 
@@ -38,7 +37,7 @@ class FlushCacheCommand extends CommandAbstract
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         //czyszczenie bufora systemowego
-        $this->privateCache->flush();
+        $this->systemCache->flush();
         //czyszczenie bufora aplikacyjnego
         $this->cache->flush();
         $output->writeln('Cache flushed');

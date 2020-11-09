@@ -159,7 +159,7 @@ class HeadStyle extends HelperAbstract
     protected function _getStyleContent($fileName)
     {
         //wczytanie stylu z cache
-        if (null !== ($cache = $this->view->getCache()) && (null !== ($content = $cache->load($cacheKey = 'Head-Style-Css-' . md5($fileName))))) {
+        if (null !== ($cache = $this->view->getSystemCache()) && (null !== ($content = $cache->load($cacheKey = 'Head-Style-Css-' . md5($fileName))))) {
             //zwrot z cache
             return $content;
         }

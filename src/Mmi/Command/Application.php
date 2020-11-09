@@ -3,7 +3,7 @@
 namespace Mmi\Command;
 
 use DI\Container;
-use Mmi\Cache\PrivateCache;
+use Mmi\Cache\SystemCacheInterface;
 use Mmi\Mvc\Structure;
 use Symfony\Component\Console\Application as BaseApplication;
 
@@ -46,7 +46,7 @@ class Application extends BaseApplication
 
     private function getApplicationCommandNames(): array
     {
-        if (null !== $commands = $this->container->get(PrivateCache::class)->load($cacheKey = 'mmi-commands')) {
+        if (null !== $commands = $this->container->get(SystemCacheInterface::class)->load($cacheKey = 'mmi-commands')) {
             return $commands;
         }
         //iterating classes
@@ -55,7 +55,7 @@ class Application extends BaseApplication
                 $commands[] = $entryName;
             }
         }
-        $this->container->get(PrivateCache::class)->save($commands, $cacheKey);
+        $this->container->get(SystemCacheInterface::class)->save($commands, $cacheKey);
         return $commands;
     }
 

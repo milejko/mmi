@@ -14,21 +14,9 @@ class PdoSqlite extends PdoAbstract
 {
 
     /**
-     * Ustawia schemat
-     * @param string $schemaName nazwa schematu
-     * @return \Mmi\Db\Adapter\PdoSqlite
-     */
-    public function selectSchema($schemaName)
-    {
-        //w sqlite nic nie robi
-        return $this;
-    }
-
-    /**
      * Ustawia domyślne parametry dla importu (długie zapytania)
-     * @return \Mmi\Db\Adapter\PdoSqlite
      */
-    public function setDefaultImportParams()
+    public function setDefaultImportParams(): self
     {
         //w sqlite nic nie robi
         return $this;
@@ -37,7 +25,7 @@ class PdoSqlite extends PdoAbstract
     /**
      * Tworzy połączenie z bazą danych
      */
-    public function connect()
+    public function connect(): self
     {
         //pdo do zapisu
         $this->_upstreamPdo = new \PDO(
@@ -49,15 +37,13 @@ class PdoSqlite extends PdoAbstract
         $this->_connected = true;
         //włączenie funkcjonalności kluczy obcych - domyślnie
         $this->query('PRAGMA foreign_keys = ON');
+        return $this;
     }
 
     /**
      * Wstawianie wielu rekordów
-     * @param string $table nazwa tabeli
-     * @param array $data tabela tabel w postaci: klucz => wartość
-     * @return integer
      */
-    public function insertAll($table, array $data = [])
+    public function insertAll(string $table, array $data = []): int
     {
         //brak natywnego wsparcia sqlite, wiele insertów dokonuje się uniami selectów
         $fields = '';
@@ -94,10 +80,8 @@ class PdoSqlite extends PdoAbstract
 
     /**
      * Otacza nazwę pola odpowiednimi znacznikami
-     * @param string $fieldName nazwa pola
-     * @return string
      */
-    public function prepareField($fieldName)
+    protected function prepareField(string $fieldName): string
     {
         //konwersja random
         if ($fieldName == 'RAND()') {
@@ -113,10 +97,8 @@ class PdoSqlite extends PdoAbstract
 
     /**
      * Otacza nazwę tabeli odpowiednimi znacznikami
-     * @param string $tableName nazwa tabeli
-     * @return string
      */
-    public function prepareTable($tableName)
+    protected function prepareTable(string $tableName): string
     {
         //dla sqlite jak pola
         return $this->prepareField($tableName);
@@ -124,11 +106,8 @@ class PdoSqlite extends PdoAbstract
 
     /**
      * Zwraca informację o kolumnach tabeli
-     * @param string $tableName nazwa tabeli
-     * @param array $schema nie istotny w MySQL
-     * @return array
      */
-    public function tableInfo($tableName, $schema = null)
+    public function tableInfo($tableName, $schema = null): array
     {
         //schema nie jest używane w sqlite
         return $this->_associateTableMeta($this->fetchAll('PRAGMA table_info(' . $this->prepareTable($tableName) . ')'));
@@ -136,10 +115,8 @@ class PdoSqlite extends PdoAbstract
 
     /**
      * Listuje tabele w schemacie bazy danych
-     * @param string $schema nie istotny w Sqlite
-     * @return array
      */
-    public function tableList($schema = null)
+    public function tableList(string $schema = null): array
     {
         //pobranie listy tabel
         $list = $this->fetchAll('SELECT name FROM sqlite_master WHERE type=\'table\'');
@@ -153,11 +130,8 @@ class PdoSqlite extends PdoAbstract
 
     /**
      * Tworzy konstrukcję sprawdzającą null w silniku bazy danych
-     * @param string $fieldName nazwa pola
-     * @param boolean $positive sprawdza czy null, lub czy nie null
-     * @return string
      */
-    public function prepareNullCheck($fieldName, $positive = true)
+    protected function prepareNullCheck(string $fieldName, bool $positive = true): string
     {
         //sprawdzanie czy null lub nie null
         return $positive ? ('(' . $fieldName . ' is null OR ' . $fieldName . ' = ' . $this->quote('') . ')') : ($fieldName . ' is not null');
@@ -165,10 +139,8 @@ class PdoSqlite extends PdoAbstract
 
     /**
      * Tworzy konstrukcję sprawdzającą ILIKE, jeśli dostępna w silniku
-     * @param string $fieldName nazwa pola
-     * @return string
      */
-    public function prepareLike($fieldName)
+    protected function prepareLike(string $fieldName): string
     {
         //ilike jak like
         return $fieldName . ' LIKE';
@@ -179,7 +151,7 @@ class PdoSqlite extends PdoAbstract
      * @param array $meta meta data
      * @return array
      */
-    protected function _associateTableMeta(array $meta)
+    private function _associateTableMeta(array $meta): array
     {
         $associativeMeta = [];
         //iteracja po metadanych

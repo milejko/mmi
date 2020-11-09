@@ -12,7 +12,7 @@ namespace Mmi\Mvc;
 
 use Mmi\App\KernelException;
 use Mmi\Cache\Cache;
-use Mmi\Cache\PrivateCache;
+use Mmi\Cache\SystemCacheInterface;
 use Mmi\Http\HttpServerEnv;
 use Mmi\Security\Acl;
 use Mmi\Security\Auth;
@@ -158,9 +158,9 @@ class View extends \Mmi\DataObject
     /**
      * Zwraca obiekt cache
      */
-    public function getCache(): Cache
+    public function getSystemCache(): Cache
     {
-        return $this->container->get(PrivateCache::class);
+        return $this->container->get(SystemCacheInterface::class);
     }
 
     /**
@@ -346,7 +346,7 @@ class View extends \Mmi\DataObject
         //start bufora
         ob_start();
         //wymuszona kompilacja
-        if (!$this->getCache()->isActive()) {
+        if (!$this->getSystemCache()->isActive()) {
             file_put_contents($compilationFile, $this->template($templateCode));
         }
         //próba włączenia skompilowanego pliku

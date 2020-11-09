@@ -11,9 +11,9 @@
 namespace Mmi\Cache;
 
 /**
- * Obiekt bufora danych
+ * Cache class implementing both System (private) and Cache (public)
  */
-class Cache
+class Cache implements CacheInterface, SystemCacheInterface
 {
 
     /**
@@ -54,7 +54,7 @@ class Cache
      * Pobiera konfigurację
      * @return CacheConfig
      */
-    public function getConfig()
+    public function getConfig(): CacheConfig
     {
         return $this->_config;
     }
@@ -65,7 +65,7 @@ class Cache
      * @return mixed
      * @throws CacheException
      */
-    public function load($key)
+    public function load(string $key)
     {
         //bufor nieaktywny
         if (!$this->isActive()) {
@@ -83,12 +83,9 @@ class Cache
      * Zapis danych
      * Dane zostaną zserializowane i zapisane w handlerzie
      * @param mixed $data dane
-     * @param string $key klucz
-     * @param integer $lifetime czas życia
-     * @return boolean
      * @throws CacheException
      */
-    public function save($data, $key, $lifetime = null)
+    public function save($data, string $key, int $lifetime = null): bool
     {
         //bufor nieaktywny
         if (!$this->isActive()) {
@@ -111,7 +108,7 @@ class Cache
      * @return boolean
      * @throws CacheException
      */
-    public function remove($key)
+    public function remove($key): bool
     {
         //bufor nieaktywny
         if (!$this->isActive()) {
@@ -126,7 +123,7 @@ class Cache
     /**
      * Usuwa wszystkie dane z bufora
      */
-    public function flush()
+    public function flush(): void
     {
         //bufor nieaktywny
         if (!$this->isActive()) {
@@ -143,7 +140,7 @@ class Cache
      * @return boolean
      * @throws CacheException
      */
-    public function isActive()
+    public function isActive(): bool
     {
         //sprawdzenie aktywności
         if (!$this->_config->active) {
@@ -158,7 +155,7 @@ class Cache
      * Zwraca rejestr bufora
      * @return CacheRegistry
      */
-    public function getRegistry()
+    protected function getRegistry()
     {
         return $this->_registry;
     }
@@ -188,7 +185,7 @@ class Cache
      * @param mixed $data dane
      * @return mixed
      */
-    public function validateAndPrepareBackendData($key, $data)
+    protected function validateAndPrepareBackendData($key, $data)
     {
         //niepoprawna serializacja
         if (!($data = \unserialize($data))) {

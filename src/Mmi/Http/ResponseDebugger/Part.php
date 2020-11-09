@@ -12,7 +12,7 @@ namespace Mmi\Http\ResponseDebugger;
 
 use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
-use Mmi\Db\Adapter\PdoAbstract;
+use Mmi\Db\DbInterface;
 use Mmi\Http\HttpServerEnv;
 
 /**
@@ -73,7 +73,7 @@ class Part
     {
         $percentSum = 0;
         $html = '';
-        $profilerData = App::$di->get(PdoAbstract::class) && App::$di->get(PdoAbstract::class)->getProfiler() ? App::$di->get(PdoAbstract::class)->getProfiler()->get() : [];
+        $profilerData = App::$di->get(DbInterface::class) && App::$di->get(DbInterface::class)->getProfiler() ? App::$di->get(DbInterface::class)->getProfiler()->get() : [];
         //brak zapytań
         if (!count($profilerData)) {
             return 'No SQL queries';
