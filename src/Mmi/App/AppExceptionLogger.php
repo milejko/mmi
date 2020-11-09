@@ -10,12 +10,13 @@
 
 namespace Mmi\App;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
  * Application exception logger
  */
-class AppExceptionLogger
+class AppExceptionLogger implements AppExceptionLoggerInterface
 {
 
     /**
@@ -44,7 +45,7 @@ class AppExceptionLogger
     /**
      * Exception logger
      */
-    public function logException($exception): void
+    public function logException(Exception $exception): void
     {
         //logowanie wyjątku aplikacyjnego
         if ($exception instanceof KernelException) {

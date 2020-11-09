@@ -10,18 +10,11 @@
 
 namespace Mmi\App;
 
-use Psr\Container\ContainerInterface;
-
 /**
  * Application event interceptor interface
  */
 interface AppEventInterceptorInterface
 {
-
-    /**
-     * Constructor
-     */
-    public function __construct(ContainerInterface $container);
 
     /**
      * Executed right after interceptor is added

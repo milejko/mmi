@@ -10,18 +10,18 @@
 
 namespace Mmi\App;
 
-class AppExceptionFormatter
-{
+use Exception;
 
-    public function __construct()
-    {
-        
-    }
+/**
+ * Exception formatter
+ */
+class AppExceptionFormatter implements AppExceptionFormatterInterface
+{
 
     /**
      * Formatuje obiekt wyjątku do pojedynczej wiadomości
      */
-    public function formatException($exception): string
+    public function formatException(Exception $exception): string
     {
         return str_replace(realpath(BASE_PATH), '', $exception->getMessage() . ' @ ' .
             $exception->getFile() . '(' . $exception->getLine() . ') ' .
@@ -31,7 +31,7 @@ class AppExceptionFormatter
     /**
      * Format trace
      */
-    public function formatTrace($exception): string
+    public function formatTrace(Exception $exception): string
     {
         $message = '';
         $i = 0;

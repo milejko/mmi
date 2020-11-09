@@ -20,7 +20,7 @@ use Mmi\Mvc\View;
 /**
  * Application error handler
  */
-class AppErrorHandler
+class AppErrorHandler implements AppErrorHandlerInterface
 {
 
     /**
