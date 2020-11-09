@@ -51,25 +51,12 @@ class RecordRo
     protected $_queryClass;
 
     /**
-     * @var DbInterface
-     */
-    protected $db;
-
-    /**
-     * @var DbInformationInterface
-     */
-    protected $dbInformation;
-
-    /**
      * Konstruktor
      * @param mixed $id identyfikator do tworzenia obiektu
      * @throws RecordNotFoundException
      */
     public final function __construct($id = null)
     {
-        //@TODO: proper DI (could be impossible)
-        $this->db            = App::$di->get(DbInterface::class);
-        $this->dbInformation = App::$di->get(DbInformationInterface::class);
         $this->_queryClass = substr(get_called_class(), 0, -6) . 'Query';
         if ($id === null) {
             return;
@@ -285,7 +272,7 @@ class RecordRo
      */
     protected function _pkWhere($bindKey)
     {
-        return 'WHERE ' . $this->db->prepareField('id') . ' = :' . $bindKey;
+        return 'WHERE ' . DbProxy::getDb()->prepareField('id') . ' = :' . $bindKey;
     }
 
     /**

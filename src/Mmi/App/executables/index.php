@@ -9,7 +9,6 @@
  */
 
 use Mmi\App\App;
-use Mmi\Http\Request;
 
 //define base path
 define('BASE_PATH', realpath(__DIR__ . '/../'));
