@@ -36,10 +36,8 @@ class AppProfiler implements AppProfilerInterface
 
     /**
      * Dodaje zdarzenie
-     * @param string $name nazwa
-     * @param string $elapsed opcjonalnie czas operacji
      */
-    public function event($name)
+    public function event(string $name): void
     {
         //znacznik czasu
         $time = microtime(true);
@@ -57,9 +55,8 @@ class AppProfiler implements AppProfilerInterface
 
     /**
      * Pobiera dane z profilera
-     * @return array
      */
-    public function get()
+    public function get(): array
     {
         //iteracja po danych
         foreach ($this->_data as $key => $item) {
@@ -74,18 +71,16 @@ class AppProfiler implements AppProfilerInterface
 
     /**
      * Zwraca ilość zdarzeń w profilerze
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->_counter;
     }
 
     /**
      * Pobiera sumaryczny czas wszystkich zdarzeń
-     * @return int
      */
-    public function elapsed()
+    public function elapsed(): float
     {
         return $this->_elapsed;
     }

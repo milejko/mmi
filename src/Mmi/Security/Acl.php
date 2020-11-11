@@ -10,8 +10,9 @@
 
 namespace Mmi\Security;
 
-class Acl
+class Acl implements AclInterface
 {
+    const SEPARATOR = ':';
 
     /**
      * Zasoby
@@ -33,10 +34,8 @@ class Acl
 
     /**
      * Dodaje zasób
-     * @param string $resource zasób
-     * @return \Mmi\Security\Acl
      */
-    public function add($resource)
+    public function add(string $resource): self
     {
         $this->_resources[strtolower($resource)] = true;
         return $this;
@@ -44,20 +43,16 @@ class Acl
 
     /**
      * Sprawdza istnienie zasobu
-     * @param string $resource zasób
-     * @return boolean
      */
-    public function has($resource)
+    public function has(string $resource): bool
     {
         return isset($this->_resources[strtolower($resource)]);
     }
 
     /**
      * Dodaje rolę
-     * @param string $role rola
-     * @return \Mmi\Security\Acl
      */
-    public function addRole($role)
+    public function addRole(string $role): self
     {
         $this->_roles[$role] = true;
         return $this;
@@ -65,49 +60,38 @@ class Acl
 
     /**
      * Sprawdza istnienie roli
-     * @param string $role rola
-     * @return boolean
      */
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
         return isset($this->_roles[$role]);
     }
 
     /**
      * Ustawia pozwolenie na dostęp roli do zasobu
-     * @param string $role rola
-     * @param string $resource zasób
-     * @return \Mmi\Security\Acl
      */
-    public function allow($role, $resource)
+    public function allow(string $role, string $resource): self
     {
         //dodawanie roli i zasobu
         $this->add($resource)->addRole($role);
-        $this->_rights[$role . ':' . strtolower($resource)] = true;
+        $this->_rights[$role . self::SEPARATOR . strtolower($resource)] = true;
         return $this;
     }
 
     /**
      * Ustawia zakaz dostępu roli do zasobu
-     * @param string $role rola
-     * @param string $resource zasób
-     * @return \Mmi\Security\Acl
      */
-    public function deny($role, $resource)
+    public function deny(string $role, string $resource): self
     {
         //dodawanie roli i zasobu
         $this->add($resource)->addRole($role);
-        $this->_rights[$role . ':' . strtolower($resource)] = false;
+        $this->_rights[$role . self::SEPARATOR . strtolower($resource)] = false;
         return $this;
     }
 
     /**
      * Sprawdza dostęp grupy ról do zasobu
-     * @param array $roles tablica ról
-     * @param string $resource zasób
-     * @return boolean
      */
-    public function isAllowed(array $roles, $resource)
+    public function isAllowed(array $roles, $resource): bool
     {
         $allowed = false;
         foreach ($roles as $role) {
@@ -121,25 +105,22 @@ class Acl
 
     /**
      * Sprawdza dostęp roli do zasobu
-     * @param string $role rola
-     * @param string $resource zasób
-     * @return boolean
      */
-    public function isRoleAllowed($role, $resource)
+    public function isRoleAllowed(string $role, string $resource): bool
     {
         //zmniejszanie liter
         $resource = strtolower($resource);
         //istnieje konkretne uprawnienie
-        if (isset($this->_rights[$role . ':' . $resource])) {
-            return $this->_rights[$role . ':' . $resource];
+        if (isset($this->_rights[$role . self::SEPARATOR . $resource])) {
+            return $this->_rights[$role . self::SEPARATOR . $resource];
         }
         //uprawnienie do zasobu powyżej
-        if (strrpos($resource, ':') !== false) {
-            return $this->isRoleAllowed($role, substr($resource, 0, strrpos($resource, ':')));
+        if (strrpos($resource, self::SEPARATOR) !== false) {
+            return $this->isRoleAllowed($role, substr($resource, 0, strrpos($resource, self::SEPARATOR)));
         }
         //globalne dla roli
-        if (isset($this->_rights[$role . ':'])) {
-            return $this->_rights[$role . ':'];
+        if (isset($this->_rights[$role . self::SEPARATOR])) {
+            return $this->_rights[$role . self::SEPARATOR];
         }
         return false;
     }

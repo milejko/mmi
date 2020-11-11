@@ -70,9 +70,10 @@ class AppErrorHandler implements AppErrorHandlerInterface
 
     /**
      * Errors, warnings, notices, etc. as exception
+     * Note: no strict typing as errors are not always strings
      * @throws KernelException
      */
-    public function errorHandler(string $errno, string $errstr, string $errfile, string $errline): void
+    public function errorHandler($errno, $errstr, $errfile, $errline): void
     {
         throw new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
     }

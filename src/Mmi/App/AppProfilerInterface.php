@@ -18,26 +18,21 @@ interface AppProfilerInterface
 
     /**
      * Dodaje zdarzenie
-     * @param string $name nazwa
-     * @param string $elapsed opcjonalnie czas operacji
      */
-    public function event($name);
+    public function event(string $name): void;
 
     /**
      * Pobiera dane z profilera
-     * @return array
      */
-    public function get();
+    public function get(): array;
 
     /**
      * Zwraca ilość zdarzeń w profilerze
-     * @return int
      */
-    public function count();
+    public function count(): int;
 
     /**
      * Pobiera sumaryczny czas wszystkich zdarzeń
-     * @return int
      */
-    public function elapsed();
+    public function elapsed(): float;
 }
