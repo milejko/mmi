@@ -131,33 +131,13 @@ class DbDeployCommand extends CommandAbstract
     {
         //rozbicie zapytań po średniku i końcu linii
         foreach (explode(';' . PHP_EOL, file_get_contents($fileName)) as $query) {
-            //wykonanie zapytania
-            $this->_performQuery($query);
-        }
-    }
-
-    /**
-     * Wykonanie pojedynczego zapytania
-     * @param string $query
-     */
-    private function _performQuery($query)
-    {
-        //brak query
-        if (!trim($query)) {
-            return;
-        }
-        //start transakcji
-        $this->db->beginTransaction();
-        //quera jeśli błędna rollback i exception, jeśli poprawna commit
-        try {
-            //wykonanie zapytania
+            //brak query
+            if (!trim($query)) {
+                return;
+            }
+            //wykonanie query
             $this->db->query($query);
-            //commit
-            $this->db->commit();
-        } catch (\Mmi\Db\DbException $e) {
-            //rollback
-            $this->db->rollBack();
-            throw $e;
+
         }
     }
 
