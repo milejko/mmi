@@ -14,6 +14,7 @@ use Mmi\Db\DbConfig;
 use Mmi\Db\DbException;
 use Mmi\Db\DbInterface;
 use Mmi\Db\DbProfiler;
+use PDOException;
 use PDOStatement;
 
 /**
@@ -172,8 +173,12 @@ abstract class PdoAbstract implements DbInterface
             //wiązanie wartości
             $statement->bindValue($key, $param, $type);
         }
-        //wykonywanie zapytania
-        $result = $statement->execute();
+        try {
+            //wykonywanie zapytania
+            $result = $statement->execute();
+        } catch (PDOException $e) {
+            throw new DbException(get_called_class() . ': ' . $e->getMessage() . ' --- ' . $sql);
+        }
         //przypisanie rezultatu do zmiennej w statement
         $statement->result = $result;
         //jeśli rezultat to nie 1, wyrzucony zostaje wyjątek bazodanowy
