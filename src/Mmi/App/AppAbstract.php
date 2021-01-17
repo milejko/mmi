@@ -29,19 +29,12 @@ abstract class AppAbstract
 
     /**
      * @TODO: remove after all legacy dependencies are removed
-     * @var Container
      */
-    public static $di;
+    public static Container $di;
 
-    /**
-     * @var Container
-     */
-    protected $container;
+    protected Container $container;
 
-    /**
-     * @var AppProfiler
-     */
-    protected $profiler;
+    protected AppProfiler $profiler;
 
     /**
      * Constructor

@@ -17,7 +17,7 @@ class CacheConfig
      * Buforowanie włączone
      * @var boolean
      */
-    public $active = true;
+    public $active = false;
 
     /**
      * Czas życia bufora

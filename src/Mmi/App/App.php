@@ -13,7 +13,6 @@ namespace Mmi\App;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Mvc\ActionHelper;
-use Mmi\Mvc\Router;
 
 /**
  * Application class
