@@ -26,8 +26,8 @@ class Image
      */
     public static function inputToResource($input)
     {
-        //jeśli resource zwrot
-        if (gettype($input) == 'resource') {
+        //jeśli resource/obiekt GdImage (PHP 8) zwrot
+        if (\is_resource($input) || \is_object($input)) {
             return $input;
         }
         //jeśli krótki content zakłada że to ścieżka pliku
