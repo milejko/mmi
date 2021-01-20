@@ -207,6 +207,36 @@ class Image
     }
 
     /**
+     * Optymalizacja palety (256 kolorów z dithieringiem)
+     */
+    public static function optimizePalette($input)
+    {
+        //zamiana koloru w alfę
+        imagecolortransparent($input, imagecolorexactalpha($input, 0, 0, 0, 127));
+        $width = imagesx($input);
+        $height = imagesy($input);
+        //zczytanie prawie przeźroczystych pikseli (niektóre PNG i GIF mają wartości 126 zamiast 127)
+        $transparentPixels = [];
+        for ($x = 0; $x < $width; $x++) {
+            for ($y = 0; $y < $height; $y++) {
+                //125+ = całkowita przeźroczystość
+                if (125 < ((imagecolorat($input, $x, $y) & 0x7F000000) >> 24)) {
+                    $transparentPixels[] = ['x' => $x, 'y' => $y];
+                }
+            }
+        }
+        //optymalizacja palety z dithieringiem
+        imagetruecolortopalette($input, true, 256);
+        //wczytanie przeźroczystości z palety
+        $alphabg = imagecolorclosestalpha($input, 0, 0, 0, 127);
+        //podmiana przeźroczystych pikseli
+        foreach ($transparentPixels as $pixel) {
+            imagesetpixel($input, $pixel['x'], $pixel['y'], $alphabg);
+        }
+    }
+
+
+    /**
      * Zachowanie alphy
      * @param resource $imgRes
      */
