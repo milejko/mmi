@@ -275,6 +275,17 @@ class Response
     }
 
     /**
+     * Ustawia typ na obraz WebP
+     * @param boolean $replace zastąpienie
+     * @return \Mmi\Http\Response
+     */
+    public function setTypeWebp($replace = false)
+    {
+        //webp
+        return $this->setType('webp', $replace);
+    }
+
+    /**
      * Ustawia typ na Gzip
      * @param boolean $replace zastąpienie
      * @return \Mmi\Http\Response

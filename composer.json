@@ -22,7 +22,6 @@
         "php": ">=7.0.0",
         "ext-bcmath": "*",
         "ext-date": "*",
-        "ext-exif": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
         "ext-hash": "*",
