@@ -309,30 +309,7 @@ class Query
      */
     public final function count($column = '*')
     {
-        return (new QueryData($this))
-                ->count($column);
-    }
-
-    /**
-     * Pobiera pierwszy rekord po kluczu głównym ID
-     * null jeśli brak danych
-     * @param int $id
-     * @return Record
-     */
-    public final function findPk($id)
-    {
-        //zwróci null jeśli brak danych
-        return $this->where('id')->equals($id)
-                ->findFirst();
-    }
-
-    /**
-     * Pobiera wszystkie rekordy i zwraca ich kolekcję
-     * @return RecordCollection
-     */
-    public final function find()
-    {
-        return (new QueryData($this))->find();
+        return (new QueryData($this))->count($column);
     }
 
     /**
@@ -347,6 +324,18 @@ class Query
     }
 
     /**
+     * Pobiera pierwszy rekord po kluczu głównym ID
+     * null jeśli brak danych
+     * @param int $id
+     * @return Record
+     */
+    public final function findPk($id)
+    {
+        //zwróci null jeśli brak danych
+        return $this->where('id')->equals($id)->findFirst();
+    }
+
+    /**
      * Pobiera obiekt pierwszy ze zbioru
      * null jeśli brak danych
      * @param Query $q Obiekt zapytania
@@ -354,8 +343,25 @@ class Query
      */
     public final function findFirst()
     {
-        return (new QueryData($this))
-                ->findFirst();
+        return (new QueryData($this))->findFirst();
+    }
+
+    /**
+     * Pobiera wszystkie rekordy i zwraca ich kolekcję
+     * @return RecordCollection
+     */
+    public final function find()
+    {
+        return (new QueryData($this))->find();
+    }
+
+    /**
+     * Pobiera wybrane pola w postaci tabeli
+     * @return array
+     */
+    public final function findFields(array $fields)
+    {
+        return (new QueryData($this))->findFields($fields);
     }
 
     /**
@@ -366,8 +372,7 @@ class Query
      */
     public final function findPairs($keyName, $valueName)
     {
-        return (new QueryData($this))
-                ->findPairs($keyName, $valueName);
+        return (new QueryData($this))->findPairs($keyName, $valueName);
     }
 
     /**
@@ -377,8 +382,7 @@ class Query
      */
     public final function findMax($keyName)
     {
-        return (new QueryData($this))
-                ->findMax($keyName);
+        return (new QueryData($this))->findMax($keyName);
     }
 
     /**
@@ -388,8 +392,7 @@ class Query
      */
     public final function findMin($keyName)
     {
-        return (new QueryData($this))
-                ->findMin($keyName);
+        return (new QueryData($this))->findMin($keyName);
     }
 
     /**
@@ -399,8 +402,7 @@ class Query
      */
     public final function findSum($keyName)
     {
-        return (new QueryData($this))
-                ->findSum($keyName);
+        return (new QueryData($this))->findSum($keyName);
     }
 
     /**
@@ -410,8 +412,7 @@ class Query
      */
     public final function findUnique($keyName)
     {
-        return (new QueryData($this))
-                ->findUnique($keyName);
+        return (new QueryData($this))->findUnique($keyName);
     }
 
     /**
@@ -463,12 +464,12 @@ class Query
         $tableName = ($forcedTableName === null) ? $this->_tableName : $forcedTableName;
         //przygotowany prefix tabeli
         $tablePrefix = $this->db->prepareTable($tableName);
-        //pole występuje w tabeli (jeden do jednego bez żadnych konwersji)
-        if ($this->dbInformation->isTableContainsField($tableName, $fieldName)) {
-            return $tablePrefix . '.' . $this->db->prepareField($fieldName);
+        //pole wymaga konwersji do underscore
+        if ($this->dbInformation->isTableContainsField($tableName, $underscoreFieldName = Convert::camelcaseToUnderscore($fieldName))) {
+            return $tablePrefix . '.' . $underscoreFieldName;
         }
         //konwersja camelcase na podkreślenia
-        return $tablePrefix . '.' . $this->db->prepareField(Convert::camelcaseToUnderscore($fieldName));
+        return $tablePrefix . '.' . $this->db->prepareField($fieldName);
     }
 
     /**
@@ -516,5 +517,4 @@ class Query
     {
         return substr(get_called_class(), 0, -5);
     }
-
 }

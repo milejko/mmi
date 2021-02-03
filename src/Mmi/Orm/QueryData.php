@@ -130,6 +130,22 @@ class QueryData
     }
 
     /**
+     * Zwraca tablicę asocjacyjną (pary)
+     * @param string $keyName
+     * @param string $valueName
+     * @return array
+     */
+    public final function findFields(array $fields)
+    {
+        //escape pól do zapytania
+        \array_walk($fields, function (&$value) {
+            $value = $this->db->prepareField($value);
+        });
+        //odpytanie adaptera o dane
+        return $this->db->select(implode(',', $fields), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind);
+    }
+
+    /**
      * Pobiera wartość maksymalną z kolumny
      * @param string $keyName nazwa klucza
      * @return string wartość maksymalna
