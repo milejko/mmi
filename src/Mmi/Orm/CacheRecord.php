@@ -46,12 +46,12 @@ class CacheRecord extends \Mmi\Orm\Record
         try {
             //insert
             return $this->_insert();
-        } catch (DbException $e) {
+        } catch (\Exception $e) {
             //próba aktualizacji
             try {
                 //update
                 return $this->_update();
-            } catch (DbException $e) {
+            } catch (\Exception $e) {
                 return false;
             }
         }
