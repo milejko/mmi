@@ -29,11 +29,22 @@ class Cookie
      * @param string $path ścieżka
      * @param boolean $secure czy zabezpieczone
      * @param boolean $httpOnly czy tylko dla HTTP
+     * @param string $sameStie SameSite policy property
      */
-    public function __construct($name = null, $value = null, $domain = null, $expire = 0, $path = '/', $secure = false, $httpOnly = false)
+    public function __construct($name = null, $value = null, $domain = null, $expire = 0, $path = '/', $secure = false, $httpOnly = false, $sameSite = 'None')
     {
         if (!is_null($name)) {
-            setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+            $cookieOptions = [
+                'expires' => $expire,
+                'path' => $path,
+                'domain' => $domain,
+                'secure' => $secure,
+                'httponly' => $httpOnly
+            ];
+            if ($secure) {
+                $cookieOptions['samesite'] = $sameSite;
+            }
+            setcookie($name, $value, $cookieOptions);
         }
         $this->_options['name'] = $name;
         $this->_options['value'] = $value;
@@ -42,6 +53,7 @@ class Cookie
         $this->_options['path'] = $path;
         $this->_options['secure'] = $secure;
         $this->_options['httpOnly'] = $httpOnly;
+        $this->_options['sameSite'] = $sameSite;
     }
 
     /**

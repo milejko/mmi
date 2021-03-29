@@ -26,7 +26,17 @@ class Session
     public static function start(\Mmi\Session\SessionConfig $config)
     {
         session_name($config->name);
-        session_set_cookie_params($config->cookieLifetime, $config->cookiePath, $config->cookieDomain, $config->cookieSecure, $config->cookieHttpOnly);
+        $cookieParams = [
+            'lifetime' => $config->cookieLifetime,
+            'path' => $config->cookiePath,
+            'domain' => $config->cookieDomain,
+            'secure' => $config->cookieSecure,
+            'httponly' => $config->cookieHttpOnly,
+        ];
+        if ($config->cookieSecure) {
+            $cookieParams['samesite'] = $config->cookieSameSite;
+        }
+        session_set_cookie_params($cookieParams);
         session_cache_expire($config->cacheExpire);
         session_save_path($config->path);
         ini_set('session.gc_divisor', $config->gcDivisor);
