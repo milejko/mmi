@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -56,10 +56,10 @@ abstract class Form extends \Mmi\OptionObject
      * @var boolean
      */
     protected $_valid;
-    
+
     //szablon rozpoczynający formularz
     CONST TEMPLATE_START = 'mmi/form/start';
-    
+
     //szablon kończący formularz
     CONST TEMPLATE_END = 'mmi/form/end';
 
