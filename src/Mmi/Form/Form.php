@@ -413,7 +413,7 @@ abstract class Form extends \Mmi\OptionObject
         foreach ($this->getElements() as $element) {
             //niezaznaczony checkbox
             if ($element instanceof Element\Checkbox && !$element->issetChecked()) {
-                $data[$element->getName()] = 0;
+                $data[$element->getName()] = false;
                 continue;
             }
             //bez zapisu ignorowanych

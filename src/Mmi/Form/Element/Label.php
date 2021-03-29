@@ -23,7 +23,8 @@ class Label extends ElementAbstract
     public function __construct($name)
     {
         parent::__construct($name);
-        $this->setLabelPostfix('');
+        $this->setLabelPostfix('')
+            ->setIgnore();
     }
 
     /**

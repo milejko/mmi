@@ -38,6 +38,8 @@ class File extends ElementAbstract
         parent::setForm($form);
         //nazwa pola
         $namespace = $form->getBaseName();
+        //no value
+        $this->setIgnore();
         $fieldName = str_replace(['[', ']'], '', $this->getName());
         $fieldNameWithSquareBracket = $fieldName.'[]';
         //brak załadowanych plików
