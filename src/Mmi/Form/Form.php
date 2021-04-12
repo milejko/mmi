@@ -58,10 +58,10 @@ abstract class Form extends \Mmi\OptionObject
     protected $_valid;
 
     //szablon rozpoczynający formularz
-    CONST TEMPLATE_START = 'mmi/form/start';
+    const TEMPLATE_START = 'mmi/form/start';
 
     //szablon kończący formularz
-    CONST TEMPLATE_END = 'mmi/form/end';
+    const TEMPLATE_END = 'mmi/form/end';
 
     /**
      * Konstruktor
@@ -137,7 +137,7 @@ abstract class Form extends \Mmi\OptionObject
      * Zwraca nazwę bazową
      * @return string
      */
-    public final function getBaseName()
+    final public function getBaseName()
     {
         return $this->_formBaseName;
     }
@@ -146,7 +146,7 @@ abstract class Form extends \Mmi\OptionObject
      * Pobranie elementów formularza
      * @return Element\ElementAbstract[]
      */
-    public final function getElements()
+    final public function getElements()
     {
         return $this->_elements;
     }
@@ -156,7 +156,7 @@ abstract class Form extends \Mmi\OptionObject
      * @param string $name nazwa elementu
      * @return \Mmi\Form\Element\ElementAbstract
      */
-    public final function getElement($name)
+    final public function getElement($name)
     {
         return isset($this->_elements[$name]) ? $this->_elements[$name] : null;
     }
@@ -165,12 +165,12 @@ abstract class Form extends \Mmi\OptionObject
      * Zwraca czy dane POST są przeznaczone dla tego formularza
      * @return boolean
      */
-    public final function isMine()
+    final public function isMine()
     {
         //sprawdzenie istnienia w POST przestrzeni formularza
         return App::$di->get(Request::class)
-                ->getPost()
-                ->__isset($this->_formBaseName);
+            ->getPost()
+            ->__isset($this->_formBaseName);
     }
 
     /**
@@ -178,7 +178,7 @@ abstract class Form extends \Mmi\OptionObject
      * @param boolean $valid
      * @return self
      */
-    public final function setValid($valid = true)
+    final public function setValid($valid = true)
     {
         $this->_valid = $valid;
         return $this;
@@ -188,7 +188,7 @@ abstract class Form extends \Mmi\OptionObject
      * Walidacja formularza
      * @return boolean
      */
-    public final function isValid()
+    final public function isValid()
     {
         //formularz już zwalidowany
         if (null !== $this->_valid) {
@@ -215,7 +215,7 @@ abstract class Form extends \Mmi\OptionObject
      * @param \Mmi\Http\RequestPost $post
      * @return \Mmi\Form
      */
-    public final function setFromPost(\Mmi\Http\RequestPost $post)
+    final public function setFromPost(\Mmi\Http\RequestPost $post)
     {
         //dane z posta do tablicy
         $data = $post->toArray()[$this->_formBaseName];
@@ -265,7 +265,7 @@ abstract class Form extends \Mmi\OptionObject
      * @param array $data
      * @return \Mmi\Form\Form
      */
-    public final function setFromArray(array $data = array())
+    final public function setFromArray(array $data = array())
     {
         //sprawdzenie wartości dla wszystkich elementów
         foreach ($this->getElements() as $element) {
@@ -287,7 +287,7 @@ abstract class Form extends \Mmi\OptionObject
      * Czy w modelu wystąpił zapis
      * @return boolean
      */
-    public final function isSaved()
+    final public function isSaved()
     {
         return $this->_saved;
     }
@@ -296,7 +296,7 @@ abstract class Form extends \Mmi\OptionObject
      * Zwraca obiekt aktywnego rekordu
      * @return \Mmi\Orm\Record
      */
-    public final function getRecord()
+    final public function getRecord()
     {
         return $this->_record;
     }
@@ -305,7 +305,7 @@ abstract class Form extends \Mmi\OptionObject
      * Pobiera nazwę klasy rekordu
      * @return string
      */
-    public final function getRecordClass()
+    final public function getRecordClass()
     {
         if (!$this->hasRecord()) {
             return;
@@ -318,7 +318,7 @@ abstract class Form extends \Mmi\OptionObject
      * Czy do formularza przypisany jest active record, jeśli nie, a podana jest nazwa, stworzy obiekt rekordu
      * @return boolean
      */
-    public final function hasRecord()
+    final public function hasRecord()
     {
         return $this->_record instanceof \Mmi\Orm\Record;
     }
@@ -327,7 +327,7 @@ abstract class Form extends \Mmi\OptionObject
      * Sprawdza czy rekord zawiera dane
      * @return boolean
      */
-    public final function hasNotEmptyRecord()
+    final public function hasNotEmptyRecord()
     {
         //jeśli brak rekordu to brak także niepustego rekordu
         if (!$this->hasRecord()) {
@@ -406,7 +406,7 @@ abstract class Form extends \Mmi\OptionObject
      * Zapis danych do obiektu rekordu
      * @return boolean
      */
-    protected final function _setRecordData()
+    final protected function _setRecordData()
     {
         $data = [];
         //pobieranie danych z elementów
@@ -456,11 +456,11 @@ abstract class Form extends \Mmi\OptionObject
      * Automatyczny renderer formularza
      * @return string
      */
-    public final function render()
+    final public function render()
     {
         $html = $this->start();
         //rendering poszczególnych elementów
-        foreach ($this->_elements AS $element) {
+        foreach ($this->_elements as $element) {
             /* @var $element \Mmi\Form\Element\ElementAbstract */
             $html .= $element->__toString();
         }
@@ -468,11 +468,35 @@ abstract class Form extends \Mmi\OptionObject
     }
 
     /**
+     * Pobranie formularza jako tablicy
+     * @return array
+     */
+    final public function toArray()
+    {
+        $options = [];
+
+        foreach ($this->getElements() as $element) {
+            $options[] = array_merge($element->getOptions(), ['value' => $element->getValue()]);
+        }
+
+        return $options;
+    }
+
+    /**
+     * Pobranie formularza jako jsona
+     * @return false|string
+     */
+    final public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
+    /**
      * Renderer formularza
      * Renderuje bezpośrednio, lub z szablonu
      * @return string
      */
-    public final function __toString()
+    final public function __toString()
     {
         //nie rzuci wyjątkiem, gdyż wyjątki są wyłapane w elementach
         return $this->render();
@@ -495,5 +519,4 @@ abstract class Form extends \Mmi\OptionObject
         //obsługa nadrzędnych
         return parent::__call($name, $params);
     }
-
 }
