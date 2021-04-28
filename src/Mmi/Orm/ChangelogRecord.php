@@ -17,8 +17,8 @@ class ChangelogRecord extends \Mmi\Orm\Record
 {
 
     /**
-     * Nieużywane
-     * @var null
+     * Klucz
+     * @var int
      */
     public $id;
     

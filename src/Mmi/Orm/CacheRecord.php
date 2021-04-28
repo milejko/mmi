@@ -20,7 +20,7 @@ class CacheRecord extends \Mmi\Orm\Record
 
     /**
      * Klucz
-     * @var string
+     * @var int
      */
     public $id;
 
