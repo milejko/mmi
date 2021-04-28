@@ -34,4 +34,9 @@ class ChangelogRecord extends \Mmi\Orm\Record
      */
     public $md5;
 
+    /**
+     * @var bool
+     */
+    public $active;
+
 }

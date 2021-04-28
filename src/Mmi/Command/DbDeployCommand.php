@@ -109,16 +109,21 @@ class DbDeployCommand extends CommandAbstract
         }
         //informacja na ekran przed importem aby bylo wiadomo który
         echo 'RESTORE INCREMENTAL: ' . $baseFileName . "\n";
-        //import danych
-        $this->_importSql($file);
-        //resetowanie struktur tabeli
-        $this->dbInformation->reset();
         //brak restore - zakłada nowy rekord
         $newDc = new ChangelogRecord();
         //zapis informacji o incrementalu
         $newDc->filename = $baseFileName;
         //wstawienie md5
         $newDc->md5 = $md5file;
+        $newDc->active = true;
+        //zapis rekordu
+        $newDc->save();
+        //import danych
+        $this->_importSql($file);
+        //resetowanie struktur tabeli
+        $this->dbInformation->reset();
+        //oznaczenie aktywności
+        $newDc->active = 0;
         //zapis rekordu
         $newDc->save();
     }
@@ -137,7 +142,6 @@ class DbDeployCommand extends CommandAbstract
             }
             //wykonanie query
             $this->db->query($query);
-
         }
     }
 
