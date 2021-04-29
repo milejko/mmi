@@ -115,6 +115,7 @@ class DbDeployCommand extends CommandAbstract
         $newDc->filename = $baseFileName;
         //wstawienie md5
         $newDc->md5 = $md5file;
+        //zadanie importu oznaczone jako aktywne (trwające)
         $newDc->active = true;
         //zapis rekordu
         $newDc->save();
@@ -122,8 +123,8 @@ class DbDeployCommand extends CommandAbstract
         $this->_importSql($file);
         //resetowanie struktur tabeli
         $this->dbInformation->reset();
-        //oznaczenie aktywności
-        $newDc->active = 0;
+        //oznaczenie braku aktywności (zakończone)
+        $newDc->active = false;
         //zapis rekordu
         $newDc->save();
     }
