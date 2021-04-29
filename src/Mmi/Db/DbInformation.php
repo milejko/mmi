@@ -30,10 +30,6 @@ class DbInformation implements DbInformationInterface
             'data' => ['dataType' => 'mediumtext', 'maxLength' => 16777215, 'null', 'default'],
             'ttl' => ['dataType' => 'int', 'maxLength', 'null' => 1, 'default'],
         ],
-        'mmi_changelog' => [
-            'filename' => ['dataType' => 'varchar', 'maxLength' => 64, 'null', 'default'],
-            'md5' => ['dataType' => 'varchar', 'maxLength' => 32, 'null', 'default'],
-        ],
         'mmi_session' => [
             'id' => ['dataType' => 'varchar', 'maxLength' => 64, 'null', 'default'],
             'data' => ['dataType' => 'mediumtext', 'maxLength' => 16777215, 'null', 'default'],
