@@ -30,6 +30,11 @@ use Mmi\Mvc\View;
  */
 abstract class ElementAbstract extends \Mmi\OptionObject
 {
+    /**
+     * Nazwa elementu
+     * @var string
+     */
+    protected $_baseName;
 
     /**
      * Błędy pola
@@ -67,7 +72,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     protected $_renderingOrder = ['fetchBegin', 'fetchLabel', 'fetchField', 'fetchDescription', 'fetchErrors', 'fetchEnd'];
 
-    /** 
+    /**
      * @var View
      */
     protected $view;
@@ -91,6 +96,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     {
         //ustawia nazwę i opcje domyślne
         $this->setName($name)
+            ->setBaseName($name)
             ->setRequired(false)
             ->setRequiredAsterisk('*')
             ->setLabelPostfix(':')
@@ -99,6 +105,27 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             ->addClass('field');
         //@TODO: some day better injection (container independent)
         $this->view = App::$di->get(View::class);
+    }
+
+    /**
+     * Ustawia nazwę podstawową
+     * @return string
+     */
+    public function getBaseName()
+    {
+        return $this->_baseName;
+    }
+
+    /**
+     * Pobiera nazwę podstawową
+     * @param string $baseName
+     * @return $this
+     */
+    public function setBaseName(string $baseName)
+    {
+        $this->_baseName = $baseName;
+
+        return $this;
     }
 
     /**
@@ -151,7 +178,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public function onFormSaved()
     {
-
     }
 
     /**
@@ -160,7 +186,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public function onRecordSaved()
     {
-
     }
 
     /**
@@ -180,7 +205,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public final function setIgnore($ignore = true)
     {
-        return $this->setOption('data-ignore', (bool) $ignore);
+        return $this->setOption('data-ignore', (bool)$ignore);
     }
 
     /**
@@ -230,7 +255,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public final function setRequired($required = true)
     {
-        return $this->setOption('data-required', (bool) $required);
+        return $this->setOption('data-required', (bool)$required);
     }
 
     /**
@@ -252,7 +277,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     {
         $this->_form = $form;
         //ustawianie ID
-        $this->setId($form->getBaseName() . '-' . $this->getName());
+        $this->setId($form->getBaseName() . '-' . $this->getBaseName());
+        //ustawienie nazwy po nazwie forma
+        $this->setName($this->_form->getBaseName() . '[' . rtrim($this->getBaseName(), '[]') . ']' . (substr($this->getBaseName(), -2) == '[]' ? '[]' : ''));
         return $this;
     }
 
@@ -288,7 +315,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public final function getIgnore()
     {
-        return (bool) $this->getOption('data-ignore');
+        return (bool)$this->getOption('data-ignore');
     }
 
     /**
@@ -324,7 +351,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      */
     public final function getRequired()
     {
-        return (bool) $this->getOption('data-required');
+        return (bool)$this->getOption('data-required');
     }
 
     /**
@@ -518,10 +545,6 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     {
         try {
             $html = '';
-            //ustawienie nazwy po nazwie forma
-            if ($this->_form) {
-                $this->setName($this->_form->getBaseName() . '[' . rtrim($this->getName(), '[]') . ']' . (substr($this->getName(), -2) == '[]' ? '[]' : ''));
-            }
             foreach ($this->_renderingOrder as $method) {
                 if (!method_exists($this, $method)) {
                     continue;
