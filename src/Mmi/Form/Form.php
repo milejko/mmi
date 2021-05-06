@@ -129,7 +129,7 @@ abstract class Form extends \Mmi\OptionObject
     public function addElement(\Mmi\Form\Element\ElementAbstract $element)
     {
         //ustawianie opcji na elemencie
-        $this->_elements[$element->getName()] = $element->setForm($this);
+        $this->_elements[$element->getBaseName()] = $element->setForm($this);
         return $this;
     }
 
@@ -225,7 +225,7 @@ abstract class Form extends \Mmi\OptionObject
             if ($element->getDisabled()) {
                 continue;
             }
-            $keyExists = array_key_exists($element->getName(), $data);
+            $keyExists = array_key_exists($element->getBaseName(), $data);
             //selecty multiple i serie checkboxów dostają pusty array jeśli:
             //brak wartości oraz dane z POST
             if (($element instanceof Element\MultiCheckbox || ($element instanceof Element\Select && $element->getOption('multiple'))) && !$keyExists) {
@@ -242,7 +242,7 @@ abstract class Form extends \Mmi\OptionObject
                 continue;
             }
             //ustawianie wartości
-            $element->setValue($data[$element->getName()]);
+            $element->setValue($data[$element->getBaseName()]);
             //aktualizacja na wartość po filtracji
             $element->setValue($element->getFilteredValue());
         }
@@ -269,16 +269,16 @@ abstract class Form extends \Mmi\OptionObject
     {
         //sprawdzenie wartości dla wszystkich elementów
         foreach ($this->getElements() as $element) {
-            if (!array_key_exists($element->getName(), $data)) {
+            if (!array_key_exists($element->getBaseName(), $data)) {
                 continue;
             }
             //checkbox
             if ($element instanceof Element\Checkbox) {
-                $element->getValue() == $data[$element->getName()] ? $element->setChecked() : $element->setChecked(false);
+                $element->getValue() == $data[$element->getBaseName()] ? $element->setChecked() : $element->setChecked(false);
                 continue;
             }
             //ustawianie wartości
-            $element->setValue($data[$element->getName()]);
+            $element->setValue($data[$element->getBaseName()]);
         }
         return $this;
     }
@@ -413,7 +413,7 @@ abstract class Form extends \Mmi\OptionObject
         foreach ($this->getElements() as $element) {
             //niezaznaczony checkbox
             if ($element instanceof Element\Checkbox && !$element->issetChecked()) {
-                $data[$element->getName()] = false;
+                $data[$element->getBaseName()] = false;
                 continue;
             }
             //bez zapisu ignorowanych
@@ -421,7 +421,7 @@ abstract class Form extends \Mmi\OptionObject
                 continue;
             }
             //dodawanie wartości do tabeli
-            $data[$element->getName()] = $element->getValue();
+            $data[$element->getBaseName()] = $element->getValue();
         }
         //ustawianie rekordu na podstawie danych
         $this->_record->setFromArray($data);
@@ -461,6 +461,8 @@ abstract class Form extends \Mmi\OptionObject
         $html = $this->start();
         //rendering poszczególnych elementów
         foreach ($this->_elements as $element) {
+            //ustawienie nazwy po nazwie forma
+            $element->setBaseName($this->getBaseName() . '[' . rtrim($element->getBaseName(), '[]') . ']' . (substr($element->getBaseName(), -2) == '[]' ? '[]' : ''));
             /* @var $element \Mmi\Form\Element\ElementAbstract */
             $html .= $element->__toString();
         }
