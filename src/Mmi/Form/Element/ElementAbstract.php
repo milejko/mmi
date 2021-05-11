@@ -91,6 +91,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Konstruktor
      * @param string $name nazwa
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct($name)
     {
@@ -133,9 +135,36 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param string $className nazwa klasy
      * @return self
      */
-    public final function addClass($className)
+    final public function addClass($className)
     {
-        return $this->setOption('class', trim($this->getOption('class') . ' ' . $className));
+        if (!$this->hasClass($className)) {
+            $this->setOption('class', trim($this->getOption('class') . ' ' . $className));
+        }
+        return $this;
+    }
+
+    /**
+     * Dodaje klasę do elementu
+     * @param string $className nazwa klasy
+     * @return self
+     */
+    final public function removeClass($className)
+    {
+        if ($this->hasClass($className)) {
+            $this->setOption('class', trim(str_replace([$className, '  '], ['', ' '], $this->getOption('class'))));
+        }
+        return $this;
+    }
+
+    /**
+     * Dodaje klasę do elementu
+     * @param string $className nazwa klasy
+     * @return bool
+     */
+    final public function hasClass($className)
+    {
+        $class = $this->getOption('class');
+        return is_string($class) ? str_contains($class, $className) : false;
     }
 
     /**
@@ -143,7 +172,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param \Mmi\Filter\FilterAbstract $filter
      * @return self
      */
-    public final function addFilter(\Mmi\Filter\FilterAbstract $filter)
+    final public function addFilter(\Mmi\Filter\FilterAbstract $filter)
     {
         //dodawanie filtra
         $this->_filters[] = $filter;
@@ -155,7 +184,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param \Mmi\Validator\ValidatorAbstract $validator
      * @return self
      */
-    public final function addValidator(\Mmi\Validator\ValidatorAbstract $validator)
+    final public function addValidator(\Mmi\Validator\ValidatorAbstract $validator)
     {
         //dodawanie walidodatora
         $this->_validators[] = $validator;
@@ -167,7 +196,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param string $error
      * @return ElementAbstract
      */
-    public final function addError($error)
+    final public function addError($error)
     {
         $this->_errors[] = $error;
         return $this;
@@ -193,7 +222,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param string $description
      * @return self
      */
-    public final function setDescription($description)
+    final public function setDescription($description)
     {
         return $this->setOption('data-description', $description);
     }
@@ -203,7 +232,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param bool $ignore
      * @return self
      */
-    public final function setIgnore($ignore = true)
+    final public function setIgnore($ignore = true)
     {
         return $this->setOption('data-ignore', (bool)$ignore);
     }
@@ -213,7 +242,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param bool $disabled
      * @return self
      */
-    public final function setDisabled($disabled = true)
+    final public function setDisabled($disabled = true)
     {
         return $disabled ? $this->setOption('disabled', '') : $this;
     }
@@ -223,7 +252,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param boolean $readOnly
      * @return self
      */
-    public final function setReadOnly($readOnly = true)
+    final public function setReadOnly($readOnly = true)
     {
         return $readOnly ? $this->setOption('readonly', '') : $this;
     }
@@ -233,7 +262,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param string $label
      * @return self
      */
-    public final function setLabel($label)
+    final public function setLabel($label)
     {
         return $this->setOption('data-label', $label);
     }
@@ -243,7 +272,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param string $asterisk
      * @return ElementAbstract
      */
-    public final function setRequiredAsterisk($asterisk = '*')
+    final public function setRequiredAsterisk($asterisk = '*')
     {
         return $this->setOption('data-requiredAsterisk', $asterisk);
     }
@@ -253,7 +282,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param bool $required wymagane
      * @return self
      */
-    public final function setRequired($required = true)
+    final public function setRequired($required = true)
     {
         return $this->setOption('data-required', (bool)$required);
     }
@@ -263,7 +292,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @param string $labelPostfix postfix labelki
      * @return self
      */
-    public final function setLabelPostfix($labelPostfix)
+    final public function setLabelPostfix($labelPostfix)
     {
         return $this->setOption('data-labelPostfix', $labelPostfix);
     }
@@ -289,7 +318,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * @return ElementAbstract
      * @throws \Mmi\Form\FormException
      */
-    public final function setRenderingOrder(array $renderingOrder = [])
+    final public function setRenderingOrder(array $renderingOrder = [])
     {
         foreach ($renderingOrder as $method) {
             if (!method_exists($this, $method)) {
@@ -304,7 +333,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Pobiera opis
      * @return string
      */
-    public final function getDescription()
+    final public function getDescription()
     {
         return $this->getOption('data-description');
     }
@@ -313,7 +342,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Zwraca czy pole jest ignorowane
      * @return boolean
      */
-    public final function getIgnore()
+    final public function getIgnore()
     {
         return (bool)$this->getOption('data-ignore');
     }
@@ -322,7 +351,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Zwraca czy pole jest wyłączone
      * @return boolean
      */
-    public final function getDisabled()
+    final public function getDisabled()
     {
         return null !== $this->getOption('disabled');
     }
@@ -331,7 +360,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Pobiera label
      * @return string
      */
-    public final function getLabel()
+    final public function getLabel()
     {
         return $this->getOption('data-label');
     }
@@ -340,7 +369,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Pobiera postfix labelki
      * @return string
      */
-    public final function getLabelPostfix()
+    final public function getLabelPostfix()
     {
         return $this->getOption('data-labelPostfix');
     }
@@ -349,7 +378,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Zwraca czy pole jest wymagane
      * @return boolean
      */
-    public final function getRequired()
+    final public function getRequired()
     {
         return (bool)$this->getOption('data-required');
     }
@@ -358,7 +387,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Pobiera walidatory
      * @return \Mmi\Validator\ValidatorAbstract[]
      */
-    public final function getValidators()
+    final public function getValidators()
     {
         return is_array($this->_validators) ? $this->_validators : [];
     }
@@ -367,7 +396,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Pobiera walidatory
      * @return \Mmi\Filter\FilterAbstract[]
      */
-    public final function getFilters()
+    final public function getFilters()
     {
         return is_array($this->_filters) ? $this->_filters : [];
     }
@@ -400,15 +429,27 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Pobiera błędy pola
      * @return array
      */
-    public final function getErrors()
+    final public function getErrors()
     {
         return $this->_errors;
+    }
+
+    /**
+     * Dodaje liste błędów
+     * @param string $error
+     * @return ElementAbstract
+     */
+    final public function setErrors(array $errors)
+    {
+        $this->_errors = $errors;
+        return $this;
     }
 
     /**
      * Filtruje daną wartość za pomocą filtrów pola
      * @param mixed $value wartość
      * @return mixed wynik filtracji
+     * @throws \Mmi\App\KernelException
      */
     public function getFilteredValue()
     {
@@ -431,6 +472,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         //jeśli istnieją validatory dodajemy klasę validate
         if (!empty($validators)) {
             $this->addClass('validate');
+        } else {
+            $this->removeClass('validate');
         }
         $html = '';
         //iteracja po opcjach do HTML
@@ -448,8 +491,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje kontener pola (początek)
      * @return string
+     * @throws \Mmi\App\KernelException
      */
-    public final function fetchBegin()
+    final public function fetchBegin()
     {
         $class = get_class($this);
         //dodawanie klasy z klasą forma
@@ -457,6 +501,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject
         //dodawanie klasy błędu jeśli wystąpiły
         if ($this->getErrors()) {
             $this->addClass('error');
+        } else {
+            $this->removeClass('error');
         }
         //element do widoku
         $this->view->_element = $this;
@@ -467,8 +513,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje kontener pola (koniec)
      * @return string
+     * @throws \Mmi\App\KernelException
      */
-    public final function fetchEnd()
+    final public function fetchEnd()
     {
         //element do widoku
         $this->view->_element = $this;
@@ -479,6 +526,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje etykietę pola
      * @return string
+     * @throws \Mmi\App\KernelException
      */
     public function fetchLabel()
     {
@@ -498,6 +546,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje pole
      * @return string
+     * @throws \Mmi\App\KernelException
      */
     public function fetchField()
     {
@@ -512,8 +561,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje opis pola
      * @return string
+     * @throws \Mmi\App\KernelException
      */
-    public final function fetchDescription()
+    final public function fetchDescription()
     {
         //brak opisu
         if (!$this->getDescription()) {
@@ -528,8 +578,9 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje błędy pola
      * @return string
+     * @throws \Mmi\App\KernelException
      */
-    public final function fetchErrors()
+    final public function fetchErrors()
     {
         //element do widoku
         $this->view->_element = $this;
@@ -556,5 +607,4 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             return $e->getMessage();
         }
     }
-
 }
