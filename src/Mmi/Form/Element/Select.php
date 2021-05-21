@@ -60,7 +60,7 @@ class Select extends ElementAbstract
             }
             //jeśli wystąpi zagnieżdżenie - generowanie grupy opcji
             if (is_array($caption)) {
-                $html .= '<optgroup label="' . $key . '">';
+                $html .= '<optgroup label="' . $this->view->_($key) . '">';
                 foreach ($caption as $k => $c) {
                     $html .= '<option value="' . $k . '" ' . $this->_calculateSelected($k, $value) . $disabled . '>' . $this->view->_($c) . '</option>';
                 }
