@@ -28,12 +28,17 @@ class Image
      */
     public static function inputToResource($input)
     {
-        //jeśli resource zwrot
-        if (gettype($input) == 'resource') {
+        //jeśli resource/obiekt GdImage (PHP 8) zwrot
+        if (\is_resource($input) || \is_object($input)) {
             return $input;
         }
         //jeśli krótki content zakłada że to ścieżka pliku
-        return imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
+        $resource = imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
+        //konwersja do truecolor
+        if (!imageistruecolor($resource)) {
+            imagepalettetotruecolor($resource);
+        }
+        return $resource;
     }
 
     /**
