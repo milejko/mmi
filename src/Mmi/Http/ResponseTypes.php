@@ -82,6 +82,7 @@ class ResponseTypes
         'png' => 'image/png',
         'jpg' => 'image/jpeg',
         'jpeg' => 'image/jpeg',
+        'webp' => 'image/webp',
         'tif' => 'image/tiff',
         'tiff' => 'image/tif',
         'ico' => 'image/x-icon',
