@@ -18,7 +18,7 @@
         {/if}
         <li id="{$_element->getId()}-item">
             <input value="{$key}" id="{$baseId}-{$id}" type="radio" {$_htmlOptions} {$checked} />
-            <label for="{$baseId}-{$id}">{$caption}</label>
+            <label for="{$baseId}-{$id}">{_($caption)}</label>
         </li>
     {/foreach}
     {* reset całego pola *}
