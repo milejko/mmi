@@ -24,7 +24,9 @@ class Radio extends ElementAbstract
      */
     public function __construct($name)
     {
-        $this->addClass('form-control');
         parent::__construct($name);
+        $this->addClass('form-control');
+        $this->addClass('form-check-input');
+        $this->removeClass('form-control');
     }
 }
