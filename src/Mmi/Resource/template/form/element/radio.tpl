@@ -12,13 +12,13 @@
         {if $value !== null && $value == $key}
             {$checked = 'checked'}
         {/if}
-        {* wartość wyłączona *}
+        {* wartość wyłączona *}
         {if php_strpos($key, ':disabled') !== false}
             {$a = $_element->setDisabled()}
         {/if}
-        <li id="{$_element->getId()}-item">
-            <input value="{$key}" id="{$baseId}-{$id}" type="radio" {$_htmlOptions} {$checked} />
-            <label for="{$baseId}-{$id}">{_($caption)}</label>
+        <li id="{$_element->getId()}-item" class="form-check">
+            <input value="{$key}" id="{$baseId}-{$id}" class="form-check-input" type="radio" {$_htmlOptions} {$checked} />
+            <label for="{$baseId}-{$id}" class="form-check-label">{_($caption)}</label>
         </li>
     {/foreach}
     {* reset całego pola *}
