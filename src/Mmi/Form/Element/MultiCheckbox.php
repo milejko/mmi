@@ -50,7 +50,7 @@ class MultiCheckbox extends ElementAbstract
             if (in_array($key, $values)) {
                 $checkbox->setChecked();
             }
-            //wartość wyłączona
+            //wartość wyłączona
             if (strpos($key, ':disabled') !== false) {
                 $checkbox->setValue('')
                     ->setDisabled();
