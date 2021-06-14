@@ -17,16 +17,4 @@ class Radio extends ElementAbstract
 {
     //szablon pola
     const TEMPLATE_FIELD = 'mmi/form/element/radio';
-
-    /**
-     * Konstruktor
-     * @param string $name
-     */
-    public function __construct($name)
-    {
-        parent::__construct($name);
-        $this->addClass('form-control');
-        $this->addClass('form-check-input');
-        $this->removeClass('form-control');
-    }
 }
