@@ -109,10 +109,6 @@ class Image
         $ratioX = 100 * $maxDimX / $width;
         //obliczanie współczynnika Y
         $ratioY = 100 * $maxDimY / $height;
-        //nie skalujemy w górę
-        if ($ratioX > 100 || $ratioY > 100) {
-            return $resource;
-        }
         //nie podano długości
         if (null === $maxDimX) {
             //skalowanie do maksymalnego X-a
