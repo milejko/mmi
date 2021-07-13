@@ -31,7 +31,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $emptyHandlerConfig->handler = null;
         $this->assertInstanceOf('\Mmi\Cache\Cache', $emptyCache = new Cache($emptyHandlerConfig), 'Unable to create cache without handler');
         $this->assertInstanceOf('\Mmi\Cache\CacheConfig', $emptyCache->getConfig());
-        $this->assertInstanceOf('\Mmi\Cache\CacheRegistry', $emptyCache->getRegistry());
 
         $config = new CacheConfig;
         $config->active = 0;
@@ -114,6 +113,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testRedisInvalidPath()
     {
+        $this->expectException(\Mmi\Cache\CacheException::class);
         if (!class_exists('\Redis')) {
             throw new \Mmi\Cache\CacheException();
         }

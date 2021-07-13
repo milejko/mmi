@@ -7,6 +7,9 @@
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (http://milejko.com)
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
+
+use Mmi\App\TestApp;
+
 //definicja katalogu bazowego
 define('BASE_PATH', __DIR__ . '/../../');
 
@@ -14,12 +17,13 @@ define('BASE_PATH', __DIR__ . '/../../');
 require BASE_PATH . 'vendor/autoload.php';
 
 //powołanie konfiguracji i rejestru
-require 'data/config-default.php';
+require BASE_PATH . 'tests/data/app.php';
+require BASE_PATH . 'tests/data/test-query-record.php';
+/*require 'data/config-default.php';
 require 'data/registry.php';
 //mock
 require 'data/auth-model.php';
-require 'data/test-query-record.php';
-require 'data/fc-plugin.php';
+reuire 'data/fc-plugin.php';*/
 
 //iteracja po katalogach do utworzenia
 foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'var/session'] as $dir) {
@@ -29,3 +33,6 @@ foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'va
 
 //kopiowanie testowej bazy danych do tmp
 copy(BASE_PATH . '/tests/data/db.sqlite', BASE_PATH . '/var/test-db.sqlite');
+
+//run application
+(new TestApp())->run();

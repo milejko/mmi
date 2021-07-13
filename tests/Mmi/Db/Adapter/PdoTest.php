@@ -26,7 +26,7 @@ class PdoTest extends \PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass(): void
     {
-        require_once 'data/config-cache.php';
+        require_once BASE_PATH . '/tests/data/config-cache.php';
         (new Kernel('\Mmi\App\Bootstrap', 'CACHE'));
     }
 
