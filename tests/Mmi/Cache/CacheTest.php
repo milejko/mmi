@@ -37,19 +37,11 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->_testInactiveCache(new Cache($config));
     }
 
-    public function testFileHandlerDistributed()
-    {
-        $cacheConfig = new CacheConfig;
-        $cacheConfig->path = BASE_PATH . '/var/cache';
-        $cacheConfig->distributed = true;
-        $cache = new Cache($cacheConfig);
-        $this->_testActiveCache($cache);
-    }
-
     public function testFileHandler()
     {
         $cacheConfig = new CacheConfig;
         $cacheConfig->path = BASE_PATH . '/var/cache';
+        $cacheConfig->active = true;
         $cache = new Cache($cacheConfig);
         //umieszczanie w buforze uszkodzonego pliku
         file_put_contents($cacheConfig->path . '/test', self::INVALID_CACHE_DATA);
@@ -64,7 +56,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         }
         $config = new CacheConfig;
         $config->handler = 'apc';
-        $config->distributed = true;
+        $cacheConfig->active = true;
         $cache = new Cache($config);
         $this->_testActiveCache($cache);
     }
@@ -77,6 +69,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $config = new CacheConfig;
         $config->handler = 'memcache';
         $config->path = '127.0.0.1:11211';
+        $cacheConfig->active = true;
         //próba połączenia
         try {
             (new Cache($config))->flush();
@@ -97,6 +90,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $config = new CacheConfig;
         $config->handler = 'redis';
         $config->path = 'udp://user:pass@127.0.0.1:6379/1';
+        $config->active = true;
         //próba połączenia
         try {
             $cache = new Cache($config);
@@ -150,11 +144,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($cache->flush(), 'Flush should always return null');
         $this->assertNull($cache->load(self::TEST_KEY));
         $this->assertTrue($cache->save(self::TEST_DATA, self::TEST_KEY, 1));
-        sleep(1);
-        //czyszczenie rejestru
-        $cache->getRegistry()->setOptions([], true);
-        //po 1 sekundzie znika
-        $this->assertNull($cache->load(self::TEST_KEY));
+        $this->assertTrue($cache->remove(self::TEST_KEY), 'Remove should always return true');
         $newCache = new Cache($cache->getConfig());
         $this->assertNull($newCache->load(self::TEST_KEY));
     }

@@ -37,7 +37,7 @@ class TestApp extends AppAbstract
     public function run(): void
     {
         
-        /*$request = $this->container->get(Request::class);
+        $request = $this->container->get(Request::class);
         $interceptor = $this->container->has(AppEventInterceptorInterface::class) ? $this->container->get(AppEventInterceptorInterface::class) : null;
         //intercept before dispatch
         if (null !== $interceptor) {
@@ -46,19 +46,6 @@ class TestApp extends AppAbstract
             $interceptor->beforeDispatch();
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeDispatch()');
         }
-        //render content
-        $content = $this->container->get(ActionHelper::class)->forward($request);
-        //intercept before send
-        if (null !== $interceptor) {
-            $interceptor->beforeSend();
-            $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeSend()');
-        }
-        //set content to response
-        $this->container->get(Response::class)
-            ->setContent($content);
-        //content send
-        $this->profiler->event(self::PROFILER_PREFIX . 'send response to the client');
-        //$this->container->get(Response::class)->send();*/
     }
 
 }

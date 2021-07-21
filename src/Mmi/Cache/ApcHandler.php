@@ -13,8 +13,18 @@ namespace Mmi\Cache;
 /**
  * Handler bufora w APC
  */
-class ApcHandler extends DistributedCacheHandlerAbstract
+class ApcHandler implements CacheHandlerInterface 
 {
+
+    /**
+     * Konfiguruje handler
+     * @param \Mmi\Cache\Cache $cache obiekt bufora
+     */
+    public function __construct(Cache $cache)
+    {
+        $this->_namespace = md5(__FILE__);
+        $this->_cache = $cache;
+    }
 
     /**
      * Ładuje dane o podanym kluczu
@@ -40,13 +50,13 @@ class ApcHandler extends DistributedCacheHandlerAbstract
         \apcu_store($this->_namespace . $key, $data, $lifeTime);
         return true;
     }
-
+    
     /**
-     * Kasuje klucz bez rozgłaszania
-     * @param strings $key klucz
-     * @return bool
+     * Kasuje dane o podanym kluczu
+     * @param string $key klucz
+     * @return boolean
      */
-    protected function _deleteNoBroadcasting($key)
+    public function delete($key)
     {
         //usunięcie z apc
         \apcu_delete($this->_namespace . $key);
@@ -54,9 +64,9 @@ class ApcHandler extends DistributedCacheHandlerAbstract
     }
 
     /**
-     * Kasuje bufor bez rozgłaszania
+     * Kasuje wszystkie dane
      */
-    protected function _deleteAllNoBroadcasting()
+    public function deleteAll()
     {
         //czyszczenie bufora apc
         \apcu_clear_cache();
