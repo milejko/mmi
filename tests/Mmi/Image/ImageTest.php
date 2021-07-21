@@ -21,7 +21,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     CONST IMAGE_PATH = BASE_PATH . 'tests/data/test.png';
     CONST VERTICAL_IMAGE_PATH = BASE_PATH . 'tests/data/test-vertical.png';
     CONST TMP_PATH = BASE_PATH . 'var/cache/test.png';
-    CONST RESOURCE_TYPE = 'resource';
+    CONST RESOURCE_TYPE = 'object';
 
     public function testInputToResource()
     {

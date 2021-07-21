@@ -25,7 +25,6 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         //nie równe
         $this->assertFalse((new Json)->isValid('{2: 2}'));
         $this->assertFalse((new Json)->isValid('{"2":"3""}'));
-        $this->assertFalse((new Json)->isValid(new \stdClass()));
         $this->assertFalse((new Json)->isValid(null));
     }
 
