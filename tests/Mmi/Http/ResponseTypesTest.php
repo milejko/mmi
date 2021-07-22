@@ -33,11 +33,9 @@ class ResponseTypesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('js', ResponseTypes::getExtensionByType('application/x-javascript'));
     }
 
-    /**
-     * @expectedException \Mmi\Http\HttpException
-     */
     public function testSearchType()
     {
+        $this->expectException(\Mmi\Http\HttpException::class);
         $this->assertEquals('image/jpeg', ResponseTypes::searchType('jpg'));
         $this->assertEquals('image/jpeg', ResponseTypes::searchType('jpeg'));
         $this->assertEquals('image/jpeg', ResponseTypes::searchType('image/jpeg'));

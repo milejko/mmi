@@ -11,8 +11,6 @@
 namespace Mmi\App;
 
 use Mmi\Http\Request;
-use Mmi\Http\Response;
-use Mmi\Mvc\ActionHelper;
 
 /**
  * Application class

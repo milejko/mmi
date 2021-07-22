@@ -10,7 +10,6 @@
 
 namespace Mmi\Http;
 
-use Mmi\App\App;
 use Mmi\Mvc\Router;
 
 /**

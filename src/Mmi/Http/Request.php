@@ -135,7 +135,7 @@ class Request extends \Mmi\DataObject
      */
     public function getReferer(): string
     {
-        return filter_var($this->server['HTTP_REFERER'], \FILTER_SANITIZE_STRING);
+        return filter_var(isset($this->server['HTTP_REFERER']) ? : null, \FILTER_SANITIZE_STRING);
     }
 
     /**

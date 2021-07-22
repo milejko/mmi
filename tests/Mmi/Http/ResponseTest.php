@@ -10,16 +10,41 @@
 
 namespace Mmi\Test\Http;
 
+use Mmi\App\TestApp;
+use Mmi\App\AppProfiler;
+use Mmi\Cache\Cache;
+use Mmi\Cache\CacheConfig;
+use Mmi\Http\Request;
 use Mmi\Http\Response;
+use Mmi\Http\ResponseTimingHeader;
+use Mmi\Http\ResponseDebugger;
+use Mmi\Mvc\Router;
+use Mmi\Mvc\RouterConfig;
+use Mmi\Mvc\View;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
 
-    CONST CLASS_NAME = '\Mmi\Http\Response';
+    const CLASS_NAME = '\Mmi\Http\Response';
+
+    private function getNewResponseObject(): Response
+    {
+        return new Response(
+            new Router(new RouterConfig),
+            new ResponseTimingHeader(new AppProfiler),
+            new ResponseDebugger(
+                new Request(),
+                new AppProfiler,
+                new Cache(new CacheConfig),
+                new View(TestApp::$di),
+                TestApp::$di
+            )
+        );
+    }
 
     public function testGetSetType()
     {
-        $response = new Response;
+        $response = $this->getNewResponseObject();
         $this->assertInstanceOf(self::CLASS_NAME, $response->setTypeGzip());
         $this->assertEquals('application/x-gzip', $response->getType());
         $this->assertInstanceOf(self::CLASS_NAME, $response->setTypeJpeg());
@@ -40,7 +65,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetCode()
     {
-        $response = new Response;
+        $response = $this->getNewResponseObject();
         $this->assertInstanceOf(self::CLASS_NAME, $response->setCodeOk());
         $this->assertEquals(200, $response->getCode());
         $this->assertInstanceOf(self::CLASS_NAME, $response->setCodeUnauthorized());
@@ -53,55 +78,44 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(500, $response->getCode());
     }
 
-    /**
-     * @expectedException \Mmi\Http\HttpException
-     */
     public function testFailedCode()
     {
-        $response = new Response;
+        $this->expectException(\Mmi\Http\HttpException::class);
+        $response = $this->getNewResponseObject();
         $this->assertInstanceOf(self::CLASS_NAME, $response->setCode(792813));
     }
 
     public function testGetSetDebug()
     {
-        $response = new Response;
+        $response = $this->getNewResponseObject();
         $this->assertInstanceOf(self::CLASS_NAME, $response->setDebug());
     }
 
     public function testSetContent()
     {
-        $response = new Response;
+        $response = $this->getNewResponseObject();
         $response->setContent('test content')
             ->setDebug();
-        $view = \Mmi\App\FrontController::getInstance()->getView();
+        $view = new View(TestApp::$di);
         $view->sampleVariable = ['test1' => 'test', 'test2' => ['test1' => 'test', 'test' => ['test' => 'test', 'test2' => [1]]]];
         $view->anotherVariable = 'test';
         $this->assertEquals('test content', $response->getContent());
         ob_start();
-        $this->assertInstanceOf('\Mmi\Http\Response', $response->send(false));
+        $this->assertNull($response->send(false));
         $this->assertEquals('test content', ob_get_contents());
         ob_end_clean();
     }
 
     public function testGetSetHeaders()
     {
-        $response = new Response;
+        $response = $this->getNewResponseObject();
         $response->setCodeNotFound()
             ->setTypeGzip();
         $this->assertCount(2, $response->getHeaders());
         foreach ($response->getHeaders() as $header) {
             $this->assertInstanceOf('\Mmi\Http\ResponseHeader', $header);
         }
-        $this->assertInstanceOf('\Mmi\Http\Response', $response->send(false));
-    }
-
-    /**
-     * @expectedException \Mmi\App\KernelException
-     */
-    public function testRedirect()
-    {
-        $response = new Response;
-        $response->redirect('mmi', 'index', 'index', [], false);
+        $this->assertNull($response->send(false));
     }
 
 }

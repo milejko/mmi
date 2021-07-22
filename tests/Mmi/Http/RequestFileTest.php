@@ -15,11 +15,9 @@ use Mmi\Http\RequestFile;
 class RequestFileTest extends \PHPUnit\Framework\TestCase
 {
 
-    /**
-     * @expectedException \Mmi\Http\HttpException
-     */
     public function testEmptyObject()
     {
+        $this->expectException(\Mmi\Http\HttpException::class);
         new RequestFile;
     }
 
@@ -28,14 +26,13 @@ class RequestFileTest extends \PHPUnit\Framework\TestCase
      */
     public function testMissingTmpName()
     {
+        $this->expectException(\Mmi\Http\HttpException::class);
         new RequestFile(['name' => 'image.png']);
     }
 
-    /**
-     * @expectedException \Mmi\Http\HttpException
-     */
     public function testNew()
     {
+        $this->expectException(\Mmi\Http\HttpException::class);
         $file = new RequestFile(['name' => 'image.png', 'tmp_name' => BASE_PATH . '/tests/data/test.png']);
         $this->assertEquals('image.png', $file->name);
         $this->assertEquals(BASE_PATH . '/tests/data/test.png', $file->tmpName);
