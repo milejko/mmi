@@ -8,23 +8,26 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-namespace Mmi\Test\Model;
+namespace Mmi\Test;
+
+use Mmi\Security\AuthRecord;
 
 /**
- * Testowy auth model
+ * Testowy auth provider
  */
-class AuthModel implements \Mmi\Security\AuthInterface
+class TestAuthProvider implements \Mmi\Security\AuthProviderInterface
 {
 
-    public static function authenticate($identity, $credential)
+    public function authenticate($identity, $credential): ?AuthRecord
     {
-        if ('fake' == $identity) {
-            return 'not-a-security-record';
+        //no identity
+        if (!$identity) {
+            return null;
         }
         if ($identity != $credential) {
-            return;
+            return null;
         }
-        $ar = new \Mmi\Security\AuthRecord;
+        $ar = new AuthRecord;
         $ar->id = 1;
         $ar->email = 'test@example.com';
         $ar->username = 'test';
@@ -32,15 +35,12 @@ class AuthModel implements \Mmi\Security\AuthInterface
         return $ar;
     }
 
-    public static function idAuthenticate($identity)
+    public function idAuthenticate($identity): ?AuthRecord
     {
-        if ('fake' == $identity) {
-            return 'not-a-security-record';
-        }
         if (!intval($identity)) {
-            return;
+            return null;
         }
-        $ar = new \Mmi\Security\AuthRecord;
+        $ar = new AuthRecord;
         $ar->id = 1;
         $ar->email = 'test@example.com';
         $ar->username = 'test';
@@ -48,7 +48,7 @@ class AuthModel implements \Mmi\Security\AuthInterface
         return $ar;
     }
 
-    public static function deauthenticate()
+    public function deauthenticate(): void
     {
         
     }

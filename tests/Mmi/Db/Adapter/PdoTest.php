@@ -11,7 +11,6 @@
 namespace Mmi\Test\Db\Adapter;
 
 use Mmi\App\AppProfiler;
-use Mmi\App\Kernel;
 use Mmi\Db\DbConfig;
 
 /**
@@ -25,12 +24,6 @@ class PdoTest extends \PHPUnit\Framework\TestCase
      * @var \Mmi\Db\Adapter\PdoAbstract
      */
     private $_db;
-
-    public static function setUpBeforeClass(): void
-    {
-        //require_once BASE_PATH . '/tests/data/config-cache.php';
-        //(new Kernel('\Mmi\App\Bootstrap', 'CACHE'));
-    }
 
     public function setUp(): void
     {

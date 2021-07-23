@@ -18,25 +18,11 @@ use Mmi\Mvc\Controller;
 class IndexController extends Controller
 {
 
-    //domyślna labelka
-    CONST DEFAULT_LABEL = '<html><body><h1>It works!</h1></body></html>';
-
     /**
      * Akcja główna
      */
     public function indexAction()
-    {
-        return self::DEFAULT_LABEL;
-    }
-
-    /**
-     * Akcja testowa
-     * @return string
-     */
-    public function testAction()
-    {
-        return self::DEFAULT_LABEL;
-    }
+    {}
 
     /**
      * Akcja błędu

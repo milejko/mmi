@@ -87,7 +87,7 @@ class Auth implements AuthInterface
      */
     public function getName(): string
     {
-        return $this->_session->name;
+        return (string) $this->_session->name;
     }
 
     /**
@@ -95,7 +95,7 @@ class Auth implements AuthInterface
      */
     public function getUsername(): string
     {
-        return $this->_session->username;
+        return (string) $this->_session->username;
     }
 
     /**
@@ -103,7 +103,7 @@ class Auth implements AuthInterface
      */
     public function getEmail(): string
     {
-        return $this->_session->email;
+        return (string) $this->_session->email;
     }
 
     /**
@@ -121,7 +121,7 @@ class Auth implements AuthInterface
      */
     public function getId(): string
     {
-        return $this->_session->id;
+        return (string) $this->_session->id;
     }
 
     /**

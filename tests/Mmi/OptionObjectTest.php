@@ -30,11 +30,9 @@ class OptionObjectTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($oo->issetOption('c'));
     }
 
-    /**
-     * @expectedException \Mmi\App\KernelException
-     */
     public function testSettersGetters()
     {
+        $this->expectException(\Mmi\App\KernelException::class);
         $oo = new OptionObject;
         $this->assertInstanceOf('\Mmi\OptionObject', $oo->setOption('a', 'a')
                 ->setB('b')

@@ -10,6 +10,8 @@
 
 namespace Mmi\Test\Mvc\ViewHelper;
 
+use Mmi\App\TestApp;
+use Mmi\Mvc\View;
 use Mmi\Mvc\ViewHelper\HeadStyle;
 
 class HeadStyleTest extends \PHPUnit\Framework\TestCase
@@ -17,7 +19,7 @@ class HeadStyleTest extends \PHPUnit\Framework\TestCase
 
     public function testClass()
     {
-        $hs = new HeadStyle;
+        $hs = new HeadStyle(new View(TestApp::$di));
         $hs->appendStyle('http://www.wp.pl/');
         //już dodany
         $hs->prependStyle('http://www.wp.pl/');

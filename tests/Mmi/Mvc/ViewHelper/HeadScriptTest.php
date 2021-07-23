@@ -10,6 +10,8 @@
 
 namespace Mmi\Test\Mvc\ViewHelper;
 
+use Mmi\App\TestApp;
+use Mmi\Mvc\View;
 use Mmi\Mvc\ViewHelper\HeadScript;
 
 class HeadScriptTest extends \PHPUnit\Framework\TestCase
@@ -17,7 +19,7 @@ class HeadScriptTest extends \PHPUnit\Framework\TestCase
 
     public function testClass()
     {
-        $hs = new HeadScript;
+        $hs = new HeadScript(new View(TestApp::$di));
         $hs->appendFile('http://www.wp.pl/');
         $hs->headScript(['type' => 'text/javascript', 'src' => 'http://www.onet.pl', 'ts' => 1]);
         //już dodany

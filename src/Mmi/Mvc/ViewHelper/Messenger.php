@@ -24,7 +24,6 @@ class Messenger extends HelperAbstract
      */
     public function messenger()
     {
-        
         if (!$this->view->getMessenger()->hasMessages()) {
             return;
         }

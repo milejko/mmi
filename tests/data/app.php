@@ -10,14 +10,12 @@
 
 namespace Mmi\App;
 
-use Mmi\Http\Request;
-
 /**
  * Application class
  */
 class TestApp extends AppAbstract
 {
-    const PROFILER_PREFIX                    = 'Mmi\App: ';
+    const PROFILER_PREFIX                    = 'Mmi\TestApp: ';
     const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
     const APPLICATION_COMPILE_STRUCTURE_FILE = self::APPLICATION_COMPILE_PATH . '/Structure.json';
 
@@ -26,6 +24,11 @@ class TestApp extends AppAbstract
      */
     protected function setErrorHandler(): self
     {
+        //exception handler
+        set_exception_handler([$this->container->get(AppErrorHandler::class), 'exceptionHandler']);
+        //error handler
+        set_error_handler([$this->container->get(AppErrorHandler::class), 'errorHandler']);
+        $this->profiler->event(self::PROFILER_PREFIX . 'error handler setup');
         return $this;
     }
 
@@ -34,8 +37,6 @@ class TestApp extends AppAbstract
      */
     public function run(): void
     {
-        
-        $request = $this->container->get(Request::class);
         $interceptor = $this->container->has(AppEventInterceptorInterface::class) ? $this->container->get(AppEventInterceptorInterface::class) : null;
         //intercept before dispatch
         if (null !== $interceptor) {

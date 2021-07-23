@@ -16,14 +16,17 @@ define('BASE_PATH', __DIR__ . '/../../');
 //dołączenie autoloadera
 require BASE_PATH . 'vendor/autoload.php';
 
-//powołanie konfiguracji i rejestru
+//zmienne testowe
+putenv('APP_DEBUG_ENABLED=0');
+putenv('DB_HOST=' . BASE_PATH . '/var/test-db.sqlite');
+putenv('DB_DRIVER=sqlite');
+
+//załadowanie aplikacji testowej
 require BASE_PATH . 'tests/data/app.php';
+
+//testowe obiekty
 require BASE_PATH . 'tests/data/test-query-record.php';
-/*require 'data/config-default.php';
-require 'data/registry.php';
-//mock
-require 'data/auth-model.php';
-reuire 'data/fc-plugin.php';*/
+require BASE_PATH . 'tests/data/test-auth-provider.php';
 
 //iteracja po katalogach do utworzenia
 foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'var/session'] as $dir) {
