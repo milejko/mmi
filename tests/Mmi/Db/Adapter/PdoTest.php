@@ -10,7 +10,8 @@
 
 namespace Mmi\Test\Db\Adapter;
 
-use Mmi\App\Kernel;
+use Mmi\App\AppProfiler;
+use Mmi\Db\DbConfig;
 
 /**
  * Test adapterów pdo bazy danych
@@ -24,28 +25,15 @@ class PdoTest extends \PHPUnit\Framework\TestCase
      */
     private $_db;
 
-    public static function setUpBeforeClass(): void
-    {
-        require_once 'data/config-cache.php';
-        (new Kernel('\Mmi\App\Bootstrap', 'CACHE'));
-    }
-
     public function setUp(): void
     {
-        $db = new \Mmi\Db\Adapter\PdoSqlite(\App\Registry::$config->db);
+        $dbConfig = new DbConfig;
+        $dbConfig->driver = 'sqlite';
+        $dbConfig->host = BASE_PATH . '/var/test-db.sqlite';
+        $db = new \Mmi\Db\Adapter\PdoSqlite($dbConfig);
         $db->delete('mmi_cache');
-        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $db->selectSchema('test'));
         $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $db->setDefaultImportParams());
-        $this->_db = new \Mmi\Db\Adapter\PdoSqlite(\App\Registry::$config->db);
-    }
-
-    public function testQuote()
-    {
-        $this->assertEquals('13', $this->_db->quote(13));
-        $this->assertEquals('\'13\'', $this->_db->quote('13'));
-        $this->assertEquals('\'test\'', $this->_db->quote('test'));
-        $this->assertEquals('true', $this->_db->quote(true));
-        $this->assertEquals('false', $this->_db->quote(false));
+        $this->_db = new \Mmi\Db\Adapter\PdoSqlite($dbConfig);
     }
 
     public function testGetConfig()
@@ -53,25 +41,16 @@ class PdoTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\Mmi\Db\DbConfig', $this->_db->getConfig());
     }
 
-    public function testPrepareSequenceName()
-    {
-        $this->assertEquals('mmi_cache_id_seq', $this->_db->prepareSequenceName('mmi_cache'));
-    }
-
-    /**
-     * @expectedException \Mmi\Db\DbException
-     */
     public function testInvalidQuery()
     {
+        $this->expectException(\PDOException::class);
         //exception
         $this->_db->query('INVALID-QUERY');
     }
 
-    /**
-     * @expectedException \Mmi\Db\DbException
-     */
     public function testInvalidQueryData()
     {
+        $this->expectException(\Mmi\Db\DbException::class);
         //exception
         $this->_db->query('INSERT INTO ' . $this->_db->prepareTable('mmi_cache') . ' (' . $this->_db->prepareField('id') . ', ' . $this->_db->prepareField('data') . ', ' . $this->_db->prepareField('ttl') . ') VALUES (?, ?, ?)', ['x', 'y']);
     }
@@ -98,15 +77,13 @@ class PdoTest extends \PHPUnit\Framework\TestCase
     public function testFetchRow()
     {
         foreach ([null, 1, '1', 'test', 17.31] as $value) {
-            $this->assertEquals($value, $this->_db->fetchRow('SELECT ' . $this->_db->quote($value) . ' as test')['test']);
+            $this->assertEquals($value, $this->_db->fetchRow('SELECT "' . $value . '" as test')['test']);
         }
     }
 
-    /**
-     * @expectedException \Mmi\Db\DbException
-     */
     public function testInexistentMethod()
     {
+        $this->expectException(\Mmi\Db\DbException::class);
         $this->_db->surelyNonExistentMethod();
     }
 
@@ -144,8 +121,7 @@ class PdoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetProfiler()
     {
-        $this->assertNull($this->_db->getProfiler());
-        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $this->_db->setProfiler(new \Mmi\Db\DbProfiler));
+        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $this->_db->setProfiler(new \Mmi\Db\DbProfiler(new AppProfiler)));
         $this->assertInstanceOf('\Mmi\Db\DbProfiler', $this->_db->getProfiler());
     }
 

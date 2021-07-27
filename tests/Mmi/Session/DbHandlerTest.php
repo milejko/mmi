@@ -10,8 +10,8 @@
 
 namespace Mmi\Test\Session;
 
+use Mmi\Db\DbConfig;
 use Mmi\Session\DbHandler;
-use Mmi\App\Kernel;
 
 /**
  * Test handlera plikowego
@@ -19,19 +19,14 @@ use Mmi\App\Kernel;
 class DbHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
-    public static function setUpBeforeClass(): void
-    {
-        require_once 'data/config-cache.php';
-        (new Kernel('\Mmi\App\Bootstrap', 'CACHE'));
-    }
-
     public function setUp(): void
     {
-        $db = new \Mmi\Db\Adapter\PdoSqlite(\App\Registry::$config->db);
+        $dbConfig = new DbConfig;
+        $dbConfig->driver = 'sqlite';
+        $dbConfig->host = BASE_PATH . '/var/test-db.sqlite';
+        $db = new \Mmi\Db\Adapter\PdoSqlite($dbConfig);
         $db->delete('mmi_cache');
-        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $db->selectSchema('test'));
         $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $db->setDefaultImportParams());
-        $this->_db = new \Mmi\Db\Adapter\PdoSqlite(\App\Registry::$config->db);
     }
 
     public function testOpen()

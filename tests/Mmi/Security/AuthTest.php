@@ -11,17 +11,17 @@
 namespace Mmi\Test\Security;
 
 use Mmi\Security\Auth;
+use Mmi\Test\TestAuthProvider;
 
 class AuthTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testClass()
     {
-        $auth = new Auth;
+        $auth = new Auth(new TestAuthProvider);
         //brak modelu
         $this->assertFalse($auth->authenticate());
-        $this->assertInstanceOf('\Mmi\Security\Auth', $auth->setModelName('\Mmi\Test\Model\AuthModel')
-                ->setSalt('salt')
+        $this->assertInstanceOf('\Mmi\Security\Auth', $auth
                 ->setIdentity('test')
                 ->setCredential('test1'));
         $this->assertFalse($auth->authenticate());
@@ -33,12 +33,11 @@ class AuthTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test@example.com', $auth->getEmail());
         $this->assertTrue($auth->hasRole('member'));
         $this->assertEquals(['member'], $auth->getRoles());
-        $this->assertNull($auth->getName());
+        $this->assertEmpty($auth->getName());
         $this->assertEquals('test', $auth->getUsername());
-        $this->assertEquals('salt', $auth->getSalt());
         $this->assertInstanceOf('\Mmi\Security\Auth', $auth->clearIdentity());
         $this->assertFalse($auth->hasIdentity());
-        $this->assertNull($auth->getId());
+        $this->assertEmpty($auth->getId());
         $auth->setIdentity(7);
         $this->assertTrue($auth->idAuthenticate());
         $this->assertTrue($auth->hasIdentity());
@@ -46,39 +45,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test@example.com', $auth->getEmail());
         $this->assertInstanceOf('\Mmi\Security\Auth', $auth->clearIdentity());
         $this->assertFalse($auth->idAuthenticate());
-        $this->assertInstanceOf('\Mmi\Session\SessionSpace', $auth->getSessionNamespace());
         $this->assertEmpty($auth->getData());
-    }
-
-    /**
-     * @expectedException \Mmi\Security\SecurityException
-     */
-    public function testAuthenticate()
-    {
-        $this->assertInstanceOf('\Mmi\Security\Auth', $auth = (new Auth)
-            ->setModelName('\Mmi\Test\Model\AuthModel')
-            ->setIdentity('fake'));
-        $auth->authenticate();
-    }
-
-    /**
-     * @expectedException \Mmi\Security\SecurityException
-     */
-    public function testIdAuthenticate()
-    {
-        $this->assertInstanceOf('\Mmi\Security\Auth', $auth = (new Auth)
-            ->setModelName('\Mmi\Test\Model\AuthModel')
-            ->setIdentity('fake'));
-        $auth->idAuthenticate();
-    }
-
-    /**
-     * @expectedException \Mmi\Security\SecurityException
-     */
-    public function testNoSalt()
-    {
-        $this->assertInstanceOf('\Mmi\Security\Auth', $auth = new Auth);
-        $auth->getSalt();
     }
 
 }

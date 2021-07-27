@@ -17,10 +17,6 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
 
     public function testPaginator()
     {
-        $view = new \Mmi\Mvc\View();
-        $view->setRequest(new \Mmi\Http\Request);
-        \Mmi\App\FrontController::getInstance()->setView($view);
-
         $paginator = (new Paginator)
             ->setHashHref('test-href');
         $this->assertEquals(0, $paginator->getPagesCount());
@@ -49,12 +45,6 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
                 ->getPage());
 
         $this->assertStringStartsNotWith('<div class="paginator">', $renderedPaginator);
-    }
-    
-    public static function tearDownAfterClass(): void
-    {
-        //czyszczenie fc
-        \Mmi\App\FrontController::getInstance(true);
     }
 
 }

@@ -24,9 +24,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         FileSystem::rmdirRecursive(BASE_PATH . '/var/data/tests');
         $this->assertFalse(FileSystem::copyRecursive(BASE_PATH . '/surely-non-existent', BASE_PATH . '/var/data/tests'), 'Able to copy inexistent files');
         $this->assertTrue(FileSystem::copyRecursive(BASE_PATH . '/tests', BASE_PATH . '/var/data/tests'), 'Unable to copy files');
-        $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/phpunit.xml'), 'File not found');
         $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/Mmi/FileSystemTest.php'), 'File not found');
-        $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/Mmi/App/KernelTest.php'), 'File not found');
     }
 
     /**
@@ -35,16 +33,16 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     public function testUnlinkRecursive()
     {
         //invalid path
-        $this->assertFalse(FileSystem::unlinkRecursive('KernelTest.php', BASE_PATH . '/var/data/surely-non-existent'));
-        $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/Mmi/App/KernelTest.php'), 'File not found');
-        $this->assertTrue(FileSystem::unlinkRecursive('KernelTest.php', BASE_PATH . '/var/data/tests'));
-        $this->assertFalse(file_exists(BASE_PATH . '/var/data/tests/Mmi/App/KernelTest.php'), 'File still found');
+        $this->assertFalse(FileSystem::unlinkRecursive('FileSystemTest.php', BASE_PATH . '/var/data/surely-non-existent'));
+        $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/Mmi/FileSystemTest.php'), 'File not found');
+        $this->assertTrue(FileSystem::unlinkRecursive('FileSystemTest.php', BASE_PATH . '/var/data/tests'));
+        $this->assertFalse(file_exists(BASE_PATH . '/var/data/tests/Mmi/FileSystemTest.php'), 'File still found');
     }
 
     public function testRmdirRecursive()
     {
         $this->assertTrue(FileSystem::copyRecursive(BASE_PATH . '/tests', BASE_PATH . '/var/data/tests'), 'Unable to copy files');
-        $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/phpunit.xml'), 'File not found');
+        $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/Mmi/FileSystemTest.php'), 'File not found');
         $this->assertTrue(FileSystem::rmdirRecursive(BASE_PATH . '/var/data/tests'), 'Directory not found');
         $this->assertFalse(file_exists(BASE_PATH . '/var/data/tests'), 'Directory still found');
         $this->assertFalse(FileSystem::rmdirRecursive(BASE_PATH . '/var/data/tests'), 'Able to delete inexistent directory');

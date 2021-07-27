@@ -15,8 +15,17 @@ use \Mmi\App\KernelException;
 /**
  * Plikowy backend bufora
  */
-class FileHandler extends DistributedCacheHandlerAbstract
+class FileHandler implements CacheHandlerInterface 
 {
+
+    /**
+     * Konfiguruje handler
+     * @param \Mmi\Cache\Cache $cache obiekt bufora
+     */
+    public function __construct(Cache $cache)
+    {
+        $this->_cache = $cache;
+    }
 
     /**
      * Ładuje dane o podanym kluczu
@@ -51,7 +60,7 @@ class FileHandler extends DistributedCacheHandlerAbstract
      * @param string $key klucz
      * @return boolean
      */
-    protected function _deleteNoBroadcasting($key)
+    public function delete($key)
     {
         //próba usunięcia pliku
         try {
@@ -65,7 +74,7 @@ class FileHandler extends DistributedCacheHandlerAbstract
     /**
      * Kasuje bufor bez rozgłaszania
      */
-    protected function _deleteAllNoBroadcasting()
+    public function deleteAll()
     {
         //iteracja po plikach
         foreach (glob($this->_cache->getConfig()->path . '/*') as $filename) {

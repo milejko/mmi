@@ -12,7 +12,7 @@ namespace Mmi\Test\Filter;
 
 use Mmi\Filter\Urlencode;
 
-class UrlencodeTest extends \PHPUnit\Framework\TestCase
+class UppercaseTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testFilter()

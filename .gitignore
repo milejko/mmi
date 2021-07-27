@@ -2,6 +2,7 @@
 /nbproject/
 /tests/.phpunit*
 /.idea
+/.phpunit*
 /src/App/
 /var/
 /vendor/

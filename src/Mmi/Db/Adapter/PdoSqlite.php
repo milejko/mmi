@@ -81,7 +81,7 @@ class PdoSqlite extends PdoAbstract
     /**
      * Otacza nazwę pola odpowiednimi znacznikami
      */
-    protected function prepareField(string $fieldName): string
+    public function prepareField(string $fieldName): string
     {
         //konwersja random
         if ($fieldName == 'RAND()') {
@@ -98,7 +98,7 @@ class PdoSqlite extends PdoAbstract
     /**
      * Otacza nazwę tabeli odpowiednimi znacznikami
      */
-    protected function prepareTable(string $tableName): string
+    public function prepareTable(string $tableName): string
     {
         //dla sqlite jak pola
         return $this->prepareField($tableName);

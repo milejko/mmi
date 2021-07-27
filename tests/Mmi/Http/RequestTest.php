@@ -27,17 +27,12 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function testGetReferer()
     {
-        $this->assertNull((new Request)->getReferer());
+        $this->assertEmpty((new Request)->getReferer());
     }
 
     public function testGetHeader()
     {
         $this->assertNull((new Request)->getHeader('test'));
-    }
-
-    public function testGetGet()
-    {
-        $this->assertInstanceOf('\Mmi\Http\RequestGet', (new Request)->getGet());
     }
 
     public function testGetPost()

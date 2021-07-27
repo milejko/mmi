@@ -47,11 +47,9 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/?module=mmi', $router->encodeUrl(['module' => 'mmi', 'controller' => 'index', 'action' => 'index']));
     }
 
-    /**
-     * @expectedException \Mmi\Mvc\MvcException
-     */
     public function testInvalidRouter()
     {
+        $this->expectException(\Mmi\Mvc\MvcException::class);
         $config = (new RouterConfig)
             ->setRoute('test', '/static/', ['module' => '$1']);
         $router = new Router($config);

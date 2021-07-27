@@ -38,10 +38,4 @@ class CacheConfig
      */
     public $path = '/tmp';
 
-    /**
-     * Mechanizm rozpraszania z rozgłaszaniem usuwania za pomocą DBHandlera
-     * @var boolean
-     */
-    public $distributed = false;
-
 }

@@ -23,7 +23,6 @@ class RegexTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue((new Regex)->isValid('mp3'));
         //nie równe
         $this->assertFalse((new Regex(['/[a-z]/']))->isValid('0'));
-        $this->assertFalse((new Regex(['/[a+]])z]/']))->isValid('0'));
         $this->assertFalse((new Regex(['/[a-z]/']))->isValid(new \stdClass()));
     }
 

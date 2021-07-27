@@ -10,19 +10,22 @@
 
 namespace Mmi\Test\Mvc\ViewHelper;
 
-use Mmi\Mvc\ViewHelper\Messenger;
+use Mmi\App\TestApp;
+use Mmi\Mvc\View;
 
 class MessengerTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testClass()
     {
-        $msg = new Messenger;
-        $this->assertEquals('', $msg->messenger());
-        \Mmi\Message\MessengerHelper::getMessenger()->addMessage('test');
+        $_SESSION = [];
+        $view = TestApp::$di->get(View::class);
+        $view->getMessenger()->clearMessages();
+        $this->assertEquals('', $view->messenger());
+        $view->getMessenger()->addMessage('test');
         $this->assertEquals('<ul id="messenger" class="messenger">' . "\n" .
-            '                                    <li class="notice warning"><i class="icon-warning-sign icon-large"></i><div class="alert">test<a class="close-alert" href="#"></a></div></li>' . "\n" .
-            '    </ul>' . "\n", $msg->messenger());
+        '                                    <li class="notice warning"><i class="icon-warning-sign icon-large"></i><div class="alert">test<a class="close-alert" href="#"></a></div></li>' . "\n" .
+        '    </ul>' . "\n", $view->messenger());
     }
 
 }

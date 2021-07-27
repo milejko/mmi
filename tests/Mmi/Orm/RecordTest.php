@@ -15,11 +15,9 @@ use Mmi\Orm\Query;
 class RecordTest extends \PHPUnit\Framework\TestCase
 {
 
-    /**
-     * @expectedException \Mmi\Orm\RecordNotFoundException
-     */
     public function testNew()
     {
+        $this->expectException(\Mmi\Orm\RecordNotFoundException::class);
         new \Mmi\Orm\CacheRecord('surely-inexistent-id');
     }
 
