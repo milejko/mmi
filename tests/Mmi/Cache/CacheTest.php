@@ -10,11 +10,11 @@
 
 namespace Mmi\Test\Cache;
 
-use Mmi\Cache\Cache,
-    Mmi\Cache\CacheConfig;
+use Mmi\Cache\Cache;
+use Mmi\Cache\CacheConfig;
 
 /**
- * Test kernela aplikacji
+ * Test bufora aplikacji
  */
 class CacheTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,7 +23,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     CONST TEST_DATA = 'unit-test-php';
     CONST INVALID_CACHE_DATA = 'a:2:{s:1:"x";s:13:"unit-test-php";s:1:"e";i:1503324942;}';
 
-    protected $_backends = ['file', 'apc', 'memcache', 'redis'];
+    protected $_backends = ['file', 'apc', 'redis'];
 
     public function testNew()
     {
@@ -56,28 +56,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         }
         $config = new CacheConfig;
         $config->handler = 'apc';
-        $cacheConfig->active = true;
-        $cache = new Cache($config);
-        $this->_testActiveCache($cache);
-    }
-
-    public function testMemcacheHandler()
-    {
-        if (!class_exists('\Memcache')) {
-            return;
-        }
-        $config = new CacheConfig;
-        $config->handler = 'memcache';
-        $config->path = '127.0.0.1:11211';
-        $cacheConfig->active = true;
-        //próba połączenia
-        try {
-            (new Cache($config))->flush();
-        } catch (\Mmi\App\KernelException $e) {
-            return;
-        }
-        //dodanie ścieżki z opcjami
-        $config->path = ['udp://127.0.0.1:11211?timeout=5&weight=1'];
+        $config->active = true;
         $cache = new Cache($config);
         $this->_testActiveCache($cache);
     }
@@ -100,23 +79,11 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             return;
         }
         $this->_testActiveCache($cache);
-    }
+        $this->assertTrue($cache->save(self::TEST_DATA, self::TEST_KEY));
+        //completely new cache object (no registry memory)
+        $cache = new Cache($config);
+        $this->assertEquals($cache->load(self::TEST_KEY), self::TEST_DATA);
 
-    /**
-     * @expectedException \Mmi\Cache\CacheException
-     */
-    public function testRedisInvalidPath()
-    {
-        $this->expectException(\Mmi\Cache\CacheException::class);
-        if (!class_exists('\Redis')) {
-            throw new \Mmi\Cache\CacheException();
-        }
-        $config = new CacheConfig;
-        $config->handler = 'redis';
-        //zła ścieżka
-        $config->path = 'surely-invalid-path';
-        //tu wyjątek
-        (new Cache($config))->flush();
     }
 
     protected function _testActiveCache(Cache $cache)

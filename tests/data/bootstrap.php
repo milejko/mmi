@@ -27,6 +27,12 @@ require BASE_PATH . 'tests/data/app.php';
 //testowe obiekty
 require BASE_PATH . 'tests/data/test-query-record.php';
 require BASE_PATH . 'tests/data/test-auth-provider.php';
+if (!function_exists('apcu_fetch')) {
+    require BASE_PATH . 'tests/data/apc-stub.php';
+}
+if (!class_exists(\Redis::class)) {
+    require BASE_PATH . 'tests/data/redis-stub.php';
+}
 
 //iteracja po katalogach do utworzenia
 foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'var/session'] as $dir) {
