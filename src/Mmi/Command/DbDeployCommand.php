@@ -91,11 +91,13 @@ class DbDeployCommand extends CommandAbstract
         $md5file = md5_file($file);
         //ustawianie domyślnych parametrów importu
         $this->db->setDefaultImportParams();
+        $initialImport = false;
         //pobranie rekordu
         try {
             $dc = (new ChangelogQuery())->whereFilename()->equals(basename($file))->findFirst();
         } catch (\Exception $e) {
             echo 'INITIAL IMPORT.' . $e->getMessage() . "\n";
+            $initialImport = true;
             $dc = null;
         }
         //restore istnieje md5 zgodne
@@ -118,7 +120,7 @@ class DbDeployCommand extends CommandAbstract
         //zadanie importu oznaczone jako aktywne (trwające)
         $newDc->active = true;
         //zapis rekordu
-        $newDc->save();
+        $initialImport ?? $newDc->save();
         //import danych
         $this->_importSql($file);
         //resetowanie struktur tabeli
