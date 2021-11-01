@@ -29,7 +29,7 @@ class Phone extends ValidatorAbstract
     public function isValid($value)
     {
         //dopasowanie telefonu
-        if (preg_match('/([0-9\+\(])([0-9\- \)]+)([0-9]+)/i', $value)) {
+        if (preg_match('/(\(?\+?(00)?[0-9]{1,3}\)?) ?-?([0-9]{1,4}) ?-?([0-9]{2,5}) ?-?([0-9]{2,5}) ?([\p{L}]+.? ?[\d]+)?/i', $value)) {
             return true;
         }
         return $this->_error(static::INVALID);
