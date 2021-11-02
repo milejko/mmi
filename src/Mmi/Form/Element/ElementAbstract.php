@@ -192,6 +192,21 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     }
 
     /**
+     * Usuwa walidator
+     * @param string $validatorClass
+     * @return self
+     */
+    final public function removeValidator(string $validatorClass)
+    {
+        foreach ($this->getValidators() as $index => $validator) {
+            if (get_class($validator) === $validatorClass) {
+                unset($this->_validators[$index]);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Dodaje błąd
      * @param string $error
      * @return ElementAbstract
