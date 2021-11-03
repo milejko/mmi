@@ -51,6 +51,7 @@ class Deployer
             //flush wyniku na ekran
             flush();
         }
+        return 0;
     }
 
     /**
