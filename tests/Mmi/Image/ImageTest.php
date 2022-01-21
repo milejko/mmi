@@ -42,8 +42,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, imagesy($resource));
         //png
         imagepng($resource, self::TMP_PATH);
-        //rozmiar > 20k
-        $this->assertGreaterThan(20000, filesize(self::TMP_PATH));
+        //rozmiar > 5k
+        $this->assertGreaterThan(5000, filesize(self::TMP_PATH));
         //badanie miniatury
         $this->assertEquals(320, imagesx(Image::inputToResource(self::TMP_PATH)));
         $this->assertEquals(200, imagesy(Image::inputToResource(self::TMP_PATH)));
@@ -55,7 +55,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         //png
         imagepng($upscale, self::TMP_PATH);
         //rozmiar > 20k
-        $this->assertGreaterThan(50000, filesize(self::TMP_PATH));
+        $this->assertGreaterThan(20000, filesize(self::TMP_PATH));
         unlink(self::TMP_PATH);
         $this->assertEquals(144, imagesx(Image::scaleCrop(self::VERTICAL_IMAGE_PATH, 144, 144)));
         $this->assertEquals(72, imagesy(Image::scaleCrop(self::VERTICAL_IMAGE_PATH, 72, 72)));
