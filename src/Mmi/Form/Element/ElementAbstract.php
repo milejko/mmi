@@ -218,6 +218,13 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     }
 
     /**
+     * Zdarzenie wywoływane przed zapisem całego formularza
+     */
+    public function beforeFormSave()
+    {
+    }
+
+    /**
      * Zdarzenie wywoływane po zapisie całego formularza
      */
     public function onFormSaved()

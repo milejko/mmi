@@ -370,6 +370,11 @@ abstract class Form extends \Mmi\OptionObject
         if (!$this->hasRecord()) {
             return $this->_saved = (false !== $this->beforeSave()) && (false !== $this->afterSave());
         }
+        //iteracja po elementach
+        foreach ($this->getElements() as $element) {
+            //powiadamianie elementu przed zapisaniem formularza
+            $element->beforeFormSave();
+        }
         //wybranie DAO i rozpoczęcie transakcji
         App::$di->get(DbInterface::class)->beginTransaction();
         //ustawianie danych rekordu
