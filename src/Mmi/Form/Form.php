@@ -237,8 +237,9 @@ abstract class Form extends \Mmi\OptionObject
                 $element->setChecked($keyExists);
                 continue;
             }
-            //jeśli klucz nie istnieje nie ustawiamy wartości
+            //jeśli klucz nie istnieje ustawiamy wartość null
             if (!$keyExists) {
+                $element->setValue(null);
                 continue;
             }
             //ustawianie wartości

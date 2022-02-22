@@ -10,6 +10,9 @@
 
 namespace Mmi\Form\Element;
 
+use Mmi\Form\FormException;
+use Mmi\OptionObject;
+
 /**
  * Element checkbox
  */
@@ -22,27 +25,28 @@ class Checkbox extends ElementAbstract
     /**
      * Konstruktor ustawia kolejność i opcje
      * @param string $name
+     * @throws FormException
      */
     public function __construct($name)
     {
         parent::__construct($name);
         $this->setRenderingOrder(['fetchBegin', 'fetchField', 'fetchLabel', 'fetchDescription', 'fetchErrors', 'fetchEnd'])
-            ->setLabelPostfix('')
-            ->setValue(true);
+            ->setLabelPostfix('');
     }
 
     /**
      * Ustawia zaznaczenie
-     * @return \Mmi\Form\Element\Checkbox
+     * @param bool $checked
+     * @return OptionObject
      */
     public function setChecked($checked = true)
     {
-        return $checked ? $this->setOption('checked', '') : $this->unsetOption('checked');
+        return (bool)$checked ? $this->setOption('checked', '') : $this->unsetOption('checked');
     }
 
     /**
      * Czy zaznaczone
-     * @return \Mmi\Form\Element\Checkbox
+     * @return bool
      */
     public function isChecked()
     {
