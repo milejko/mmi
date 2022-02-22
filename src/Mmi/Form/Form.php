@@ -232,9 +232,12 @@ abstract class Form extends \Mmi\OptionObject
                 $element->setValue([]);
                 continue;
             }
-            //checkboxy na 0 jeśli dane z post i brak wartości
+            //checkboxy na false jeśli dane z post i brak wartości
             if ($element instanceof Element\Checkbox) {
                 $element->setChecked($keyExists);
+                if (!$keyExists) {
+                    $element->setValue(false);
+                }
                 continue;
             }
             //jeśli klucz nie istnieje ustawiamy wartość null
@@ -417,11 +420,6 @@ abstract class Form extends \Mmi\OptionObject
         $data = [];
         //pobieranie danych z elementów
         foreach ($this->getElements() as $element) {
-            //niezaznaczony checkbox
-            if ($element instanceof Element\Checkbox && !$element->issetChecked()) {
-                $data[$element->getBaseName()] = false;
-                continue;
-            }
             //bez zapisu ignorowanych
             if ($element->getIgnore()) {
                 continue;
