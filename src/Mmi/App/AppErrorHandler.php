@@ -75,7 +75,15 @@ class AppErrorHandler implements AppErrorHandlerInterface
      */
     public function errorHandler($errno, $errstr, $errfile, $errline): void
     {
-        throw new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
+        //initializing Kernel Exception
+        $kernelException = new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
+        //deprecated are ignored, but logged
+        if (E_DEPRECATED === $errno) {
+            $this->logger->logException($kernelException);
+            return;
+        }
+        //otherwise throw above exception
+        throw $kernelException;
     }
 
     /**
