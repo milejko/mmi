@@ -5,7 +5,14 @@
         <ul>
             <li class="point first"></li>
             {foreach $_errors as $_error}
-            <li class="notice error"><i class="icon-remove-sign icon-large"></i>{_($_error)}</li>
+                <li class="notice error">
+                    <i class="icon-remove-sign icon-large"></i>
+                    {if php_is_array($_error)}
+                        {_($_error[0], $_error[1])}
+                    {else}
+                        {_($_error)}
+                    {/if}
+                </li>
             {/foreach}
             <li class="close last"></li>
         </ul>

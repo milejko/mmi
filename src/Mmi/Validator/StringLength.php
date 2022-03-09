@@ -52,11 +52,11 @@ class StringLength extends ValidatorAbstract
     {
         //za krótki
         if ($this->getFrom() && mb_strlen($value) < $this->getFrom()) {
-            return $this->_error(self::INVALID_MIN);
+            return $this->_error([self::INVALID_MIN, [$this->getFrom()]]);
         }
         //za długi
         if ($this->getTo() && mb_strlen($value) > $this->getTo()) {
-            return $this->_error(self::INVALID_MAX);
+            return $this->_error([self::INVALID_MAX, [$this->getTo()]]);
         }
         return true;
     }
