@@ -128,11 +128,11 @@ abstract class AppAbstract
         setlocale(LC_NUMERIC, 'en_US.UTF-8');
         //try to load .env
         try {
-            (new Dotenv())->usePutenv()->load(BASE_PATH . '/.env');
-            $this->profiler->event(self::PROFILER_PREFIX . '.env configuration file loaded');
+            (new Dotenv())->usePutenv()->load(BASE_PATH . '/.env', BASE_PATH . '/.env.local');
         } catch (PathException $e) {
-            $this->profiler->event(self::PROFILER_PREFIX . 'no .env configuration file found');
+            //nothing to do
         }
+        $this->profiler->event(self::PROFILER_PREFIX . '.env configuration file loaded');
         return $this;
     }
 
