@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -66,6 +66,9 @@ class Translate implements TranslateInterface
     /**
      * Translate string using sprintf notation
      * ->translate('number %d', [12]) returns "number 12"
+     * @param $key
+     * @param array $params
+     * @return string
      */
     public function translate($key, array $params = []): string
     {
@@ -73,20 +76,12 @@ class Translate implements TranslateInterface
         if (null === $this->_locale) {
             return $key;
         }
-        //parametry istnieją
-        if (!empty($params)) {
-            $filteredParams = [];
-            array_walk($params, function ($value, $key) use (&$filteredParams) {
-                $filteredParams['%' . $key . '%'] = $value;
-            });
-            $params = $filteredParams;
-        }
         //zwrot znalezionego tłumaczenia
         if (isset($this->_data[$this->_locale][$key])) {
-            return strtr($this->_data[$this->_locale][$key], $params);
+            $key = $this->_data[$this->_locale][$key];
         }
         //key return
-        return strtr($key, $params);
+        return empty($params) ? $key : sprintf($key, ...$params);
     }
 
     /**
