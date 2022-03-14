@@ -209,9 +209,6 @@ class Router
     {
         if (!is_array($input)) {
             $input = str_replace('&amp;', '&', htmlspecialchars($input));
-            if (get_magic_quotes_gpc()) {
-                $input = stripslashes($input);
-            }
         } elseif (is_array($input)) {
             $newInput = [];
             foreach ($input AS $key => $value) {

@@ -40,7 +40,6 @@ class Part
         return '<p style="margin: 0; padding: 0;">Include path: <b>' . ini_get('include_path') . '</b></p>' .
             '<p style="margin: 0; padding: 0;">Memory limit: <b>' . ini_get('memory_limit') . '</b></p>' .
             '<p style="margin: 0; padding: 0;">Register globals: <b>' . ((ini_get('register_globals') == 1) ? 'yes' : 'no') . '</b></p>' .
-            '<p style="margin: 0 0 10px 0; padding: 0;">Magic quotes: <b>' . ((get_magic_quotes_gpc() == 1) ? 'yes' : 'no') . '</b></p>' .
             '<p style="margin: 0; padding: 0;">Short tags: <b>' . ((ini_get('short_open_tag') == 1) ? 'yes' : 'no') . '</b></p>' .
             '<p style="margin: 0; padding: 0;">Uploads allowed: <b>' . ((ini_get('file_uploads') == 1) ? 'yes' : 'no') . '</b></p>' .
             '<p style="margin: 0; padding: 0;">Upload maximal size: <b>' . ini_get('upload_max_filesize') . '</b></p>' .

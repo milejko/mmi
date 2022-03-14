@@ -86,7 +86,7 @@ namespace Mmi\App {
             //domyślne kodowanie znaków PHP
             ini_set('default_charset', 'utf-8');
             //locale
-            setlocale(LC_ALL, 'pl_PL.utf-8');
+            setlocale(LC_ALL, 'utf-8');
             setlocale(LC_NUMERIC, 'en_US.UTF-8');
             //ustawienie lokalizacji
             ini_set('default_charset', \App\Registry::$config->charset);
