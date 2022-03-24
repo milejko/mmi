@@ -71,7 +71,7 @@ class RequestServer extends \Mmi\DataObject
             'httpAcceptLanguage' => $this->_filter('HTTP_ACCEPT_LANGUAGE'),
             'httpAcceptEncoding' => $this->_filter('HTTP_ACCEPT_ENCODING'),
             'httpHost' => $this->_filter('HTTP_HOST'),
-            'httpReferer' => $this->_filter('HTTP_REFERER', FILTER_SANITIZE_STRING),
+            'httpReferer' => $this->_filter('HTTP_REFERER'),
             'httpUserAgent' => $this->_filter('HTTP_USER_AGENT'),
             'httpRange' => $this->_filter('HTTP_RANGE'),
         ];
