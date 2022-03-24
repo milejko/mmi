@@ -28,6 +28,8 @@ class App extends AppAbstract
      */
     protected function setErrorHandler(): self
     {
+        //           
+        error_reporting(E_ALL && ~E_DEPRECATED);
         //exception handler
         set_exception_handler([$this->container->get(AppErrorHandler::class), 'exceptionHandler']);
         //error handler
