@@ -504,6 +504,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             if (!is_string($value) && !is_numeric($value)) {
                 continue;
             }
+            //placeholder value translation
+            if ('placeholder' == $key) {
+                $value = $this->view->_($value);
+            }
             $html .= $key . '="' . str_replace('"', '&quot;', $value) . '" ';
         }
         //zwrot html
