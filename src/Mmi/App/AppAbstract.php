@@ -41,6 +41,8 @@ abstract class AppAbstract
      */
     public function __construct()
     {
+        //PHP 8.1 workaround
+        error_reporting(E_ALL && ~E_DEPRECATED);
         //enable profiler
         $this->profiler = new AppProfiler();
         $this->profiler->event(self::PROFILER_PREFIX . 'application create');
