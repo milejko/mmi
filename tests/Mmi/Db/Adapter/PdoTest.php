@@ -128,19 +128,19 @@ class PdoTest extends \PHPUnit\Framework\TestCase
     public function testTableInfo()
     {
         $this->assertEquals(['id' => [
-                'dataType' => 'TEXT',
+                'dataType' => 'text',
                 'maxLength' => null,
                 'null' => false,
                 'default' => null
             ],
             'data' =>
-            ['dataType' => 'TEXT',
+            ['dataType' => 'text',
                 'maxLength' => null,
                 'null' => false,
                 'default' => null
             ],
             'ttl' =>
-            ['dataType' => 'INTEGER',
+            ['dataType' => 'integer',
                 'maxLength' => null,
                 'null' => false,
                 'default' => null
