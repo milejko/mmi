@@ -74,14 +74,14 @@ class Translate implements TranslateInterface
     {
         //jeśli brak locale - zwrot klucza
         if (null === $this->_locale) {
-            return $key;
+            return (string) $key;
         }
         //zwrot znalezionego tłumaczenia
         if (isset($this->_data[$this->_locale][$key])) {
             $key = $this->_data[$this->_locale][$key];
         }
         //key return
-        return empty($params) ? $key : sprintf($key, ...$params);
+        return empty($params) ? (string) $key : sprintf($key, ...$params);
     }
 
     /**
