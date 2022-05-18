@@ -144,7 +144,7 @@ class Request extends \Mmi\DataObject
      */
     public function getModuleName()
     {
-        return $this->module;
+        return (string) $this->module;
     }
 
     /**
