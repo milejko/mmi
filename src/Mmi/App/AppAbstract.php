@@ -95,6 +95,8 @@ abstract class AppAbstract
         }
         //build container (@TODO remove static $di after refactoring)
         $this->container = self::$di = $builder->build();
+        //timezone set
+        date_default_timezone_set($this->container->get('app.time.zone'));
         $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');
         return $this;
     }
