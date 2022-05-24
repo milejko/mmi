@@ -74,7 +74,7 @@ abstract class AppAbstract
         //container has app.structure.template, so it is properly built
         if ($this->container->has('app.structure.template')) {
             $this->profiler->event(self::PROFILER_PREFIX . 'cached DI container loaded');
-            return $this;
+            return $this->setTimezone();
         }
         //unlink previously cached container
         $this->unlinkCompiledContainer();
@@ -95,10 +95,8 @@ abstract class AppAbstract
         }
         //build container (@TODO remove static $di after refactoring)
         $this->container = self::$di = $builder->build();
-        //timezone set
-        date_default_timezone_set($this->container->get('app.time.zone'));
         $this->profiler->event(self::PROFILER_PREFIX . 'DI container built');
-        return $this;
+        return $this->setTimezone();
     }
 
     /**
@@ -156,5 +154,15 @@ abstract class AppAbstract
     {
         return function_exists('apcu_fetch') && ini_get('apc.enabled')
             && !('cli' === \PHP_SAPI && !ini_get('apc.enable_cli'));
+    }
+
+    /**
+     * Sets default time zone
+     */
+    private function setTimezone(): self
+    {
+        //timezone set
+        date_default_timezone_set($this->container->get('app.time.zone'));
+        return $this;
     }
 }
