@@ -15,6 +15,7 @@ use Mmi\Filter\Ascii;
 class AsciiTest extends \PHPUnit\Framework\TestCase
 {
 
+    /** @group needs-review */
     public function testFilter()
     {
         $this->assertEquals('ala ma kota', (new Ascii)->filter('ala ma kota'));
