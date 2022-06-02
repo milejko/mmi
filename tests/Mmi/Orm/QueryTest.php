@@ -12,6 +12,9 @@ namespace Mmi\Test;
 
 use Mmi\Orm\Query;
 
+/**
+ * @group infra
+ */
 class QueryTest extends \PHPUnit\Framework\TestCase
 {
 
