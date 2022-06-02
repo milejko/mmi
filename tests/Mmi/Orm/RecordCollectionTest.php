@@ -12,6 +12,9 @@ namespace Tests\Mmi\Orm;
 
 use Mmi\Orm\RecordCollection;
 
+/**
+ * @group infra
+ */
 class RecordCollectionTest extends \PHPUnit\Framework\TestCase
 {
 
