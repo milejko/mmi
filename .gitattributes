@@ -3,5 +3,8 @@
 /.gitignore export-ignore
 /tests export-ignore
 /shell.nix export-ignore
+/src/Mmi/di.test.php export-ignore
+/src/Mmi/TestKit export-ignore
+/src/Mmi/TestKit/* export-ignore
 *.php text eol=lf
 *.sql text eol=lf
