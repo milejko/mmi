@@ -20,6 +20,18 @@ pkgs.mkShell {
     ];
 
     shellHook = ''
+      export APP_DEBUG_ENABLED=1
+      export APP_BASE_URL=hxxp://example.com
+      export CACHE_SYSTEM_ENABLED=0
+      export CACHE_PUBLIC_ENABLED=1
+      export CACHE_PUBLIC_HANDLER=file
+
+      export DB_HOST=localhost
+      export DB_USER=3306
+      export DB_NAME=test
+      export DB_PASSWORD=test
+
       vendor/bin/phpunit --no-coverage --exclude-group=infra,needs-review
+      vendor/bin/phpunit -c phpunit.app.xml --testdox
     '';
 }
