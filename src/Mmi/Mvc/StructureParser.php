@@ -35,7 +35,7 @@ class StructureParser
      */
     public static function getModules()
     {
-        return array_merge(self::getSrcModules(), self::getVendorModules());
+        return array_merge(self::getVendorModules(), self::getSrcModules());
     }
 
     /**
