@@ -24,7 +24,7 @@ class Escape extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return htmlspecialchars(strip_tags($value));
+        return htmlspecialchars(strip_tags((string) $value));
     }
 
 }

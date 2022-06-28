@@ -33,6 +33,9 @@ return [
                 $transport = new IgnoreErrorTransportWrapper(new UdpTransport($pathPort[0], isset($pathPort[1]) ? $pathPort[1] : 9000));
                 $logger->pushHandler(new GelfHandler(new Publisher($transport), $container->get('log.level')));
                 break;
+            case 'stream':
+                $logger->pushHandler(new StreamHandler($container->get('log.path'), $container->get('log.level')));
+                break;
                 //syslog
             case 'syslog':
                 $logger->pushHandler(new SyslogHandler('mmi', LOG_USER, $container->get('log.level')));
