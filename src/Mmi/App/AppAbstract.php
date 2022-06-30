@@ -85,8 +85,8 @@ abstract class AppAbstract
         $this->profiler->event(self::PROFILER_PREFIX . 'application structure mapped');
         //add structure to the container
         $builder->addDefinitions(['app.structure.template' => $structure['template']]);
-        //add module DI definitions
-        foreach ($structure['di'] as $diConfigPath) {
+        //add module DI definitions (starting from application, then vendors: reverse order)
+        foreach (array_reverse($structure['di']) as $diConfigPath) {
             $builder->addDefinitions($diConfigPath);
         }
         //controllers, add view helpers, commands
