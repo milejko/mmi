@@ -11,13 +11,14 @@ return [
     'cache.public.enabled'      => env('CACHE_PUBLIC_ENABLED', false),
     'cache.public.handler'      => env('CACHE_PUBLIC_HANDLER', 'file'),
     'cache.public.path'         => env('CACHE_PUBLIC_PATH', BASE_PATH . '/var/cache'),
-    'cache.public.distributed'  => env('CACHE_PUBLIC_DISTRIBUTED', false),
+    'cache.public.lifetime'     => env('CACHE_PUBLIC_LIFETIME', 300),
 
     SystemCacheInterface::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
-        $config->active  = $container->get('cache.system.enabled');
-        $config->handler = \function_exists('apcu_fetch') ? 'apc' : 'file';
-        $config->path    = BASE_PATH . '/var/cache';
+        $config->active     = $container->get('cache.system.enabled');
+        $config->handler    = \function_exists('apcu_fetch') ? 'apc' : 'file';
+        $config->path       = BASE_PATH . '/var/cache';
+        $config->lifetime   = 2592000;
         return new Cache($config);
     },
     CacheInterface::class => function (ContainerInterface $container) {
@@ -25,8 +26,7 @@ return [
         $config->active      = $container->get('cache.public.enabled');
         $config->handler     = $container->get('cache.public.handler');
         $config->path        = $container->get('cache.public.path');
-        #for clusters shared cache must be distributed for non shared backends
-        $config->distributed = $container->get('cache.public.distributed');
+        $config->lifetime    = $container->get('cache.public.lifetime');
         return new Cache($config);
     },
 ];
