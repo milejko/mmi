@@ -31,7 +31,7 @@ return [
         $dbConfig->user     = $container->get('db.user');
         $dbConfig->password = $container->get('db.password');
         //database not specified
-        if (!$dbConfig->name || !$dbConfig->host) {
+        if (!$dbConfig->driver) {
             return;
         }
         //compatible drivers

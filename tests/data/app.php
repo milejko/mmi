@@ -17,7 +17,6 @@ class TestApp extends AppAbstract
 {
     const PROFILER_PREFIX                    = 'Mmi\TestApp: ';
     const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
-    const APPLICATION_COMPILE_STRUCTURE_FILE = self::APPLICATION_COMPILE_PATH . '/Structure.json';
 
     /**
      * Sets error and exception handler
