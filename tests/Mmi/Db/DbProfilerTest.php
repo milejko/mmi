@@ -22,16 +22,18 @@ class DbProfilerTest extends \PHPUnit\Framework\TestCase
     public function testCount()
     {
         $profiler = new DbProfiler(new AppProfiler);
+        $pdoStatement = (new \PDOStatement());
+        $pdoStatement->queryString = 'SELECT 1';
         $this->assertEquals(0, $profiler->count());
-        $this->assertNull($profiler->event(new \PDOStatement, ['test' => 'test'], 0));
+        $this->assertNull($profiler->event($pdoStatement, ['test' => 'test'], 0));
         $this->assertEquals(1, $profiler->count());
         $this->assertEquals(0, $profiler->elapsed());
         $this->assertCount(1, $profiler->get());
-        $this->assertNull($profiler->event(new \PDOStatement, [1], 31));
+        $this->assertNull($profiler->event($pdoStatement, [1], 31));
         $this->assertEquals(2, $profiler->count());
         $this->assertGreaterThan(30, $profiler->elapsed());
-        $this->assertNull($profiler->event(new \PDOStatement, [1], 31));
-        $this->assertNull($profiler->event(new \PDOStatement, [1], 31));
+        $this->assertNull($profiler->event($pdoStatement, [1], 31));
+        $this->assertNull($profiler->event($pdoStatement, [1], 31));
         $this->assertCount(4, $profiler->get());
     }
 

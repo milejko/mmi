@@ -123,7 +123,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test1', $r->getPk());
         $this->assertEquals(2, (new Query('mmi_cache'))->where('id')->like('test%')->andQuery((new Query('mmi_cache'))->where('id')->equals('test1')->orField('id')->equals('test2'))->count());
         $this->assertEquals('test1-data', (new \Mmi\Orm\CacheQuery)->findPk('test1')->data);
-        $this->assertSame(['1'], (new Query('mmi_cache'))->where('id')->equals(['test1', 'test2', 'test3'])->findUnique('ttl'));
+        $this->assertSame([1], (new Query('mmi_cache'))->where('id')->equals(['test1', 'test2', 'test3'])->findUnique('ttl'));
         $this->assertNull((new Query('mmi_cache'))->findPk('inexistent-id'));
         $this->assertInstanceOf('\Mmi\Orm\RecordCollection', (new TestQuery)->joinLeft('mmi_cache')->on('id')->find());
     }

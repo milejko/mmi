@@ -63,9 +63,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     public function testRedisHandler()
     {
-        if (!class_exists('\Redis')) {
-            return;
-        }
         $config = new CacheConfig;
         $config->handler = 'redis';
         $config->path = 'udp://user:pass@127.0.0.1:6379/1';

@@ -59,11 +59,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('gril', $translate->translate('girl'));
         $this->assertEquals('cow', $translate->translate('cow'));
 
-        $this->assertEquals('translation with a sample text string and another text int 13 and %unused% sample text', $translate->translate('test', [
-            'firstText' => 'sample text',
-            'secondText' => 'another text',
-            'number' => 13
-        ]));
+        $this->assertEquals('translation with 1 test and second-test', $translate->translate('test', [1, 'test', 'second-test']));
     }
 
 }

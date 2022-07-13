@@ -153,7 +153,7 @@ class Request extends \Mmi\DataObject
      */
     public function getControllerName()
     {
-        return $this->controller;
+        return (string) $this->controller;
     }
 
     /**
@@ -162,7 +162,7 @@ class Request extends \Mmi\DataObject
      */
     public function getActionName()
     {
-        return $this->action;
+        return (string) $this->action;
     }
 
     /**

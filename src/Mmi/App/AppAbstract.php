@@ -25,7 +25,6 @@ abstract class AppAbstract
 {
     const PROFILER_PREFIX                    = 'Mmi\App: ';
     const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
-    const APPLICATION_COMPILE_STRUCTURE_FILE = self::APPLICATION_COMPILE_PATH . '/Structure.json';
 
     /**
      * @TODO: remove after all legacy dependencies are removed

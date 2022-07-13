@@ -47,9 +47,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     public function testGetters()
     {
-        $this->assertNull((new Request)->getModuleName());
-        $this->assertNull((new Request)->getControllerName());
-        $this->assertNull((new Request)->getActionName());
+        $this->assertEmpty((new Request)->getModuleName());
+        $this->assertEmpty((new Request)->getControllerName());
+        $this->assertEmpty((new Request)->getActionName());
         $request = (new Request)->setModuleName('tm')
             ->setControllerName('tc')
             ->setActionName('ta');
