@@ -15,7 +15,6 @@ use Mmi\Filter\Ascii;
 class AsciiTest extends \PHPUnit\Framework\TestCase
 {
 
-    /** @group needs-review */
     public function testFilter()
     {
         $this->assertEquals('ala ma kota', (new Ascii)->filter('ala ma kota'));
@@ -23,7 +22,11 @@ class AsciiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('zolw', (new Ascii)->filter('żółw'));
         $this->assertEquals('swinke', (new Ascii)->filter('świnkę'));
         $this->assertEquals('Shojgu zayavil ob okonchanii grazhdanskoj vojny v Sirii', (new Ascii)->filter('Шойгу заявил об окончании гражданской войны в Сирии'));
-        $this->assertEquals('grosster', (new Ascii)->filter('größter'));
     }
 
+    /** @group needs-review */
+    public function testScharfesS(): void
+    {
+        $this->assertEquals('grosster', (new Ascii)->filter('größter'));
+    }
 }
