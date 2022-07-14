@@ -6,7 +6,7 @@
 { pkgs ? import <nixpkgs> {}}:
 
 let
-    myPhp = pkgs.php74.buildEnv {
+    myPhp = pkgs.php81.buildEnv {
         extensions = ({ enabled, all }: enabled ++ [ all.xdebug] ++ [ all.apcu ]);
         extraConfig = ''
          xdebug.mode=debug
