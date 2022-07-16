@@ -134,6 +134,19 @@ abstract class Form extends \Mmi\OptionObject
     }
 
     /**
+     * Usuwanie elementu formularza z gotowego obiektu
+     * @param \Mmi\Form\Element\ElementAbstract $element obiekt elementu formularza
+     * @return self
+     */
+    public function removeElement($name)
+    {
+        if (isset($this->_elements[$name])) {
+            unset($this->_elements[$name]);
+        }
+        return $this;
+    }
+
+    /**
      * Zwraca nazwę bazową
      * @return string
      */
