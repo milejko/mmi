@@ -152,7 +152,7 @@ class PdoMysql extends PdoAbstract
         foreach ($meta as $column) {
             //przekształcanie odpowiedzi do standardowej postaci
             $associativeMeta[$column['name']] = [
-                'dataType' => $column['dataType'],
+                'dataType' => strtolower($column['dataType']),
                 'maxLength' => $column['maxLength'],
                 'null' => ($column['null'] == 'YES') ? true : false,
                 'default' => $column['default']

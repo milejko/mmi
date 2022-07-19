@@ -149,7 +149,7 @@ class PdoSqlite extends PdoAbstract
         foreach ($meta as $column) {
             //konwersja do wspólnego formatu mmi
             $associativeMeta[$column['name']] = [
-                'dataType' => $column['type'],
+                'dataType' => strtolower($column['type']),
                 'maxLength' => null,
                 'null' => ($column['notnull'] == 1) ? false : true,
                 'default' => $column['dflt_value']
