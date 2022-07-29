@@ -2,6 +2,7 @@
 
 namespace Mmi\Session;
 
+use Mmi\App\AppProfilerInterface;
 use Psr\Container\ContainerInterface;
 
 use function DI\env;
@@ -21,6 +22,7 @@ return [
         $sessionConfig->path            = $container->get('session.path');
         $sessionConfig->cookieSecure    = $container->get('session.cookie.secure');
         $sessionConfig->cookieHttpOnly  = $container->get('session.cookie.http');
+        $container->get(AppProfilerInterface::class)->event(SessionInterface::class . ': session setup');
         //creating session instance
         return new Session($sessionConfig);
     },
