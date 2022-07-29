@@ -10,7 +10,6 @@
 
 namespace Mmi\Http;
 
-use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\Cache;
 use Mmi\Cache\CacheInterface;
@@ -177,10 +176,8 @@ class ResponseDebugger
     public function getArray(): array
     {
         $debuggerArray = [];
-        $debuggerArray['cacheInfo'] = 'system cache: %s, public cache: %s';
-        //pobranie widoku
-        $debuggerArray['cacheInfo'] = \sprintf(
-            $debuggerArray['cacheInfo'], 
+        $debuggerArray['cache info'] = \sprintf(
+            'system cache: %s, public cache: %s', 
             $this->container->get('cache.system.enabled') ? 'on' : 'off', 
             $this->cache->isActive() ? 'on' : 'off'
         );
@@ -189,12 +186,11 @@ class ResponseDebugger
             $debuggerArray['exception']['trace'] = $this->view->_trace;
         }
         $debuggerArray['elapsed'] = $this->_getElapsed();
-        $debuggerArray['memory usage'] = $this->_getPeakMemory();
+        $debuggerArray['peak memory usage'] = $this->_getPeakMemory();
         $debuggerArray['request'] = $this->request->toArray();
-        $debuggerArray['server'] = $this->request->getServer()->toArray();
-        $debuggerArray['db profiler'] = App::$di->get(DbInterface::class) && App::$di->get(DbInterface::class)->getProfiler() ? App::$di->get(DbInterface::class)->getProfiler()->get() : [];
-        $debuggerArray['profiler'] = $this->profiler->get();
-        $debuggerArray['container entries'] = $this->_simplifyVarArray($this->container->getKnownEntryNames());
+        $dbProfilerData = $this->container->get(DbInterface::class) && $this->container->get(DbInterface::class)->getProfiler() ? $this->container->get(DbInterface::class)->getProfiler()->get() : [];
+        $debuggerArray['db profiler'] = array_map(function ($data) { return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['sql']; }, $dbProfilerData);
+        $debuggerArray['profiler'] = array_map(function ($data) { return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['name']; }, $this->profiler->get());
         return $debuggerArray;
     }
 
