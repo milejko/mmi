@@ -10,9 +10,11 @@
 
 namespace Mmi\Http;
 
+use Mmi\App\App;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\Cache;
 use Mmi\Cache\CacheInterface;
+use Mmi\Db\DbInterface;
 use Mmi\Mvc\View;
 use Psr\Container\ContainerInterface;
 
@@ -94,7 +96,7 @@ class ResponseDebugger
      */
     public function getHtml()
     {
-        $cacheInfo = 'cache private: %s - cache public: %s';
+        $cacheInfo = 'system cache: %s - public cache: %s';
         //pobranie widoku
         $cacheInfo = \sprintf(
             $cacheInfo, 
@@ -170,6 +172,30 @@ class ResponseDebugger
         $html .= '</pre>';
         $html .= '</td></tr></table></div>';
         return $html;
+    }
+
+    public function getArray(): array
+    {
+        $debuggerArray = [];
+        $debuggerArray['cacheInfo'] = 'system cache: %s, public cache: %s';
+        //pobranie widoku
+        $debuggerArray['cacheInfo'] = \sprintf(
+            $debuggerArray['cacheInfo'], 
+            $this->container->get('cache.system.enabled') ? 'on' : 'off', 
+            $this->cache->isActive() ? 'on' : 'off'
+        );
+        if (null !== $this->view->_exception) {
+            $debuggerArray['exception']['message'] = $this->view->_exception->getMessage() . ' on ' . $this->view->_exception->getFile() . ' (' . $this->view->_exception->getLine() . ')';
+            $debuggerArray['exception']['trace'] = $this->view->_trace;
+        }
+        $debuggerArray['elapsed'] = $this->_getElapsed();
+        $debuggerArray['memory usage'] = $this->_getPeakMemory();
+        $debuggerArray['request'] = $this->request->toArray();
+        $debuggerArray['server'] = $this->request->getServer()->toArray();
+        $debuggerArray['db profiler'] = App::$di->get(DbInterface::class) && App::$di->get(DbInterface::class)->getProfiler() ? App::$di->get(DbInterface::class)->getProfiler()->get() : [];
+        $debuggerArray['profiler'] = $this->profiler->get();
+        $debuggerArray['container entries'] = $this->_simplifyVarArray($this->container->getKnownEntryNames());
+        return $debuggerArray;
     }
 
     /**
