@@ -11,9 +11,9 @@
 namespace Mmi\Filter;
 
 /**
- * Intval
+ * Floatval
  */
-class Intval extends \Mmi\Filter\FilterAbstract
+class Floatval extends \Mmi\Filter\FilterAbstract
 {
     /**
      * Wycina wszystko poza liczbami
@@ -23,6 +23,6 @@ class Intval extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return (int)$value;
+        return (float)$value;
     }
 }
