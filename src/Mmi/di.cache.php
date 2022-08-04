@@ -2,6 +2,7 @@
 
 namespace Mmi\Cache;
 
+use Mmi\App\AppProfilerInterface;
 use Psr\Container\ContainerInterface;
 
 use function DI\env;
@@ -19,6 +20,7 @@ return [
         $config->handler    = \function_exists('apcu_fetch') ? 'apc' : 'file';
         $config->path       = BASE_PATH . '/var/cache';
         $config->lifetime   = 2592000;
+        $container->get(AppProfilerInterface::class)->event(SystemCacheInterface::class . ': system cache setup');
         return new Cache($config);
     },
     CacheInterface::class => function (ContainerInterface $container) {
@@ -27,6 +29,7 @@ return [
         $config->handler     = $container->get('cache.public.handler');
         $config->path        = $container->get('cache.public.path');
         $config->lifetime    = $container->get('cache.public.lifetime');
+        $container->get(AppProfilerInterface::class)->event(CacheInterface::class . ': public cache setup');
         return new Cache($config);
     },
 ];

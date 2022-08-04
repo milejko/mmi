@@ -13,6 +13,7 @@ namespace Mmi\Http;
 use Mmi\App\AppProfilerInterface;
 use Mmi\Cache\Cache;
 use Mmi\Cache\CacheInterface;
+use Mmi\Db\DbInterface;
 use Mmi\Mvc\View;
 use Psr\Container\ContainerInterface;
 
@@ -94,7 +95,7 @@ class ResponseDebugger
      */
     public function getHtml()
     {
-        $cacheInfo = 'cache private: %s - cache public: %s';
+        $cacheInfo = 'system cache: %s - public cache: %s';
         //pobranie widoku
         $cacheInfo = \sprintf(
             $cacheInfo, 
@@ -170,6 +171,27 @@ class ResponseDebugger
         $html .= '</pre>';
         $html .= '</td></tr></table></div>';
         return $html;
+    }
+
+    public function getArray(): array
+    {
+        $debuggerArray = [];
+        $debuggerArray['cache info'] = \sprintf(
+            'system cache: %s, public cache: %s', 
+            $this->container->get('cache.system.enabled') ? 'on' : 'off', 
+            $this->cache->isActive() ? 'on' : 'off'
+        );
+        if (null !== $this->view->_exception) {
+            $debuggerArray['exception']['message'] = $this->view->_exception->getMessage() . ' on ' . $this->view->_exception->getFile() . ' (' . $this->view->_exception->getLine() . ')';
+            $debuggerArray['exception']['trace'] = $this->view->_trace;
+        }
+        $debuggerArray['elapsed'] = $this->_getElapsed();
+        $debuggerArray['peak memory usage'] = $this->_getPeakMemory();
+        $debuggerArray['request'] = $this->request->toArray();
+        $dbProfilerData = $this->container->get(DbInterface::class) && $this->container->get(DbInterface::class)->getProfiler() ? $this->container->get(DbInterface::class)->getProfiler()->get() : [];
+        $debuggerArray['db profiler'] = array_map(function ($data) { return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['sql']; }, $dbProfilerData);
+        $debuggerArray['profiler'] = array_map(function ($data) { return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['name']; }, $this->profiler->get());
+        return $debuggerArray;
     }
 
     /**
