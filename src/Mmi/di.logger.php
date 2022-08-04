@@ -3,6 +3,7 @@
 use Gelf\Publisher;
 use Gelf\Transport\IgnoreErrorTransportWrapper;
 use Gelf\Transport\UdpTransport;
+use Mmi\App\AppProfilerInterface;
 use Monolog\Handler\GelfHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogHandler;
@@ -41,6 +42,7 @@ return [
                 $logger->pushHandler(new SyslogHandler('mmi', LOG_USER, $container->get('log.level')));
                 break;
         }
+        $container->get(AppProfilerInterface::class)->event(LoggerInterface::class . ': logger setup');
         return $logger;
     },
 ];

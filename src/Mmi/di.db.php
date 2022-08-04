@@ -2,6 +2,7 @@
 
 namespace Mmi\Db;
 
+use Mmi\App\AppProfilerInterface;
 use Psr\Container\ContainerInterface;
 
 use function DI\autowire;
@@ -44,6 +45,7 @@ return [
         $db = new $driver($dbConfig);
         //set DB profiler
         $db->setProfiler($container->get(DbProfilerInterface::class));
+        $container->get(AppProfilerInterface::class)->event(DbInterface::class . ': database setup');
         return $db;
     },
 
