@@ -404,6 +404,10 @@ class Response
         $headers ? $this->sendHeaders() : null;
         //opcjonalne uruchomienie panelu deweloperskiego
         if ($this->_debug) {
+            if (null !== $jsonContent = json_decode($this->getContent())) {
+                $jsonContent->debugData = $this->responseDebugger->getArray();
+                $this->setContent(json_encode($jsonContent));
+            }
             //content decorate with debug data
             $this->setContent(str_replace('</body>', $this->responseDebugger->getHtml() . '</body>', $this->getContent()));
         }
