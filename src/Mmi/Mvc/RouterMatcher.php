@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -32,6 +32,10 @@ class RouterMatcher
         $params = [];
         $matches = [];
         $matched = false;
+        //sprawdzenie metody
+        if (null !== $check = $this->checkMethod($route)) {
+            return $check;
+        }
         //sprawdzenie statyczne
         if ($route->pattern == $url) {
             return [
@@ -110,11 +114,36 @@ class RouterMatcher
                 $url = preg_replace('/\(\#\)/', $match, $url, 1);
             }
         }
+
+        //sprawdzenie metody
+        if (null !== $check = $this->checkMethod($route)) {
+            return $check;
+        }
+
         return [
             'applied' => $applied,
             'matched' => $matched,
             'url' => $url
         ];
+    }
+
+    /**
+     * Sprawdzenie czy metoda zapytania jest odpowiednia
+     * @param RouterConfigRoute $route
+     *
+     * @return array[]|null
+     */
+    protected function checkMethod(RouterConfigRoute $route): ?array
+    {
+        if (null !== $route->method && $_SERVER['REQUEST_METHOD'] !== $route->method) {
+            return [
+                'matched' => [],
+                'params' => [],
+                'url' => []
+            ];
+        }
+
+        return null;
     }
 
     /**

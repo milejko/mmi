@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -28,16 +28,32 @@ class RouterConfig
      * @param string $pattern wyrażenie regularne lub plain
      * @param array $replace tablica zastąpień
      * @param array $default tablica wartości domyślnych
+     * @param string $method metoda
      * @return \Mmi\Mvc\RouterConfig
      */
-    public function setRoute($name, $pattern, array $replace = [], array $default = [])
+    public function setRoute($name, $pattern, array $replace = [], array $default = [], string $method = null)
     {
         $route = new \Mmi\Mvc\RouterConfigRoute;
         $route->name = $name;
         $route->pattern = $pattern;
         $route->replace = $replace;
         $route->default = $default;
+        $route->method = $method;
         return $this->addRoute($route);
+    }
+
+    /**
+     * Tworzy (lub nadpisuje) routę z daną metodą
+     * @param string $method metoda
+     * @param string $name nazwa lub indeks
+     * @param string $pattern wyrażenie regularne lub plain
+     * @param array $replace tablica zastąpień
+     * @param array $default tablica wartości domyślnych
+     * @return \Mmi\Mvc\RouterConfig
+     */
+    public function setRouteMethod(string $method, $name, $pattern, array $replace = [], array $default = [])
+    {
+        return $this->setRoute($name, $pattern, $replace, $default, $method);
     }
 
     /**
