@@ -17,8 +17,17 @@ class AsciiTest extends \PHPUnit\Framework\TestCase
 
     public function testFilter()
     {
+        $this->assertEquals('+', (new Ascii)->filter('+'));
+        $this->assertEquals('_', (new Ascii)->filter('_'));
+        $this->assertEquals(',', (new Ascii)->filter(','));
+        $this->assertEquals('|', (new Ascii)->filter('|'));
+        $this->assertEquals('-', (new Ascii)->filter('-'));
+        $this->assertEquals('/', (new Ascii)->filter('/'));
+        $this->assertEquals(',', (new Ascii)->filter(','));
+        $this->assertEquals('.', (new Ascii)->filter('.'));
+        $this->assertEquals('', (new Ascii)->filter('!@#$%^&*(){}:"<>?;\'\\[]~`'));
         $this->assertEquals('ala ma kota', (new Ascii)->filter('ala ma kota'));
-        $this->assertEquals('_+|,/-', (new Ascii)->filter('!@#$%^&*()_+{}:"|<>?,./;\'\[]=-'));
+        $this->assertEquals('Dokument v1.31', (new Ascii)->filter('Dokument v1.31'));
         $this->assertEquals('zolw', (new Ascii)->filter('żółw'));
         $this->assertEquals('swinke', (new Ascii)->filter('świnkę'));
         $this->assertEquals('Shojgu zayavil ob okonchanii grazhdanskoj vojny v Sirii', (new Ascii)->filter('Шойгу заявил об окончании гражданской войны в Сирии'));
