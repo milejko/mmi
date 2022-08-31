@@ -43,7 +43,7 @@ class Ascii extends \Mmi\Filter\FilterAbstract
             'я' => 'ya', '–' => '-'];
         $value = strtr($value, $ruMap);
         $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
-        $value = preg_replace("/[^a-zA-Z0-9\/\,_|+ -]/", '', $value);
+        $value = preg_replace("/[^a-zA-Z0-9\.\/\,_|+ -]/", '', $value);
         return $value;
     }
 
