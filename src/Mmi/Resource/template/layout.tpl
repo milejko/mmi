@@ -6,6 +6,6 @@
     <body>
         {content()}
         <hr />
-        <i>MMi 4.0</i>
+        <i>MMi 4.1</i>
     </body>
 </html>
