@@ -15,7 +15,15 @@ return [
         //router apply (with baseUrl calculation)
         $calculatedRequestUri = substr($request->getServer()->requestUri, strlen($container->get('app.base.url')));
         $container->get(AppProfilerInterface::class)->event(Request::class . ': request created from globals');
-        return $request->setParams($container->get(Router::class)->decodeUrl($calculatedRequestUri));
+        $request->setParams($container->get(Router::class)->decodeUrl($calculatedRequestUri));
+        //url decoded to 404
+        if (!$request->module) {
+            $request
+                ->setModuleName('mmi')
+                ->setControllerName('index')
+                ->setActionName('error');
+        }
+        return $request;
     },
     ResponseDebugger::class => autowire(ResponseDebugger::class),
     Response::class => autowire(Response::class)
