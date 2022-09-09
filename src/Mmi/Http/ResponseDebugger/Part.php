@@ -91,7 +91,7 @@ class Part
      */
     protected static function _colorifyPercent($percent)
     {
-        $boost = $percent * 15;
+        $boost = round($percent) * 15;
         return dechex(($boost > 255) ? 255 : $boost) . '2222';
     }
 
