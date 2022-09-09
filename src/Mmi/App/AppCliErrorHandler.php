@@ -46,7 +46,7 @@ class AppCliErrorHandler
     {
         //logowanie wyjątku
         $this->logger->logException($exception);
-        echo '¯\_(ツ)_/¯ ups, something went wrong';
+        echo 'Something went wrong';
     }
 
 }

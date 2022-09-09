@@ -132,7 +132,7 @@ class AppErrorHandler implements AppErrorHandlerInterface
      */
     private function rawErrorResponse(Response $response): string
     {
-        $message = '¯\_(ツ)_/¯ ups, something went wrong';
+        $message = 'Something went wrong';
         //wybór typów
         switch ($response->getType()) {
                 //plaintext
