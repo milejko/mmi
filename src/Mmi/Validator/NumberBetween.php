@@ -23,11 +23,9 @@ namespace Mmi\Validator;
  */
 class NumberBetween extends ValidatorAbstract
 {
-
-    /**
-     * Treść błędu 
-     */
     const INVALID = 'validator.numberBetween.message';
+    const INVALID_MIN = 'validator.numberBetween.messageMin';
+    const INVALID_MAX = 'validator.numberBetween.messageMax';
 
     /**
      * Ustawia opcje
@@ -48,17 +46,16 @@ class NumberBetween extends ValidatorAbstract
      */
     public function isValid($value)
     {
-        //czy liczba
         if (!is_numeric($value)) {
-            return $this->_error(static::INVALID);
+            return $this->_error(self::INVALID);
         }
-        //sprawdzamy dolny zakres
-        if ($this->getFrom() !== null && $value < $this->getFrom()) {
-            return $this->_error(static::INVALID);
+
+        if ($this->getFrom() && $value < $this->getFrom()) {
+            return $this->_error([self::INVALID_MIN, [$this->getFrom()]]);
         }
-        //sprawdzamy górny zakres
-        if ($this->getTo() !== null && $value > $this->getTo()) {
-            return $this->_error(static::INVALID);
+
+        if ($this->getTo() && $value > $this->getTo()) {
+            return $this->_error([self::INVALID_MAX, [$this->getTo()]]);
         }
         return true;
     }
