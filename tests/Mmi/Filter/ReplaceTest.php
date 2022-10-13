@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Test\Filter;
+namespace Mmi\Tests\Filter;
 
 use Mmi\Filter\Replace;
 

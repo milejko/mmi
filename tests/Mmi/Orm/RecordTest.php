@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Test;
+namespace Mmi\Tests\Orm;
 
 use Mmi\Orm\Query;
 
@@ -35,7 +35,7 @@ class RecordTest extends \PHPUnit\Framework\TestCase
 
     public function testSave()
     {
-        $tr = new \Mmi\Test\TestRecord;
+        $tr = new \Mmi\Tests\Orm\TestRecord;
         $tr->camelCase = 'test1';
         $tr->anotherColumn = 'test2';
         $this->assertTrue($tr->save());
