@@ -1,6 +1,6 @@
 <?php
 
-namespace Mmi\Test\EventManager;
+namespace Mmi\EventManager;
 
 use _PHPStan_76800bfb5\Nette\Neon\Exception;
 use Mmi\App\App;
