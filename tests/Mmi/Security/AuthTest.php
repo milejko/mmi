@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Security;
+namespace Mmi\Test\Security;
 
 use Mmi\Security\Auth;
 use Mmi\Test\TestAuthProvider;

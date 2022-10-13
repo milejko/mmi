@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Mvc\ViewHelper;
+namespace Mmi\Test\Mvc\ViewHelper;
 
 use Mmi\App\TestApp;
 use Mmi\Filter\Escape as EscapeFilter;

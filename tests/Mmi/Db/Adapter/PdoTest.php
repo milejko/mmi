@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Db\Adapter;
+namespace Mmi\Test\Db\Adapter;
 
 use Mmi\App\AppProfiler;
 use Mmi\Db\DbConfig;

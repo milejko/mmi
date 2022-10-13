@@ -16,6 +16,16 @@ namespace Mmi\Cache;
 interface CacheInterface
 {
     /**
+     * Constructor
+     */
+    public function __construct(CacheConfig $config);
+
+    /**
+     * Get config
+     */
+    public function getConfig(): CacheConfig;
+
+    /**
      * Loads from cache
      * @return mixed
      */
@@ -42,4 +52,5 @@ interface CacheInterface
      * Is buffer active
      */
     public function isActive(): bool;
+
 }

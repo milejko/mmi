@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Validator;
+namespace Mmi\Test\Validator;
 
 use Mmi\Validator\Postal;
 

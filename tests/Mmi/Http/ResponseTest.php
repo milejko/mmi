@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Http;
+namespace Mmi\Test\Http;
 
 use Mmi\App\TestApp;
 use Mmi\App\AppProfiler;

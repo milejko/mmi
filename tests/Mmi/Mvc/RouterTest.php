@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Router;
+namespace Mmi\Test\Router;
 
 use Mmi\Mvc\Router,
     Mmi\Mvc\RouterConfig;

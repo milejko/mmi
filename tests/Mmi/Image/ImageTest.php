@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Image;
+namespace Mmi\Test\Image;
 
 use Mmi\Image\Image;
 
