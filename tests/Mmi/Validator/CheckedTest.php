@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Tests\Validator;
+namespace Tests\Mmi\Validator;
 
 use Mmi\Validator\Checked;
 

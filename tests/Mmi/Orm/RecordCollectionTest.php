@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Tests\Orm;
+namespace Tests\Mmi\Orm;
 
 use Mmi\Orm\RecordCollection;
 

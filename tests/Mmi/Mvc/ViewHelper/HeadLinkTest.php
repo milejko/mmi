@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Tests\Mvc\ViewHelper;
+namespace Tests\Mmi\Mvc\ViewHelper;
 
 use Mmi\App\TestApp;
 use Mmi\Mvc\ViewHelper\HeadLink;

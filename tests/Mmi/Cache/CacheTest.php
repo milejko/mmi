@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Tests\Cache;
+namespace Tests\Mmi\Cache;
 
 use Mmi\Cache\Cache;
 use Mmi\Cache\CacheConfig;

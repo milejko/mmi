@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Tests\Paginator;
+namespace Tests\Mmi\Paginator;
 
 use Mmi\Paginator\Paginator;
 

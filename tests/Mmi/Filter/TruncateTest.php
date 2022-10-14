@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Mmi\Tests\Filter;
+namespace Tests\Mmi\Filter;
 
 use Mmi\Filter\Truncate;
 
