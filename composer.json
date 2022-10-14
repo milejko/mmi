@@ -53,7 +53,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Mmi\\": "tests/Mmi"
+            "Tests\\Mmi\\": "tests/Mmi"
         }
     },
     "extra": {
