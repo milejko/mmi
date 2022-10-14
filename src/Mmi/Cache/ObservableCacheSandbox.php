@@ -1,21 +1,30 @@
 <?php
+
+/**
+ * Mmi Framework (https://github.com/milejko/mmi.git)
+ * 
+ * @link       https://github.com/milejko/mmi.git
+ * @copyright  Copyright (c) 2010-2022 Mariusz Miłejko (mariusz@milejko.pl)
+ * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
+ */
+
 declare(strict_types=1);
 
-namespace Tests\Mmi\Cache;
+namespace Mmi\Cache;
 
 use Mmi\Cache\CacheInterface;
 
-final class ObservableCacheStub implements CacheInterface
+final class ObservableCacheSandbox implements CacheInterface
 {
-    private $store = [];
-    private $eventLog = [];
+    private array $store = [];
+    private array $eventLog = [];
 
     private const LOAD_LABEL = 'load';
     private const SAVE_LABEL = 'save';
     private const REMOVE_LABEL = 'remove';
     private const FLUSH_LABEL = 'flush';
 
-    public function load(string $key)
+    public function load(string $key): mixed
     {
         $this->eventLog[] = self::LOAD_LABEL;
         return isset($this->store[$key]) ? $this->store[$key] : null;
@@ -55,5 +64,4 @@ final class ObservableCacheStub implements CacheInterface
     {
         $this->eventLog = [];
     }
-
 }
