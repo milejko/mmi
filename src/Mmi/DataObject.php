@@ -107,16 +107,16 @@ class DataObject implements \Iterator
      * Przeskakuje na początek
      * @return mixed
      */
-    function rewind()
+    function rewind(): void
     {
-        return reset($this->_data);
+        reset($this->_data);
     }
 
     /**
      * Zwraca aktualny element
      * @return mixed
      */
-    function current()
+    function current(): mixed
     {
         return current($this->_data);
     }
@@ -125,7 +125,7 @@ class DataObject implements \Iterator
      * Zwraca klucz aktualnego elementu
      * @return string
      */
-    function key()
+    function key(): mixed
     {
         return key($this->_data);
     }
@@ -134,16 +134,16 @@ class DataObject implements \Iterator
      * Przechodzi do następnego elementu
      * @return mixed
      */
-    function next()
+    function next(): void
     {
-        return next($this->_data);
+        next($this->_data);
     }
 
     /**
      * Sprawdza, czy aktualna pozycja jest prawidłowa
      * @return boolean
      */
-    function valid()
+    function valid(): bool
     {
         return key($this->_data) !== null;
     }
