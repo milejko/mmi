@@ -28,5 +28,12 @@ final class RouterApply
         }
 
         $request->setParams($this->router->decodeUrl($requestUri));
+
+        if (!$request->module) {
+            $request
+                ->setModuleName('mmi')
+                ->setControllerName('index')
+                ->setActionName('error');
+        }
     }
 }
