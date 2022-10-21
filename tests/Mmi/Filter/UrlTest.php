@@ -12,7 +12,6 @@ namespace Tests\Mmi\Filter;
 
 use Mmi\Filter\Url;
 
-/** @group needs-review */
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
 
