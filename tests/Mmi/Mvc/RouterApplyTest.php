@@ -16,7 +16,10 @@ final class RouterApplyTest extends TestCase
         $request = self::getRequestForHelp();
         $routerApply($request);
 
-        self::assertEquals(['controller' => 'index', 'action' => 'index'], $request->toArray());
+        self::assertEquals(
+            ['module' => 'mmi', 'controller' => 'index', 'action' => 'error'],
+            $request->toArray()
+        );
     }
 
     public function testItAppliesParametersForRequestWithTestRouterConfig(): void

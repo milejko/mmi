@@ -14,5 +14,11 @@ final class TestRouterConfig extends RouterConfig
             '',
             ['module' => 'mmi', 'controller' => 'index', 'action' => 'index', 'uri' => '/']
         );
+
+        $this->setRoute(
+            'example',
+            'example',
+            ['module' => 'mmi', 'controller' => 'example', 'action' => 'index', 'uri' => '/example']
+        );
     }
 }

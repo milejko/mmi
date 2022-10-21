@@ -12,6 +12,7 @@ namespace Mmi\App;
 
 /**
  * Application class
+ * @deprecated
  */
 class TestApp extends AppAbstract
 {

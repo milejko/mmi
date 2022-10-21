@@ -9,6 +9,7 @@
  */
 
 use Mmi\App\TestApp;
+use Mmi\Http\Request;
 
 //definicja katalogu bazowego
 define('BASE_PATH', __DIR__ . '/../../');

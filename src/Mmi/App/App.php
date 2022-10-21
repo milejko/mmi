@@ -24,6 +24,11 @@ class App extends AppAbstract
     const PROFILER_PREFIX                    = 'Mmi\App: ';
     const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
 
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+    }
+
     /**
      * Sets error and exception handler
      */
@@ -44,9 +49,10 @@ class App extends AppAbstract
     {
     }
 
-    public function handleRequest(Request $request): Response
+    // TODO: pass request as argument (requires many changes upstream)
+    public function handleRequest(): Response
     {
-        ($this->container->get(RouterApply::class))($request);
+        ($this->container->get(RouterApply::class))($this->request);
 
         $interceptor = $this->container->has(AppEventInterceptorInterface::class) ? $this->container->get(AppEventInterceptorInterface::class) : null;
         //intercept before dispatch
@@ -57,7 +63,7 @@ class App extends AppAbstract
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeDispatch()');
         }
         //render content
-        $content = $this->container->get(ActionHelper::class)->forward($request);
+        $content = $this->container->get(ActionHelper::class)->forward($this->request);
         //intercept before send
         if (null !== $interceptor) {
             $interceptor->beforeSend();
