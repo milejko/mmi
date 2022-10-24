@@ -6,7 +6,7 @@
 { pkgs ? import <nixpkgs> {}}:
 
 let
-    myPhp = pkgs.php80.buildEnv {
+    myPhp = pkgs.php81.buildEnv {
         extensions = ({ enabled, all }: enabled ++ [ all.xdebug] ++ [ all.apcu ]);
         extraConfig = ''
          xdebug.mode=debug
@@ -21,9 +21,9 @@ pkgs.mkShell {
 
     shellHook = ''
       export APP_DEBUG_ENABLED=1
-      export APP_BASE_URL=hxxp://example.com
+      export APP_BASE_URL=
       export CACHE_SYSTEM_ENABLED=0
-      export CACHE_PUBLIC_ENABLED=1
+      export CACHE_PUBLIC_ENABLED=0
       export CACHE_PUBLIC_HANDLER=file
 
       export DB_HOST=localhost
