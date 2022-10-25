@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App;
+namespace Tests\Mmi\App;
 
 use Mmi\App\App;
 use Mmi\Http\Request;

@@ -31,7 +31,6 @@ pkgs.mkShell {
       export DB_NAME=test
       export DB_PASSWORD=test
 
-      vendor/bin/phpunit --no-coverage --exclude-group=infra,needs-review
-      vendor/bin/phpunit -c phpunit.app.xml --testdox
+      vendor/bin/phpunit --no-coverage --exclude-group=infra
     '';
 }
