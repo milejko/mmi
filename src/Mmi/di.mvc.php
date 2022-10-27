@@ -14,6 +14,8 @@ return [
 
     Router::class => autowire(Router::class),
 
+    RouterApply::class => autowire(RouterApply::class),
+
     View::class => autowire(View::class)
         ->method('setCdn', get('app.view.cdn')),
     
