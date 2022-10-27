@@ -17,7 +17,6 @@ pkgs.mkShell {
     packages = [
         myPhp
         myPhp.packages.composer
-        pkgs.git
     ];
 
     shellHook = ''
