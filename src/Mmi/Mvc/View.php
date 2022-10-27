@@ -61,12 +61,6 @@ class View extends \Mmi\DataObject
     public $request;
 
     /**
-     * Bazowa ścieżka
-     * @var string
-     */
-    public $baseUrl;
-
-    /**
      * Adres CDN
      * @var string 
      */
@@ -77,7 +71,6 @@ class View extends \Mmi\DataObject
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->baseUrl   = $container->get('app.base.url');
         $this->container = $container;
     }
 

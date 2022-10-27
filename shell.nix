@@ -9,7 +9,7 @@ let
     myPhp = pkgs.php81.buildEnv {
         extensions = ({ enabled, all }: enabled ++ [ all.xdebug] ++ [ all.apcu ]);
         extraConfig = ''
-         xdebug.mode=debug
+         memory_limit=256M
         '';
     };
 in
@@ -17,9 +17,12 @@ pkgs.mkShell {
     packages = [
         myPhp
         myPhp.packages.composer
+        myPhp.packages.psysh
+        pkgs.nginx
     ];
 
     shellHook = ''
-      vendor/bin/phpunit --no-coverage
+      export XDEBUG_MODE=coverage
+      vendor/bin/phpunit
     '';
 }

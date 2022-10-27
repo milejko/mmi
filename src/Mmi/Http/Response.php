@@ -64,23 +64,17 @@ class Response
      */
     private $responseTimingHeader;
 
-    /**
-     * @var string
-     */
-    private $baseUrl;
 
     public function __construct(
         Router $router,
         ResponseTimingHeader $responseTimingHeader,
         ResponseDebugger $responseDebugger,
-        string $baseUrl = ''
     )
     {
         //injects
         $this->router               = $router;
         $this->responseTimingHeader = $responseTimingHeader;
         $this->responseDebugger     = $responseDebugger;
-        $this->baseUrl              = $baseUrl;
     }
 
     /**
@@ -446,7 +440,7 @@ class Response
     public function redirectToRoute(array $params = [])
     {
         //przekierowanie na url
-        $this->redirectToUrl($this->baseUrl . $this->router->encodeUrl($params));
+        $this->redirectToUrl($this->router->encodeUrl($params));
     }
 
     /**
