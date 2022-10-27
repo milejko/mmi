@@ -17,20 +17,10 @@ pkgs.mkShell {
     packages = [
         myPhp
         myPhp.packages.composer
+        pkgs.git
     ];
 
     shellHook = ''
-      export APP_DEBUG_ENABLED=1
-      export APP_BASE_URL=
-      export CACHE_SYSTEM_ENABLED=0
-      export CACHE_PUBLIC_ENABLED=0
-      export CACHE_PUBLIC_HANDLER=file
-
-      export DB_HOST=localhost
-      export DB_USER=3306
-      export DB_NAME=test
-      export DB_PASSWORD=test
-
-      vendor/bin/phpunit --no-coverage --exclude-group=infra
+      vendor/bin/phpunit --no-coverage
     '';
 }
