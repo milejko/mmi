@@ -13,8 +13,4 @@ jobs:
       with:
         name: mycache
     - run: nix-build
-    - run: nix-shell --run "composer test:security-checker"
-    - run: nix-shell --run "composer test:phpcs"
-    - run: nix-shell --run "composer test:phpstan"
-    - run: nix-shell --run "composer test:phpmd"
-    - run: nix-shell --run "composer test:unit"
+    - run: nix-shell --run "composer test:all"
