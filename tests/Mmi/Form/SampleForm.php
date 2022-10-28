@@ -10,6 +10,21 @@
 
 namespace Tests\Mmi\Form;
 
+use Mmi\Form\Element\Button;
+use Mmi\Form\Element\Checkbox;
+use Mmi\Form\Element\Csrf;
+use Mmi\Form\Element\Email;
+use Mmi\Form\Element\File;
+use Mmi\Form\Element\Hidden;
+use Mmi\Form\Element\Label;
+use Mmi\Form\Element\MultiCheckbox;
+use Mmi\Form\Element\Password;
+use Mmi\Form\Element\Radio;
+use Mmi\Form\Element\Select;
+use Mmi\Form\Element\Submit;
+use Mmi\Form\Element\Text;
+use Mmi\Form\Element\Textarea;
+
 /**
  * Test obiektu danych
  */
@@ -17,36 +32,36 @@ class SampleForm extends \Mmi\Form\Form
 {
     public function init()
     {
-        $this->addElementButton('button');
+        $this->addElement(new Button('button'));
 
-        $this->addElementCheckbox('checkbox');
+        $this->addElement(new Checkbox('checkbox'));
 
-        $this->addElementCsrf('csrf');
+        $this->addElement(new Csrf('csrf'));
 
-        $this->addElementEmail('email');
+        $this->addElement(new Email('email'));
 
-        $this->addElementFile('file');
+        $this->addElement(new File('file'));
 
-        $this->addElementHidden('hidden');
+        $this->addElement(new Hidden('hidden'));
 
-        $this->addElementLabel('label');
+        $this->addElement(new Label('label'));
 
-        $this->addElementMultiCheckbox('multicheckbox')
-            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']);
+        $this->addElement((new MultiCheckbox('multicheckbox'))
+            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
 
-        $this->addElementPassword('password');
+        $this->addElement(new Password('password'));
         
-        $this->addElementRadio('radio')
-            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']);
+        $this->addElement((new Radio('radio'))
+            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
         
-        $this->addElementSelect('select')
-            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']);
+        $this->addElement((new Select('select'))
+            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
         
-        $this->addElementSubmit('submit');
+        $this->addElement(new Submit('submit'));
         
-        $this->addElementText('text');
+        $this->addElement(new Text('text'));
         
-        $this->addElementTextarea('textarea');
+        $this->addElement(new Textarea('textarea'));
         
         foreach ($this->getElements() as $name => $element) {
             $element->setLabel('l:' . $name)
