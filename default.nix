@@ -22,6 +22,5 @@ pkgs.mkShell {
 
     shellHook = ''
         composer install
-        composer test:all
     '';
 }
