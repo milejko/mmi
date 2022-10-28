@@ -6,8 +6,5 @@ jobs:
     runs-on: ubuntu-latest
 steps:
     - uses: actions/checkout@v3
-    - uses: nixbuild/nix-quick-install-action@v18
-    - name: nix build
-    - run: nix-build
-    - name: composer test all
+    - uses: cachix/install-nix-action@v18
     - run: nix-shell --run "composer test:all"
