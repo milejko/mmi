@@ -9,12 +9,13 @@
 
 * MMi is only supported on PHP 8.1 and up.
 
-## Installation
+## Installation (for development purposes) - macOS & linux
 
 1. Install Nix: `sh <(curl -L https://nixos.org/nix/install)`
 2. Run command: `nix-shell`
+3. Nix shell gives you `composer`
 
-### 
+### Usage
 
 1. either composer require mmi/mmi
 2. or use mmi-standard package
