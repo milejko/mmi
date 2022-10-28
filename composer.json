@@ -60,7 +60,8 @@
             "@test:phpcs",
             "@test:phpstan",
             "@test:phpmd",
-            "@test:phpunit"
+            "@test:phpunit",
+            "@test:infection"
         ]
     },
     "autoload": {
