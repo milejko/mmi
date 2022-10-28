@@ -180,8 +180,8 @@ class HeadStyle extends HelperAbstract
         } catch (\Exception $e) {
             return '/* CSS file not found: ' . $fileName . ' */';
         }
-        //lokalizacja zasobów z uwzględnieniem baseUrl
-        $location = $this->view->baseUrl . '/' . trim(dirname($fileName), '/') . '/';
+        //lokalizacja zasobów
+        $location = '/' . trim(dirname($fileName), '/') . '/';
         //usuwanie nowych linii i tabów
         return preg_replace(['/\r\n/', '/\n/', '/\t/'], '', str_replace(['url(\'', 'url("'], ['url(\'' . $location, 'url("' . $location], $content));
     }

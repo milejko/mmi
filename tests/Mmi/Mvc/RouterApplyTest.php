@@ -11,7 +11,7 @@ final class RouterApplyTest extends TestCase
 {
     public function testItAppliesDefaultParametersForRequest(): void
     {
-        $routerApply = new RouterApply('hxxp://example.com', new Router(new RouterConfig()));
+        $routerApply = new RouterApply(new Router(new RouterConfig()));
 
         $request = self::getRequestForHelp();
         $routerApply($request);
@@ -24,7 +24,7 @@ final class RouterApplyTest extends TestCase
 
     public function testItAppliesParametersForRequestWithTestRouterConfig(): void
     {
-        $routerApply = new RouterApply('hxxp://example.com', new Router(new TestRouterConfig()));
+        $routerApply = new RouterApply(new Router(new TestRouterConfig()));
 
         $request = new Request();
         $routerApply($request);
@@ -38,7 +38,6 @@ final class RouterApplyTest extends TestCase
     public function testForConfiguredRoute(): void
     {
         $routerApply = new RouterApply(
-            'hxxp://example.com',
             new Router(
                 (new RouterConfig())
                     ->setRoute(

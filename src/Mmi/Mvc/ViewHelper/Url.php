@@ -27,7 +27,7 @@ class Url extends HelperAbstract
     {
         $urlParams = $reset ? $params : array_merge(App::$di->get(Request::class)->toArray(), $params);
         //wyznaczanie url
-        $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl($urlParams);
+        $url = App::$di->get(Router::class)->encodeUrl($urlParams);
         return $url ? $url : '/';
     }
 }

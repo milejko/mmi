@@ -8,3 +8,5 @@
 /var/
 /vendor/
 /web/
+*.build
+*.php

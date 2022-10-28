@@ -31,12 +31,12 @@ class HeadAbstract extends HelperAbstract
     }
 
     /**
-     * Zwraca publiczny src z baseUrl i CDN
+     * Zwraca publiczny src z CDN
      * @param string $src
      * @return string
      */
     protected function _getPublicSrc($src)
     {
-        return $this->view->cdn ? $this->view->cdn . $src : $this->view->baseUrl . $src;
+        return $this->view->cdn ? $this->view->cdn . $src : $src;
     }
 }
