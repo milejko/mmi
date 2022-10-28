@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -19,7 +19,6 @@ use Mmi\Db\DbInterface;
  */
 class QueryData
 {
-
     /**
      * Obiekt zapytania
      * @var Query
@@ -52,7 +51,7 @@ class QueryData
      * Pobiera ilość rekordów
      * @return int
      */
-    public final function count($column = '*')
+    final public function count($column = '*')
     {
         //wykonanie zapytania zliczającego na adapter
         $result = $this->_query->getQueryCompile()->groupBy ?
@@ -71,7 +70,7 @@ class QueryData
      * Pobiera wszystkie rekordy i zwraca ich kolekcję
      * @return RecordCollection
      */
-    public final function find()
+    final public function find()
     {
         //ustalenie klasy rekordu
         $recordName = $this->_query->getRecordName();
@@ -82,7 +81,7 @@ class QueryData
         //iteracja po danych z bazy
         foreach ($this->db->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
             //tworzenie i dodawanie rekordu
-            $collection->append((new $recordName)->setFromArray($row)->clearModified());
+            $collection->append((new $recordName())->setFromArray($row)->clearModified());
         }
         //zwrot kolekcji
         return $collection;
@@ -94,7 +93,7 @@ class QueryData
      * @param Query $q Obiekt zapytania
      * @return RecordRo
      */
-    public final function findFirst()
+    final public function findFirst()
     {
         //odpytanie adaptera o rekordy
         $result = $this->db->select($this->_prepareFields(), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind);
@@ -105,7 +104,7 @@ class QueryData
         //ustalenie klasy rekordu
         $recordName = $this->_query->getRecordName();
         /* @var $record RecordRo */
-        $record = new $recordName;
+        $record = new $recordName();
         return $record->setFromArray($result[0])->clearModified();
     }
 
@@ -115,7 +114,7 @@ class QueryData
      * @param string $valueName
      * @return array
      */
-    public final function findPairs($keyName, $valueName)
+    final public function findPairs($keyName, $valueName)
     {
         //inicjalizacja pustej tablicy
         $kv = [];
@@ -135,7 +134,7 @@ class QueryData
      * @param string $valueName
      * @return array
      */
-    public final function findFields(array $fields)
+    final public function findFields(array $fields)
     {
         //escape pól do zapytania
         \array_walk($fields, function (&$value) {
@@ -150,7 +149,7 @@ class QueryData
      * @param string $keyName nazwa klucza
      * @return string wartość maksymalna
      */
-    public final function findMax($keyName)
+    final public function findMax($keyName)
     {
         //odpytanie adaptera o rekord
         $result = $this->db->select('MAX(' . $this->db->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
@@ -162,7 +161,7 @@ class QueryData
      * @param string $keyName nazwa klucza
      * @return string wartość minimalna
      */
-    public final function findMin($keyName)
+    final public function findMin($keyName)
     {
         //odpytanie adaptera o rekord
         $result = $this->db->select('MIN(' . $this->db->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
@@ -174,7 +173,7 @@ class QueryData
      * @param string $keyName nazwa klucza
      * @return string wartość minimalna
      */
-    public final function findSum($keyName)
+    final public function findSum($keyName)
     {
         //odpytanie adaptera o rekord
         $result = $this->db->select('SUM(' . $this->db->prepareField($keyName) . ')', $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, 1, null, $this->_query->getQueryCompile()->bind);
@@ -186,7 +185,7 @@ class QueryData
      * @param string $keyName nazwa klucza
      * @return array mixed wartości unikalne
      */
-    public final function findUnique($keyName)
+    final public function findUnique($keyName)
     {
         //inicjalizacja pustej tabeli
         $result = [];
@@ -202,7 +201,7 @@ class QueryData
      * Przygotowuje pola do selecta
      * @return string
      */
-    protected final function _prepareFields()
+    final protected function _prepareFields()
     {
         //jeśli pusty schemat połączeń
         if (empty($this->_query->getQueryCompile()->joinSchema)) {
@@ -236,7 +235,7 @@ class QueryData
      * Przygotowuje sekcję FROM
      * @return string
      */
-    protected final function _prepareFrom()
+    final protected function _prepareFrom()
     {
         //przygotowanie tabeli
         $table = $this->db->prepareTable($this->_query->getTableName());
@@ -261,5 +260,4 @@ class QueryData
         }
         return $table;
     }
-
 }

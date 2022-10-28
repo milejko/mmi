@@ -15,7 +15,6 @@ namespace Mmi\Cache;
  */
 interface CacheHandlerInterface
 {
-
     /**
      * Konstruktor
      * @param Cache $cache obiekt bufora

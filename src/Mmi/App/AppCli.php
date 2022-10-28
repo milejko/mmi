@@ -19,7 +19,6 @@ use Symfony\Component\Console\Application;
  */
 class AppCli extends AppAbstract
 {
-
     private $symfonyConsoleApplication;
 
     public function __construct()
@@ -86,5 +85,4 @@ class AppCli extends AppAbstract
         $this->container->get(SystemCacheInterface::class)->save($commands, $cacheKey);
         return $commands;
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -22,7 +22,6 @@ use Mmi\Orm\Query;
  */
 class QueryField
 {
-
     /**
      * Nazwa pola
      * @var string
@@ -74,7 +73,7 @@ class QueryField
      * @return Query
      * @throws OrmException
      */
-    public final function __call($name, $params)
+    final public function __call($name, $params)
     {
         //znajdowanie 2 podciągów: 1 - nazwa metody, 2 - wartość pola
         if (!preg_match('/(equalsColumn|notEqualsColumn|greaterThanColumn|lessThanColumn|greaterOrEqualsColumn|lessOrEqualsColumn)([a-zA-Z0-9]+)/', $name, $matches) || !empty($params)) {
@@ -321,5 +320,4 @@ class QueryField
         //dodawanie operatora logicznego
         $this->_query->getQueryCompile()->where .= ' ' . $this->_logic . ' ';
     }
-
 }

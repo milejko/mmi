@@ -24,8 +24,8 @@ use function DI\autowire;
  */
 abstract class AppAbstract
 {
-    const PROFILER_PREFIX                    = 'Mmi\App: ';
-    const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
+    public const PROFILER_PREFIX                    = 'Mmi\App: ';
+    public const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
 
     /**
      * @TODO: remove after all legacy dependencies are removed

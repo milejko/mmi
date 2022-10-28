@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -10,12 +10,11 @@
 
 namespace Tests\Mmi\Router;
 
-use Mmi\Mvc\Router,
-    Mmi\Mvc\RouterConfig;
+use Mmi\Mvc\Router;
+use Mmi\Mvc\RouterConfig;
 
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testEncodeDecodeUrl()
     {
         $sampleRoute = new \Mmi\Mvc\RouterConfigRoute;
@@ -55,5 +54,4 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $router = new Router($config);
         $router->decodeUrl('static');
     }
-
 }

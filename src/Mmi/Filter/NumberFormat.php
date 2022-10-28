@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Filter;
 
 /**
  * Formater numerów
- * 
+ *
  * @method self setDigits($digits) ilość znaków
  * @method integer getDigits() pobiera ilość znaków
  * @method self setSeparator($separator) znak separatora przecinka
@@ -26,7 +26,6 @@ namespace Mmi\Filter;
  */
 class NumberFormat extends \Mmi\Filter\FilterAbstract
 {
-
     /**
      * Ustawia opcje
      * @param array $options
@@ -60,5 +59,4 @@ class NumberFormat extends \Mmi\Filter\FilterAbstract
         }
         return str_replace('-', '- ', $value);
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -14,7 +14,6 @@ use Mmi\Http\Request;
 
 class RequestTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testGetContentType()
     {
         $this->assertNull((new Request)->getContentType());
@@ -61,5 +60,4 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('ta', $request->action);
         $this->assertEquals('tm:tc:ta', $request->getAsColonSeparatedString());
     }
-
 }

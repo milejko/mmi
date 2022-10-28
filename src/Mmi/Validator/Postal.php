@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,11 +15,10 @@ namespace Mmi\Validator;
  */
 class Postal extends ValidatorAbstract
 {
-
     /**
      * Komunikat błędnego kodu
      */
-    const INVALID = 'validator.postal.message';
+    public const INVALID = 'validator.postal.message';
 
     /**
      * Sprawdza czy tekst jest e-mailem
@@ -34,5 +33,4 @@ class Postal extends ValidatorAbstract
         }
         return $this->_error(static::INVALID);
     }
-
 }

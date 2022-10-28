@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,6 @@ use Mmi\Mvc\Router;
  */
 class Response
 {
-
     /**
      * Przechowuje nagłówki
      * @var ResponseHeader[]
@@ -74,8 +73,7 @@ class Response
         ResponseTimingHeader $responseTimingHeader,
         ResponseDebugger $responseDebugger,
         string $baseUrl = ''
-    )
-    {
+    ) {
         //injects
         $this->router               = $router;
         $this->responseTimingHeader = $responseTimingHeader;
@@ -456,9 +454,8 @@ class Response
     public function redirectToUrl($url)
     {
         //przekierowanie - header location
-        (new ResponseHeader)->setName('Location')->setValue($url)
+        (new ResponseHeader())->setName('Location')->setValue($url)
             //wysyłka i wyjście z aplikacji
             ->sendAndExit();
     }
-
 }

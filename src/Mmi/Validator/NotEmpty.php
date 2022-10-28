@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,11 +15,10 @@ namespace Mmi\Validator;
  */
 class NotEmpty extends ValidatorAbstract
 {
-
     /**
      * Treść wiadomości
      */
-    const INVALID = 'validator.notEmpty.message';
+    public const INVALID = 'validator.notEmpty.message';
 
     /**
      * Walidacja niepustości
@@ -44,5 +43,4 @@ class NotEmpty extends ValidatorAbstract
         }
         return true;
     }
-
 }

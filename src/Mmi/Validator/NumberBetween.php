@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,20 +12,20 @@ namespace Mmi\Validator;
 
 /**
  * Walidator liczba pomiędzy
- * 
+ *
  * @method self setFrom($from) ustawia od
  * @method self setTo($to) ustawia do
  * @method self setMessage($message) ustawia własną wiadomość walidatora
- * 
+ *
  * @method integer getFrom() pobiera od
  * @method integer getTo() pobiera do
- * @method string getMessage() pobiera wiadomość 
+ * @method string getMessage() pobiera wiadomość
  */
 class NumberBetween extends ValidatorAbstract
 {
-    const INVALID = 'validator.numberBetween.message';
-    const INVALID_MIN = 'validator.numberBetween.messageMin';
-    const INVALID_MAX = 'validator.numberBetween.messageMax';
+    public const INVALID = 'validator.numberBetween.message';
+    public const INVALID_MIN = 'validator.numberBetween.messageMin';
+    public const INVALID_MAX = 'validator.numberBetween.messageMax';
 
     /**
      * Ustawia opcje
@@ -59,5 +59,4 @@ class NumberBetween extends ValidatorAbstract
         }
         return true;
     }
-
 }

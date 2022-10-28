@@ -15,7 +15,6 @@ namespace Mmi\Mvc;
  */
 class StructureParser
 {
-
     /**
      * Katalogi konieczne w module
      * @var array
@@ -118,5 +117,4 @@ class StructureParser
         }
         return false;
     }
-
 }

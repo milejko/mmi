@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Http\ResponseDebugger;
  */
 class Colorify
 {
-
     /**
      * Wyszukiwane frazy
      * @var array
@@ -84,5 +83,4 @@ class Colorify
         $boldBracket = preg_replace('/\{([a-zA-Z_ ]+)\}/', '{<span style="color: #000; font-weight: bold;">${1}</span>}', $boldSqBracket);
         return str_replace(self::$_search, self::$_replace, $boldBracket);
     }
-
 }

@@ -18,12 +18,12 @@ class Url extends ValidatorAbstract
     /**
      * Komunikat błędu
      */
-    const INVALID = 'validator.url.message';
+    public const INVALID = 'validator.url.message';
 
     /**
      * Pattern
      */
-    const PATTERN = '~^
+    public const PATTERN = '~^
             https?://                                                                           # protocol
             (((?:[\_\.\pL\pN-]|%%[0-9A-Fa-f]{2})+:)?((?:[\_\.\pL\pN-]|%%[0-9A-Fa-f]{2})+)@)?    # basic auth
             (

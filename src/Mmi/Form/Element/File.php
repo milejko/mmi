@@ -18,9 +18,8 @@ use Mmi\Http\Request;
  */
 class File extends ElementAbstract
 {
-
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/element/file';
+    public const TEMPLATE_FIELD = 'mmi/form/element/file';
 
     /**
      * Informacje o zuploadowanym pliku

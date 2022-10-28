@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,20 +12,19 @@ namespace Mmi\Validator;
 
 /**
  * Walidator dla elementu formularza Csrf
- * 
+ *
  * @method self setName($name) ustawia nazwę namespace
- * 
+ *
  * @method string getName() pobiera nazwę pola
- * 
+ *
  * @see \Mmi\Form\Element\Csrf
  */
 class Csrf extends ValidatorAbstract
 {
-
     /**
      * Komunikat błędnego kodu zabezpieczającego
      */
-    const INVALID = 'validator.csrf.message';
+    public const INVALID = 'validator.csrf.message';
 
     /**
      * Ustawia opcje
@@ -72,5 +71,4 @@ class Csrf extends ValidatorAbstract
         $sessionSpace->hash = sha1(microtime(true) . rand(0, 1000000));
         return $sessionSpace->hash;
     }
-
 }

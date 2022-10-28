@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,6 @@ use Mmi\Orm\Query;
  */
 class RecordTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testNew()
     {
         $this->expectException(\Mmi\Orm\RecordNotFoundException::class);
@@ -45,5 +44,4 @@ class RecordTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($tr->nullColumn);
         $this->assertEquals(1, $tr->id);
     }
-
 }

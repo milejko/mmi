@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -14,7 +14,6 @@ use Mmi\Security\Acl;
 
 class AclTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @return Acl
      */
@@ -67,8 +66,7 @@ class AclTest extends \PHPUnit\Framework\TestCase
                 ->allow('god', '')
                 ->allow('member', 'news')
                 ->deny('member', 'news:admin')
-                ->allow('guest', 'news:guest')
-        );
+                ->allow('guest', 'news:guest'));
         return $acl;
     }
 
@@ -89,5 +87,4 @@ class AclTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($acl->isAllowed(['member'], 'god-content'));
         $this->assertFalse($acl->isAllowed(['member'], 'news:admin'));
     }
-
 }

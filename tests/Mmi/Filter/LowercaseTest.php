@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -14,7 +14,6 @@ use Mmi\Filter\Lowercase;
 
 class LowercaseTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testFilter()
     {
         $this->assertEquals('abc', (new Lowercase)->filter('AbC'));
@@ -23,5 +22,4 @@ class LowercaseTest extends \PHPUnit\Framework\TestCase
         $this->assertNull((new Lowercase)->filter(['a', 'b']));
         $this->assertNull((new Lowercase)->filter(new \stdClass()));
     }
-
 }

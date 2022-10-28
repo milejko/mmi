@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -19,10 +19,10 @@ use Mmi\Image\Image;
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
 
-    CONST IMAGE_PATH = BASE_PATH . 'tests/data/test.png';
-    CONST VERTICAL_IMAGE_PATH = BASE_PATH . 'tests/data/test-vertical.png';
-    CONST TMP_PATH = BASE_PATH . 'var/cache/test.png';
-    CONST RESOURCE_TYPE = 'object';
+    const IMAGE_PATH = BASE_PATH . 'tests/data/test.png';
+    const VERTICAL_IMAGE_PATH = BASE_PATH . 'tests/data/test-vertical.png';
+    const TMP_PATH = BASE_PATH . 'var/cache/test.png';
+    const RESOURCE_TYPE = 'object';
 
     public function testInputToResource()
     {
@@ -61,9 +61,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(144, imagesx(Image::scaleCrop(self::VERTICAL_IMAGE_PATH, 144, 144)));
         $this->assertEquals(72, imagesy(Image::scaleCrop(self::VERTICAL_IMAGE_PATH, 72, 72)));
         for ($i = 200; $i < 800; $i += 23) {
-            $tmp = Image::scaleCrop(self::IMAGE_PATH, $i, round(1,1 * $i));
+            $tmp = Image::scaleCrop(self::IMAGE_PATH, $i, round(1, 1 * $i));
             $this->assertEquals($i, imagesx($tmp));
-            $this->assertEquals(round(1,1 * $i), imagesy($tmp));
+            $this->assertEquals(round(1, 1 * $i), imagesy($tmp));
         }
     }
 
@@ -135,5 +135,4 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(639, imagesx(Image::crop(self::IMAGE_PATH, 1, 1, 2000, 2000)));
         $this->assertEquals(359, imagesy(Image::crop(self::IMAGE_PATH, 1, 1, 2000, 2000)));
     }
-
 }

@@ -52,7 +52,8 @@ final class RouterApplyTest extends TestCase
         $request = self::getRequestForHelp();
         $routerApply($request);
 
-        self::assertEquals([
+        self::assertEquals(
+            [
                 'module' => 'content',
                 'controller' => 'help',
                 'action' => 'index'

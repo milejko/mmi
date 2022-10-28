@@ -23,12 +23,11 @@ namespace Mmi\Validator;
  */
 class StringLength extends ValidatorAbstract
 {
-
     /**
      * Komunikat niedostatecznej długości
      */
-    const INVALID_MIN = 'validator.stringLength.messageMin';
-    const INVALID_MAX = 'validator.stringLength.messageMax';
+    public const INVALID_MIN = 'validator.stringLength.messageMin';
+    public const INVALID_MAX = 'validator.stringLength.messageMax';
 
     /**
      * Ustawia opcje
@@ -60,5 +59,4 @@ class StringLength extends ValidatorAbstract
         }
         return true;
     }
-
 }

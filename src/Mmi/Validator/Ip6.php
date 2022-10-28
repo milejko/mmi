@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,11 +15,10 @@ namespace Mmi\Validator;
  */
 class Ip6 extends ValidatorAbstract
 {
-
     /**
      * Treść wiadomości
      */
-    const INVALID = 'validator.ip6.message';
+    public const INVALID = 'validator.ip6.message';
 
     /**
      * Walidacja IPv6
@@ -34,5 +33,4 @@ class Ip6 extends ValidatorAbstract
         }
         return $this->_error(static::INVALID);
     }
-
 }

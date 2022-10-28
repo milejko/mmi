@@ -15,5 +15,4 @@ namespace Mmi\Session;
  */
 class SessionException extends \Mmi\App\KernelException
 {
-
 }

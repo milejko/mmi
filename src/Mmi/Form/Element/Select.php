@@ -18,7 +18,6 @@ use Mmi\Mvc\View;
  */
 class Select extends ElementAbstract
 {
-
     /**
      * Ustawia multiselect
      * @return self
@@ -32,7 +31,7 @@ class Select extends ElementAbstract
      * Zwraca czy pole jest multiple
      * @return boolean
      */
-    public final function getMultiple()
+    final public function getMultiple()
     {
         return null !== $this->getOption('multiple');
     }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Mvc\ViewHelper;
  */
 class Template extends HelperAbstract
 {
-
     /**
      * Parsuje kod szablonu do kodu PHP
      * @param string $input kod wejściowy
@@ -200,7 +199,7 @@ class Template extends HelperAbstract
 
     /**
      * Konwertuje tagi {'element struktury'} na wynik renderowania pliku
-     * przykład: {'cms/index'} wyrenderuje template index.tpl w module cms 
+     * przykład: {'cms/index'} wyrenderuje template index.tpl w module cms
      * @param array $matches dopasowania
      * @return string
      */
@@ -250,5 +249,4 @@ class Template extends HelperAbstract
         }
         return $var;
     }
-
 }

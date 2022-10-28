@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,6 @@ use Mmi\Db\Adapter\PdoBindHelper;
  */
 class Record extends \Mmi\Orm\RecordRo
 {
-
     /**
      * Zapis danych do obiektu
      * @return bool
@@ -41,7 +40,7 @@ class Record extends \Mmi\Orm\RecordRo
         }
         $query = $this->_queryClass;
         $bindKey = PdoBindHelper::generateBindKey();
-        $result = DbProxy::getDb()->delete((new $query)->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
+        $result = DbProxy::getDb()->delete((new $query())->getTableName(), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
         return ($result > 0) ? true : false;
     }
 
@@ -52,7 +51,7 @@ class Record extends \Mmi\Orm\RecordRo
     protected function _insert()
     {
         $query = $this->_queryClass;
-        $table = (new $query)->getTableName();
+        $table = (new $query())->getTableName();
         $result = DbProxy::getDb()->insert($table, $this->_truncateToStructure());
         //odczyt id z sekwencji
         if ($result && property_exists($this, 'id') && $this->getPk() === null) {
@@ -71,7 +70,7 @@ class Record extends \Mmi\Orm\RecordRo
     {
         $query = $this->_queryClass;
         $bindKey = PdoBindHelper::generateBindKey();
-        $result = DbProxy::getDb()->update((new $query)->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
+        $result = DbProxy::getDb()->update((new $query())->getTableName(), $this->_truncateToStructure(true), $this->_pkWhere($bindKey), [$bindKey => $this->getInitialStateValue('id')]);
         //utrwalanie bieżącego stanu
         $this->clearModified();
         return ($result >= 0);
@@ -82,11 +81,11 @@ class Record extends \Mmi\Orm\RecordRo
      * @param bool $modifiedOnly tylko zmodyfikowane
      * @return array
      */
-    protected final function _truncateToStructure($modifiedOnly = false)
+    final protected function _truncateToStructure($modifiedOnly = false)
     {
         $tableData = [];
         $query = $this->_queryClass;
-        $structure = DbProxy::getDbInformation()->getTableStructure((new $query)->getTableName());
+        $structure = DbProxy::getDbInformation()->getTableStructure((new $query())->getTableName());
         foreach ($this as $field => $value) {
             //jeśli tylko zmodyfikowane i pole nie jest modyfikowane - omijanie
             if ($modifiedOnly && !$this->isModified($field)) {
@@ -107,5 +106,4 @@ class Record extends \Mmi\Orm\RecordRo
         }
         return $tableData;
     }
-
 }

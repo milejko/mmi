@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -16,7 +16,6 @@ use Mmi\Mvc\View;
 
 class HeadLinkTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testClass()
     {
         $hl = new HeadLink(new View(TestApp::$di));
@@ -32,5 +31,4 @@ class HeadLinkTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\Mmi\Mvc\ViewHelper\HeadLink', $hl->headLink());
         $this->assertEquals('	<link rel="canonical" href="http://www.example.com/" />	<link rel="alternate" type="text/html" title="title" href="http://www.google.com/" media="print" />	<link rel="stylesheet" type="text/css" href="http://www.onet.pl/" />	<link rel="stylesheet" type="text/css" href="http://www.wp.pl/" media="print" />	<link rel="stylesheet" type="text/css" href="http://www.amazon.com/?ts=1234" />	<link rel="alternate" type="text/html" title="title" href="http://www.google.pl/" />	<link rel="canonical" href="http://www.example.pl/" />', (string) $hl);
     }
-
 }

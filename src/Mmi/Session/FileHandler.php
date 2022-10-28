@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Session;
  */
 class FileHandler implements \SessionHandlerInterface
 {
-
     /**
      * Namespace sesji
      */
@@ -23,7 +22,7 @@ class FileHandler implements \SessionHandlerInterface
 
     /**
      * Dane w sesji
-     * @var mixed 
+     * @var mixed
      */
     private $_data;
 
@@ -33,7 +32,7 @@ class FileHandler implements \SessionHandlerInterface
      * @param string $sessionName
      * @return boolean
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $sessionName): bool
     {
         if ($savePath) {
             $this->_namespace = $savePath . '/';
@@ -46,7 +45,7 @@ class FileHandler implements \SessionHandlerInterface
      * @param string $id
      * @return mixed
      */
-    public function read($id)
+    public function read($id): string|false
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
@@ -68,7 +67,7 @@ class FileHandler implements \SessionHandlerInterface
      * @param mixed $data
      * @return boolean
      */
-    public function write($id, $data)
+    public function write($id, $data): bool
     {
         //dane nie uległy zmianie
         if ($data == $this->_data) {
@@ -97,7 +96,7 @@ class FileHandler implements \SessionHandlerInterface
      * Zamknięcie sesji (nie robi nic)
      * @return boolean
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -107,7 +106,7 @@ class FileHandler implements \SessionHandlerInterface
      * @param string $id
      * @return boolean
      */
-    public function destroy($id)
+    public function destroy($id): bool
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
@@ -125,9 +124,8 @@ class FileHandler implements \SessionHandlerInterface
     /**
      * Garbage collector
      * @param integer $maxLifetime
-     * @return boolean
      */
-    public function gc($maxLifetime)
+    public function gc($maxLifetime): int|false
     {
         //iteracja po plikach sesyjnych
         foreach (glob($this->_namespace . '*') as $sessionFile) {
@@ -150,7 +148,7 @@ class FileHandler implements \SessionHandlerInterface
                 //nie udało się usunąć (usunięty przez inny proces)
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -163,5 +161,4 @@ class FileHandler implements \SessionHandlerInterface
         //litery i cyfry długości 8-128 znaków
         return preg_match('/^[a-z0-9]{8,128}$/', $id);
     }
-
 }

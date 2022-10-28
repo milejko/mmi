@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -23,7 +23,6 @@ use Throwable;
  */
 class AppErrorHandler implements AppErrorHandlerInterface
 {
-
     /**
      * @var AppExceptionLogger
      */
@@ -58,8 +57,7 @@ class AppErrorHandler implements AppErrorHandlerInterface
         Response $response,
         View $view,
         ActionHelper $actionHelper
-    )
-    {
+    ) {
         //assigning injections
         $this->logger           = $logger;
         $this->formatter        = $formatter;
@@ -135,7 +133,7 @@ class AppErrorHandler implements AppErrorHandlerInterface
         $message = 'Something went wrong';
         //wybór typów
         switch ($response->getType()) {
-                //plaintext
+            //plaintext
             case 'text/plain':
                 return $message;
                 //json
@@ -148,5 +146,4 @@ class AppErrorHandler implements AppErrorHandlerInterface
         //domyślnie html
         return '<html><body><h1>Error 500</h1><p>' . $message . '</p></body></html>';
     }
-
 }

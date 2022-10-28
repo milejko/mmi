@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Session;
  */
 class RedisHandler implements \SessionHandlerInterface
 {
-
     /**
      * Przechowuje obiekt Redisa
      * @var \Redis
@@ -35,10 +34,10 @@ class RedisHandler implements \SessionHandlerInterface
      * @throws SessionException
      * @return boolean
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $sessionName): bool
     {
         //powoływanie serwera
-        $this->_server = new \Redis;
+        $this->_server = new \Redis();
         //parsowanie konfiguracji
         $config = parse_url($savePath);
         //format połączenie host/port
@@ -62,7 +61,7 @@ class RedisHandler implements \SessionHandlerInterface
      * @param string $id
      * @return mixed
      */
-    public function read($id)
+    public function read($id): string|false
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
@@ -83,7 +82,7 @@ class RedisHandler implements \SessionHandlerInterface
      * @param mixed $data
      * @return boolean
      */
-    public function write($id, $data)
+    public function write($id, $data): bool
     {
         //dane nie uległy zmianie
         if ($data == $this->_data) {
@@ -109,7 +108,7 @@ class RedisHandler implements \SessionHandlerInterface
      * Zamknięcie sesji (nie robi nic)
      * @return boolean
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -119,7 +118,7 @@ class RedisHandler implements \SessionHandlerInterface
      * @param string $id
      * @return boolean
      */
-    public function destroy($id)
+    public function destroy($id): bool
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
@@ -133,11 +132,10 @@ class RedisHandler implements \SessionHandlerInterface
     /**
      * Garbage collector
      * @param integer $maxLifetime
-     * @return boolean
      */
-    public function gc($maxLifetime)
+    public function gc($maxLifetime): int|false
     {
-        return true;
+        return false;
     }
 
     /**
@@ -150,5 +148,4 @@ class RedisHandler implements \SessionHandlerInterface
         //litery i cyfry długości 8-128 znaków
         return preg_match('/^[a-z0-9]{8,128}$/', $id);
     }
-
 }

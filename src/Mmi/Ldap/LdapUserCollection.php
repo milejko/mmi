@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Ldap;
  */
 class LdapUserCollection extends \ArrayObject
 {
-
     /**
      * Konstruktor z odpowiedzi ldapa
      * @param array $array
@@ -45,7 +44,7 @@ class LdapUserCollection extends \ArrayObject
                 continue;
             }
             //nowy rekord użytkownika
-            $record = new LdapUserRecord;
+            $record = new LdapUserRecord();
             //ustawianie dn
             $record->dn = $user['dn'];
             //cn
@@ -71,5 +70,4 @@ class LdapUserCollection extends \ArrayObject
         $this->exchangeArray($records);
         return $this;
     }
-
 }

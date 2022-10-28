@@ -31,9 +31,8 @@ use Mmi\Mvc\View;
  */
 class Paginator extends \Mmi\OptionObject
 {
-
     //ścieżka szablonu
-    const TEMPLATE = 'mmi/paginator/paginator';
+    public const TEMPLATE = 'mmi/paginator/paginator';
 
     /**
      * Konstruktor, przyjmuje opcje, ustawia wartości domyślne
@@ -138,5 +137,4 @@ class Paginator extends \Mmi\OptionObject
         //render szablonu
         return App::$di->get(View::class)->renderTemplate(static::TEMPLATE);
     }
-
 }

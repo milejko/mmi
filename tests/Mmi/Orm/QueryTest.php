@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,6 @@ use Mmi\Orm\Query;
  */
 class QueryTest extends \PHPUnit\Framework\TestCase
 {
-
     public function setUp(): void
     {
         $r1 = new \Mmi\Orm\CacheRecord;
@@ -168,5 +167,4 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('419c9138694e9d6306c8c090edecd379', (new \Mmi\Orm\CacheQuery)->where('ttl')->equals(1)
                 ->joinLeft('mmi_cache')->on('id')->getQueryCompileHash());
     }
-
 }

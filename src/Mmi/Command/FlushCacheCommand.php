@@ -43,5 +43,4 @@ class FlushCacheCommand extends CommandAbstract
         $output->writeln('Cache flushed');
         return 0;
     }
-
 }

@@ -20,9 +20,9 @@ use Psr\Container\ContainerInterface;
  */
 class ActionHelper
 {
-    const PROFILER_ACTION_PREFIX = 'Mmi\Mvc\Controller: ';
-    const PROFILER_TEMPLATE_PREFIX = 'Mmi\Mvc\View: ';
-    const PROFILER_PREFIX = 'Mmi\Mvc\ActionHelper: ';
+    public const PROFILER_ACTION_PREFIX = 'Mmi\Mvc\Controller: ';
+    public const PROFILER_TEMPLATE_PREFIX = 'Mmi\Mvc\View: ';
+    public const PROFILER_PREFIX = 'Mmi\Mvc\ActionHelper: ';
 
     /**
      * Obiekt ACL
@@ -66,7 +66,8 @@ class ActionHelper
      * Pobranie instancji
      * @return \Mmi\Mvc\ActionHelper
      */
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
         $this->profiler             = $container->get(AppProfilerInterface::class);
         $this->view                 = $container->get(View::class);
         $this->appEventInterceptor  = $container->has(AppEventInterceptorInterface::class) ? $container->get(AppEventInterceptorInterface::class) : null;
@@ -112,7 +113,7 @@ class ActionHelper
             return $this->profiler->event(self::PROFILER_ACTION_PREFIX . $request->getAsColonSeparatedString() . ' blocked');
         }
         //rendering szablonu jeśli akcja zwraca null
-        return $this->_renderAction($request, ($this->view->request ? $this->view->request : new Request), $main);
+        return $this->_renderAction($request, ($this->view->request ? $this->view->request : new Request()), $main);
     }
 
     /**

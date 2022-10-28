@@ -4,19 +4,18 @@ namespace Mmi\Validator;
 
 /**
  * Walidator zaznaczenia checkboxa
- * 
+ *
  * @method self setMessage($message) ustawia własną wiadomość walidatora
- * 
+ *
  * @method \Mmi\Form\Element\Checkbox getElement() pobiera checkbox
  * @method string getMessage() pobiera wiadomość
  */
 class Checked extends ValidatorAbstract
 {
-
     /**
      * Treść wiadomości
      */
-    const INVALID = 'validator.checked.message';
+    public const INVALID = 'validator.checked.message';
 
     /**
      * Ustawia element
@@ -56,5 +55,4 @@ class Checked extends ValidatorAbstract
         }
         return true;
     }
-
 }

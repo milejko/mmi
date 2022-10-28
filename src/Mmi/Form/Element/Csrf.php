@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Form\Element;
  */
 class Csrf extends Hidden
 {
-
     /**
      * Walidator CSRF
      * @var \Mmi\Validator\Csrf
@@ -44,5 +43,4 @@ class Csrf extends Hidden
         $this->setValue($this->_validator->generateHash());
         return parent::fetchField();
     }
-
 }

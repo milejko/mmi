@@ -1,26 +1,37 @@
 <?php
 
 namespace {
-    class Redis {    
-        function pconnect() {
-
+    class Redis
+    {
+        function pconnect()
+        {
         }
-        function auth() {
 
+        function auth()
+        {
         }
-        function select() {
 
+        function select()
+        {
         }
-        function flushDB() {
+
+        function flushDB()
+        {
             $GLOBALS['FAKE_REDIS'] = [];
         }
-        function del(string $key) {
+
+        function del(string $key)
+        {
             unset($GLOBALS['FAKE_REDIS'][$key]);
         }
-        function get(string $key) {
+
+        function get(string $key)
+        {
             return isset($GLOBALS['FAKE_REDIS'][$key]) ? $GLOBALS['FAKE_REDIS'][$key] : null;
         }
-        function set(string $key, $value) {
+
+        function set(string $key, $value)
+        {
             $GLOBALS['FAKE_REDIS'][$key] = $value;
         }
     }

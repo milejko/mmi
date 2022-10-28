@@ -16,9 +16,8 @@ namespace Mmi\Http;
  */
 class RequestFiles
 {
-
-    const FILE_NAME_KEY = 'name';
-    const FILE_PATH_KEY = 'tmp_name';
+    public const FILE_NAME_KEY = 'name';
+    public const FILE_PATH_KEY = 'tmp_name';
 
     /**
      * Tablica zawierająca strukturę plików
@@ -70,7 +69,6 @@ class RequestFiles
     /**
      * Obsługa formularza z róznymi typami pól: typu files, user[files], lub user[file][]
      * @param array $data
-     * @return array
      */
     private function _handleForm(array $data, array &$node)
     {

@@ -18,6 +18,6 @@ return [
 
     View::class => autowire(View::class)
         ->method('setCdn', get('app.view.cdn')),
-    
+
     HelperAbstract::class => autowire(HelperAbstract::class),
 ];

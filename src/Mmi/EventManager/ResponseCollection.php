@@ -29,6 +29,7 @@ class ResponseCollection extends SplStack
         if (0 !== count($this)) {
             return parent::top();
         }
+        return null;
     }
 
     public function contains($value): bool

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Tests\Mmi\Form;
  */
 class SampleForm extends \Mmi\Form\Form
 {
-
     public function init()
     {
         $this->addElementButton('button');
@@ -57,7 +56,5 @@ class SampleForm extends \Mmi\Form\Form
                 ->addFilter(new \Mmi\Filter\Ascii)
                 ->addValidator(new \Mmi\Validator\StringLength([3, 30, 'Invalid string length']));
         }
-        
     }
-
 }

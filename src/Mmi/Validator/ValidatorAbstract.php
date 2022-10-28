@@ -60,5 +60,4 @@ abstract class ValidatorAbstract extends \Mmi\OptionObject
         $this->_error = $message;
         return false;
     }
-
 }

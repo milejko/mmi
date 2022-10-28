@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ use Mmi\Mvc\View;
 
 class MessengerTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testClass()
     {
         $_SESSION = [];
@@ -27,5 +26,4 @@ class MessengerTest extends \PHPUnit\Framework\TestCase
         '                                    <li class="notice warning"><i class="icon-warning-sign icon-large"></i><div class="alert">test<a class="close-alert" href="#"></a></div></li>' . "\n" .
         '    </ul>' . "\n", $view->messenger());
     }
-
 }

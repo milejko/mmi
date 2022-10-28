@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,20 +12,19 @@ namespace Mmi\Validator;
 
 /**
  * Walidator równości
- * 
+ *
  * @method self setPattern($pattern) ustawia pattern
  * @method self setMessage($message) ustawia własną wiadomość walidatora
- * 
+ *
  * @method string getPattern() pobiera pattern
  * @method string getMessage() pobiera wiadomość
  */
 class Regex extends ValidatorAbstract
 {
-
     /**
      * Treść wiadomości
      */
-    const INVALID = 'validator.regex.message';
+    public const INVALID = 'validator.regex.message';
 
     /**
      * Ustawia opcje
@@ -61,5 +60,4 @@ class Regex extends ValidatorAbstract
         }
         return $status ? true : $this->_error(static::INVALID);
     }
-
 }

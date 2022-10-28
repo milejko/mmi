@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -26,7 +26,6 @@ use Psr\Container\ContainerInterface;
  */
 class View extends \Mmi\DataObject
 {
-
     /**
      * Przechowuje dane placeholderów
      * @var array
@@ -40,12 +39,12 @@ class View extends \Mmi\DataObject
     private $_layoutDisabled = false;
 
     /**
-     * 
+     *
      */
     private $acl;
 
     /**
-     * 
+     *
      */
     private $auth;
 
@@ -68,7 +67,7 @@ class View extends \Mmi\DataObject
 
     /**
      * Adres CDN
-     * @var string 
+     * @var string
      */
     public $cdn;
 
@@ -177,8 +176,8 @@ class View extends \Mmi\DataObject
      */
     public function getHelper($name)
     {
-        return $this->container->has('ViewHelper\\' . \ucfirst($name)) ? 
-            $this->container->get('ViewHelper\\' . \ucfirst($name)) : 
+        return $this->container->has('ViewHelper\\' . \ucfirst($name)) ?
+            $this->container->get('ViewHelper\\' . \ucfirst($name)) :
             null;
     }
 
@@ -189,8 +188,8 @@ class View extends \Mmi\DataObject
      */
     public function getFilter($name)
     {
-        return $this->container->has('Filter\\' . \ucfirst($name)) ? 
-            $this->container->get('Filter\\' . \ucfirst($name)) : 
+        return $this->container->has('Filter\\' . \ucfirst($name)) ?
+            $this->container->get('Filter\\' . \ucfirst($name)) :
             null;
     }
 
@@ -381,5 +380,4 @@ class View extends \Mmi\DataObject
         //zwrot layoutu aplikacyjnego
         return 'app/layout';
     }
-
 }

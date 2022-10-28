@@ -15,7 +15,6 @@ use Mmi\Mvc\View;
 
 class NavigationConfigBuilder
 {
-
     /**
      * Buduje strukturę drzewiastą na podstawie struktury płaskiej
      * @param array $data
@@ -41,5 +40,4 @@ class NavigationConfigBuilder
         }
         return $build;
     }
-
 }

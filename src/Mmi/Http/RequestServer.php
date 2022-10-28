@@ -100,5 +100,4 @@ class RequestServer extends \Mmi\DataObject
     {
         return isset($this->rawData[$name]) ? filter_var($this->rawData[$name], $filter) : null;
     }
-
 }

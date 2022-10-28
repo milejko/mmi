@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * 
+ *
  */
 class DaoRenderCommand extends CommandAbstract
 {
@@ -39,5 +39,4 @@ class DaoRenderCommand extends CommandAbstract
         $output->writeln('DAO classess rendered.');
         return 0;
     }
-
 }

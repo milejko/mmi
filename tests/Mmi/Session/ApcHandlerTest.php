@@ -18,7 +18,7 @@ use Mmi\Session\ApcHandler;
 class ApcHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
-    CONST FILE_PATH = BASE_PATH . '/var/session/sess-';
+    const FILE_PATH = BASE_PATH . '/var/session/sess-';
 
     public function testOpen()
     {
@@ -53,7 +53,6 @@ class ApcHandlerTest extends \PHPUnit\Framework\TestCase
             return;
         }
         $fh = new ApcHandler();
-        $this->assertTrue($fh->gc(0));
+        $this->assertFalse($fh->gc(0));
     }
-
 }

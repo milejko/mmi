@@ -41,9 +41,28 @@
         "symfony/dotenv": "^5.0",
         "doctrine/annotations": "^1.11"
     },
-    "require-dev": {
-        "php-console/php-console": "~3.1",
-        "phpunit/phpunit": "^9.1"
+    "scripts": {
+        "test:infection": "infection --show-mutations --only-covered",
+        "test:security-checker": "security-checker security:check",
+        "report:metrics": "phpmetrics --report-html=./web/build/metrics ./src",
+        "fix:phpcbf": "phpcbf",
+        "fix:php-cs-fixer": "php-cs-fixer fix src && php-cs-fixer fix src",
+        "fix:all": [
+            "@fix:phpcbf",
+            "@fix:php-cs-fixer"
+        ],
+        "test:phpmd": "phpmd ./src text phpmd.xml.dist",
+        "test:phpcs": "phpcs",
+        "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
+        "test:phpstan": "phpstan --level=0 --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
+        "test:all": [
+            "@test:phpcs",
+            "@test:phpmd",
+            "@test:phpstan",
+            "@test:phpunit",
+            "@test:security-checker",
+            "@test:infection"
+        ]
     },
     "autoload": {
         "psr-4": {
@@ -60,5 +79,13 @@
         "branch-alias": {
             "dev-master": "4.1-dev"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    },
+    "require-dev": {
+        "mmi/mmi-build-toolkit": "^1.0"
     }
 }

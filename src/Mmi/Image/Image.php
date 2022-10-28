@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,9 +15,8 @@ namespace Mmi\Image;
  */
 class Image
 {
-
     //minimalna długość binariów
-    const BINARY_MIN_LENGTH = 1024;
+    public const BINARY_MIN_LENGTH = 1024;
 
     /**
      * Konwertuje string, lub binaria do zasobu GD
@@ -214,5 +213,4 @@ class Image
         imagealphablending($imgRes, false);
         imagesavealpha($imgRes, true);
     }
-
 }

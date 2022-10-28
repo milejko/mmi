@@ -15,7 +15,6 @@ namespace Mmi\Cache;
  */
 class Cache implements CacheInterface, SystemCacheInterface
 {
-
     /**
      * Konfiguracja bufora
      * @var CacheConfig
@@ -37,7 +36,7 @@ class Cache implements CacheInterface, SystemCacheInterface
     /**
      * Maksymalna długość bufora
      */
-    CONST MAX_LIFETIME = 2592000;
+    public const MAX_LIFETIME = 2592000;
 
     /**
      * Konstruktor, wczytuje konfigurację i ustawia handler
@@ -47,7 +46,7 @@ class Cache implements CacheInterface, SystemCacheInterface
         //ustawienie configu
         $this->_config = $config;
         //powoływanie rejestru
-        $this->_registry = new CacheRegistry;
+        $this->_registry = new CacheRegistry();
     }
 
     /**
@@ -220,5 +219,4 @@ class Cache implements CacheInterface, SystemCacheInterface
         //powoływanie obiektu handlera
         $this->_setHandler(new $handlerClassName($this));
     }
-
 }

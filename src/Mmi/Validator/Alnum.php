@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,11 +15,10 @@ namespace Mmi\Validator;
  */
 class Alnum extends ValidatorAbstract
 {
-
     /**
      * Treść wiadomości
      */
-    const INVALID = 'validator.alnum.message';
+    public const INVALID = 'validator.alnum.message';
 
     /**
      * Walidacja znaków alfanumerycznych
@@ -28,7 +27,6 @@ class Alnum extends ValidatorAbstract
      */
     public function isValid($value)
     {
-
         //nieprawidłowy typ danych
         if (!is_string($value) && !is_int($value) && !is_float($value)) {
             return $this->_error(static::INVALID);
@@ -36,5 +34,4 @@ class Alnum extends ValidatorAbstract
         //wartość filtrowana alnumem jest równa zadanej, lub nie
         return (new \Mmi\Filter\Alnum())->filter($value) == $value ? true : $this->_error(static::INVALID);
     }
-
 }

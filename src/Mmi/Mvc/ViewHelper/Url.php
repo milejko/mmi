@@ -16,7 +16,6 @@ use Mmi\Mvc\Router;
 
 class Url extends HelperAbstract
 {
-
     /**
      * Generuje link na podstawie parametrów (z użyciem routera)
      * @see \Mmi\Mvc\Router::encodeUrl()
@@ -31,5 +30,4 @@ class Url extends HelperAbstract
         $url = $this->view->baseUrl . App::$di->get(Router::class)->encodeUrl($urlParams);
         return $url ? $url : '/';
     }
-
 }

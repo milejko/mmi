@@ -8,7 +8,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class WeblinksCommand extends CommandAbstract
 {
-
     public function configure()
     {
         $this->setDescription('Create symlinks from modules to /web');
@@ -26,5 +25,4 @@ class WeblinksCommand extends CommandAbstract
         $output->writeln('Symlinks created');
         return 0;
     }
-
 }

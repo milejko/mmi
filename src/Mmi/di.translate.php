@@ -19,7 +19,7 @@ return [
             return $translate;
         }
         //utworzenie obiektu tłumaczenia
-        $translate = new Translate;
+        $translate = new Translate();
         //dodawanie tłumaczeń do translatora
         foreach (Structure::getStructure('translate') as $translationFile) {
             $translate->addTranslationFile($translationFile, substr(basename($translationFile), 0, -4));

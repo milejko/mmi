@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Validator;
 
 /**
  * Walidator unikalności rekordu
- * 
+ *
  * @method self setQuery(\Mmi\Orm\Query $query) ustawia querę
  * @method self setField($field) ustawia nazwę pola
  * @method self setId($id) ustawia ID
@@ -25,11 +25,10 @@ namespace Mmi\Validator;
  */
 class RecordUnique extends ValidatorAbstract
 {
-
     /**
      * Komunikat istnienia pola
      */
-    const INVALID = 'validator.recordUnique.message';
+    public const INVALID = 'validator.recordUnique.message';
 
     /**
      * Ustawia opcje
@@ -71,5 +70,4 @@ class RecordUnique extends ValidatorAbstract
         }
         return true;
     }
-
 }

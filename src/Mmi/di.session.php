@@ -14,7 +14,7 @@ return [
     'session.cookie.secure' => env('SESSION_COOKIE_SECURE', false),
     'session.cookie.http'   => env('SESSION_COOKIE_HTTP', false),
 
-    SessionInterface::class => function(ContainerInterface $container) {
+    SessionInterface::class => function (ContainerInterface $container) {
         //creating config
         $sessionConfig = new SessionConfig();
         $sessionConfig->name            = $container->get('session.name');

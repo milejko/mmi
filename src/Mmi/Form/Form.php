@@ -26,7 +26,6 @@ use Mmi\Mvc\View;
  */
 abstract class Form extends \Mmi\OptionObject
 {
-
     /**
      * Elementy formularza
      * @var Element\ElementAbstract[]
@@ -58,10 +57,10 @@ abstract class Form extends \Mmi\OptionObject
     protected $_valid;
 
     //szablon rozpoczynający formularz
-    const TEMPLATE_START = 'mmi/form/start';
+    public const TEMPLATE_START = 'mmi/form/start';
 
     //szablon kończący formularz
-    const TEMPLATE_END = 'mmi/form/end';
+    public const TEMPLATE_END = 'mmi/form/end';
 
     /**
      * Konstruktor
@@ -442,6 +441,7 @@ abstract class Form extends \Mmi\OptionObject
         }
         //ustawianie rekordu na podstawie danych
         $this->_record->setFromArray($data);
+        return true;
     }
 
     /**

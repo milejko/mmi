@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,13 +12,12 @@ namespace Mmi\Filter;
 
 /**
  * Obcięcie
- * 
+ *
  * @method self setExtras($extras)
  * @method string getExtras()
  */
 class StringTrim extends \Mmi\Filter\FilterAbstract
 {
-
     /**
      * Ustawia opcje
      * @param array $options
@@ -43,5 +42,4 @@ class StringTrim extends \Mmi\Filter\FilterAbstract
         }
         return trim($value, $chars);
     }
-
 }

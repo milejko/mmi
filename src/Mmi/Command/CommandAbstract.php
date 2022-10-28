@@ -9,7 +9,6 @@ use Symfony\Component\Console\Command\Command;
  */
 abstract class CommandAbstract extends Command
 {
-
     /**
      * Configure name and description
      */
@@ -21,5 +20,4 @@ abstract class CommandAbstract extends Command
         //$this->setDescription('Render DAO classess');
         parent::configure();
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Http;
 
 /**
  * Klasa pliku
- * 
+ *
  * @property string $name nazwa pliku
  * @property string $tmpName tymczasowa ścieżka
  * @property integer $size rozmiar pliku
@@ -20,7 +20,6 @@ namespace Mmi\Http;
  */
 class RequestFile extends \Mmi\DataObject
 {
-
     /**
      * Konstruktor
      * @throws \Mmi\Http\HttpException
@@ -47,5 +46,4 @@ class RequestFile extends \Mmi\DataObject
             'size' => isset($data['size']) ? $data['size'] : filesize($data['tmp_name'])
         ]);
     }
-
 }

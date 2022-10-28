@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -10,16 +10,11 @@
 
 namespace Mmi\Orm;
 
-use Mmi\App\App;
-use Mmi\Db\DbInformationInterface;
-use Mmi\Db\DbInterface;
-
 /**
  * Klasa rekordu tylko do odczytu
  */
 class RecordRo
 {
-
     /**
      * Przechowuje ekstra opcje rekordu
      * @var array
@@ -55,14 +50,17 @@ class RecordRo
      * @param mixed $id identyfikator do tworzenia obiektu
      * @throws RecordNotFoundException
      */
-    public final function __construct($id = null)
+    final public function __construct($id = null)
     {
         $this->_queryClass = substr(get_called_class(), 0, -6) . 'Query';
         if ($id === null) {
             return;
         }
+        /**
+         * @var Query
+         */
         $query = $this->_queryClass;
-        if (null === ($record = (new $query)->findPk($id))) {
+        if (null === ($record = (new $query())->findPk($id))) {
             throw new RecordNotFoundException('Record not found: ' . $id);
         }
         //ustawianie z tablicy i zapis stanu
@@ -74,7 +72,7 @@ class RecordRo
      * Pobiera klucz główny (tabela jeśli wielokrotny)
      * @return mixed klucz główny
      */
-    public final function getPk()
+    final public function getPk()
     {
         return property_exists($this, 'id') ? $this->id : null;
     }
@@ -85,7 +83,7 @@ class RecordRo
      * @return mixed
      * @throws RecordFieldException
      */
-    public final function __get($name)
+    final public function __get($name)
     {
         throw new RecordFieldException('Field not found: ' . $name);
     }
@@ -96,7 +94,7 @@ class RecordRo
      * @param mixed $value wartość
      * @throws RecordFieldException
      */
-    public final function __set($name, $value)
+    final public function __set($name, $value)
     {
         throw new RecordFieldException('Field not found: ' . $name);
     }
@@ -106,7 +104,7 @@ class RecordRo
      * @param string $name
      * @return mixed
      */
-    public final function getOption($name)
+    final public function getOption($name)
     {
         return isset($this->_options[$name]) ? $this->_options[$name] : null;
     }
@@ -115,7 +113,7 @@ class RecordRo
      * Zwraca wszystkie opcje w rekordzie
      * @return array
      */
-    public final function getOptions()
+    final public function getOptions()
     {
         return $this->_options;
     }
@@ -126,7 +124,7 @@ class RecordRo
      * @param mixed $value
      * @return \Mmi\Orm\RecordRo
      */
-    public final function setOption($name, $value)
+    final public function setOption($name, $value)
     {
         $this->_options[$name] = $value;
         return $this;
@@ -137,7 +135,7 @@ class RecordRo
      * @param string $tableName
      * @return \Mmi\Orm\Record
      */
-    public final function getJoined($tableName)
+    final public function getJoined($tableName)
     {
         return isset($this->_joined[$tableName]) ? $this->_joined[$tableName] : null;
     }
@@ -146,7 +144,7 @@ class RecordRo
      * Sprawdza czy rekord został wypełniony setFromArray
      * @return boolean
      */
-    public final function getFilled()
+    final public function getFilled()
     {
         return $this->_filled ? true : false;
     }
@@ -178,7 +176,7 @@ class RecordRo
         foreach ($joinedRows as $alias => $tables) {
             foreach ($tables as $tableName => $fields) {
                 $recordClass = $this->getRecordNameByTable($tableName);
-                $record = new $recordClass;
+                $record = new $recordClass();
                 $record->setFromArray($fields)
                     ->clearModified();
                 $this->_joined[$alias] = $record;
@@ -193,7 +191,7 @@ class RecordRo
      * Usuwa flagę modyfikacji na polu, lub wszyskich polach
      * @return \Mmi\Orm\RecordRo
      */
-    public final function clearModified()
+    final public function clearModified()
     {
         foreach ($this as $name => $value) {
             $this->_state[$name] = $value;
@@ -206,7 +204,7 @@ class RecordRo
      * @param string $field nazwa pola
      * @return boolean
      */
-    public final function isModified($field)
+    final public function isModified($field)
     {
         //brak klucza w tablicy stanu - niezmodyfikowane
         if (!array_key_exists($field, $this->_state)) {
@@ -225,7 +223,7 @@ class RecordRo
      * @param string $field nazwa pola
      * @return mixed
      */
-    public final function getInitialStateValue($field)
+    final public function getInitialStateValue($field)
     {
         return isset($this->_state[$field]) ? $this->_state[$field] : null;
     }
@@ -291,5 +289,4 @@ class RecordRo
         //łączenie z namespace
         return $namespace . implode('', $tableArray);
     }
-
 }

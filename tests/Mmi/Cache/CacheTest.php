@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -19,9 +19,9 @@ use Mmi\Cache\CacheConfig;
 class CacheTest extends \PHPUnit\Framework\TestCase
 {
 
-    CONST TEST_KEY = 'php-unit-test';
-    CONST TEST_DATA = 'unit-test-php';
-    CONST INVALID_CACHE_DATA = 'a:2:{s:1:"x";s:13:"unit-test-php";s:1:"e";i:1503324942;}';
+    const TEST_KEY = 'php-unit-test';
+    const TEST_DATA = 'unit-test-php';
+    const INVALID_CACHE_DATA = 'a:2:{s:1:"x";s:13:"unit-test-php";s:1:"e";i:1503324942;}';
 
     protected $_backends = ['file', 'apc', 'redis'];
 
@@ -83,7 +83,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         //completely new cache object (no registry memory)
         $cache = new Cache($config);
         $this->assertEquals($cache->load(self::TEST_KEY), self::TEST_DATA);
-
     }
 
     protected function _testActiveCache(Cache $cache)
@@ -123,5 +122,4 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($inactiveCache->remove('surely-inexistent-key'), 'Remove should always return true');
         $this->assertNull($inactiveCache->flush(), 'Flush should always return null');
     }
-
 }

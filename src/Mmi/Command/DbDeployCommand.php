@@ -16,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DbDeployCommand extends CommandAbstract
 {
-
     /**
      * @var DbInterface
      */
@@ -39,8 +38,7 @@ class DbDeployCommand extends CommandAbstract
         DbInterface $db,
         DbInformationInterface $dbInformation,
         ContainerInterface $container
-    )
-    {
+    ) {
         $this->db               = $db;
         $this->dbInformation    = $dbInformation;
         $this->container        = $container;
@@ -147,5 +145,4 @@ class DbDeployCommand extends CommandAbstract
             $this->db->query($query);
         }
     }
-
 }

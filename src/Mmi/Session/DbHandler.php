@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,14 +12,13 @@ namespace Mmi\Session;
 
 use Mmi\App\App;
 use Mmi\Db\DbInterface;
-use \Mmi\Orm;
+use Mmi\Orm;
 
 /**
  * Klasa obsługi sesji w bazie danych
  */
 class DbHandler implements \SessionHandlerInterface
 {
-
     /**
      * Dane w sesji
      * @var mixed
@@ -32,7 +31,7 @@ class DbHandler implements \SessionHandlerInterface
      * @param string $sessionName
      * @return boolean
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $sessionName): bool
     {
         return true;
     }
@@ -42,14 +41,14 @@ class DbHandler implements \SessionHandlerInterface
      * @param string $id
      * @return mixed
      */
-    public function read($id)
+    public function read($id): string|false
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
             return '';
         }
         //wyszukiwanie rekordu
-        if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
+        if (null === $record = (new Orm\SessionQuery())->findPk($id)) {
             //nie może zwracać null
             return ($this->_data = '');
         }
@@ -63,7 +62,7 @@ class DbHandler implements \SessionHandlerInterface
      * @param mixed $data
      * @return boolean
      */
-    public function write($id, $data)
+    public function write($id, $data): bool
     {
         //dane nie uległy zmianie
         if ($data == $this->_data) {
@@ -74,9 +73,9 @@ class DbHandler implements \SessionHandlerInterface
             return true;
         }
         //wyszukiwanie rekordu
-        if (null === $record = (new Orm\SessionQuery)->findPk($id)) {
+        if (null === $record = (new Orm\SessionQuery())->findPk($id)) {
             //tworzenie nowego rekordu
-            $record = new Orm\SessionRecord;
+            $record = new Orm\SessionRecord();
         }
         //puste dane sesyjne
         if (!$data) {
@@ -96,7 +95,7 @@ class DbHandler implements \SessionHandlerInterface
      * Zamknięcie sesji (nie robi nic)
      * @return boolean
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -106,14 +105,14 @@ class DbHandler implements \SessionHandlerInterface
      * @param string $id
      * @return boolean
      */
-    public function destroy($id)
+    public function destroy($id): bool
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
             return true;
         }
         //brak rekordu
-        if ((null === $record = (new Orm\SessionQuery)->findPk($id))) {
+        if ((null === $record = (new Orm\SessionQuery())->findPk($id))) {
             return true;
         }
         //usuwanie rekordu
@@ -124,13 +123,12 @@ class DbHandler implements \SessionHandlerInterface
     /**
      * Garbage collector
      * @param integer $maxLifetime
-     * @return boolean
      */
-    public function gc($maxLifetime)
+    public function gc($maxLifetime): int|false
     {
         //uproszczone usuwanie - jednym zapytaniem
-        App::$di->get(DbInterface::class)->delete((new Orm\SessionQuery)->getTableName(), 'WHERE timestamp <= :time', [':time' => (time() - $maxLifetime)]);
-        return true;
+        App::$di->get(DbInterface::class)->delete((new Orm\SessionQuery())->getTableName(), 'WHERE timestamp <= :time', [':time' => (time() - $maxLifetime)]);
+        return false;
     }
 
     /**
@@ -143,5 +141,4 @@ class DbHandler implements \SessionHandlerInterface
         //litery i cyfry długości 8-128 znaków
         return preg_match('/^[a-z0-9]{8,128}$/', $id);
     }
-
 }
