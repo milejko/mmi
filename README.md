@@ -7,13 +7,14 @@
 
 ## Requirements
 
-* MMi is only supported on PHP 7.3.x and up.
+* MMi is only supported on PHP 8.1 and up.
 
 ## Installation
 
-### The best way to install MMi is to use composer:
+1. Install Nix: `sh <(curl -L https://nixos.org/nix/install)`
+2. Run command: `nix-shell`
 
-1. composer require mmi/mmi
-2. configure Your environment in .env (.env.sample can be found in this repository)
-3. you will want to map RouterConfig::class to implementation
-4. if you are using database probably you will need to run ./bin/mmi Mmi:DbDeploy
+### 
+
+1. either composer require mmi/mmi
+2. or use mmi-standard package
