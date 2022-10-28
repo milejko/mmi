@@ -11,6 +11,7 @@ let
         extensions = ({ enabled, all }: enabled ++ [ all.xdebug ] ++ [ all.apcu ]);
         extraConfig = ''
             memory_limit=256M
+            xdebug.max_nesting_level=512
         '';
     };
 in
