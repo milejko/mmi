@@ -18,7 +18,6 @@ namespace Mmi\Http;
  * @property string $requestUri uri żądania HTTP
  * @property string $requestMethod metoda żądania
  * @property string $contentType typ treści
- * @property string $baseUrl ścieżka bazowa aplikacji
  * @property string $authUser autoryzowany użytkownik basic-auth
  * @property string $authPassword hasło użytkownika basic-auth
  * @property string $scriptFilename wykonywany plik (wejście do aplikacji)
@@ -58,7 +57,6 @@ class RequestServer extends \Mmi\DataObject
             'lang' => $this->_filter('APPLICATION_LANGUAGE'),
             'authUser' => $this->_filter('PHP_AUTH_USER'),
             'authPassword' => $this->_filter('PHP_AUTH_PW'),
-            'baseUrl' => '',
             'phpSelf' => $this->_filter('PHP_SELF'),
             'requestMethod' => $this->_filter('REQUEST_METHOD'),
             'contentType' => $this->_filter('CONTENT_TYPE'),

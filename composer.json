@@ -60,5 +60,8 @@
         "branch-alias": {
             "dev-master": "4.1-dev"
         }
+    },
+    "scripts": {
+        "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.build/clover.xml --coverage-html ./.build/phpunit"
     }
 }
