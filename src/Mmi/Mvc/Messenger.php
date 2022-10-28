@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,7 @@ use Mmi\Translate\TranslateInterface;
  */
 class Messenger
 {
-    const SESSION_SPACE = 'mmi-messenger';
+    public const SESSION_SPACE = 'mmi-messenger';
 
     /**
      * Przestrzeń w sesji zarezerwowana dla wiadomości
@@ -117,5 +117,4 @@ class Messenger
         array_unshift($message['vars'], $translatedMessage);
         return call_user_func_array('sprintf', $message['vars']);
     }
-
 }

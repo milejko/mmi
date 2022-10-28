@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2020 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\App;
  */
 class AppProfiler implements AppProfilerInterface
 {
-
     /**
      * Dane profilera
      * @var array
@@ -84,5 +83,4 @@ class AppProfiler implements AppProfilerInterface
     {
         return $this->_elapsed;
     }
-
 }

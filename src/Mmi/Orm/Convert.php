@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,13 +15,12 @@ namespace Mmi\Orm;
  */
 class Convert
 {
-
     /**
      * Konwertuje podkreślenia na camelcase
      * @param string $value
      * @return string
      */
-    public static final function underscoreToCamelcase($value)
+    final public static function underscoreToCamelcase($value)
     {
         //używa callbacku
         return preg_replace_callback('/\_([a-z0-9])/', function ($matches) {
@@ -34,12 +33,11 @@ class Convert
      * @param string $value
      * @return string
      */
-    public static final function camelcaseToUnderscore($value)
+    final public static function camelcaseToUnderscore($value)
     {
         //używa callbacku
         return preg_replace_callback('/([A-Z])/', function ($matches) {
             return '_' . lcfirst($matches[1]);
         }, $value);
     }
-
 }

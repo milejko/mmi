@@ -12,10 +12,11 @@ namespace Mmi\Form\Element;
 
 /**
  * Element wielokrotny checkbox
+ * @method self setMultioptions(array $options)
+ * @method array getMultioptions()
  */
 class MultiCheckbox extends ElementAbstract
 {
-
     /**
      * Konstruktor ustawia nazwę bazową formularza
      * @param string $name
@@ -36,7 +37,7 @@ class MultiCheckbox extends ElementAbstract
         $values = is_array($this->getValue()) ? $this->getValue() : [$this->getValue()];
         $html = '<ul id="' . ($baseId = $this->getId()) . '-list">';
         //filtr url
-        $f = new \Mmi\Filter\Url;
+        $f = new \Mmi\Filter\Url();
         foreach ($this->getMultioptions() as $key => $caption) {
             //nowy checkbox
             $checkbox = new Checkbox($this->getBaseName() . '[]');
@@ -60,5 +61,4 @@ class MultiCheckbox extends ElementAbstract
         }
         return $html . '</ul>';
     }
-
 }

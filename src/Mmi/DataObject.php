@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,6 @@ namespace Mmi;
 
 class DataObject implements \Iterator
 {
-
     /**
      * Dane
      * @var array
@@ -107,7 +106,7 @@ class DataObject implements \Iterator
      * Przeskakuje na początek
      * @return mixed
      */
-    function rewind(): void
+    public function rewind(): void
     {
         reset($this->_data);
     }
@@ -116,7 +115,7 @@ class DataObject implements \Iterator
      * Zwraca aktualny element
      * @return mixed
      */
-    function current(): mixed
+    public function current(): mixed
     {
         return current($this->_data);
     }
@@ -125,7 +124,7 @@ class DataObject implements \Iterator
      * Zwraca klucz aktualnego elementu
      * @return string
      */
-    function key(): mixed
+    public function key(): mixed
     {
         return key($this->_data);
     }
@@ -134,7 +133,7 @@ class DataObject implements \Iterator
      * Przechodzi do następnego elementu
      * @return mixed
      */
-    function next(): void
+    public function next(): void
     {
         next($this->_data);
     }
@@ -143,7 +142,7 @@ class DataObject implements \Iterator
      * Sprawdza, czy aktualna pozycja jest prawidłowa
      * @return boolean
      */
-    function valid(): bool
+    public function valid(): bool
     {
         return key($this->_data) !== null;
     }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Http;
 
 /**
  * Klasa requesta
- * 
+ *
  * @property string $module moduł
  * @property string $controller kontroler
  * @property string $action akcja
@@ -47,14 +47,12 @@ class Request extends \Mmi\DataObject
     private $server;
 
     public function __construct(
-        array $query        = [],
-        array $post         = [],
-        array $attributes   = [],
-        array $cookie       = [],
-        array $files        = [],
-        array $server       = []
-    )
-    {
+        array $query = [],
+        array $post = [],
+        array $cookie = [],
+        array $files = [],
+        array $server = []
+    ) {
         //populate for use with ::__get()
         parent::__construct($query);
         $this->get    = $query;
@@ -73,7 +71,6 @@ class Request extends \Mmi\DataObject
         return new self(
             $_GET,
             $_POST,
-            [],
             $_COOKIE,
             $_FILES,
             $_SERVER
@@ -206,5 +203,4 @@ class Request extends \Mmi\DataObject
     {
         return $this->module . ':' . $this->controller . ':' . $this->action;
     }
-
 }

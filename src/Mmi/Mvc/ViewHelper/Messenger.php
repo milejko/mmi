@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -16,7 +16,7 @@ namespace Mmi\Mvc\ViewHelper;
 class Messenger extends HelperAbstract
 {
     //szablon
-    const TEMPLATE = 'mmi/mvc/view-helper/messenger';
+    public const TEMPLATE = 'mmi/mvc/view-helper/messenger';
 
     /**
      * Metoda główna, wyświetla i czyści dostępne wiadomości
@@ -29,5 +29,4 @@ class Messenger extends HelperAbstract
         }
         return $this->view->renderTemplate(static::TEMPLATE);
     }
-
 }

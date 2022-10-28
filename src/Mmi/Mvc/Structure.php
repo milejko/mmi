@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,10 +15,9 @@ namespace Mmi\Mvc;
  */
 class Structure
 {
-
     /**
      * Zwraca dostępne komponenty aplikacji
-     * @return array 
+     * @return array
      */
     public static function getStructure($object = null)
     {
@@ -117,7 +116,7 @@ class Structure
                 continue;
             }
             $objectName = substr(basename($file), 0, -4);
-            $components[($namespaceAlias ? : $namespace) . '\\' . $objectName] = $namespace . '\\' . $objectName;
+            $components[($namespaceAlias ?: $namespace) . '\\' . $objectName] = $namespace . '\\' . $objectName;
         }
     }
 
@@ -130,5 +129,4 @@ class Structure
             $components[] = $file;
         }
     }
-
 }

@@ -15,7 +15,6 @@ namespace Mmi\Filter;
  */
 class EmptyStringToNull extends \Mmi\Filter\FilterAbstract
 {
-
     /**
      * Zamienia pusty ciąg znaków na null
      * @param mixed $value wartość
@@ -26,5 +25,4 @@ class EmptyStringToNull extends \Mmi\Filter\FilterAbstract
     {
         return is_string($value) && mb_strlen($value) == 0 ? null : $value;
     }
-
 }

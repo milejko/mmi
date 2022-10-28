@@ -26,7 +26,6 @@ use Mmi\Mvc\View;
  */
 abstract class Form extends \Mmi\OptionObject
 {
-
     /**
      * Elementy formularza
      * @var Element\ElementAbstract[]
@@ -58,10 +57,10 @@ abstract class Form extends \Mmi\OptionObject
     protected $_valid;
 
     //szablon rozpoczynający formularz
-    const TEMPLATE_START = 'mmi/form/start';
+    public const TEMPLATE_START = 'mmi/form/start';
 
     //szablon kończący formularz
-    const TEMPLATE_END = 'mmi/form/end';
+    public const TEMPLATE_END = 'mmi/form/end';
 
     /**
      * Konstruktor
@@ -442,6 +441,7 @@ abstract class Form extends \Mmi\OptionObject
         }
         //ustawianie rekordu na podstawie danych
         $this->_record->setFromArray($data);
+        return true;
     }
 
     /**
@@ -519,23 +519,5 @@ abstract class Form extends \Mmi\OptionObject
     {
         //nie rzuci wyjątkiem, gdyż wyjątki są wyłapane w elementach
         return $this->render();
-    }
-
-    /**
-     * Magicznie wywoływanie metod
-     * @param string $name
-     * @param array $params
-     * @return mixed
-     */
-    public function __call($name, $params)
-    {
-        $matches = [];
-        //obsługa addElement
-        if (preg_match('/addElement([a-zA-Z0-9]+)/', $name, $matches)) {
-            $elementClass = '\\Mmi\\Form\\Element\\' . $matches[1];
-            return $this->addElement(new $elementClass(isset($params[0]) ? $params[0] : null));
-        }
-        //obsługa nadrzędnych
-        return parent::__call($name, $params);
     }
 }

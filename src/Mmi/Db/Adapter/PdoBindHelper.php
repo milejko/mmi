@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Db\Adapter;
  */
 class PdoBindHelper
 {
-
     /**
      * Indeks powiązań
      * @var integer
@@ -31,5 +30,4 @@ class PdoBindHelper
         //generowanie kolejnego klucza bind
         return str_replace([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], self::$_bindIndex++);
     }
-
 }

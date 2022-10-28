@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Log;
 
 /**
  * Klasa konfiguracji elementu loggera
- * 
+ *
  * @method string getName() pobiera nazwę aplikacji logującej
  * @method LogConfigInstance setName($name) ustawia nazwę aplikacji logującej
  * @method string getPath() pobiera ścieżkę (lub kanał czy IP)
@@ -24,17 +24,16 @@ namespace Mmi\Log;
  */
 class LogConfigInstance extends \Mmi\OptionObject
 {
-
     //poziomy logowania
-    CONST DEBUG = 100;
-    CONST INFO = 200;
-    CONST NOTICE = 250;
-    CONST WARNING = 300;
-    CONST ERROR = 400;
-    CONST CRITICAL = 500;
-    CONST ALERT = 550;
-    CONST EMERGENCY = 600;    
-    
+    public const DEBUG = 100;
+    public const INFO = 200;
+    public const NOTICE = 250;
+    public const WARNING = 300;
+    public const ERROR = 400;
+    public const CRITICAL = 500;
+    public const ALERT = 550;
+    public const EMERGENCY = 600;
+
     /**
      * Domyślne ustawienia
      */
@@ -160,5 +159,4 @@ class LogConfigInstance extends \Mmi\OptionObject
     {
         return $this->setOption('handler', 'syslog');
     }
-
 }

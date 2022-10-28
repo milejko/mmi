@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,9 +15,8 @@ namespace Mmi\Form\Element;
  */
 class Submit extends ElementAbstract
 {
-
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/element/submit';
+    public const TEMPLATE_FIELD = 'mmi/form/element/submit';
 
     /**
      * Konstruktor, ustawia nazwę pola i opcje
@@ -41,5 +40,4 @@ class Submit extends ElementAbstract
         //rendering szablonu
         return parent::fetchField();
     }
-
 }

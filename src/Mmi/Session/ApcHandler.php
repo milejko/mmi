@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Session;
  */
 class ApcHandler implements \SessionHandlerInterface
 {
-
     /**
      * Namespace sesji
      */
@@ -31,9 +30,8 @@ class ApcHandler implements \SessionHandlerInterface
      * Otwarcie sesji
      * @param string $savePath
      * @param string $sessionName
-     * @return boolean
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $sessionName): bool
     {
         $this->_namespace = 'sess-' . crc32($sessionName . $savePath) . '-';
         return true;
@@ -44,7 +42,7 @@ class ApcHandler implements \SessionHandlerInterface
      * @param string $id
      * @return mixed
      */
-    public function read($id)
+    public function read($id): string|false
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
@@ -65,7 +63,7 @@ class ApcHandler implements \SessionHandlerInterface
      * @param mixed $data
      * @return boolean
      */
-    public function write($id, $data)
+    public function write($id, $data): bool
     {
         //dane nie uległy zmianie
         if ($data == $this->_data) {
@@ -90,7 +88,7 @@ class ApcHandler implements \SessionHandlerInterface
      * Zamknięcie sesji (nie robi nic)
      * @return boolean
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -100,7 +98,7 @@ class ApcHandler implements \SessionHandlerInterface
      * @param string $id
      * @return boolean
      */
-    public function destroy($id)
+    public function destroy($id): bool
     {
         //niepoprawne ID
         if (!$this->_validate($id)) {
@@ -114,11 +112,10 @@ class ApcHandler implements \SessionHandlerInterface
     /**
      * Garbage collector
      * @param integer $maxLifetime
-     * @return boolean
      */
-    public function gc($maxLifetime)
+    public function gc($maxLifetime): int|false
     {
-        return true;
+        return false;
     }
 
     /**
@@ -131,5 +128,4 @@ class ApcHandler implements \SessionHandlerInterface
         //litery i cyfry długości 8-128 znaków
         return preg_match('/^[a-z0-9]{8,128}$/', $id);
     }
-
 }

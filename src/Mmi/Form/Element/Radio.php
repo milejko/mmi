@@ -16,5 +16,5 @@ namespace Mmi\Form\Element;
 class Radio extends ElementAbstract
 {
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/element/radio';
+    public const TEMPLATE_FIELD = 'mmi/form/element/radio';
 }

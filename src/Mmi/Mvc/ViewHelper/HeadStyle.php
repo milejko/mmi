@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Mvc\ViewHelper;
  */
 class HeadStyle extends HelperAbstract
 {
-
     /**
      * Dane
      * @var array
@@ -41,7 +40,7 @@ class HeadStyle extends HelperAbstract
         if (array_search($params, $this->_data) !== false) {
             return '';
         }
-        //prepend 
+        //prepend
         if ($prepend) {
             array_unshift($this->_data, $params);
         } else {
@@ -158,8 +157,9 @@ class HeadStyle extends HelperAbstract
      */
     protected function _getStyleContent($fileName)
     {
+        $cacheKey = 'Head-Style-Css-' . md5($fileName);
         //wczytanie stylu z cache
-        if (null !== ($cache = $this->view->getSystemCache()) && (null !== ($content = $cache->load($cacheKey = 'Head-Style-Css-' . md5($fileName))))) {
+        if (null !== ($cache = $this->view->getSystemCache()) && (null !== ($content = $cache->load($cacheKey)))) {
             //zwrot z cache
             return $content;
         }
@@ -186,5 +186,4 @@ class HeadStyle extends HelperAbstract
         //usuwanie nowych linii i tabów
         return preg_replace(['/\r\n/', '/\n/', '/\t/'], '', str_replace(['url(\'', 'url("'], ['url(\'' . $location, 'url("' . $location], $content));
     }
-
 }

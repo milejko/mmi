@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2020 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -18,7 +18,6 @@ use Throwable;
  */
 class AppExceptionLogger implements AppExceptionLoggerInterface
 {
-
     /**
      * @var LoggerInterface
      */
@@ -33,10 +32,9 @@ class AppExceptionLogger implements AppExceptionLoggerInterface
      * Constructor
      */
     public function __construct(
-        LoggerInterface $logger, 
+        LoggerInterface $logger,
         AppExceptionFormatter $formatter
-    )
-    {
+    ) {
         //service injections
         $this->logger    = $logger;
         $this->formatter = $formatter;
@@ -55,5 +53,4 @@ class AppExceptionLogger implements AppExceptionLoggerInterface
         //logowanie pozostałych wyjątków
         $this->logger->alert($this->formatter->formatException($exception));
     }
-
- }
+}

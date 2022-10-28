@@ -6,7 +6,7 @@ interface EventManagerInterface
 {
     public function trigger(string $event, mixed $target = null, array $argv = [], object $callback = null);
 
-    public function attach(string $event, object $callback = null, int $priority = 1) : object;
+    public function attach(string $event, object $callback = null, int $priority = 1): object;
 
     public function detach(mixed $listener, string $eventName, bool $force): void;
 

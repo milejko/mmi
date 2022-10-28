@@ -13,17 +13,16 @@ namespace Mmi\Cache;
 /**
  * Handler bufora w APC
  */
-class ApcHandler implements CacheHandlerInterface 
+class ApcHandler implements CacheHandlerInterface
 {
+    private string $_namespace;
 
     /**
      * Konfiguruje handler
-     * @param \Mmi\Cache\Cache $cache obiekt bufora
      */
-    public function __construct(Cache $cache)
+    public function __construct()
     {
         $this->_namespace = md5(__FILE__);
-        $this->_cache = $cache;
     }
 
     /**
@@ -50,7 +49,7 @@ class ApcHandler implements CacheHandlerInterface
         \apcu_store($this->_namespace . $key, $data, $lifeTime);
         return true;
     }
-    
+
     /**
      * Kasuje dane o podanym kluczu
      * @param string $key klucz
@@ -71,5 +70,4 @@ class ApcHandler implements CacheHandlerInterface
         //czyszczenie bufora apc
         \apcu_clear_cache();
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Filter;
  */
 class Uppercase extends \Mmi\Filter\FilterAbstract
 {
-
     /**
      * Zwiększa wszystkie litery w ciągu
      * @param mixed $value wartość
@@ -26,5 +25,4 @@ class Uppercase extends \Mmi\Filter\FilterAbstract
     {
         return mb_strtoupper($value, mb_detect_encoding($value));
     }
-
 }

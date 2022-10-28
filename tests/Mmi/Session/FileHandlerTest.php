@@ -17,7 +17,6 @@ use Mmi\Session\FileHandler;
  */
 class FileHandlerTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testOpen()
     {
         $this->assertTrue((new FileHandler())->open('test', 'test'));
@@ -65,11 +64,10 @@ class FileHandlerTest extends \PHPUnit\Framework\TestCase
         $sessionId = md5(microtime());
         $this->assertTrue($fh->write($sessionId, 'xxx'));
         $this->assertEquals('xxx', $fh->read($sessionId));
-        $this->assertTrue($fh->gc(0));
+        $this->assertFalse($fh->gc(0));
         $this->assertEquals(null, $fh->read($sessionId));
         $this->assertTrue($fh->write($sessionId, 'abc'));
-        $this->assertTrue($fh->gc(1));
+        $this->assertFalse($fh->gc(1));
         $this->assertEquals('abc', $fh->read($sessionId));
     }
-
 }

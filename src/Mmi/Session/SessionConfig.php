@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Session;
  */
 class SessionConfig
 {
-
     /**
      * Nazwa sesji
      * @var string
@@ -106,5 +105,4 @@ class SessionConfig
      * @var int
      */
     public $authRemember = 31536000;
-
 }

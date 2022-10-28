@@ -21,8 +21,8 @@ use Mmi\Mvc\RouterApply;
  */
 class App extends AppAbstract
 {
-    const PROFILER_PREFIX                    = 'Mmi\App: ';
-    const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
+    public const PROFILER_PREFIX                    = 'Mmi\App: ';
+    public const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
 
     public function __construct(Request $request)
     {

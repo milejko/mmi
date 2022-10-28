@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,6 @@ namespace Mmi\Db\Adapter;
 
 class PdoSqlite extends PdoAbstract
 {
-
     /**
      * Ustawia domyślne parametry dla importu (długie zapytania)
      */
@@ -29,7 +28,10 @@ class PdoSqlite extends PdoAbstract
     {
         //pdo do zapisu
         $this->_upstreamPdo = new \PDO(
-            $this->_config->driver . ':' . $this->_config->host, null, null, [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
+            $this->_config->driver . ':' . $this->_config->host,
+            null,
+            null,
+            [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
         //odczyt identycznie
         $this->_downstreamPdo = $this->_upstreamPdo;
@@ -157,5 +159,4 @@ class PdoSqlite extends PdoAbstract
         }
         return $associativeMeta;
     }
-
 }

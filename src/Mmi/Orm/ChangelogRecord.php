@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,22 +15,21 @@ namespace Mmi\Orm;
  */
 class ChangelogRecord extends \Mmi\Orm\Record
 {
-
     /**
      * Klucz
      * @var int
      */
     public $id;
-    
+
     /**
      * Nazwa pliku
-     * @var string 
+     * @var string
      */
     public $filename;
-    
+
     /**
      * Odcisk zawartości pliku
-     * @var string 
+     * @var string
      */
     public $md5;
 
@@ -38,5 +37,4 @@ class ChangelogRecord extends \Mmi\Orm\Record
      * @var bool
      */
     public $active;
-
 }

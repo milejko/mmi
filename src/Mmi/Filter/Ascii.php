@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Filter;
  */
 class Ascii extends \Mmi\Filter\FilterAbstract
 {
-
     /**
      * Zwraca ciąg znormalizowany do ascii
      * @param mixed $value wartość
@@ -47,5 +46,4 @@ class Ascii extends \Mmi\Filter\FilterAbstract
         $value = preg_replace("/[^a-zA-Z0-9\.\/\,_|+ -]/", '', $value);
         return $value;
     }
-
 }

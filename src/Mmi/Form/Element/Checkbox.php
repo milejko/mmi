@@ -18,9 +18,8 @@ use Mmi\OptionObject;
  */
 class Checkbox extends ElementAbstract
 {
-
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/element/checkbox';
+    public const TEMPLATE_FIELD = 'mmi/form/element/checkbox';
 
     /**
      * Konstruktor ustawia kolejność i opcje
@@ -52,5 +51,4 @@ class Checkbox extends ElementAbstract
     {
         return $this->issetOption('checked');
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -20,7 +20,6 @@ use Psr\Container\ContainerInterface;
  */
 class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
 {
-
     /**
      * Maksymalna głębokość menu
      * @var int
@@ -99,7 +98,7 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
     private $container;
 
     //szablon menu
-    CONST TEMPLATE = 'mmi/mvc/view-helper/navigation/menu-item';
+    public const TEMPLATE = 'mmi/mvc/view-helper/navigation/menu-item';
 
     public function __construct(View $view, ContainerInterface $container)
     {
@@ -146,11 +145,11 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
         if ($this->_allowedOnly && $this->view->getAuth() && $this->view->getAcl()) {
             //sprawdzenie na acl
             return $this->view->getAcl()->isAllowed($this->view->getAuth()->getRoles(), strtolower($component))
-				&& $this->_checkRoles($leaf);
+                && $this->_checkRoles($leaf);
         }
         return true;
     }
-	
+
     /**
      * Sprawdzenie dostępności liścia dla zalogowanych roli
      * @param array $leaf liść
@@ -158,11 +157,11 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
      */
     protected function _checkRoles(array &$leaf)
     {
-		if (!isset($leaf['roles']) || empty($leaf['roles'])) {
-			return true;
-		}
-		//czy jest część wspólna
-		return [] !== array_intersect($this->view->getAuth()->getRoles(), $leaf['roles']);
+        if (!isset($leaf['roles']) || empty($leaf['roles'])) {
+            return true;
+        }
+        //czy jest część wspólna
+        return [] !== array_intersect($this->view->getAuth()->getRoles(), $leaf['roles']);
     }
 
     /**
@@ -576,5 +575,4 @@ class Navigation extends \Mmi\Mvc\ViewHelper\HelperAbstract
         //buduje menu jeśli podano root i jest nawigator
         return $this->_getHtml(($this->_root && $this->_getNavigation()) ? $this->_getNavigation()->seek($this->_root) : []);
     }
-
 }

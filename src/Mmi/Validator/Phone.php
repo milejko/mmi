@@ -15,11 +15,10 @@ namespace Mmi\Validator;
  */
 class Phone extends ValidatorAbstract
 {
-
     /**
      * Komunikat błędu
      */
-    const INVALID = 'validator.phone.message';
+    public const INVALID = 'validator.phone.message';
 
     /**
      * Sprawdza czy tekst jest numerem telfonu
@@ -34,5 +33,4 @@ class Phone extends ValidatorAbstract
         }
         return $this->_error(static::INVALID);
     }
-
 }

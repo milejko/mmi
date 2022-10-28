@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi;
  */
 class FileSystem
 {
-
     /**
      * Kopiowanie rekursywne
      * @param string $src
@@ -162,5 +161,4 @@ class FileSystem
         //zwrot informacji o mime binarium
         return finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $binary);
     }
-
 }

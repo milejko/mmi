@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,6 @@ use Mmi\Db\DbException;
  */
 class CacheRecord extends \Mmi\Orm\Record
 {
-
     /**
      * Klucz
      * @var int
@@ -35,7 +34,7 @@ class CacheRecord extends \Mmi\Orm\Record
      * @var integer
      */
     public $ttl;
-    
+
     /**
      * Zapis to próba wstawienia, przy niepowodzeniu - update
      * @return boolean
@@ -56,5 +55,4 @@ class CacheRecord extends \Mmi\Orm\Record
             }
         }
     }
-
 }

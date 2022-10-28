@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2020 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,7 @@ use Mmi\Cache\SystemCacheInterface;
  */
 class DbInformation implements DbInformationInterface
 {
-    const CACHE_PREFIX = 'mmi-db-information-';
+    public const CACHE_PREFIX = 'mmi-db-information-';
 
     /**
      * Contains table structure
@@ -103,5 +103,4 @@ class DbInformation implements DbInformationInterface
         //usunięcie lokalnie zapisanych struktur
         $this->tableStructure = [];
     }
-
 }

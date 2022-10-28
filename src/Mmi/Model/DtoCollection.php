@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Model;
  */
 class DtoCollection extends \ArrayObject
 {
-
     /**
      * Konstruktor ustawiający kolekcję na podstawie tablicy obiektów lub tablic
      * @param mixed $data
@@ -33,7 +32,8 @@ class DtoCollection extends \ArrayObject
             return;
         }
         if (!is_array(reset($data))) {
-            return parent::__construct($data);
+            parent::__construct($data);
+            return;
         }
         $this->setFromArray($data);
     }
@@ -43,7 +43,7 @@ class DtoCollection extends \ArrayObject
      * @param array $data tablica obiektów \stdClass
      * @return \Mmi\Model\Api\DtoCollection
      */
-    public final function setFromArray(array $data)
+    final public function setFromArray(array $data)
     {
         $dtoClass = $this->_getDtoClass();
         $this->exchangeArray([]);
@@ -61,7 +61,7 @@ class DtoCollection extends \ArrayObject
      * @param \Mmi\Orm\RecordCollection $data kolekcja obiektów DAO
      * @return \Mmi\Model\Api\Orm\DtoCollection
      */
-    public final function setFromDaoRecordCollection(\Mmi\Orm\RecordCollection $data)
+    final public function setFromDaoRecordCollection(\Mmi\Orm\RecordCollection $data)
     {
         $dtoClass = $this->_getDtoClass();
         $this->exchangeArray([]);
@@ -75,7 +75,7 @@ class DtoCollection extends \ArrayObject
      * Zwraca kolekcję w postaci tablicy
      * @return array
      */
-    public final function toArray()
+    final public function toArray()
     {
         $array = [];
         foreach ($this as $key => $dto) {
@@ -88,7 +88,7 @@ class DtoCollection extends \ArrayObject
      * Zwraca kolekcję w postaci tablicy obiektów DTO
      * @return array
      */
-    public final function toObjectArray()
+    final public function toObjectArray()
     {
         $array = [];
         foreach ($this as $key => $dto) {
@@ -101,7 +101,7 @@ class DtoCollection extends \ArrayObject
      * Ustala nazwę klasy DTO
      * @return string
      */
-    protected final function _getDtoClass()
+    final protected function _getDtoClass()
     {
         $dtoClass = substr(get_class($this), 0, -10);
         if ($dtoClass == '\Mmi\Model\Dto') {
@@ -109,5 +109,4 @@ class DtoCollection extends \ArrayObject
         }
         return $dtoClass;
     }
-
 }

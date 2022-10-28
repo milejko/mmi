@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Filter;
 
 /**
  * Przycięcie ciągu znaków
- * 
+ *
  * @method self setLength($length)
  * @method getLength()
  * @method self setEnding($ending) końce linii
@@ -22,7 +22,6 @@ namespace Mmi\Filter;
  */
 class Truncate extends \Mmi\Filter\FilterAbstract
 {
-
     /**
      * Ustawia opcje
      * @param array $options
@@ -61,5 +60,4 @@ class Truncate extends \Mmi\Filter\FilterAbstract
         $value .= $this->getEnding();
         return $value;
     }
-
 }

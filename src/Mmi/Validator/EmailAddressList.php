@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,11 +15,10 @@ namespace Mmi\Validator;
  */
 class EmailAddressList extends ValidatorAbstract
 {
-
     /**
      * Komunikat błędu
      */
-    const INVALID = 'validator.emailAddressList.message';
+    public const INVALID = 'validator.emailAddressList.message';
 
     /**
      * Sprawdza czy tekst jest e-mailem
@@ -32,11 +31,10 @@ class EmailAddressList extends ValidatorAbstract
         //iteracja po mailach
         foreach ($emails as $email) {
             //niepoprawny email
-            if (!(new EmailAddress)->isValid($email)) {
+            if (!(new EmailAddress())->isValid($email)) {
                 return $this->_error(static::INVALID);
             }
         }
         return true;
     }
-
 }

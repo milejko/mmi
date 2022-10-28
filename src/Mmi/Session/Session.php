@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,7 @@ namespace Mmi\Session;
 
 class Session implements SessionInterface
 {
-    const FILE_HANDLER = 'files';
+    public const FILE_HANDLER = 'files';
 
     /**
      * Constructor depends on SessionConfig object
@@ -76,7 +76,7 @@ class Session implements SessionInterface
     public function getNumericId(): int
     {
         $hashId = $this->getId();
-        $id = (integer) substr(preg_replace('/[a-z]+/', '', $hashId), 0, 9);
+        $id = (int) substr(preg_replace('/[a-z]+/', '', $hashId), 0, 9);
         $letters = preg_replace('/[0-9]+/', '', $hashId);
         for ($i = 0, $length = strlen($letters); $i < $length; $i++) {
             $id += ord($letters[$i]) - 97;
@@ -99,5 +99,4 @@ class Session implements SessionInterface
     {
         session_regenerate_id($deleteOldSession);
     }
-
 }

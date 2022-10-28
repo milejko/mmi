@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Cache;
  */
 class RedisHandler implements CacheHandlerInterface
 {
-
     /**
      * Przechowuje obiekt Redisa
      * @var \Redis
@@ -51,7 +50,7 @@ class RedisHandler implements CacheHandlerInterface
     private function _connect()
     {
         //powoływanie serwera
-        $this->_server = new \Redis;
+        $this->_server = new \Redis();
         //parsowanie konfiguracji
         $config = parse_url($this->_config->path);
         //format połączenie host/port
@@ -109,5 +108,4 @@ class RedisHandler implements CacheHandlerInterface
     {
         $this->_server->flushDB();
     }
-
 }

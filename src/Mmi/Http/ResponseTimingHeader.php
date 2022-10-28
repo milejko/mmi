@@ -17,8 +17,7 @@ use Mmi\App\AppProfilerInterface;
  */
 class ResponseTimingHeader
 {
-
-    const HEADER_NAME = 'Server-Timing';
+    public const HEADER_NAME = 'Server-Timing';
     /**
      * @var AppProfilerInterface
      */
@@ -46,7 +45,7 @@ class ResponseTimingHeader
         foreach ($eventGroups as $groupName => $elapsed) {
             $headerValue .= str_replace('\\', '', $groupName) . ';dur=' . round(1000 * $elapsed, 2) . ',';
         }
-        return (new ResponseHeader)
+        return (new ResponseHeader())
             ->setName(self::HEADER_NAME)
             ->setValue('App;dur=' . 1000 * $this->profiler->elapsed() . ',' . $headerValue);
     }

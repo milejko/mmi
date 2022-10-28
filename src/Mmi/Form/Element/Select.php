@@ -10,15 +10,13 @@
 
 namespace Mmi\Form\Element;
 
-use Mmi\App\App;
-use Mmi\Mvc\View;
-
 /**
  * Element select
+ * @method self setMultioptions(array $options)
+ * @method array getMultioptions()
  */
 class Select extends ElementAbstract
 {
-
     /**
      * Ustawia multiselect
      * @return self
@@ -32,7 +30,7 @@ class Select extends ElementAbstract
      * Zwraca czy pole jest multiple
      * @return boolean
      */
-    public final function getMultiple()
+    final public function getMultiple()
     {
         return null !== $this->getOption('multiple');
     }

@@ -1,0 +1,364 @@
+<?xml version="1.0"?>
+<phpmd-baseline>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/App/AppAbstract.php"/>
+  <violation rule="PHPMD\Rule\Design\ExitExpression" file="src/Mmi/App/AppCli.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/App/AppCli.php" method="getApplicationCommandNames"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/App/AppCli.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/App/AppErrorHandler.php"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/App/AppExceptionFormatter.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/App/AppProfiler.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/App/ComposerInstaller.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/App/ComposerInstaller.php" method="_initAutoload"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/App/ComposerInstaller.php" method="_createSysDirs"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/App/ComposerInstaller.php" method="_copyDistFiles"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/App/ComposerInstaller.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/App/ComposerInstaller.php" method="_copyExecutables"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/App/KernelException.php" method="getExtendedMessage"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Cache/ApcHandler.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Cache/Cache.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Cache/Cache.php" method="_setCacheData"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Cache/Cache.php" method="_setHandler"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Cache/Cache.php" method="validateAndPrepareBackendData"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Cache/Cache.php" method="_setupHandler"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Cache/FileHandler.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\ErrorControlOperator" file="src/Mmi/Cache/FileHandler.php" method="load"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Cache/RedisHandler.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Cache/RedisHandler.php" method="_connect"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Cache/RedisHandler.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Command/DaoRenderCommand.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Command/DaoRenderCommand.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Command/DbDeployCommand.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Command/DbDeployCommand.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Command/DbDeployCommand.php" method="_importIncremental"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Command/DbDeployCommand.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Command/DbDeployCommand.php" method="_importSql"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Command/FlushCacheCommand.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Command/WeblinksCommand.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Command/WeblinksCommand.php"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Mmi/DataObject.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/DataObject.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/DataObject.php"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Mmi/Db/Adapter/PdoAbstract.php"/>
+  <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Mmi/Db/Adapter/PdoAbstract.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Db/Adapter/PdoAbstract.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Db/Adapter/PdoAbstract.php" method="query"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Db/Adapter/PdoAbstract.php" method="query"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Db/Adapter/PdoAbstract.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Db/Adapter/PdoAbstract.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Db/Adapter/PdoBindHelper.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Db/Adapter/PdoMysql.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Db/Adapter/PdoMysql.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Db/Adapter/PdoMysql.php" method="_associateTableMeta"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Db/Adapter/PdoSqlite.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Mmi/Db/Adapter/PdoSqlite.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Db/Adapter/PdoSqlite.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Db/Adapter/PdoSqlite.php" method="_associateTableMeta"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Db/DbInformation.php" method="getTableStructure"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Db/DbInterface.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Db/DbProfiler.php"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/Db/DbProfiler.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/EventManager/Event.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/EventManager/EventInterface.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/EventManager/EventManager.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/EventManager/EventManager.php" method="detach"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/EventManager/EventManager.php" method="detach"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/EventManager/EventManager.php" method="triggerListeners"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Mmi/EventManager/EventManager.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/FileSystem.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/FileSystem.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Filter/DateFormat.php"/>
+  <violation rule="PHPMD\Rule\Design\NumberOfChildren" file="src/Mmi/Filter/FilterAbstract.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Filter/NumberFormat.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Filter/Replace.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Filter/Round.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Filter/StringTrim.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Filter/StripTags.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Filter/Truncate.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Filter/Truncate.php" method="filter"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Filter/Url.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Form/Element/Checkbox.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Form/Element/Csrf.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Form/Element/Csrf.php"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Mmi/Form/Element/ElementAbstract.php"/>
+  <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Mmi/Form/Element/ElementAbstract.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Form/Element/ElementAbstract.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Form/Element/ElementAbstract.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Form/Element/ElementAbstract.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Form/Element/ElementAbstract.php" method="_getHtmlOptions"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Mmi/Form/Element/ElementAbstract.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Form/Element/File.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Form/Element/MultiCheckbox.php"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/Form/Element/MultiCheckbox.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Form/Element/Select.php" method="_calculateSelected"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Mmi/Form/Form.php"/>
+  <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Mmi/Form/Form.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Form/Form.php"/>
+  <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Mmi/Form/Form.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Form/Form.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Form/Form.php" method="setFromPost"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Form/Form.php" method="save"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Form/Form.php" method="_setRecordData"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Http/Cookie.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Http/Cookie.php"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Http/Cookie.php" method="match"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Http/Cookie.php" method="delete"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Http/Request.php" method="createFromGlobals"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Http/RequestFile.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Http/RequestFiles.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Http/RequestFiles.php" method="_handleFieldFiles"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/RequestFiles.php" method="_handleFieldFiles"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/RequestFiles.php" method="_handleForm"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/RequestFiles.php" method="_handleSingleUpload"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Http/RequestFiles.php" method="_handleMultiUpload"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/RequestFiles.php" method="_handleMultiUpload"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/RequestFiles.php" method="_pivot"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/RequestServer.php" method="_filter"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Http/Response.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Http/Response.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Http/Response.php" method="setCode"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Http/Response.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Http/Response.php" method="send"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/ResponseDebugger.php" method="_getElapsed"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/ResponseDebugger.php" method="_getPeakMemory"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Http/ResponseDebugger.php" method="getHtml"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Http/ResponseDebugger.php" method="getHtml"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Http/ResponseDebugger.php" method="getHtml"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Http/ResponseDebugger.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/ResponseDebugger.php" method="_simplifyVarArray"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Http/ResponseDebugger/Colorify.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/ResponseDebugger/Part.php" method="_colorifyPercent"/>
+  <violation rule="PHPMD\Rule\Design\ExitExpression" file="src/Mmi/Http/ResponseHeader.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Http/ResponseTypes.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseVariableName" file="src/Mmi/Http/ResponseTypes.php" method="getMessageByCode"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseVariableName" file="src/Mmi/Http/ResponseTypes.php" method="searchType"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/Image/Image.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Image/Image.php" method="_saveAlpha"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Ldap/LdapClient.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Ldap/LdapClient.php" method="_getActiveServer"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Ldap/LdapClient.php" method="_getActiveServer"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Ldap/LdapClient.php" method="_isServerAlive"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Ldap/LdapClient.php" method="_parseAddress"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Ldap/LdapClient.php" method="_close"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Ldap/LdapUserCollection.php" method="setFromLdapResponse"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Ldap/LdapUserCollection.php" method="setFromLdapResponse"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/Ldap/LdapUserCollection.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Log/LogConfig.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Model/Dto.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Model/Dto.php" method="toArrayPut"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Model/DtoCollection.php" method="_getDtoClass"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/ActionHelper.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/ActionHelper.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Mvc/ActionHelper.php" method="_renderAction"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ActionHelper.php" method="_renderAction"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ActionHelper.php" method="_checkAcl"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ActionHelper.php" method="_invokeAction"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/Messenger.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/Messenger.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/Messenger.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/Router.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Mvc/Router.php" method="encodeUrl"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Mvc/Router.php" method="encodeUrl"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="src/Mmi/Mvc/Router.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/RouterConfig.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/RouterConfig.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/RouterConfig.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/RouterMatcher.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Mvc/RouterMatcher.php" method="tryRouteForParams"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Mvc/RouterMatcher.php" method="tryRouteForParams"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/RouterMatcher.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/RouterMatcher.php" method="_isPatternRegular"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/RouterMatcher.php" method="_routeMatch"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Mvc/Structure.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Mvc/Structure.php" method="_parseModule"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/Structure.php" method="_parseModule"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/Structure.php" method="_parseTemplates"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/Structure.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/Structure.php" method="_parseClasses"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/Structure.php" method="_parseFiles"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/StructureParser.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/StructureParser.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/StructureParser.php" method="_moduleValid"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/View.php"/>
+  <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Mmi/Mvc/View.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Mvc/View.php" method="__call"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="src/Mmi/Mvc/View.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/View.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/View.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Mvc/View.php" method="renderTemplate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/View.php" method="_"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/View.php" method="_compileTemplate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/View.php" method="_getLayout"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/ViewHelper/Escape.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Mvc/ViewHelper/HeadAbstract.php" method="_getLocationTimestamp"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/HeadAbstract.php" method="_getLocationTimestamp"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/HeadAbstract.php" method="_getPublicSrc"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/ViewHelper/HeadLink.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/ViewHelper/HeadLink.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/HeadLink.php" method="_setStylesheet"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/HeadLink.php" method="_setCanonical"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/HeadLink.php" method="_setAlternate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/ViewHelper/HeadMeta.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/ViewHelper/HeadMeta.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/ViewHelper/HeadScript.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/ViewHelper/HeadScript.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Mvc/ViewHelper/HeadScript.php" method="__toString"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/ViewHelper/HeadStyle.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/ViewHelper/HeadStyle.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Mmi/Mvc/ViewHelper/HeadStyle.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Mvc/ViewHelper/HeadStyle.php" method="_getStyleContent"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/HeadStyle.php" method="_getStyleContent"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/HeadStyle.php" method="_filterCssFile"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Mmi/Mvc/ViewHelper/Navigation.php"/>
+  <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Mmi/Mvc/ViewHelper/Navigation.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Mvc/ViewHelper/Navigation.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_getNavigation"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_modifyBreadcrumbData"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_checkAcl"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_checkAcl"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_checkRoles"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_buildBreadcrumbs"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_buildBreadcrumbs"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_buildBreadcrumbs"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/Mvc/ViewHelper/Navigation.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_getHtml"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_getHtml"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Navigation.php" method="_getHtml"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="src/Mmi/Mvc/ViewHelper/Navigation.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/ViewHelper/Navigation.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Mmi/Mvc/ViewHelper/Navigation.php"/>
+  <violation rule="PHPMD\Rule\Design\LongMethod" file="src/Mmi/Mvc/ViewHelper/Template.php" method="template"/>
+  <violation rule="PHPMD\Rule\UnusedPrivateMethod" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_url"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_url"/>
+  <violation rule="PHPMD\Rule\UnusedPrivateMethod" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_routerLinks"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_routerLinks"/>
+  <violation rule="PHPMD\Rule\UnusedPrivateMethod" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_text"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_text"/>
+  <violation rule="PHPMD\Rule\UnusedPrivateMethod" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_render"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_render"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_render"/>
+  <violation rule="PHPMD\Rule\UnusedPrivateMethod" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_translate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_translate"/>
+  <violation rule="PHPMD\Rule\UnusedPrivateMethod" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_filter"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Mvc/ViewHelper/Template.php" method="_filter"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Mvc/ViewHelper/Url.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Mvc/ViewHelper/Widget.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Navigation/Navigation.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Navigation/Navigation.php" method="_setupActive"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Navigation/Navigation.php" method="_setupActive"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Navigation/Navigation.php" method="_setupActive"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Navigation/Navigation.php" method="_setupBreadcrumbs"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Navigation/NavigationConfig.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Navigation/NavigationConfig.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Navigation/NavigationConfig.php" method="findById"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Navigation/NavigationConfig.php" method="_findInChildren"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Navigation/NavigationConfig.php" method="_findInChildren"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Navigation/NavigationConfigElement.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Navigation/NavigationConfigElement.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Navigation/NavigationConfigElement.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Navigation/NavigationConfigElement.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/OptionObject.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/OptionObject.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Orm/Builder.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateRecord"/>
+  <violation rule="PHPMD\Rule\UnusedLocalVariable" file="src/Mmi/Orm/Builder.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\UndefinedVariable" file="src/Mmi/Orm/Builder.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateQueryField"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateQueryJoin"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateQuery"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_getPathPrefix"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_getNamespace"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_getNamePrefix"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_mkdirRecursive"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/CacheQuery.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/ChangelogQuery.php"/>
+  <violation rule="PHPMD\Rule\Design\TooManyMethods" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Query.php" method="_mergeQueries"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Orm/Query.php" method="_prepareField"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Query.php" method="_prepareField"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Orm/Query.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Query.php" method="_prepareOrder"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Query.php" method="_prepareGroup"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Query.php" method="_classPrefix"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/QueryData.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/QueryData.php" method="_prepareFields"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/QueryData.php" method="_prepareFrom"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Mmi/Orm/QueryHelper/QueryField.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/QueryHelper/QueryField.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Orm/QueryHelper/QueryField.php" method="_prepareQuery"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Orm/QueryHelper/QueryField.php" method="_prepareQuery"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/QueryHelper/QueryField.php" method="_prepareQuery"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Orm/QueryHelper/QueryField.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/QueryHelper/QueryField.php" method="_prepareColumnQuery"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/QueryHelper/QueryField.php" method="_initQuery"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/QueryHelper/QueryJoin.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Orm/Record.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Record.php" method="_insert"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Record.php" method="_update"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Orm/Record.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Record.php" method="_truncateToStructure"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/Orm/RecordCollection.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/RecordRo.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Orm/RecordRo.php" method="__construct"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Orm/RecordRo.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/RecordRo.php" method="_pkWhere"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Orm/SessionQuery.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Security/Acl.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Security/Auth.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Security/Auth.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Security/Auth.php" method="authenticate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Security/Auth.php" method="_setAuthentication"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Security/Auth.php" method="idAuthenticate"/>
+  <violation rule="PHPMD\Rule\Design\ExitExpression" file="src/Mmi/Security/Auth.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Session/ApcHandler.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Session/ApcHandler.php" method="read"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Session/ApcHandler.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Session/ApcHandler.php" method="_validate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Session/DbHandler.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Session/DbHandler.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Session/DbHandler.php" method="read"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Session/DbHandler.php" method="write"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Session/DbHandler.php" method="destroy"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Session/DbHandler.php" method="_validate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Session/FileHandler.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Session/FileHandler.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Session/FileHandler.php" method="_validate"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Session/RedisHandler.php"/>
+  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Session/RedisHandler.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Session/RedisHandler.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Session/RedisHandler.php" method="read"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Session/RedisHandler.php" method="_validate"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Session/Session.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Session/SessionInterface.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Session/SessionSpace.php"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Session/SessionSpace.php" method="__set"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Session/SessionSpace.php" method="__get"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Session/SessionSpace.php" method="__isset"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Session/SessionSpace.php" method="__unset"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Session/SessionSpace.php" method="unsetAll"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Session/SessionSpace.php" method="setFromArray"/>
+  <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Session/SessionSpace.php" method="toArray"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Translate/Translate.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Translate/Translate.php" method="_parseTranslationFile"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Validator/Alnum.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/Checked.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/Csrf.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\MissingImport" file="src/Mmi/Validator/Csrf.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/Equal.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/Iban.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Validator/NotEmpty.php" method="isValid"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/NumberBetween.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/RecordUnique.php"/>
+  <violation rule="PHPMD\Rule\Naming\ShortVariable" file="src/Mmi/Validator/RecordUnique.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/Regex.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/StringLength.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Validator/ValidatorAbstract.php"/>
+  <violation rule="PHPMD\Rule\Design\NumberOfChildren" file="src/Mmi/Validator/ValidatorAbstract.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/ValidatorAbstract.php"/>
+  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Validator/ValidatorAbstract.php" method="_error"/>
+</phpmd-baseline>

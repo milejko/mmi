@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,7 +12,6 @@ namespace Mmi\Http;
 
 class ResponseTypes
 {
-
     /**
      * Przechowuje kody HTTP
      * @var array
@@ -98,10 +97,8 @@ class ResponseTypes
         'rtf' => 'text/rtf',
         'doc' => 'application/msword',
         'xls' => 'application/vnd.ms-excel',
-        'ppt' => 'application/vnd.ms-powerpoint',
         'xhtml' => 'application/xhtml+xml',
         'zip' => 'application/zip',
-        'gz' => 'application/gzip',
         'odt' => 'application/octet-stream',
         'bin' => 'application/octet-stream',
         'midi' => 'audio/midi',
@@ -115,7 +112,6 @@ class ResponseTypes
         'avi' => 'video/x-msvideo',
         'flv' => 'video/x-flv',
         'wmv' => 'video/x-ms-wmv',
-        'wmv' => 'video/x-ms-asf',
         'mov' => 'video/quicktime',
         'exe' => 'application/x-dosexec',
         'msi' => 'application/x-msi',
@@ -167,5 +163,4 @@ class ResponseTypes
         //typ nieodnaleziony
         throw new HttpException('Type not found');
     }
-
 }

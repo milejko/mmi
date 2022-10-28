@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -14,7 +14,6 @@ use Mmi\Mvc\View;
 
 class HelperAbstract
 {
-
     /**
      * Referencja do widoku
      * @var \Mmi\Mvc\View
@@ -26,7 +25,6 @@ class HelperAbstract
      */
     public function init()
     {
-        
     }
 
     /**
@@ -37,5 +35,4 @@ class HelperAbstract
         $this->view = $view;
         $this->init();
     }
-
 }

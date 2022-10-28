@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,7 +17,6 @@ use Mmi\App\TestApp;
  */
 class IndexControllerTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testIndexAction()
     {
         $this->assertEquals(file_get_contents(BASE_PATH . '/src/Mmi/Resource/template/index/index.tpl'), (new \Mmi\Mvc\ActionHelper(TestApp::$di))->action((new \Mmi\Http\Request)
@@ -33,5 +32,4 @@ class IndexControllerTest extends \PHPUnit\Framework\TestCase
                     ->setControllerName('index')
                     ->setActionName('error')));
     }
-
 }

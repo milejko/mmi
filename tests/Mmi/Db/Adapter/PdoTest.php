@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -152,5 +152,4 @@ class PdoTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(['mmi_cache', 'mmi_changelog', 'mmi_session', 'test', 'sqlite_sequence'], $this->_db->tableList());
     }
-
 }

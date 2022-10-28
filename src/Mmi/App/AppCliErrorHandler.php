@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\App;
  */
 class AppCliErrorHandler
 {
-
     /**
      * @var AppExceptionLogger
      */
@@ -48,5 +47,4 @@ class AppCliErrorHandler
         $this->logger->logException($exception);
         echo 'Something went wrong';
     }
-
 }

@@ -78,15 +78,17 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     protected $view;
 
     //szablon początku pola
-    CONST TEMPLATE_BEGIN = 'mmi/form/element/element-abstract/begin';
+    public const TEMPLATE_BEGIN = 'mmi/form/element/element-abstract/begin';
     //szablon opisu
-    CONST TEMPLATE_DESCRIPTION = 'mmi/form/element/element-abstract/description';
+    public const TEMPLATE_DESCRIPTION = 'mmi/form/element/element-abstract/description';
     //szablon końca pola
-    CONST TEMPLATE_END = 'mmi/form/element/element-abstract/end';
+    public const TEMPLATE_END = 'mmi/form/element/element-abstract/end';
     //szablon błędów
-    CONST TEMPLATE_ERRORS = 'mmi/form/element/element-abstract/errors';
+    public const TEMPLATE_ERRORS = 'mmi/form/element/element-abstract/errors';
     //szablon etykiety
-    CONST TEMPLATE_LABEL = 'mmi/form/element/element-abstract/label';
+    public const TEMPLATE_LABEL = 'mmi/form/element/element-abstract/label';
+    //pusty szablon pola
+    public const TEMPLATE_FIELD = '';
 
     /**
      * Konstruktor
@@ -488,7 +490,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Buduje opcje HTML
      * @return string
      */
-    protected final function _getHtmlOptions()
+    final protected function _getHtmlOptions()
     {
         $validators = $this->getValidators();
         //jeśli istnieją validatory dodajemy klasę validate

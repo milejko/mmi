@@ -12,8 +12,7 @@ namespace Mmi\Mvc;
 
 class Router
 {
-
-    const HASH_REPLACE = '_TMP-ENCODED-HASH_';
+    public const HASH_REPLACE = '_TMP-ENCODED-HASH_';
 
     /**
      * Konfiguracja
@@ -85,7 +84,7 @@ class Router
         //próba aplikacji rout
         foreach ($this->getRoutes() as $route) {
             /* @var $route \Mmi\Mvc\RouterConfigRoute */
-            $result = (new RouterMatcher)->tryRouteForUrl($route, $filteredUrl);
+            $result = (new RouterMatcher())->tryRouteForUrl($route, $filteredUrl);
             //dopasowano routę
             if ($result['matched']) {
                 //łączenie parametrów
@@ -111,11 +110,11 @@ class Router
             if (null === $param) {
                 unset($params[$key]);
             }
-        }        
+        }
         //aplikacja rout
         foreach ($this->getRoutes() as $route) {
             /* @var $route \Mmi\Mvc\RouterConfigRoute */
-            $result = (new RouterMatcher)->tryRouteForParams($route, array_merge($route->default, $params));
+            $result = (new RouterMatcher())->tryRouteForParams($route, array_merge($route->default, $params));
             //dopasowano routę
             if ($result['applied']) {
                 $url = '/' . $result['url'];
@@ -138,7 +137,7 @@ class Router
         //jeśli puste parametry
         if (empty($params)) {
             return $url;
-        }        
+        }
         //budowanie zapytania
         return $url . ($url == '/' ? '?' : '/?') . http_build_query($params);
     }

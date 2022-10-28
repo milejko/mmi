@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -17,8 +17,7 @@ use Mmi\App\AppProfilerInterface;
  */
 class DbProfiler implements DbProfilerInterface
 {
-
-    const EVENT_PREFIX = 'Mmi\Db\Adapter\Pdo';
+    public const EVENT_PREFIX = 'Mmi\Db\Adapter\Pdo';
 
     /**
      * Dane profilera
@@ -109,5 +108,4 @@ class DbProfiler implements DbProfilerInterface
         }
         return $elapsed;
     }
-
 }

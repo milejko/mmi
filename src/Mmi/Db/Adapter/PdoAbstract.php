@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -22,7 +22,6 @@ use PDOStatement;
  */
 abstract class PdoAbstract implements DbInterface
 {
-
     /**
      * Obiekt \PDO do pobierania danych
      * @var \PDO
@@ -95,7 +94,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Zwraca konfigurację
      */
-    public final function getConfig(): DbConfig
+    final public function getConfig(): DbConfig
     {
         return $this->_config;
     }
@@ -106,7 +105,7 @@ abstract class PdoAbstract implements DbInterface
      * @param array $params
      * @throws DbException
      */
-    public final function __call($method, array $params = [])
+    final public function __call($method, array $params = [])
     {
         throw new DbException(get_called_class() . ': method not found: ' . $method);
     }
@@ -117,7 +116,7 @@ abstract class PdoAbstract implements DbInterface
      * @see \PDO::PARAM_STR
      * @see \PDO::PARAM_INT
      */
-    protected final function quote(string $value, int $paramType = \PDO::PARAM_STR): string
+    final protected function quote(string $value, int $paramType = \PDO::PARAM_STR): string
     {
         //łączy jeśli niepołączony
         if (!$this->_connected) {
@@ -141,7 +140,7 @@ abstract class PdoAbstract implements DbInterface
      * rzuca wyjątki
      * @throws DbException
      */
-    public final function query(string $sql, array $bind = []): PDOStatement
+    final public function query(string $sql, array $bind = []): PDOStatement
     {
         //łączy jeśli niepołączony
         if (!$this->_connected) {
@@ -196,7 +195,7 @@ abstract class PdoAbstract implements DbInterface
      * Zwraca ostatnio wstawione ID
      * @return mixed
      */
-    public final function lastInsertId()
+    final public function lastInsertId()
     {
         //łączy jeśli niepołączony
         if (!$this->_connected) {
@@ -208,7 +207,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Zwraca wszystkie rekordy (rządki)
      */
-    public final function fetchAll(string $sql, array $bind = []): array
+    final public function fetchAll(string $sql, array $bind = []): array
     {
         return $this->query($sql, $bind)->fetchAll(\PDO::FETCH_NAMED);
     }
@@ -216,7 +215,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Zwraca pierwszy rekord (rządek)
      */
-    public final function fetchRow(string $sql, array $bind = []): array
+    final public function fetchRow(string $sql, array $bind = []): array
     {
         return $this->query($sql, $bind)->fetch(\PDO::FETCH_NAMED);
     }
@@ -224,7 +223,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Wstawianie rekordu
      */
-    public final function insert(string $table, array $data = []): int
+    final public function insert(string $table, array $data = []): int
     {
         $fields = '';
         $values = '';
@@ -245,7 +244,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Aktualizacja rekordów
      */
-    public final function update(string $table, array $data = [], string $where = '', array $whereBind = []): int
+    final public function update(string $table, array $data = [], string $where = '', array $whereBind = []): int
     {
         $fields = '';
         $bind = [];
@@ -267,7 +266,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Kasowanie rekordu
      */
-    public final function delete(string $table, string $where = '', array $whereBind = []): int
+    final public function delete(string $table, string $where = '', array $whereBind = []): int
     {
         return $this->query('DELETE FROM ' . $this->prepareTable($table) . ' ' . $where, $whereBind)
                 ->rowCount();
@@ -276,8 +275,8 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Pobieranie rekordów
      */
-    public final function select(
-        string $fields = '*', 
+    final public function select(
+        string $fields = '*',
         string $from = '',
         string $where = null,
         string $groupBy = null,
@@ -285,8 +284,7 @@ abstract class PdoAbstract implements DbInterface
         int $limit = null,
         int $offset = null,
         array $whereBind = []
-    ): array
-    {
+    ): array {
         $sql = 'SELECT' .
             ' ' . $fields .
             ' FROM' .
@@ -302,7 +300,7 @@ abstract class PdoAbstract implements DbInterface
      * Rozpoczyna transakcję
      * @return boolean
      */
-    public final function beginTransaction(): bool
+    final public function beginTransaction(): bool
     {
         //łączenie jeśli niepołączony
         if (!$this->_connected) {
@@ -317,7 +315,7 @@ abstract class PdoAbstract implements DbInterface
      * Zatwierdza transakcję
      * @return boolean
      */
-    public final function commit(): bool
+    final public function commit(): bool
     {
         //brak transakcji
         if (!$this->_transactionInProgress) {
@@ -331,7 +329,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Odrzuca transakcję
      */
-    public final function rollBack(): bool
+    final public function rollBack(): bool
     {
         //brak transakcji
         if (!$this->_transactionInProgress) {
@@ -348,7 +346,7 @@ abstract class PdoAbstract implements DbInterface
      * @param int $offset
      * @return string
      */
-    public final function prepareLimit($limit = null, $offset = null): ?string
+    final public function prepareLimit($limit = null, $offset = null): ?string
     {
         //wyjście jeśli brak limitu
         if (!($limit > 0)) {
@@ -362,11 +360,10 @@ abstract class PdoAbstract implements DbInterface
         return 'LIMIT ' . intval($limit);
     }
 
-
     /**
      * Tworzy konstrukcję sprawdzającą ILIKE, jeśli dostępna w silniku
      */
-    public final function prepareLike(string $fieldName): string
+    final public function prepareLike(string $fieldName): string
     {
         //filed like
         return $fieldName . ' LIKE';
@@ -380,7 +377,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Ustawia profiler
      */
-    public final function setProfiler(DbProfiler $profiler): self
+    final public function setProfiler(DbProfiler $profiler): self
     {
         $this->_profiler = $profiler;
         return $this;
@@ -389,9 +386,8 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Zwraca profiler
      */
-    public final function getProfiler(): DbProfiler
+    final public function getProfiler(): DbProfiler
     {
         return $this->_profiler;
     }
-
 }

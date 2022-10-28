@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Ldap;
  */
 class LdapClient extends \Mmi\OptionObject
 {
-
     /**
      * Konfiguracja serwera
      * @var \Mmi\Ldap\LdapConfig
@@ -90,10 +89,10 @@ class LdapClient extends \Mmi\OptionObject
             }
             $searchString .= ')';
             //odpowiedź z LDAP'a
-            $rawResource = ldap_search($this->_getActiveServer(), $dn ? : 'dc=' . implode(',dc=', explode('.', $this->_config->domain)), $searchString);
+            $rawResource = ldap_search($this->_getActiveServer(), $dn ?: 'dc=' . implode(',dc=', explode('.', $this->_config->domain)), $searchString);
         } catch (\Exception $e) {
             //puste
-            return new LdapUserCollection;
+            return new LdapUserCollection();
         }
         //konwersja do obiektów
         return new LdapUserCollection(ldap_get_entries($this->_getActiveServer(), $rawResource), $limit);
@@ -197,5 +196,4 @@ class LdapClient extends \Mmi\OptionObject
         ldap_close($this->_activeServerResource);
         $this->_activeServerResource = null;
     }
-
 }

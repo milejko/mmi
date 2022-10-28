@@ -1,11 +1,10 @@
 /composer.lock
-/nbproject/
 /tests/.phpunit*
 /.idea
-/.phpunit*
+/.php*
+/.build/
 /src/App/
 /var/
 /vendor/
 /web/
 *.build
-*.php

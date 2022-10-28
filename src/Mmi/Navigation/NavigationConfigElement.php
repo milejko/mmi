@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -25,11 +25,10 @@ namespace Mmi\Navigation;
  * @method \Mmi\Navigation\NavigationConfigElement setUri(string $uri) ustawia uri
  * @method \Mmi\Navigation\NavigationConfigElement setDateStart(string $dateStart) ustawia datę startową
  * @method \Mmi\Navigation\NavigationConfigElement setDateEnd(string $dateEnd) ustawia datę końcową
- * 
+ *
  */
 class NavigationConfigElement extends \Mmi\OptionObject
 {
-
     /**
      * Struktura drzewiasta
      * @var array
@@ -64,7 +63,7 @@ class NavigationConfigElement extends \Mmi\OptionObject
             //tabela z elementami potomnymi
             'children' => [],
             //konfiguracja
-            'config' => new \Mmi\DataObject,
+            'config' => new \Mmi\DataObject(),
             //role, które mają dostęp
             'roles' => []
         ]);
@@ -160,5 +159,4 @@ class NavigationConfigElement extends \Mmi\OptionObject
         //korzysta z klasy buildera
         return ($this->_build = NavigationConfigBuilder::build($this->_options));
     }
-
 }

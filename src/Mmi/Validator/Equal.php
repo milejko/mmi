@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -12,20 +12,19 @@ namespace Mmi\Validator;
 
 /**
  * Walidator równości
- * 
+ *
  * @method self setValue($value) ustawia wartość bazową
  * @method self setMessage($message) ustawia własną wiadomość walidatora
- * 
+ *
  * @method string getValue() pobiera wartość bazową
  * @method string getMessage() pobiera wiadomość
  */
 class Equal extends ValidatorAbstract
 {
-
     /**
      * Treść wiadomości
      */
-    const INVALID = 'validator.equal.message';
+    public const INVALID = 'validator.equal.message';
 
     /**
      * Ustawia opcje
@@ -51,5 +50,4 @@ class Equal extends ValidatorAbstract
         }
         return true;
     }
-
 }

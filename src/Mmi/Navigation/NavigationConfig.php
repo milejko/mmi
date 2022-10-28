@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Navigation;
  */
 class NavigationConfig
 {
-
     /**
      * Dane nawigacji
      * @var array
@@ -69,7 +68,7 @@ class NavigationConfig
     /**
      * Znajduje element po identyfikatorze
      * @param int $id identyfikator
-     * @return \Mmi\Navigation\NavigationConfigElement
+     * @return \Mmi\Navigation\NavigationConfigElement|null
      */
     public function findById($id, $withParents = false)
     {
@@ -82,6 +81,7 @@ class NavigationConfig
                 return $found;
             }
         }
+        return null;
     }
 
     /**
@@ -109,6 +109,7 @@ class NavigationConfig
                 return $found;
             }
         }
+        return null;
     }
 
     /**
@@ -137,5 +138,4 @@ class NavigationConfig
         $this->_data = [];
         return $this->build;
     }
-
 }

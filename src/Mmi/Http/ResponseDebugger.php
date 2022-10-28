@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -23,9 +23,9 @@ use Psr\Container\ContainerInterface;
 class ResponseDebugger
 {
     //pre z łamaniem linii
-    const PRE_OPEN_BREAK = '<pre style="white-space: normal; word-wrap: break-word; margin: 0px 0px 10px 0px; color: #666; background: #eee; padding: 3px; border: 1px solid #666;">';
+    public const PRE_OPEN_BREAK = '<pre style="white-space: normal; word-wrap: break-word; margin: 0px 0px 10px 0px; color: #666; background: #eee; padding: 3px; border: 1px solid #666;">';
     //domyślny pre
-    const PRE_OPEN = '<pre style="min-width: 450px; margin: 0px 0px 10px 0px; color: #666; background: #eee; padding: 3px; border: 1px solid #666;">';
+    public const PRE_OPEN = '<pre style="min-width: 450px; margin: 0px 0px 10px 0px; color: #666; background: #eee; padding: 3px; border: 1px solid #666;">';
 
     /**
      * @var Request
@@ -61,8 +61,7 @@ class ResponseDebugger
         CacheInterface $cache,
         View $view,
         ContainerInterface $container
-    )
-    {
+    ) {
         //inject
         $this->request          = $request;
         $this->profiler         = $profiler;
@@ -98,8 +97,8 @@ class ResponseDebugger
         $cacheInfo = 'system cache: %s - public cache: %s';
         //pobranie widoku
         $cacheInfo = \sprintf(
-            $cacheInfo, 
-            $this->container->get('cache.system.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>', 
+            $cacheInfo,
+            $this->container->get('cache.system.enabled') ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>',
             $this->cache->isActive() ? '<span style="color: #99ff99;">on</span>' : '<span style="color: #f12;">off</span>'
         );
         //czasy i pamięci w wykonaniu
@@ -141,7 +140,7 @@ class ResponseDebugger
         }
 
         //zmienne cookie
-        if (isset($_COOKIE) && count($_COOKIE) > 0) {
+        if (count($_COOKIE) > 0) {
             $html .= '<p style="margin: 0px;">Cookie variables: </p>';
             $html .= self::PRE_OPEN;
             $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($_COOKIE), true)) . '</pre>';
@@ -151,7 +150,7 @@ class ResponseDebugger
             $html .= '<p style="margin: 0px;">Session Variables: </p>';
             $html .= self::PRE_OPEN;
             $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($_SESSION), true)) . '</pre>';
-        }        
+        }
 
         //profiler aplikacji
         $html .= '<p style="margin: 0px;">Application profiler: </p>';
@@ -177,8 +176,8 @@ class ResponseDebugger
     {
         $debuggerArray = [];
         $debuggerArray['cache info'] = \sprintf(
-            'system cache: %s, public cache: %s', 
-            $this->container->get('cache.system.enabled') ? 'on' : 'off', 
+            'system cache: %s, public cache: %s',
+            $this->container->get('cache.system.enabled') ? 'on' : 'off',
             $this->cache->isActive() ? 'on' : 'off'
         );
         if (null !== $this->view->_exception) {
@@ -189,8 +188,12 @@ class ResponseDebugger
         $debuggerArray['peak memory usage'] = $this->_getPeakMemory();
         $debuggerArray['request'] = $this->request->toArray();
         $dbProfilerData = $this->container->get(DbInterface::class) && $this->container->get(DbInterface::class)->getProfiler() ? $this->container->get(DbInterface::class)->getProfiler()->get() : [];
-        $debuggerArray['db profiler'] = array_map(function ($data) { return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['sql']; }, $dbProfilerData);
-        $debuggerArray['profiler'] = array_map(function ($data) { return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['name']; }, $this->profiler->get());
+        $debuggerArray['db profiler'] = array_map(function ($data) {
+            return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['sql'];
+        }, $dbProfilerData);
+        $debuggerArray['profiler'] = array_map(function ($data) {
+            return round($data['percent']) . '% -- ' . round($data['elapsed'], 2) . 's -- ' . $data['name'];
+        }, $this->profiler->get());
         return $debuggerArray;
     }
 
@@ -220,5 +223,4 @@ class ResponseDebugger
         //zwrot wartości
         return $simplifiedVars;
     }
-
 }

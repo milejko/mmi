@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Security;
  */
 interface AuthInterface
 {
-
     /**
      * Sprawdza czy użytkownik posiada tożsamość
      * @return boolean
@@ -93,5 +92,4 @@ interface AuthInterface
      * @return boolean
      */
     public function idAuthenticate(): bool;
-
 }

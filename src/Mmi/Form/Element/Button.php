@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,9 +15,8 @@ namespace Mmi\Form\Element;
  */
 class Button extends ElementAbstract
 {
-    
     //szablon pola
-    const TEMPLATE_FIELD = 'mmi/form/element/button';
+    public const TEMPLATE_FIELD = 'mmi/form/element/button';
 
     /**
      * Ignorowanie tego pola, inna kolejnośc renderowania
@@ -44,5 +43,4 @@ class Button extends ElementAbstract
         //render szablonu
         return $this->view->renderTemplate(static::TEMPLATE_FIELD);
     }
-
 }

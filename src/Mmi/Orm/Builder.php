@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -18,9 +18,8 @@ use Mmi\Db\DbInformationInterface;
  */
 class Builder
 {
+    public const INDENT = "    ";
 
-    CONST INDENT = "    ";
-    
     /**
      * Renderuje DAO, Record i Query dla podanej nazwy tabeli
      * @param string $tableName
@@ -69,6 +68,7 @@ class Builder
         if (empty($structure)) {
             throw new OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
         }
+        $variables = [];
         $variableString = "\n";
         //generowanie pól rekordu
         foreach ($structure as $fieldName => $fieldDetails) {
@@ -304,5 +304,4 @@ class Builder
         }
         return $path;
     }
-
 }

@@ -15,13 +15,6 @@ namespace Mmi\Cache;
  */
 interface CacheHandlerInterface
 {
-
-    /**
-     * Konstruktor
-     * @param Cache $cache obiekt bufora
-     */
-    public function __construct(Cache $cache);
-
     /**
      * Ładuje dane o podanym kluczu
      * @param string $key klucz

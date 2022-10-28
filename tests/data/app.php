@@ -46,5 +46,4 @@ class TestApp extends AppAbstract
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeDispatch()');
         }
     }
-
 }

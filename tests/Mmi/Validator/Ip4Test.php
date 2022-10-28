@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -14,7 +14,6 @@ use Mmi\Validator\Ip4;
 
 class Ip4Test extends \PHPUnit\Framework\TestCase
 {
-
     public function testIsValid()
     {
         //równe
@@ -27,5 +26,4 @@ class Ip4Test extends \PHPUnit\Framework\TestCase
         $this->assertFalse((new Ip4)->isValid('127.0.0.'));
         $this->assertFalse((new Ip4)->isValid(null));
     }
-
 }

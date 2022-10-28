@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Model;
  */
 abstract class Dto
 {
-
     protected $_replacementFields = [];
     protected $_readOnlyFields = ['id'];
 
@@ -54,7 +53,7 @@ abstract class Dto
      * @param array $data
      * @return \Mmi\Model\Api\Dto
      */
-    public final function setFromArray(array $data)
+    final public function setFromArray(array $data)
     {
         //iteracja po danych
         foreach ($data as $key => $value) {
@@ -89,7 +88,7 @@ abstract class Dto
      * @param \Mmi\Orm\Record $record
      * @return \Mmi\Model\Api\Dto
      */
-    public final function setFromOrmRecord(\Mmi\Orm\Record $record)
+    final public function setFromOrmRecord(\Mmi\Orm\Record $record)
     {
         return $this->setFromArray($record->toArray());
     }
@@ -98,7 +97,7 @@ abstract class Dto
      * Konwertuje DTO do tabeli (dane wyjściowe)
      * @return array
      */
-    public final function toArray()
+    final public function toArray()
     {
         $data = [];
         //iteracja po danych
@@ -112,7 +111,7 @@ abstract class Dto
      * Konwertuje DTO do tabeli (dane wejściowe)
      * @return array
      */
-    public final function toArrayPut()
+    final public function toArrayPut()
     {
         $data = [];
         //iteracja po danych
@@ -129,5 +128,4 @@ abstract class Dto
         }
         return $data;
     }
-
 }

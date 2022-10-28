@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -20,7 +20,6 @@ use Mmi\Db\DbInterface;
  */
 class Query
 {
-
     /**
      * Kompilant zapytania
      * @var QueryCompile
@@ -48,13 +47,13 @@ class Query
      * @throws \Mmi\Orm\OrmException tabela niewyspecyfikowana
      * @param string $tableName nazwa tabeli
      */
-    public final function __construct($tableName = null)
+    final public function __construct($tableName = null)
     {
         //@TODO: proper DI (could be impossible)
         $this->db            = App::$di->get(DbInterface::class);
         $this->dbInformation = App::$di->get(DbInformationInterface::class);
         //nowa kompilacja
-        $this->_compile = new QueryCompile;
+        $this->_compile = new QueryCompile();
         //klasa DAO na podstawie parametru konstruktora
         if ($tableName) {
             $this->_tableName = $tableName;
@@ -68,7 +67,7 @@ class Query
      * @return Query
      * @throws OrmException
      */
-    public final function __call($name, $params)
+    final public function __call($name, $params)
     {
         //znajdowanie 2 podciągów: 1 - nazwa metody, 2 - wartość pola
         if (!preg_match('/(where|andField|orField|orderAsc|orderDesc|groupBy)([a-zA-Z0-9]+)/', $name, $matches) || !empty($params)) {
@@ -84,7 +83,7 @@ class Query
      * @param int $limit
      * @return Query
      */
-    public final function limit($limit = null)
+    final public function limit($limit = null)
     {
         $this->_compile->limit = $limit;
         return $this;
@@ -95,7 +94,7 @@ class Query
      * @param int $offset
      * @return Query
      */
-    public final function offset($offset = null)
+    final public function offset($offset = null)
     {
         $this->_compile->offset = $offset;
         return $this;
@@ -107,7 +106,7 @@ class Query
      * @param string $tableName opcjonalna nazwa tabeli źródłowej
      * @return Query
      */
-    public final function orderAsc($fieldName, $tableName = null)
+    final public function orderAsc($fieldName, $tableName = null)
     {
         return $this->_prepareOrder($fieldName, $tableName);
     }
@@ -118,7 +117,7 @@ class Query
      * @param string $tableName opcjonalna nazwa tabeli źródłowej
      * @return Query
      */
-    public final function orderDesc($fieldName, $tableName = null)
+    final public function orderDesc($fieldName, $tableName = null)
     {
         return $this->_prepareOrder($fieldName, $tableName, false);
     }
@@ -129,7 +128,7 @@ class Query
      * @param string $tableName
      * @return Query
      */
-    public final function groupBy($fieldName, $tableName = null)
+    final public function groupBy($fieldName, $tableName = null)
     {
         return $this->_prepareGroup($fieldName, $tableName);
     }
@@ -139,7 +138,7 @@ class Query
      * @param Query $query
      * @return Query
      */
-    public final function andQuery(Query $query)
+    final public function andQuery(Query $query)
     {
         return $this->_mergeQueries($query, true);
     }
@@ -149,7 +148,7 @@ class Query
      * @param Query $query
      * @return Query
      */
-    public final function whereQuery(Query $query)
+    final public function whereQuery(Query $query)
     {
         //jest aliasem na metodę andQuery()
         return $this->andQuery($query);
@@ -160,7 +159,7 @@ class Query
      * @param Query $query
      * @return Query
      */
-    public final function orQuery(Query $query)
+    final public function orQuery(Query $query)
     {
         return $this->_mergeQueries($query, false);
     }
@@ -171,7 +170,7 @@ class Query
      * @param string $tableName opcjonalna nazwa tabeli źródłowej
      * @return QueryHelper\QueryField
      */
-    public final function andField($fieldName, $tableName = null)
+    final public function andField($fieldName, $tableName = null)
     {
         return new QueryHelper\QueryField($this, $this->_prepareField($fieldName, $tableName), 'AND');
     }
@@ -182,7 +181,7 @@ class Query
      * @param string $tableName opcjonalna nazwa tabeli źródłowej
      * @return QueryHelper\QueryField
      */
-    public final function where($fieldName, $tableName = null)
+    final public function where($fieldName, $tableName = null)
     {
         return $this->andField($fieldName, $tableName);
     }
@@ -193,7 +192,7 @@ class Query
      * @param string $tableName opcjonalna nazwa tabeli źródłowej
      * @return QueryHelper\QueryField
      */
-    public final function orField($fieldName, $tableName = null)
+    final public function orField($fieldName, $tableName = null)
     {
         return new QueryHelper\QueryField($this, $this->_prepareField($fieldName, $tableName), 'OR');
     }
@@ -205,7 +204,7 @@ class Query
      * @param string $alias alias złączenia
      * @return QueryHelper\QueryJoin
      */
-    public final function join($tableName, $targetTableName = null, $alias = null)
+    final public function join($tableName, $targetTableName = null, $alias = null)
     {
         return new QueryHelper\QueryJoin($this, $tableName, 'JOIN', $targetTableName, $alias);
     }
@@ -217,7 +216,7 @@ class Query
      * @param string $alias alias złączenia
      * @return QueryHelper\QueryJoin
      */
-    public final function joinLeft($tableName, $targetTableName = null, $alias = null)
+    final public function joinLeft($tableName, $targetTableName = null, $alias = null)
     {
         return new QueryHelper\QueryJoin($this, $tableName, 'LEFT JOIN', $targetTableName, $alias);
     }
@@ -226,7 +225,7 @@ class Query
      * Zwraca skompilowane zapytanie
      * @return QueryCompile
      */
-    public final function getQueryCompile()
+    final public function getQueryCompile()
     {
         return $this->_compile;
     }
@@ -235,7 +234,7 @@ class Query
      * Zwraca skrót MD5 zapytania
      * @return string
      */
-    public final function getQueryCompileHash()
+    final public function getQueryCompileHash()
     {
         return md5(str_replace(array_keys($this->_compile->bind), array_values($this->_compile->bind), print_r($this->_compile, true)));
     }
@@ -244,7 +243,7 @@ class Query
      * Zwraca nazwę klasy DAO
      * @return string
      */
-    public final function getTableName()
+    final public function getTableName()
     {
         return $this->_tableName;
     }
@@ -253,7 +252,7 @@ class Query
      * Zwraca nazwę klasy rekordu
      * @return string
      */
-    public final function getRecordName()
+    final public function getRecordName()
     {
         //konwencja nazwy na rekord
         return self::_classPrefix() . 'Record';
@@ -263,7 +262,7 @@ class Query
      * Zwraca nazwę klasy zapytania
      * @return string
      */
-    public static final function getCollectionName()
+    final public static function getCollectionName()
     {
         return '\Mmi\Orm\RecordCollection';
         //konwencja nazwy na kolekcję
@@ -274,7 +273,7 @@ class Query
      * Resetuje sortowanie w zapytaniu
      * @return Query
      */
-    public final function resetOrder()
+    final public function resetOrder()
     {
         $this->_compile->order = '';
         return $this;
@@ -284,7 +283,7 @@ class Query
      * Resetuje grupowanie
      * @return Query
      */
-    public final function resetGroupBy()
+    final public function resetGroupBy()
     {
         $this->_compile->groupBy = '';
         return $this;
@@ -294,7 +293,7 @@ class Query
      * Resetuje warunki w zapytaniu
      * @return Query
      */
-    public final function resetWhere()
+    final public function resetWhere()
     {
         //czyszczenie zapytania
         $this->_compile->where = '';
@@ -307,7 +306,7 @@ class Query
      * Pobiera ilość rekordów
      * @return int
      */
-    public final function count($column = '*')
+    final public function count($column = '*')
     {
         return (new QueryData($this))->count($column);
     }
@@ -315,7 +314,7 @@ class Query
     /**
      * Delete complete collection
      */
-    public final function delete()
+    final public function delete()
     {
         //iterate records
         foreach ((new QueryData($this))->find() as $record) {
@@ -329,7 +328,7 @@ class Query
      * @param int $id
      * @return Record
      */
-    public final function findPk($id)
+    final public function findPk($id)
     {
         //zwróci null jeśli brak danych
         return $this->where('id')->equals($id)->findFirst();
@@ -341,7 +340,7 @@ class Query
      * @param Query $q Obiekt zapytania
      * @return RecordRo
      */
-    public final function findFirst()
+    final public function findFirst()
     {
         return (new QueryData($this))->findFirst();
     }
@@ -350,7 +349,7 @@ class Query
      * Pobiera wszystkie rekordy i zwraca ich kolekcję
      * @return RecordCollection
      */
-    public final function find()
+    final public function find()
     {
         return (new QueryData($this))->find();
     }
@@ -359,7 +358,7 @@ class Query
      * Pobiera wybrane pola w postaci tabeli
      * @return array
      */
-    public final function findFields(array $fields)
+    final public function findFields(array $fields)
     {
         return (new QueryData($this))->findFields($fields);
     }
@@ -370,7 +369,7 @@ class Query
      * @param string $valueName
      * @return array
      */
-    public final function findPairs($keyName, $valueName)
+    final public function findPairs($keyName, $valueName)
     {
         return (new QueryData($this))->findPairs($keyName, $valueName);
     }
@@ -380,7 +379,7 @@ class Query
      * @param string $keyName nazwa klucza
      * @return string wartość maksymalna
      */
-    public final function findMax($keyName)
+    final public function findMax($keyName)
     {
         return (new QueryData($this))->findMax($keyName);
     }
@@ -390,7 +389,7 @@ class Query
      * @param string $keyName nazwa klucza
      * @return string wartość minimalna
      */
-    public final function findMin($keyName)
+    final public function findMin($keyName)
     {
         return (new QueryData($this))->findMin($keyName);
     }
@@ -400,7 +399,7 @@ class Query
      * @param string $keyName nazwa klucza
      * @return string suma
      */
-    public final function findSum($keyName)
+    final public function findSum($keyName)
     {
         return (new QueryData($this))->findSum($keyName);
     }
@@ -410,7 +409,7 @@ class Query
      * @param string $keyName nazwa klucza
      * @return array mixed wartości unikalne
      */
-    public final function findUnique($keyName)
+    final public function findUnique($keyName)
     {
         return (new QueryData($this))->findUnique($keyName);
     }
@@ -420,7 +419,7 @@ class Query
      * @param boolean $type
      * @return Query
      */
-    protected final function _mergeQueries(Query $query, $and = true)
+    final protected function _mergeQueries(Query $query, $and = true)
     {
         $compilation = $query->getQueryCompile();
         //łączenie where
@@ -454,7 +453,7 @@ class Query
      * @return string
      * @throws OrmException
      */
-    protected final function _prepareField($fieldName, $forcedTableName = null)
+    final protected function _prepareField($fieldName, $forcedTableName = null)
     {
         //funkcja sortująca rand()
         if ($fieldName == 'RAND()') {
@@ -479,7 +478,7 @@ class Query
      * @param boolean $asc
      * @return Query
      */
-    protected final function _prepareOrder($fieldName, $tableName = null, $asc = true)
+    final protected function _prepareOrder($fieldName, $tableName = null, $asc = true)
     {
         //jeśli pusty order - dodawanie ORDER BY na początku
         if (!$this->_compile->order) {
@@ -497,7 +496,7 @@ class Query
      * @param type $tableName
      * @return Query
      */
-    protected final function _prepareGroup($fieldName, $tableName = null)
+    final protected function _prepareGroup($fieldName, $tableName = null)
     {
         //jeśli pusty groupby - dodawanie GROUP BY na początku
         if (!$this->_compile->groupBy) {

@@ -28,7 +28,7 @@ return [
         }
         //additional handler
         switch ($container->get('log.handler')) {
-                //graylog
+            //graylog
             case 'gelf':
                 $pathPort = explode(':', $container->get('log.path'));
                 $transport = new IgnoreErrorTransportWrapper(new UdpTransport($pathPort[0], isset($pathPort[1]) ? $pathPort[1] : 9000));

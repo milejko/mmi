@@ -15,7 +15,6 @@ namespace Mmi\Translate;
  */
 class Translate implements TranslateInterface
 {
-
     /**
      * Dane językowe
      * @var array
@@ -110,5 +109,4 @@ class Translate implements TranslateInterface
         //zwrot tablicy tłumaczeń
         return $output;
     }
-
 }

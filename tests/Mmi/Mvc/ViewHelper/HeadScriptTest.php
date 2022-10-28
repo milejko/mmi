@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -16,7 +16,6 @@ use Mmi\Mvc\ViewHelper\HeadScript;
 
 class HeadScriptTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testClass()
     {
         $hs = new HeadScript(new View(TestApp::$di));
@@ -33,5 +32,4 @@ class HeadScriptTest extends \PHPUnit\Framework\TestCase
             '<script>alert(\'x\');</script>' . "\n" .
             '// ]]></script>' . "\n", (string) $hs);
     }
-
 }

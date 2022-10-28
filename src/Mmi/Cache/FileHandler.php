@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -10,13 +10,14 @@
 
 namespace Mmi\Cache;
 
-use \Mmi\App\KernelException;
+use Mmi\App\KernelException;
 
 /**
  * Plikowy backend bufora
  */
-class FileHandler implements CacheHandlerInterface 
+class FileHandler implements CacheHandlerInterface
 {
+    private Cache $_cache;
 
     /**
      * Konfiguruje handler
@@ -86,5 +87,4 @@ class FileHandler implements CacheHandlerInterface
             }
         }
     }
-
 }

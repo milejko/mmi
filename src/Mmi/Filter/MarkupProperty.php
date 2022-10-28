@@ -2,7 +2,7 @@
 
 /**
  * Mmi Framework (https://github.com/milejko/mmi.git)
- * 
+ *
  * @link       https://github.com/milejko/mmi.git
  * @copyright  Copyright (c) 2010-2017 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
@@ -15,7 +15,6 @@ namespace Mmi\Filter;
  */
 class MarkupProperty extends \Mmi\Filter\FilterAbstract
 {
-
     /**
      * Zmienia zmienną, tak by mogła być wykorzystana wewnątrz właściwości znacznika HTML
      * @param mixed $value wartość
@@ -43,5 +42,4 @@ class MarkupProperty extends \Mmi\Filter\FilterAbstract
             '',
             ], trim(strip_tags($value)));
     }
-
 }

@@ -3,6 +3,7 @@
 namespace Mmi\Mvc;
 
 use Mmi\TestKit\TestRouterConfig;
+
 use function DI\create;
 
 return [

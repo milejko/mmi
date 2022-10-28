@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0.0",
+        "php": ">=8.1.0",
         "ext-bcmath": "*",
         "ext-date": "*",
         "ext-fileinfo": "*",
@@ -41,9 +41,28 @@
         "symfony/dotenv": "^5.0",
         "doctrine/annotations": "^1.11"
     },
-    "require-dev": {
-        "php-console/php-console": "~3.1",
-        "phpunit/phpunit": "^9.1"
+    "scripts": {
+        "test:infection": "infection --show-mutations --only-covered --threads=max",
+        "test:security-checker": "security-checker security:check",
+        "report:metrics": "phpmetrics --report-html=./web/build/metrics ./src",
+        "fix:phpcbf": "phpcbf",
+        "fix:php-cs-fixer": "php-cs-fixer fix src && php-cs-fixer fix tests",
+        "fix:all": [
+            "@fix:phpcbf",
+            "@fix:php-cs-fixer"
+        ],
+        "test:phpmd": "phpmd ./src text phpmd.xml.dist",
+        "test:phpcs": "phpcs",
+        "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
+        "test:phpstan": "phpstan --level=1 --no-progress --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
+        "test:all": [
+            "@test:security-checker",
+            "@test:phpcs",
+            "@test:phpstan",
+            "@test:phpmd",
+            "@test:phpunit",
+            "@test:infection"
+        ]
     },
     "autoload": {
         "psr-4": {
@@ -61,7 +80,12 @@
             "dev-master": "4.1-dev"
         }
     },
-    "scripts": {
-        "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.build/clover.xml --coverage-html ./.build/phpunit"
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    },
+    "require-dev": {
+        "mmi/mmi-build-toolkit": "^1.0"
     }
 }

@@ -51,7 +51,8 @@ final class RouterApplyTest extends TestCase
         $request = self::getRequestForHelp();
         $routerApply($request);
 
-        self::assertEquals([
+        self::assertEquals(
+            [
                 'module' => 'content',
                 'controller' => 'help',
                 'action' => 'index'
@@ -62,7 +63,7 @@ final class RouterApplyTest extends TestCase
 
     private static function getRequestForHelp(): Request
     {
-        return new Request([], [], [], [], [], [
+        return new Request([], [], [], [], [
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.0',
             'HTTP_HOST' => 'example.com',

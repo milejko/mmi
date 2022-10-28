@@ -16,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DbDeployCommand extends CommandAbstract
 {
-
     /**
      * @var DbInterface
      */
@@ -39,8 +38,7 @@ class DbDeployCommand extends CommandAbstract
         DbInterface $db,
         DbInformationInterface $dbInformation,
         ContainerInterface $container
-    )
-    {
+    ) {
         $this->db               = $db;
         $this->dbInformation    = $dbInformation;
         $this->container        = $container;
@@ -120,7 +118,9 @@ class DbDeployCommand extends CommandAbstract
         //zadanie importu oznaczone jako aktywne (trwające)
         $newDc->active = true;
         //zapis rekordu
-        $initialImport ?? $newDc->save();
+        if (!$initialImport) {
+            $newDc->save();
+        }
         //import danych
         $this->_importSql($file);
         //resetowanie struktur tabeli
@@ -147,5 +147,4 @@ class DbDeployCommand extends CommandAbstract
             $this->db->query($query);
         }
     }
-
 }
