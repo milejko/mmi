@@ -140,7 +140,7 @@ class ResponseDebugger
         }
 
         //zmienne cookie
-        if (isset($_COOKIE) && count($_COOKIE) > 0) {
+        if (count($_COOKIE) > 0) {
             $html .= '<p style="margin: 0px;">Cookie variables: </p>';
             $html .= self::PRE_OPEN;
             $html .= ResponseDebugger\Colorify::colorify(print_r($this->_simplifyVarArray($_COOKIE), true)) . '</pre>';

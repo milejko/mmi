@@ -36,7 +36,7 @@ final class KernelTest extends TestCase
 
     private static function getRequestForExample(): Request
     {
-        return new Request([], [], [], [], [], [
+        return new Request([], [], [], [], [
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.0',
             'HTTP_HOST' => 'example.com',

@@ -10,11 +10,10 @@
 
 namespace Mmi\Form\Element;
 
-use Mmi\App\App;
-use Mmi\Mvc\View;
-
 /**
  * Element select
+ * @method self setMultioptions(array $options)
+ * @method array getMultioptions()
  */
 class Select extends ElementAbstract
 {

@@ -27,7 +27,7 @@ use Mmi\Mvc\View;
  * @method \Mmi\Paginator\Paginator setPage(integer $page) Ustawia aktualną stronę
  *
  * @method integer getRowsCount() Zwraca aktualną ilość wierszy w paginatorze
- * @method integer getRowsPerPageCount() Zwraca ilość wierszy na stronę
+ * @method integer getRowsPerPage() Zwraca ilość wierszy na stronę
  */
 class Paginator extends \Mmi\OptionObject
 {

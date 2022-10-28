@@ -68,6 +68,7 @@ class Builder
         if (empty($structure)) {
             throw new OrmException('\Mmi\Orm\Builder: no table found, or table invalid: ' . $tableName);
         }
+        $variables = [];
         $variableString = "\n";
         //generowanie pól rekordu
         foreach ($structure as $fieldName => $fieldDetails) {

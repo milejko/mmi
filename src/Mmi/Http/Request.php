@@ -49,7 +49,6 @@ class Request extends \Mmi\DataObject
     public function __construct(
         array $query = [],
         array $post = [],
-        array $attributes = [],
         array $cookie = [],
         array $files = [],
         array $server = []
@@ -72,7 +71,6 @@ class Request extends \Mmi\DataObject
         return new self(
             $_GET,
             $_POST,
-            [],
             $_COOKIE,
             $_FILES,
             $_SERVER

@@ -54,7 +54,7 @@
         "test:phpmd": "phpmd ./src text phpmd.xml.dist",
         "test:phpcs": "phpcs",
         "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
-        "test:phpstan": "phpstan --level=0 --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
+        "test:phpstan": "phpstan --level=1 --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
         "test:all": [
             "@test:phpcs",
             "@test:phpmd",

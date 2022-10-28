@@ -23,6 +23,7 @@ use Psr\Container\ContainerInterface;
  * @method string url(array $params = [], $reset = false, $https = null)
  * @method string widget($module, $controller = 'index', $action = 'index', array $params = [])
  * @method ViewHelper\Navigation navigation()
+ * @method string template(string $code)
  */
 class View extends \Mmi\DataObject
 {

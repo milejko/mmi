@@ -118,7 +118,9 @@ class DbDeployCommand extends CommandAbstract
         //zadanie importu oznaczone jako aktywne (trwające)
         $newDc->active = true;
         //zapis rekordu
-        $initialImport ?? $newDc->save();
+        if (!$initialImport) {
+            $newDc->save();
+        }
         //import danych
         $this->_importSql($file);
         //resetowanie struktur tabeli

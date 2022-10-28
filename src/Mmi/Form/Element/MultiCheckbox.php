@@ -12,6 +12,8 @@ namespace Mmi\Form\Element;
 
 /**
  * Element wielokrotny checkbox
+ * @method self setMultioptions(array $options)
+ * @method array getMultioptions()
  */
 class MultiCheckbox extends ElementAbstract
 {

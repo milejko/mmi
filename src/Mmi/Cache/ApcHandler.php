@@ -19,9 +19,8 @@ class ApcHandler implements CacheHandlerInterface
 
     /**
      * Konfiguruje handler
-     * @param \Mmi\Cache\Cache $cache obiekt bufora
      */
-    public function __construct(Cache $cache)
+    public function __construct()
     {
         $this->_namespace = md5(__FILE__);
     }
