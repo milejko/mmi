@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0.0",
+        "php": ">=8.1.0",
         "ext-bcmath": "*",
         "ext-date": "*",
         "ext-fileinfo": "*",
@@ -56,11 +56,11 @@
         "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
         "test:phpstan": "phpstan --level=1 --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
         "test:all": [
-            "@test:phpcs",
-            "@test:phpmd",
-            "@test:phpstan",
-            "@test:phpunit",
             "@test:security-checker",
+            "@test:phpcs",
+            "@test:phpunit",
+            "@test:phpstan",
+            "@test:phpmd",
             "@test:infection"
         ]
     },

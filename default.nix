@@ -22,6 +22,6 @@ pkgs.mkShell {
 
     shellHook = ''
         composer install
-        composer test:phpunit
+        composer test:all
     '';
 }

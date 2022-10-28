@@ -63,13 +63,11 @@ class Response
      */
     private $responseTimingHeader;
 
-
     public function __construct(
         Router $router,
         ResponseTimingHeader $responseTimingHeader,
         ResponseDebugger $responseDebugger,
-    )
-    {
+    ) {
         //injects
         $this->router               = $router;
         $this->responseTimingHeader = $responseTimingHeader;

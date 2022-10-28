@@ -26,7 +26,8 @@ putenv('DB_DRIVER=sqlite');
 require BASE_PATH . 'tests/data/app.php';
 
 //testowe obiekty
-require BASE_PATH . 'tests/data/test-query-record.php';
+require BASE_PATH . 'tests/data/test-query.php';
+require BASE_PATH . 'tests/data/test-record.php';
 require BASE_PATH . 'tests/data/test-auth-provider.php';
 if (!function_exists('apcu_fetch')) {
     require BASE_PATH . 'tests/data/apc-stub.php';
