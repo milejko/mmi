@@ -7,5 +7,7 @@ jobs:
 steps:
     - uses: actions/checkout@v3
     - uses: nixbuild/nix-quick-install-action@v18
+    - name: nix build
     - run: nix-build
+    - name: composer test all
     - run: nix-shell --run "composer test:all"
