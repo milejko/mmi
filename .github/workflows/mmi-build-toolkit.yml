@@ -2,7 +2,7 @@ name: "Code analysis and tests"
 on:
   pull_request:
 jobs:
-  tests:
+  mmi-build-toolkit:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
