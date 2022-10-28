@@ -7,6 +7,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v18
-    - uses: cachix/cachix-action@v12
     - run: nix-build
     - run: nix-shell --run "composer test:all"
