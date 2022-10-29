@@ -3,7 +3,13 @@
     "source": {
         "directories": [
             "src"
+        ],
+        "excludes": [
+            "**Resource*"
         ]
+    },
+    "logs": {
+        "text": "web/build/infection.log"
     },
     "mutators": {
         "@default": true
