@@ -1,6 +1,7 @@
 name: "Code analysis and tests"
 on:
   pull_request:
+  push:
 jobs:
   mmi-build-toolkit:
     runs-on: ubuntu-latest
