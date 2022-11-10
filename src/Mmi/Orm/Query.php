@@ -465,7 +465,7 @@ class Query
         $tablePrefix = $this->db->prepareTable($tableName);
         //pole wymaga konwersji do underscore
         if ($this->dbInformation->isTableContainsField($tableName, $underscoreFieldName = Convert::camelcaseToUnderscore($fieldName))) {
-            return $tablePrefix . '.' . $underscoreFieldName;
+            return $tablePrefix . '.' . $this->db->prepareField($underscoreFieldName);
         }
         //konwersja camelcase na podkreślenia
         return $tablePrefix . '.' . $this->db->prepareField($fieldName);
