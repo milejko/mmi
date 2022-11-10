@@ -53,8 +53,8 @@
         "test:phpstan": "phpstan --level=1 --no-progress --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
         "test:phpcs": "phpcs",
         "test:phpmd": "phpmd ./src text phpmd.xml.dist",
-        "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
-        "test:infection": "export XDEBUG_MODE=off && infection --no-progress --only-covered --threads=max",
+        "test:phpunit": "XDEBUG_MODE=coverage phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
+        "test:infection": "XDEBUG_MODE=off infection --no-progress --only-covered --threads=max",
         "test:all": [
             "@test:security-checker",
             "@test:phpcs",
