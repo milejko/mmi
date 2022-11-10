@@ -162,9 +162,9 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
     public function testQueryCompileHash()
     {
-        $this->assertEquals('641a670650bd68bb096e795ee341c343', (new \Mmi\Orm\CacheQuery)->where('ttl')->equals(1)
+        $this->assertEquals('fdaea49f25dd99e002e568cb25ebb06a', (new \Mmi\Orm\CacheQuery)->where('ttl')->equals(1)
                 ->join('mmi_cache')->on('id')->getQueryCompileHash());
-        $this->assertEquals('419c9138694e9d6306c8c090edecd379', (new \Mmi\Orm\CacheQuery)->where('ttl')->equals(1)
+        $this->assertEquals('03c3dbd53e5e63552144ba0a5fded14a', (new \Mmi\Orm\CacheQuery)->where('ttl')->equals(1)
                 ->joinLeft('mmi_cache')->on('id')->getQueryCompileHash());
     }
 }
