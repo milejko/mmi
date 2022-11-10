@@ -3,11 +3,17 @@
     "source": {
         "directories": [
             "src"
+        ],
+        "excludes": [
+            "**Resource*"
         ]
+    },
+    "logs": {
+        "text": "web/build/infection.log"
     },
     "mutators": {
         "@default": true
     },
-    "minMsi": 76,
-    "minCoveredMsi": 76
+    "minMsi": 60,
+    "minCoveredMsi": 60
 }

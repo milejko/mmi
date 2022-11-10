@@ -42,26 +42,25 @@
         "doctrine/annotations": "^1.11"
     },
     "scripts": {
-        "test:infection": "infection --show-mutations --only-covered --threads=max",
-        "test:security-checker": "security-checker security:check",
-        "report:metrics": "phpmetrics --report-html=./web/build/metrics ./src",
         "fix:phpcbf": "phpcbf",
         "fix:php-cs-fixer": "php-cs-fixer fix src && php-cs-fixer fix tests",
         "fix:all": [
             "@fix:phpcbf",
             "@fix:php-cs-fixer"
         ],
-        "test:phpmd": "phpmd ./src text phpmd.xml.dist",
-        "test:phpcs": "phpcs",
-        "test:phpunit": "export XDEBUG_MODE=coverage && phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
+        "report:metrics": "phpmetrics --report-html=./web/build/metrics ./src",
+        "test:security-checker": "security-checker security:check",
         "test:phpstan": "phpstan --level=1 --no-progress --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
+        "test:phpcs": "phpcs",
+        "test:phpmd": "phpmd ./src text phpmd.xml.dist",
+        "test:phpunit": "XDEBUG_MODE=coverage phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",
+        "test:infection": "XDEBUG_MODE=off infection --no-progress --only-covered --threads=max",
         "test:all": [
             "@test:security-checker",
             "@test:phpcs",
             "@test:phpstan",
             "@test:phpmd",
-            "@test:phpunit",
-            "@test:infection"
+            "@test:phpunit"
         ]
     },
     "autoload": {

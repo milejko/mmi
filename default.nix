@@ -23,5 +23,6 @@ pkgs.mkShell {
 
     shellHook = ''
         composer install
+        composer run -l
     '';
 }
