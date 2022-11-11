@@ -59,6 +59,10 @@ class ComposerInstaller
         self::linkModuleWebResources();
         //kopiowanie binariów z modułów
         self::_copyExecutables();
+        //kopiowanie routera dla php -S (tylko w trybie dev)
+        if ($event->isDevMode()) {
+            copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/php-serve-router.php', BASE_PATH . '/web/php-serve-router.php');
+        }
     }
 
     /**
