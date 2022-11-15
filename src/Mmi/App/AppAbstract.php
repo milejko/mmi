@@ -12,7 +12,6 @@ namespace Mmi\App;
 
 use DI\ContainerBuilder;
 use DI\Container;
-use Mmi\Http\Request;
 use Mmi\Mvc\Structure;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Dotenv\Exception\PathException;
@@ -36,20 +35,16 @@ abstract class AppAbstract
 
     protected AppProfiler $profiler;
 
-    protected ?Request $request;
-
     /**
      * Constructor
      */
-    public function __construct(?Request $request = null)
+    public function __construct()
     {
         //PHP 8.1 workaround
         error_reporting(E_ALL && ~E_DEPRECATED);
         //enable profiler
         $this->profiler = new AppProfiler();
         $this->profiler->event(self::PROFILER_PREFIX . 'application create');
-
-        $this->request = $request;
         //configure application
         $this->configureEnvironment()
             ->buildContainer()
@@ -58,7 +53,6 @@ abstract class AppAbstract
 
     /**
      * Application run method
-     * @deprecated migrate towards handleRequest()
      */
     abstract public function run(): void;
 
@@ -117,13 +111,7 @@ abstract class AppAbstract
             ->enableCompilation(self::APPLICATION_COMPILE_PATH)
             ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH)
             //adding profiler instance
-            ->addDefinitions([AppProfilerInterface::class => $this->profiler])
-        ;
-
-        if ($this->request) {
-            $builder->addDefinitions([Request::class => $this->request]);
-        }
-
+            ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
         return $this->isApcuEnabled() ?
             $builder->enableDefinitionCache(__DIR__) :
             $builder;

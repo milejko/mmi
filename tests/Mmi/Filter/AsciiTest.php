@@ -14,6 +14,7 @@ use Mmi\Filter\Ascii;
 
 class AsciiTest extends \PHPUnit\Framework\TestCase
 {
+
     public function testFilter()
     {
         $this->assertEquals('+', (new Ascii)->filter('+'));

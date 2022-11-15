@@ -9,7 +9,6 @@
  */
 
 use Mmi\App\App;
-use Mmi\Http\Request;
 
 //define base path
 define('BASE_PATH', realpath(__DIR__ . '/../'));
@@ -17,9 +16,5 @@ define('BASE_PATH', realpath(__DIR__ . '/../'));
 //autoloader definition
 require BASE_PATH . '/vendor/autoload.php';
 
-$request = Request::createFromGlobals();
-
 //run application
-$app = new App($request);
-$response = $app->handleRequest();
-$app->sendResponse($response);
+(new App())->run();

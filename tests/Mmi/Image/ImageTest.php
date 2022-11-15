@@ -14,7 +14,6 @@ use Mmi\Image\Image;
 
 /**
  * Test klasy obróbki obrazów
- * @group infra
  */
 class ImageTest extends \PHPUnit\Framework\TestCase
 {

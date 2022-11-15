@@ -14,7 +14,6 @@ use Mmi\EventManager\EventManager;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Mvc\ActionHelper;
-use Mmi\Mvc\RouterApply;
 
 /**
  * Application class
@@ -23,11 +22,6 @@ class App extends AppAbstract
 {
     public const PROFILER_PREFIX                    = 'Mmi\App: ';
     public const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
-
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
-    }
 
     /**
      * Sets error and exception handler
@@ -47,13 +41,7 @@ class App extends AppAbstract
      */
     public function run(): void
     {
-    }
-
-    // TODO: pass request as argument (requires many changes upstream)
-    public function handleRequest(): Response
-    {
-        ($this->container->get(RouterApply::class))($this->request);
-
+        $request = $this->container->get(Request::class);
         $interceptor = $this->container->has(AppEventInterceptorInterface::class) ? $this->container->get(AppEventInterceptorInterface::class) : null;
         //intercept before dispatch
         if (null !== $interceptor) {
@@ -62,24 +50,24 @@ class App extends AppAbstract
             $interceptor->beforeDispatch();
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeDispatch()');
         }
+
+        /** @var EventManager $eventManager */
+        $eventManager = $this->container->get(EventManager::class);
+
         //render content
-        $content = $this->container->get(ActionHelper::class)->forward($this->request);
+        $content = $this->container->get(ActionHelper::class)->forward($request);
         //intercept before send
         if (null !== $interceptor) {
             $interceptor->beforeSend();
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeSend()');
         }
-
-        return $this->container->get(Response::class)
+        //set content to response
+        $this->container->get(Response::class)
             ->setContent($content);
+        //content send
+        $this->profiler->event(self::PROFILER_PREFIX . 'send response to the client');
+        $eventManager->trigger(AppMvcEvents::EVENT_FINISH, $this, []);
+        $this->container->get(Response::class)->send();
     }
 
-    public function sendResponse(Response $response): void
-    {
-        $this->profiler->event(self::PROFILER_PREFIX . 'send response to the client');
-        /** @var EventManager $eventManager */
-        $eventManager = $this->container->get(EventManager::class);
-        $eventManager->trigger(AppMvcEvents::EVENT_FINISH, $this, []);
-        $response->send();
-    }
 }

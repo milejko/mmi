@@ -15,7 +15,6 @@ use Mmi\Session\DbHandler;
 
 /**
  * Test handlera plikowego
- * @group infra
  */
 class DbHandlerTest extends \PHPUnit\Framework\TestCase
 {

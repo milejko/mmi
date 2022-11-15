@@ -15,7 +15,6 @@ use Mmi\Db\DbConfig;
 
 /**
  * Test adapterów pdo bazy danych
- * @group infra
  */
 class PdoTest extends \PHPUnit\Framework\TestCase
 {
