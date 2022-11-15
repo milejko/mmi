@@ -69,5 +69,4 @@ class App extends AppAbstract
         $eventManager->trigger(AppMvcEvents::EVENT_FINISH, $this, []);
         $this->container->get(Response::class)->send();
     }
-
 }
