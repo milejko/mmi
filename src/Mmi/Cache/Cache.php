@@ -187,7 +187,7 @@ class Cache implements CacheInterface, SystemCacheInterface
     protected function validateAndPrepareBackendData($key, $data)
     {
         //niepoprawna serializacja
-        if (!($data = \unserialize($data))) {
+        if (!($data = \unserialize($data ?? ''))) {
             return;
         }
         //dane niepoprawne
