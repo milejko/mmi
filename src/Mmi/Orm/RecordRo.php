@@ -214,6 +214,10 @@ class RecordRo
         if (is_numeric($this->$field) && $this->_state[$field] == $this->$field) {
             return false;
         }
+        //bool values
+        if (is_bool($this->$field)) {
+            return $this->_state[$field] != $this->$field;
+        }
         //porównanie z typem
         return ($this->_state[$field] !== $this->$field);
     }
