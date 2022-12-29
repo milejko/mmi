@@ -23,6 +23,6 @@ class Input extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return htmlspecialchars($value);
+        return htmlspecialchars((string) $value);
     }
 }
