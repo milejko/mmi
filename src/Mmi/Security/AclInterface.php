@@ -51,4 +51,9 @@ interface AclInterface
      * Sprawdza dostęp roli do zasobu
      */
     public function isRoleAllowed(string $role, string $resource): bool;
+
+    /**
+     * Zwracanie ról
+     */
+    public function getRoles(): array;
 }

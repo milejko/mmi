@@ -55,6 +55,7 @@ class AclTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($acl->hasRole('admin'));
         $this->assertTrue($acl->hasRole('guest'));
         $this->assertFalse($acl->hasRole('nonexistent'));
+        $this->assertEquals(['guest', 'admin', 'member'], $acl->getRoles());
     }
 
     /**
