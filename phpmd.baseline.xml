@@ -120,8 +120,6 @@
   <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Http/Response.php" method="send"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/ResponseDebugger.php" method="_getElapsed"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/ResponseDebugger.php" method="_getPeakMemory"/>
-  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Http/ResponseDebugger.php" method="getHtml"/>
-  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Http/ResponseDebugger.php" method="getHtml"/>
   <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/Http/ResponseDebugger.php" method="getHtml"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Http/ResponseDebugger.php"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Http/ResponseDebugger.php" method="_simplifyVarArray"/>
@@ -261,7 +259,6 @@
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/Orm/Builder.php"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateRecord"/>
   <violation rule="PHPMD\Rule\UnusedLocalVariable" file="src/Mmi/Orm/Builder.php"/>
-  <violation rule="PHPMD\Rule\CleanCode\UndefinedVariable" file="src/Mmi/Orm/Builder.php"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateQueryField"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateQueryJoin"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Orm/Builder.php" method="_updateQuery"/>

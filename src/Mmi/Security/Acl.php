@@ -124,4 +124,12 @@ class Acl implements AclInterface
         }
         return false;
     }
+
+    /**
+     * @return array<String>
+     */
+    public function getRoles(): array
+    {
+        return array_keys($this->_roles);
+    }
 }
