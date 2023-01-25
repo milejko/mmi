@@ -10,7 +10,7 @@
 
 namespace Tests\Mmi\Mvc\ViewHelper;
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 use Mmi\Mvc\View;
 
 class MessengerTest extends \PHPUnit\Framework\TestCase
@@ -18,7 +18,7 @@ class MessengerTest extends \PHPUnit\Framework\TestCase
     public function testClass()
     {
         $_SESSION = [];
-        $view = TestApp::$di->get(View::class);
+        $view = AppTesting::$di->get(View::class);
         $view->getMessenger()->clearMessages();
         $this->assertEquals('', $view->messenger());
         $view->getMessenger()->addMessage('test');

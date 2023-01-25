@@ -10,7 +10,7 @@
 
 namespace Tests\Mmi\Mvc\ViewHelper;
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 use Mmi\Filter\Escape as EscapeFilter;
 use Mmi\Mvc\ViewHelper\Escape;
 use Mmi\Mvc\View;
@@ -19,7 +19,7 @@ class EscapeTest extends \PHPUnit\Framework\TestCase
 {
     public function testEscape()
     {
-        $view = new View(TestApp::$di);
+        $view = new View(AppTesting::$di);
         $this->assertEquals((new EscapeFilter)->filter('test'), (new Escape($view))->escape('test'));
         $this->assertEquals((new EscapeFilter)->filter('<script>alert();</script>'), (new Escape($view))->escape('<script>alert();</script>'));
     }

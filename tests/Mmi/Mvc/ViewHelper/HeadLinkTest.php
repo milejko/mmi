@@ -10,7 +10,7 @@
 
 namespace Tests\Mmi\Mvc\ViewHelper;
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 use Mmi\Mvc\ViewHelper\HeadLink;
 use Mmi\Mvc\View;
 
@@ -18,7 +18,7 @@ class HeadLinkTest extends \PHPUnit\Framework\TestCase
 {
     public function testClass()
     {
-        $hl = new HeadLink(new View(TestApp::$di));
+        $hl = new HeadLink(new View(AppTesting::$di));
         $hl->appendStylesheet('http://www.wp.pl/', 'print');
         //nie doda się
         $hl->appendStylesheet('http://www.wp.pl/', 'print');

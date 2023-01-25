@@ -10,7 +10,7 @@
 
 namespace Tests\Mmi\Mvc\ViewHelper;
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 use Mmi\Mvc\View;
 use Mmi\Mvc\ViewHelper\Navigation;
 
@@ -18,7 +18,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     public function testClass()
     {
-        $nav = new Navigation(new View(TestApp::$di), TestApp::$di);
+        $nav = new Navigation(new View(AppTesting::$di), AppTesting::$di);
         $this->assertEquals('', $nav->breadcrumbs());
         $nav->appendBreadcrumb('test', 'testu', 'testt', 'testd');
         $nav->appendBreadcrumb('test', 'testu', 'testt', 'testd');

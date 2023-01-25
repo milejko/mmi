@@ -10,7 +10,7 @@
 
 namespace Tests\Mmi\Mvc\ViewHelper;
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 use Mmi\Mvc\View;
 use Mmi\Mvc\ViewHelper\Template;
 
@@ -18,7 +18,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     public function testClass()
     {
-        $tpl = new Template(new View(TestApp::$di));
+        $tpl = new Template(new View(AppTesting::$di));
         $this->assertStringContainsString('/?module=test', $tpl->template('{@module=test@}'));
         $this->assertEquals(
             '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">' . "\n" .

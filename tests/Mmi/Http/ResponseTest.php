@@ -10,7 +10,7 @@
 
 namespace Tests\Mmi\Http;
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 use Mmi\App\AppProfiler;
 use Mmi\Cache\Cache;
 use Mmi\Cache\CacheConfig;
@@ -36,8 +36,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
                 new Request(),
                 new AppProfiler,
                 new Cache(new CacheConfig),
-                new View(TestApp::$di),
-                TestApp::$di
+                new View(AppTesting::$di),
+                AppTesting::$di
             )
         );
     }
@@ -96,7 +96,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $response = $this->getNewResponseObject();
         $response->setContent('test content')
             ->setDebug();
-        $view = new View(TestApp::$di);
+        $view = new View(AppTesting::$di);
         $view->sampleVariable = ['test1' => 'test', 'test2' => ['test1' => 'test', 'test' => ['test' => 'test', 'test2' => [1]]]];
         $view->anotherVariable = 'test';
         $this->assertEquals('test content', $response->getContent());

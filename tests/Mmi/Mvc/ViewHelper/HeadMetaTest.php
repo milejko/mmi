@@ -10,7 +10,7 @@
 
 namespace Tests\Mmi\Mvc\ViewHelper;
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 use Mmi\Mvc\View;
 use Mmi\Mvc\ViewHelper\HeadMeta;
 
@@ -18,7 +18,7 @@ class HeadMetaTest extends \PHPUnit\Framework\TestCase
 {
     public function testClass()
     {
-        $hm = new HeadMeta(new View(TestApp::$di));
+        $hm = new HeadMeta(new View(AppTesting::$di));
         $hm->openGraph('test', 'test', false, '?');
         $this->assertInstanceOf('\Mmi\Mvc\ViewHelper\HeadMeta', $hm->headMeta());
         $this->assertEquals('<!--[if ?]>	<meta property="test" content="test" /><![endif]-->' . "\n", (string) $hm);

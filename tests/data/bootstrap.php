@@ -8,7 +8,7 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-use Mmi\App\TestApp;
+use Mmi\App\AppTesting;
 
 //definicja katalogu bazowego
 define('BASE_PATH', __DIR__ . '/../../');
@@ -20,9 +20,6 @@ require BASE_PATH . 'vendor/autoload.php';
 putenv('APP_DEBUG_ENABLED=0');
 putenv('DB_HOST=' . BASE_PATH . '/var/test-db.sqlite');
 putenv('DB_DRIVER=sqlite');
-
-//załadowanie aplikacji testowej
-require BASE_PATH . 'tests/data/app.php';
 
 //testowe obiekty
 require BASE_PATH . 'tests/data/test-query.php';
@@ -45,4 +42,4 @@ foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'va
 copy(BASE_PATH . '/tests/data/db.sqlite', BASE_PATH . '/var/test-db.sqlite');
 
 //run application
-(new TestApp())->run();
+(new AppTesting())->run();
