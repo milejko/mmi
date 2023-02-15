@@ -23,7 +23,7 @@ use function DI\autowire;
  */
 abstract class AppAbstract
 {
-    public const PROFILER_PREFIX        = 'Mmi\App: ';
+    public const PROFILER_PREFIX = 'Mmi\App: ';
 
     /**
      * @TODO: remove after all legacy dependencies are removed
@@ -34,7 +34,7 @@ abstract class AppAbstract
 
     protected AppProfiler $profiler;
 
-    protected string $compilePath;
+    protected string $compilePath = BASE_PATH . '/var/cache';
 
     /**
      * Constructor
@@ -44,8 +44,6 @@ abstract class AppAbstract
         //enable profiler
         $this->profiler = new AppProfiler();
         $this->profiler->event(self::PROFILER_PREFIX . 'application create');
-        //compile path
-        $this->compilePath = \getenv('APP_COMPILE_PATH');
         //configure application
         $this->configureEnvironment()
             ->buildContainer()
@@ -134,6 +132,7 @@ abstract class AppAbstract
         } catch (PathException $e) {
             //nothing to do
         }
+        $this->compilePath = \getenv('APP_COMPILE_PATH') ?: $this->compilePath;
         $this->profiler->event(self::PROFILER_PREFIX . '.env configuration file loaded');
         return $this;
     }

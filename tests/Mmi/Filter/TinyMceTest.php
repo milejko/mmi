@@ -16,9 +16,9 @@ class TinyMceTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('<div>test</div>', (new TinyMce)->filter('<div>test</div>'));
-        $this->assertEquals('<div><p>test</p></div>', (new TinyMce)->filter('<div><p>test</p></div>'));
-        $this->assertEquals('<div><p>test</p></div>', (new TinyMce)->filter('<div><p>test</p></div><script></script>'));
-        $this->assertEquals('<div><p>test</p></div>', (new TinyMce)->filter('<div><p>test</p></div><head></head>'));
+        $this->assertEquals('<div>test</div>', (new TinyMce())->filter('<div>test</div>'));
+        $this->assertEquals('<div><p>test</p></div>', (new TinyMce())->filter('<div><p>test</p></div>'));
+        $this->assertEquals('<div><p>test</p></div>', (new TinyMce())->filter('<div><p>test</p></div><script></script>'));
+        $this->assertEquals('<div><p>test</p></div>', (new TinyMce())->filter('<div><p>test</p></div><head></head>'));
     }
 }

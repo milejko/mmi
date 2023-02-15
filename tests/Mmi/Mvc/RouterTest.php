@@ -17,11 +17,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 {
     public function testEncodeDecodeUrl()
     {
-        $sampleRoute = new \Mmi\Mvc\RouterConfigRoute;
+        $sampleRoute = new \Mmi\Mvc\RouterConfigRoute();
         $sampleRoute->name = 'test';
         $sampleRoute->pattern = '/([0-9]+)-([0-9]+)/i';
         $sampleRoute->replace = ['module' => '$1', 'controller' => '$2', 'action' => 'test'];
-        $config = (new RouterConfig)
+        $config = (new RouterConfig())
             ->setRoutes([$sampleRoute])
             ->setRoute('test1', '/([a-z]+)-([a-z]+)-([a-z]+)/', ['module' => '$1', 'controller' => '$2', 'action' => '$3'])
             ->setRoute('test2', 'static', ['module' => 'static'], ['controller' => 'index', 'action' => 'index'])
@@ -49,7 +49,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testInvalidRouter()
     {
         $this->expectException(\Mmi\Mvc\MvcException::class);
-        $config = (new RouterConfig)
+        $config = (new RouterConfig())
             ->setRoute('test', '/static/', ['module' => '$1']);
         $router = new Router($config);
         $router->decodeUrl('static');

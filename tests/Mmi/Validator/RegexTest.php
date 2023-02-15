@@ -19,7 +19,7 @@ class RegexTest extends \PHPUnit\Framework\TestCase
         //równe
         $this->assertTrue((new Regex(['/[a-z0-9]{2,5}/']))->isValid('aac'));
         $this->assertTrue((new Regex(['/[a-z0-9]{2,5}/']))->isValid('mp3'));
-        $this->assertTrue((new Regex)->isValid('mp3'));
+        $this->assertTrue((new Regex())->isValid('mp3'));
         //nie równe
         $this->assertFalse((new Regex(['/[a-z]/']))->isValid('0'));
         $this->assertFalse((new Regex(['/[a-z]/']))->isValid(new \stdClass()));

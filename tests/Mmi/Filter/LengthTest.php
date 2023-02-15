@@ -16,10 +16,10 @@ class LengthTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals(3, (new Length)->filter('abc'));
-        $this->assertEquals(0, (new Length)->filter(''));
-        $this->assertEquals(4, (new Length)->filter('żółw'));
-        $this->assertEquals(2, (new Length)->filter(['a', 'b']));
-        $this->assertNull((new Length)->filter(new \stdClass()));
+        $this->assertEquals(3, (new Length())->filter('abc'));
+        $this->assertEquals(0, (new Length())->filter(''));
+        $this->assertEquals(4, (new Length())->filter('żółw'));
+        $this->assertEquals(2, (new Length())->filter(['a', 'b']));
+        $this->assertNull((new Length())->filter(new \stdClass()));
     }
 }

@@ -50,25 +50,25 @@ class SampleForm extends \Mmi\Form\Form
             ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
 
         $this->addElement(new Password('password'));
-        
+
         $this->addElement((new Radio('radio'))
             ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
-        
+
         $this->addElement((new Select('select'))
             ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
-        
+
         $this->addElement(new Submit('submit'));
-        
+
         $this->addElement(new Text('text'));
-        
+
         $this->addElement(new Textarea('textarea'));
-        
+
         foreach ($this->getElements() as $name => $element) {
             $element->setLabel('l:' . $name)
                 ->setDescription('d:' . $name)
                 ->setValue('v:' . $name)
-                ->addFilter(new \Mmi\Filter\Capitalize)
-                ->addFilter(new \Mmi\Filter\Ascii)
+                ->addFilter(new \Mmi\Filter\Capitalize())
+                ->addFilter(new \Mmi\Filter\Ascii())
                 ->addValidator(new \Mmi\Validator\StringLength([3, 30, 'Invalid string length']));
         }
     }

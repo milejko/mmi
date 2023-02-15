@@ -26,7 +26,7 @@ class TestAuthProvider implements \Mmi\Security\AuthProviderInterface
         if ($identity != $credential) {
             return null;
         }
-        $ar = new AuthRecord;
+        $ar = new AuthRecord();
         $ar->id = 1;
         $ar->email = 'test@example.com';
         $ar->username = 'test';
@@ -39,7 +39,7 @@ class TestAuthProvider implements \Mmi\Security\AuthProviderInterface
         if (!intval($identity)) {
             return null;
         }
-        $ar = new AuthRecord;
+        $ar = new AuthRecord();
         $ar->id = 1;
         $ar->email = 'test@example.com';
         $ar->username = 'test';

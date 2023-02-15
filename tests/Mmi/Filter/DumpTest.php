@@ -17,7 +17,7 @@ class DumpTest extends \PHPUnit\Framework\TestCase
     public function testFilter()
     {
         foreach (['test', ['test'], ['test' => 'test'], new \stdClass()] as $value) {
-            $this->assertEquals('<pre>' . print_r($value, true) . '</pre>', (new Dump)->filter($value));
+            $this->assertEquals('<pre>' . print_r($value, true) . '</pre>', (new Dump())->filter($value));
         }
     }
 }

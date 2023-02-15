@@ -16,8 +16,8 @@ class AlnumTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('abc', (new Alnum)->filter('abc'));
-        $this->assertEquals('alamakota', (new Alnum)->filter('ala ma kota'));
-        $this->assertEquals('', (new Alnum)->filter('!@#$%^&*()_+{}:"|<>?,./;\'\[]=-'));
+        $this->assertEquals('abc', (new Alnum())->filter('abc'));
+        $this->assertEquals('alamakota', (new Alnum())->filter('ala ma kota'));
+        $this->assertEquals('', (new Alnum())->filter('!@#$%^&*()_+{}:"|<>?,./;\'\[]=-'));
     }
 }

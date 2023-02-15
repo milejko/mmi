@@ -16,7 +16,7 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testPaginator()
     {
-        $paginator = (new Paginator)
+        $paginator = (new Paginator())
             ->setHashHref('test-href');
         $this->assertEquals(0, $paginator->getPagesCount());
         $this->assertInstanceOf('\Mmi\Paginator\Paginator', $paginator->setRowsPerPage(0));

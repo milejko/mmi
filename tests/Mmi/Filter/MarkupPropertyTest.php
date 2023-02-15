@@ -16,10 +16,10 @@ class MarkupPropertyTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('test1', (new MarkupProperty)->filter('test#1'));
-        $this->assertEquals('xxx', (new MarkupProperty)->filter('x\'x\'x'));
-        $this->assertEquals('xx', (new MarkupProperty)->filter('x,x'));
-        $this->assertEquals('xx', (new MarkupProperty)->filter('x`x'));
-        $this->assertEquals('xx', (new MarkupProperty)->filter('x"x'));
+        $this->assertEquals('test1', (new MarkupProperty())->filter('test#1'));
+        $this->assertEquals('xxx', (new MarkupProperty())->filter('x\'x\'x'));
+        $this->assertEquals('xx', (new MarkupProperty())->filter('x,x'));
+        $this->assertEquals('xx', (new MarkupProperty())->filter('x`x'));
+        $this->assertEquals('xx', (new MarkupProperty())->filter('x"x'));
     }
 }

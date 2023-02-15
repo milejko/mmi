@@ -11,7 +11,7 @@ final class ObservableCacheSandboxTest extends TestCase
 {
     public function testIfEmptyCacheReturnsNoValues(): void
     {
-        $cacheSandbox = new ObservableCacheSandbox;
+        $cacheSandbox = new ObservableCacheSandbox();
 
         self::assertEmpty($cacheSandbox->load('some-key'));
         self::assertEquals(['load'], $cacheSandbox->getEventLog());
@@ -19,7 +19,7 @@ final class ObservableCacheSandboxTest extends TestCase
 
     public function testIfValuesCanBeStoredLoadedAndRemoved(): void
     {
-        $cacheSandbox = new ObservableCacheSandbox;
+        $cacheSandbox = new ObservableCacheSandbox();
 
         self::assertTrue($cacheSandbox->save([], 'other-key'));
         self::assertEquals([], $cacheSandbox->load('other-key'));
@@ -32,9 +32,9 @@ final class ObservableCacheSandboxTest extends TestCase
 
     public function testIfValuesCanStoredLoadedAndFlushed(): void
     {
-        $cacheSandbox = new ObservableCacheSandbox;
+        $cacheSandbox = new ObservableCacheSandbox();
         self::assertTrue($cacheSandbox->save([], 'key'));
-        self::assertTrue($cacheSandbox->save(new self, 'another-key'));
+        self::assertTrue($cacheSandbox->save(new self(), 'another-key'));
         self::assertEquals(['save', 'save'], $cacheSandbox->getEventLog());
 
         self::assertEquals([], $cacheSandbox->load('key'));
@@ -51,7 +51,7 @@ final class ObservableCacheSandboxTest extends TestCase
 
     public function testIfEventLogCanBeFlushed(): void
     {
-        $cacheSandbox = new ObservableCacheSandbox;
+        $cacheSandbox = new ObservableCacheSandbox();
 
         self::assertEmpty($cacheSandbox->load('some-key'));
         self::assertEquals(['load'], $cacheSandbox->getEventLog());
@@ -61,6 +61,6 @@ final class ObservableCacheSandboxTest extends TestCase
 
     public function testIfIsActiveGivesTrue(): void
     {
-        self::assertTrue((new ObservableCacheSandbox)->isActive());
+        self::assertTrue((new ObservableCacheSandbox())->isActive());
     }
 }

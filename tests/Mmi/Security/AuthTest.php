@@ -17,7 +17,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
 {
     public function testClass()
     {
-        $auth = new Auth(new TestAuthProvider);
+        $auth = new Auth(new TestAuthProvider());
         //brak modelu
         $this->assertFalse($auth->authenticate());
         $this->assertInstanceOf('\Mmi\Security\Auth', $auth

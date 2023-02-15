@@ -16,6 +16,6 @@ class UppercaseTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('%C5%BC%C3%B3%C5%82ta+krowa+w+kropki+bordo%2C+gryz%C5%82a+traw%C4%99+kr%C4%99c%C4%85c+mord%C4%85...', (new Urlencode)->filter('żółta krowa w kropki bordo, gryzła trawę kręcąc mordą...'));
+        $this->assertEquals('%C5%BC%C3%B3%C5%82ta+krowa+w+kropki+bordo%2C+gryz%C5%82a+traw%C4%99+kr%C4%99c%C4%85c+mord%C4%85...', (new Urlencode())->filter('żółta krowa w kropki bordo, gryzła trawę kręcąc mordą...'));
     }
 }

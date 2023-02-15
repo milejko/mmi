@@ -17,10 +17,10 @@ class AlnumTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         //równe
-        $this->assertTrue((new Alnum)->isValid('xyz'));
-        $this->assertTrue((new Alnum)->isValid('żółw'));
+        $this->assertTrue((new Alnum())->isValid('xyz'));
+        $this->assertTrue((new Alnum())->isValid('żółw'));
         //nie równe
-        $this->assertFalse((new Alnum)->isValid(new \stdClass()));
-        $this->assertFalse((new Alnum)->isValid('{xyz}'));
+        $this->assertFalse((new Alnum())->isValid(new \stdClass()));
+        $this->assertFalse((new Alnum())->isValid('{xyz}'));
     }
 }

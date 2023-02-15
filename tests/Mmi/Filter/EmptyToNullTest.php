@@ -16,9 +16,9 @@ class EmptyToNullTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertNull((new EmptyToNull)->filter(''));
-        $this->assertNull((new EmptyToNull)->filter(0));
-        $this->assertNull((new EmptyToNull)->filter(null));
-        $this->assertNull((new EmptyToNull)->filter([]));
+        $this->assertNull((new EmptyToNull())->filter(''));
+        $this->assertNull((new EmptyToNull())->filter(0));
+        $this->assertNull((new EmptyToNull())->filter(null));
+        $this->assertNull((new EmptyToNull())->filter([]));
     }
 }

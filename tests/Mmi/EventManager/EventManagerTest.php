@@ -12,7 +12,7 @@ use Mmi\Mvc\View;
 
 class EventManagerTest extends \PHPUnit\Framework\TestCase
 {
-    private function getEventManagerInstance() : EventManager
+    private function getEventManagerInstance(): EventManager
     {
         /** @var App $app */
         $app = AppTesting::$di->get(App::class);

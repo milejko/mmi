@@ -11,36 +11,35 @@
 use Mmi\App\AppTesting;
 
 //definicja katalogu bazowego
-define('BASE_PATH', __DIR__ . '/../../');
+define('BASE_PATH', __DIR__ . '/../');
 
 //dołączenie autoloadera
 require BASE_PATH . 'vendor/autoload.php';
 
 //zmienne testowe
 putenv('APP_DEBUG_ENABLED=0');
-putenv('APP_COMPILE_PATH=' . BASE_PATH . '/var/compile');
 putenv('DB_HOST=' . BASE_PATH . '/var/test-db.sqlite');
 putenv('DB_DRIVER=sqlite');
 
 //testowe obiekty
-require BASE_PATH . 'tests/data/test-query.php';
-require BASE_PATH . 'tests/data/test-record.php';
-require BASE_PATH . 'tests/data/test-auth-provider.php';
+require BASE_PATH . 'tests/Mock/test-query.php';
+require BASE_PATH . 'tests/Mock/test-record.php';
+require BASE_PATH . 'tests/Mock/test-auth-provider.php';
 if (!function_exists('apcu_fetch')) {
-    require BASE_PATH . 'tests/data/apc-stub.php';
+    require BASE_PATH . 'tests/Mock/apc-stub.php';
 }
 if (!class_exists(Redis::class)) {
-    require BASE_PATH . 'tests/data/redis-stub.php';
+    require BASE_PATH . 'tests/Mock/redis-stub.php';
 }
 
 //iteracja po katalogach do utworzenia
-foreach (['var/cache', 'var/compile', 'var/coverage', 'var/data', 'var/log', 'var/session'] as $dir) {
+foreach (['var/cache', 'var/coverage', 'var/data', 'var/log', 'var/session'] as $dir) {
     //tworzenie katalogu
     !file_exists(BASE_PATH . '/' . $dir) ? mkdir(BASE_PATH . '/' . $dir, 0777, true) : null;
 }
 
 //kopiowanie testowej bazy danych do tmp
-copy(BASE_PATH . '/tests/data/db.sqlite', BASE_PATH . '/var/test-db.sqlite');
+copy(BASE_PATH . '/tests/Mock/db.sqlite', BASE_PATH . '/var/test-db.sqlite');
 
 //run application
 (new AppTesting())->run();

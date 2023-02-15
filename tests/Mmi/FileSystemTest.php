@@ -49,7 +49,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
 
     public function testMimeType()
     {
-        $this->assertEquals('image/png', FileSystem::mimeType(BASE_PATH . '/tests/data/test.png'));
-        $this->assertEquals('image/png', FileSystem::mimeTypeBinary(file_get_contents(BASE_PATH . '/tests/data/test.png')));
+        $this->assertEquals('image/png', FileSystem::mimeType(BASE_PATH . '/tests/Mock/test.png'));
+        $this->assertEquals('image/png', FileSystem::mimeTypeBinary(file_get_contents(BASE_PATH . '/tests/Mock/test.png')));
     }
 }

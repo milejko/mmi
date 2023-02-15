@@ -16,7 +16,7 @@ class StringTrimTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('test', (new StringTrim)->filter('test '));
+        $this->assertEquals('test', (new StringTrim())->filter('test '));
         $this->assertEquals('ala, ma, kota', (new StringTrim([' ,.']))->filter(' ala, ma, kota. '));
     }
 }

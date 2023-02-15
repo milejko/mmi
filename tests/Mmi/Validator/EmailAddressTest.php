@@ -17,13 +17,13 @@ class EmailAddressTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         //równe
-        $this->assertTrue((new EmailAddress)->isValid('test@example.com'));
-        $this->assertTrue((new EmailAddress)->isValid('a.test@a.com.pl'));
-        $this->assertTrue((new EmailAddress)->isValid('a+test@a.com.pl'));
+        $this->assertTrue((new EmailAddress())->isValid('test@example.com'));
+        $this->assertTrue((new EmailAddress())->isValid('a.test@a.com.pl'));
+        $this->assertTrue((new EmailAddress())->isValid('a+test@a.com.pl'));
         //nie równe
-        $this->assertFalse((new EmailAddress)->isValid('xyz'));
-        $this->assertFalse((new EmailAddress)->isValid('xyz@'));
-        $this->assertFalse((new EmailAddress)->isValid('@xyz.pl'));
-        $this->assertFalse((new EmailAddress)->isValid(null));
+        $this->assertFalse((new EmailAddress())->isValid('xyz'));
+        $this->assertFalse((new EmailAddress())->isValid('xyz@'));
+        $this->assertFalse((new EmailAddress())->isValid('@xyz.pl'));
+        $this->assertFalse((new EmailAddress())->isValid(null));
     }
 }

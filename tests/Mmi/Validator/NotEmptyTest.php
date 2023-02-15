@@ -17,15 +17,15 @@ class NotEmptyTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         //równe
-        $this->assertTrue((new NotEmpty)->isValid(0));
-        $this->assertTrue((new NotEmpty)->isValid('a'));
-        $this->assertTrue((new NotEmpty)->isValid(1));
-        $this->assertTrue((new NotEmpty)->isValid([1]));
+        $this->assertTrue((new NotEmpty())->isValid(0));
+        $this->assertTrue((new NotEmpty())->isValid('a'));
+        $this->assertTrue((new NotEmpty())->isValid(1));
+        $this->assertTrue((new NotEmpty())->isValid([1]));
         //nie równe
-        $this->assertFalse((new NotEmpty)->isValid(new \stdClass()));
-        $this->assertFalse((new NotEmpty)->isValid(' '));
-        $this->assertFalse((new NotEmpty)->isValid(''));
-        $this->assertFalse((new NotEmpty)->isValid(null));
-        $this->assertFalse((new NotEmpty)->isValid([]));
+        $this->assertFalse((new NotEmpty())->isValid(new \stdClass()));
+        $this->assertFalse((new NotEmpty())->isValid(' '));
+        $this->assertFalse((new NotEmpty())->isValid(''));
+        $this->assertFalse((new NotEmpty())->isValid(null));
+        $this->assertFalse((new NotEmpty())->isValid([]));
     }
 }

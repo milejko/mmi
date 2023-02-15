@@ -17,7 +17,7 @@ class RequestFileTest extends \PHPUnit\Framework\TestCase
     public function testEmptyObject()
     {
         $this->expectException(\Mmi\Http\HttpException::class);
-        new RequestFile;
+        new RequestFile();
     }
 
     /**
@@ -32,9 +32,9 @@ class RequestFileTest extends \PHPUnit\Framework\TestCase
     public function testNew()
     {
         $this->expectException(\Mmi\Http\HttpException::class);
-        $file = new RequestFile(['name' => 'image.png', 'tmp_name' => BASE_PATH . '/tests/data/test.png']);
+        $file = new RequestFile(['name' => 'image.png', 'tmp_name' => BASE_PATH . '/tests/Mock/test.png']);
         $this->assertEquals('image.png', $file->name);
-        $this->assertEquals(BASE_PATH . '/tests/data/test.png', $file->tmpName);
+        $this->assertEquals(BASE_PATH . '/tests/Mock/test.png', $file->tmpName);
         $this->assertEquals('image/png', $file->type);
         $this->assertEquals('26271', $file->size);
         //wyjątek

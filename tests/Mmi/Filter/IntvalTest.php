@@ -16,8 +16,8 @@ class IntvalTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals(13, (new Intval)->filter(13));
-        $this->assertEquals(13, (new Intval)->filter('13'));
-        $this->assertEquals(13, (new Intval)->filter('13a'));
+        $this->assertEquals(13, (new Intval())->filter(13));
+        $this->assertEquals(13, (new Intval())->filter('13'));
+        $this->assertEquals(13, (new Intval())->filter('13a'));
     }
 }

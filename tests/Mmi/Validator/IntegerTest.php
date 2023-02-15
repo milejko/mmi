@@ -17,12 +17,12 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         //równe
-        $this->assertTrue((new Integer)->isValid(0));
-        $this->assertTrue((new Integer)->isValid(41));
-        $this->assertTrue((new Integer)->isValid(-12));
+        $this->assertTrue((new Integer())->isValid(0));
+        $this->assertTrue((new Integer())->isValid(41));
+        $this->assertTrue((new Integer())->isValid(-12));
         //nie równe
-        $this->assertFalse((new Integer)->isValid('-12,33'));
-        $this->assertFalse((new Integer)->isValid('0a'));
-        $this->assertFalse((new Integer)->isValid(31.12));
+        $this->assertFalse((new Integer())->isValid('-12,33'));
+        $this->assertFalse((new Integer())->isValid('0a'));
+        $this->assertFalse((new Integer())->isValid(31.12));
     }
 }

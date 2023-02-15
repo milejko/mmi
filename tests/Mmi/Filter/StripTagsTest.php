@@ -16,7 +16,7 @@ class StripTagsTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('test', (new StripTags)->filter('<div>test</div>'));
+        $this->assertEquals('test', (new StripTags())->filter('<div>test</div>'));
         $this->assertEquals('<p>test</p>', (new StripTags(['<p>']))->filter('<div><p>test</p></div>'));
     }
 }
