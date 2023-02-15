@@ -20,8 +20,7 @@ use Mmi\Mvc\ActionHelper;
  */
 class App extends AppAbstract
 {
-    public const PROFILER_PREFIX                    = 'Mmi\App: ';
-    public const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
+    public const PROFILER_PREFIX = 'Mmi\App: ';
 
     /**
      * Sets error and exception handler

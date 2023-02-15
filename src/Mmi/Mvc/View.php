@@ -291,7 +291,7 @@ class View extends \Mmi\DataObject
             throw new KernelException('View tpl not found: ' . $path);
         }
         //kompilacja szablonu
-        return $this->_compileTemplate(file_get_contents($template), BASE_PATH . '/var/compile/' . $this->container->get(TranslateInterface::class)->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
+        return $this->_compileTemplate(file_get_contents($template), $this->container->get('app.compile.path') . '/' . $this->container->get(TranslateInterface::class)->getLocale() . '-' . str_replace(['/', '\\'], '-', substr($template, strrpos($template, '/src') + 5, -4) . '.php'));
     }
 
     /**
@@ -315,7 +315,7 @@ class View extends \Mmi\DataObject
     public function renderDirectly($templateCode): string
     {
         //kompilacja szablonu
-        return $this->_compileTemplate($templateCode, BASE_PATH . '/var/compile/' . $this->container->get(TranslateInterface::class)->getLocale() . '-' . md5($templateCode) . '.php');
+        return $this->_compileTemplate($templateCode, $this->container->get('app.compile.path') . '/' . $this->container->get(TranslateInterface::class)->getLocale() . '-' . md5($templateCode) . '.php');
     }
 
     /**

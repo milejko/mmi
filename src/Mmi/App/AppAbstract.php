@@ -23,8 +23,7 @@ use function DI\autowire;
  */
 abstract class AppAbstract
 {
-    public const PROFILER_PREFIX                    = 'Mmi\App: ';
-    public const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
+    public const PROFILER_PREFIX        = 'Mmi\App: ';
 
     /**
      * @TODO: remove after all legacy dependencies are removed
@@ -35,16 +34,18 @@ abstract class AppAbstract
 
     protected AppProfiler $profiler;
 
+    protected string $compilePath;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        //PHP 8.1 workaround
-        error_reporting(E_ALL && ~E_DEPRECATED);
         //enable profiler
         $this->profiler = new AppProfiler();
         $this->profiler->event(self::PROFILER_PREFIX . 'application create');
+        //compile path
+        $this->compilePath = \getenv('APP_COMPILE_PATH');
         //configure application
         $this->configureEnvironment()
             ->buildContainer()
@@ -108,8 +109,8 @@ abstract class AppAbstract
             ->useAutowiring(true)
             ->useAnnotations(true)
             ->ignorePhpDocErrors(true)
-            ->enableCompilation(self::APPLICATION_COMPILE_PATH)
-            ->writeProxiesToFile(true, self::APPLICATION_COMPILE_PATH)
+            ->enableCompilation($this->compilePath)
+            ->writeProxiesToFile(true, $this->compilePath)
             //adding profiler instance
             ->addDefinitions([AppProfilerInterface::class => $this->profiler]);
         return $this->isApcuEnabled() ?
@@ -143,7 +144,7 @@ abstract class AppAbstract
     private function unlinkCompiledContainer(): void
     {
         $this->isApcuEnabled() && \apcu_clear_cache();
-        array_map('unlink', glob(self::APPLICATION_COMPILE_PATH . '/CompiledContainer.php'));
+        array_map('unlink', glob($this->compilePath . '/CompiledContainer.php'));
     }
 
     /**

@@ -15,8 +15,7 @@ namespace Mmi\App;
  */
 class AppTesting extends AppAbstract
 {
-    const PROFILER_PREFIX                    = 'Mmi\AppTesting: ';
-    const APPLICATION_COMPILE_PATH           = BASE_PATH . '/var/compile';
+    const PROFILER_PREFIX = 'Mmi\AppTesting: ';
 
     /**
      * Sets error and exception handler

@@ -18,6 +18,7 @@ require BASE_PATH . 'vendor/autoload.php';
 
 //zmienne testowe
 putenv('APP_DEBUG_ENABLED=0');
+putenv('APP_COMPILE_PATH=' . BASE_PATH . '/var/compile');
 putenv('DB_HOST=' . BASE_PATH . '/var/test-db.sqlite');
 putenv('DB_DRIVER=sqlite');
 
