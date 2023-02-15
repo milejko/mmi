@@ -15,7 +15,7 @@ namespace Mmi\App;
  */
 class AppTesting extends AppAbstract
 {
-    const PROFILER_PREFIX = 'Mmi\AppTesting: ';
+    public const PROFILER_PREFIX = 'Mmi\AppTesting: ';
 
     /**
      * Sets error and exception handler
