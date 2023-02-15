@@ -24,7 +24,7 @@ class MultiCheckbox extends ElementAbstract
     public function __construct($name)
     {
         parent::__construct($name);
-        $this->setOption('containerClass', trim($this->getOption('containerClass')) . 'multi-box multi-checkbox');
+        $this->setOption('containerClass', trim((string) $this->getOption('containerClass')) . 'multi-box multi-checkbox');
     }
 
     /**

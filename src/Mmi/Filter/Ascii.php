@@ -41,7 +41,7 @@ class Ascii extends \Mmi\Filter\FilterAbstract
             'х' => 'kh', 'ц' => 'ts', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch',
             'ъ' => '', 'ы' => 'y', 'ь' => '', 'э' => 'e', 'ю' => 'yu',
             'я' => 'ya', '–' => '-'];
-        $value = strtr($value, $ruMap);
+        $value = strtr((string) $value, $ruMap);
         $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
         $value = preg_replace("/[^a-zA-Z0-9\.\/\,_|+ -]/", '', $value);
         return $value;

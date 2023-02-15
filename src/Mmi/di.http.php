@@ -12,10 +12,8 @@ use function DI\get;
 return [
     Request::class => function (ContainerInterface $container) {
         $request = Request::createFromGlobals();
-        //router apply (with baseUrl calculation)
-        $calculatedRequestUri = substr($request->getServer()->requestUri, strlen($container->get('app.base.url')));
         $container->get(AppProfilerInterface::class)->event(Request::class . ': request created from globals');
-        $request->setParams($container->get(Router::class)->decodeUrl($calculatedRequestUri));
+        $request->setParams($container->get(Router::class)->decodeUrl($request->getServer()->requestUri));
         //url decoded to 404
         if (!$request->module) {
             $request

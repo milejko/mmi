@@ -16,12 +16,12 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetContentType()
     {
-        $this->assertNull((new Request)->getContentType());
+        $this->assertEmpty((new Request)->getContentType());
     }
 
     public function testGetRequestMethod()
     {
-        $this->assertNull((new Request)->getRequestMethod());
+        $this->assertEmpty((new Request)->getRequestMethod());
     }
 
     public function testGetReferer()

@@ -27,10 +27,10 @@ class Ip4 extends ValidatorAbstract
      */
     public function isValid($value)
     {
-        if (!preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $value)) {
+        if (!preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', (string) $value)) {
             return $this->_error(static::INVALID);
         }
-        foreach (explode('.', $value) as $num) {
+        foreach (explode('.', (string) $value) as $num) {
             if ($num > 255 || $num < 0) {
                 return false;
             }
