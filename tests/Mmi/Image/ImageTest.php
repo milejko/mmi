@@ -17,11 +17,10 @@ use Mmi\Image\Image;
  */
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
-
-    const IMAGE_PATH = BASE_PATH . 'tests/data/test.png';
-    const VERTICAL_IMAGE_PATH = BASE_PATH . 'tests/data/test-vertical.png';
-    const TMP_PATH = BASE_PATH . 'var/cache/test.png';
-    const RESOURCE_TYPE = 'object';
+    public const IMAGE_PATH = BASE_PATH . 'tests/Mock/test.png';
+    public const VERTICAL_IMAGE_PATH = BASE_PATH . 'tests/Mock/test-vertical.png';
+    public const TMP_PATH = BASE_PATH . 'var/cache/test.png';
+    public const RESOURCE_TYPE = 'object';
 
     public function testInputToResource()
     {

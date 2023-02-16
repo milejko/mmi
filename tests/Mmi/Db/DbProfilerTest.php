@@ -20,7 +20,7 @@ class DbProfilerTest extends \PHPUnit\Framework\TestCase
 {
     public function testCount()
     {
-        $profiler = new DbProfiler(new AppProfiler);
+        $profiler = new DbProfiler(new AppProfiler());
         $pdoStatement = (new \PDOStatement());
         $pdoStatement->queryString = 'SELECT 1';
         $this->assertEquals(0, $profiler->count());
@@ -38,6 +38,6 @@ class DbProfilerTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->assertEmpty((new DbProfiler(new AppProfiler))->get());
+        $this->assertEmpty((new DbProfiler(new AppProfiler()))->get());
     }
 }

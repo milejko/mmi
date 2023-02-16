@@ -16,8 +16,8 @@ class DateFormatTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals(date('Y/m/d'), (new DateFormat)->setOptions(['Y/m/d'])->filter(time()));
-        $this->assertEquals('01.01.2015 00:00:00', (new DateFormat)->filter('2015-01-01'));
-        $this->assertEquals('2015/01/01', (new DateFormat)->setOptions(['Y/m/d'])->filter('2015-01-01'));
+        $this->assertEquals(date('Y/m/d'), (new DateFormat())->setOptions(['Y/m/d'])->filter(time()));
+        $this->assertEquals('01.01.2015 00:00:00', (new DateFormat())->filter('2015-01-01'));
+        $this->assertEquals('2015/01/01', (new DateFormat())->setOptions(['Y/m/d'])->filter('2015-01-01'));
     }
 }

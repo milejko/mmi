@@ -56,7 +56,7 @@ class Iban extends ValidatorAbstract
         //znaki do usuniącia
         $trims = [' ', '-', '_', '.', ',', '/', '|'];
         //wielkie litery
-        $tmp = strtoupper(str_replace($trims, '', $value));
+        $tmp = strtoupper(str_replace($trims, '', (string) $value));
         //brak pierwszego znaku
         if (!isset($tmp[0])) {
             $this->_error(static::INVALID);

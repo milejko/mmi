@@ -18,28 +18,27 @@ use Mmi\Cache\CacheConfig;
  */
 class CacheTest extends \PHPUnit\Framework\TestCase
 {
-
-    const TEST_KEY = 'php-unit-test';
-    const TEST_DATA = 'unit-test-php';
-    const INVALID_CACHE_DATA = 'a:2:{s:1:"x";s:13:"unit-test-php";s:1:"e";i:1503324942;}';
+    public const TEST_KEY = 'php-unit-test';
+    public const TEST_DATA = 'unit-test-php';
+    public const INVALID_CACHE_DATA = 'a:2:{s:1:"x";s:13:"unit-test-php";s:1:"e";i:1503324942;}';
 
     protected $_backends = ['file', 'apc', 'redis'];
 
     public function testNew()
     {
-        $emptyHandlerConfig = new CacheConfig;
+        $emptyHandlerConfig = new CacheConfig();
         $emptyHandlerConfig->handler = null;
         $this->assertInstanceOf('\Mmi\Cache\Cache', $emptyCache = new Cache($emptyHandlerConfig), 'Unable to create cache without handler');
         $this->assertInstanceOf('\Mmi\Cache\CacheConfig', $emptyCache->getConfig());
 
-        $config = new CacheConfig;
+        $config = new CacheConfig();
         $config->active = 0;
         $this->_testInactiveCache(new Cache($config));
     }
 
     public function testFileHandler()
     {
-        $cacheConfig = new CacheConfig;
+        $cacheConfig = new CacheConfig();
         $cacheConfig->path = BASE_PATH . '/var/cache';
         $cacheConfig->active = true;
         $cache = new Cache($cacheConfig);
@@ -54,7 +53,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         if (!function_exists('\apcu_fetch')) {
             return;
         }
-        $config = new CacheConfig;
+        $config = new CacheConfig();
         $config->handler = 'apc';
         $config->active = true;
         $cache = new Cache($config);
@@ -66,7 +65,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         if (!class_exists('\Redis')) {
             return;
         }
-        $config = new CacheConfig;
+        $config = new CacheConfig();
         $config->handler = 'redis';
         $config->path = 'udp://user:pass@127.0.0.1:6379/1';
         $config->active = true;

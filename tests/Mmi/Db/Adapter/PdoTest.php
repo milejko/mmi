@@ -18,7 +18,6 @@ use Mmi\Db\DbConfig;
  */
 class PdoTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * Adapter DB
      * @var \Mmi\Db\Adapter\PdoAbstract
@@ -27,7 +26,7 @@ class PdoTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        $dbConfig = new DbConfig;
+        $dbConfig = new DbConfig();
         $dbConfig->driver = 'sqlite';
         $dbConfig->host = BASE_PATH . '/var/test-db.sqlite';
         $db = new \Mmi\Db\Adapter\PdoSqlite($dbConfig);
@@ -121,7 +120,7 @@ class PdoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetProfiler()
     {
-        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $this->_db->setProfiler(new \Mmi\Db\DbProfiler(new AppProfiler)));
+        $this->assertInstanceOf('\Mmi\Db\Adapter\PdoAbstract', $this->_db->setProfiler(new \Mmi\Db\DbProfiler(new AppProfiler())));
         $this->assertInstanceOf('\Mmi\Db\DbProfiler', $this->_db->getProfiler());
     }
 

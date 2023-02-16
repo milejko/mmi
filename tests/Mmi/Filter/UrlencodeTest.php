@@ -16,7 +16,7 @@ class UrlencodeTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('ŻÓŁW', (new Uppercase)->filter('żóŁw'));
-        $this->assertEquals('ŚWINKA', (new Uppercase)->filter('śwINka'));
+        $this->assertEquals('ŻÓŁW', (new Uppercase())->filter('żóŁw'));
+        $this->assertEquals('ŚWINKA', (new Uppercase())->filter('śwINka'));
     }
 }

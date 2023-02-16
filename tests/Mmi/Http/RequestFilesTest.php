@@ -14,8 +14,7 @@ use Mmi\Http\RequestFiles;
 
 class RequestFilesTest extends \PHPUnit\Framework\TestCase
 {
-
-    private $_sampleFile = ['name' => 'image.png', 'tmp_name' => BASE_PATH . '/tests/data/test.png'];
+    private $_sampleFile = ['name' => 'image.png', 'tmp_name' => BASE_PATH . '/tests/Mock/test.png'];
     private $_sampleIncompleteFile = ['size' => 1];
     private $_anotherIncompleteFile = ['name' => 'image2.jpg'];
 
@@ -41,8 +40,8 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
                 1 => 'text/plain'
             ],
             'tmp_name' => [
-                0 => BASE_PATH . '/tests/data/test.png',
-                1 => BASE_PATH . '/tests/data/test.png',
+                0 => BASE_PATH . '/tests/Mock/test.png',
+                1 => BASE_PATH . '/tests/Mock/test.png',
             ],
             'error' => [
                 0 => 0,
@@ -65,7 +64,7 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
         $rf = new RequestFiles([
             'formname' => [
                 'name' => ['field1' => 'image.jpg'],
-                'tmp_name' => ['field1' => BASE_PATH . '/tests/data/test.png'],
+                'tmp_name' => ['field1' => BASE_PATH . '/tests/Mock/test.png'],
             ]
         ]);
         $this->assertFalse($rf->isEmpty());

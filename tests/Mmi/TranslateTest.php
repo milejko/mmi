@@ -20,10 +20,10 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     public function testAddTranslation()
     {
         $translate = new Translate();
-        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/data/pl.ini', 'pl'));
-        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/data/de.ini', 'de'));
+        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/Mock/pl.ini', 'pl'));
+        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/Mock/de.ini', 'de'));
         $this->assertInstanceOf(Translate::class, $translate->addTranslationFile('/not-important', ''));
-        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/data/pl-extended.ini', 'pl'));
+        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/Mock/pl-extended.ini', 'pl'));
         return $translate;
     }
 
@@ -34,7 +34,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     public function testSetLocale(Translate $translate)
     {
         $this->assertInstanceOf(Translate::class, $translate->setLocale('pl'));
-        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/data/en.ini', 'en'));
+        $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/Mock/en.ini', 'en'));
         $this->assertEquals('pl', $translate->getLocale());
     }
 

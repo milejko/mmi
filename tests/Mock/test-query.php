@@ -7,6 +7,7 @@
  * @copyright  Copyright (c) 2010-2015 Mariusz Miłejko (http://milejko.com)
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
+
 namespace Tests\Mmi\Orm;
 
 /**
@@ -14,6 +15,5 @@ namespace Tests\Mmi\Orm;
  */
 class TestQuery extends \Mmi\Orm\Query
 {
-
     protected $_tableName = 'test';
 }

@@ -29,7 +29,7 @@ class ComposerInstaller
      * Katalogi systemowe
      * @var array
      */
-    protected static $_sysDirs = ['bin', 'var/cache', 'var/compile', 'var/data', 'var/log', 'var/session', 'web/data', 'web/resource'];
+    protected static $_sysDirs = ['bin', 'var/cache', 'var/data', 'var/log', 'var/session', 'web/data', 'web/resource'];
 
     /**
      * Po aktualizacji

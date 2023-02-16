@@ -17,7 +17,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
     public function testFilter()
     {
         foreach (['<script>xxx</script>', 'złoto coto<div><h1>', '</head xxx <script'] as $text) {
-            $this->assertEquals(htmlspecialchars($text), (new Input)->filter($text));
+            $this->assertEquals(htmlspecialchars($text), (new Input())->filter($text));
         }
     }
 }

@@ -16,10 +16,10 @@ class LowercaseTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('abc', (new Lowercase)->filter('AbC'));
-        $this->assertEquals('', (new Lowercase)->filter(''));
-        $this->assertEquals('żółw', (new Lowercase)->filter('ŻÓŁw'));
-        $this->assertNull((new Lowercase)->filter(['a', 'b']));
-        $this->assertNull((new Lowercase)->filter(new \stdClass()));
+        $this->assertEquals('abc', (new Lowercase())->filter('AbC'));
+        $this->assertEquals('', (new Lowercase())->filter(''));
+        $this->assertEquals('żółw', (new Lowercase())->filter('ŻÓŁw'));
+        $this->assertNull((new Lowercase())->filter(['a', 'b']));
+        $this->assertNull((new Lowercase())->filter(new \stdClass()));
     }
 }

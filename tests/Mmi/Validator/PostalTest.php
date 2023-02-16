@@ -17,11 +17,11 @@ class PostalTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         //równe
-        $this->assertTrue((new Postal)->isValid('00-000'));
-        $this->assertTrue((new Postal)->isValid('01-511'));
-        $this->assertTrue((new Postal)->isValid('03-312'));
+        $this->assertTrue((new Postal())->isValid('00-000'));
+        $this->assertTrue((new Postal())->isValid('01-511'));
+        $this->assertTrue((new Postal())->isValid('03-312'));
         //nie równe
-        $this->assertFalse((new Postal)->isValid('xaasss'));
-        $this->assertFalse((new Postal)->isValid('000-00'));
+        $this->assertFalse((new Postal())->isValid('xaasss'));
+        $this->assertFalse((new Postal())->isValid('000-00'));
     }
 }

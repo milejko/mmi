@@ -16,7 +16,7 @@ class CeilTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals(14, (new Ceil)->filter(13.3));
-        $this->assertEquals(124, (new Ceil)->filter(123.78));
+        $this->assertEquals(14, (new Ceil())->filter(13.3));
+        $this->assertEquals(124, (new Ceil())->filter(123.78));
     }
 }

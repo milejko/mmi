@@ -22,7 +22,7 @@ class RecordTest extends \PHPUnit\Framework\TestCase
 
     public function testIsModified()
     {
-        $cr = new \Mmi\Orm\CacheRecord;
+        $cr = new \Mmi\Orm\CacheRecord();
         $cr->id = 'test';
         $cr->ttl = 1;
         $cr->data = 'test';
@@ -34,7 +34,7 @@ class RecordTest extends \PHPUnit\Framework\TestCase
 
     public function testSave()
     {
-        $tr = new \Tests\Mmi\Orm\TestRecord;
+        $tr = new \Tests\Mmi\Orm\TestRecord();
         $tr->camelCase = 'test1';
         $tr->anotherColumn = 'test2';
         $this->assertTrue($tr->save());

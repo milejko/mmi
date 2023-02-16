@@ -16,7 +16,7 @@ class CapitalizeTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('Ala Ma Kota, A Kot Ma Alę', (new Capitalize)->filter('ala ma kota, a kot ma alę'));
-        $this->assertEquals('Żółw Świnia Łódź Źdźbło Ósemka', (new Capitalize)->filter('żółw świnia łódź źdźbło ósemka'));
+        $this->assertEquals('Ala Ma Kota, A Kot Ma Alę', (new Capitalize())->filter('ala ma kota, a kot ma alę'));
+        $this->assertEquals('Żółw Świnia Łódź Źdźbło Ósemka', (new Capitalize())->filter('żółw świnia łódź źdźbło ósemka'));
     }
 }

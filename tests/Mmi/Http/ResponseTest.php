@@ -24,18 +24,17 @@ use Mmi\Mvc\View;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-
-    const CLASS_NAME = '\Mmi\Http\Response';
+    public const CLASS_NAME = '\Mmi\Http\Response';
 
     private function getNewResponseObject(): Response
     {
         return new Response(
-            new Router(new RouterConfig),
-            new ResponseTimingHeader(new AppProfiler),
+            new Router(new RouterConfig()),
+            new ResponseTimingHeader(new AppProfiler()),
             new ResponseDebugger(
                 new Request(),
-                new AppProfiler,
-                new Cache(new CacheConfig),
+                new AppProfiler(),
+                new Cache(new CacheConfig()),
                 new View(AppTesting::$di),
                 AppTesting::$di
             )

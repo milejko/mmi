@@ -23,7 +23,7 @@ class StringLengthTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue((new StringLength([1, 3]))->isValid('xyz'));
         $this->assertTrue((new StringLength([1, 3]))->isValid('ślę'));
         $this->assertTrue((new StringLength([1, 3]))->isValid('ś'));
-        $this->assertTrue((new StringLength)->isValid(new \stdClass()));
+        $this->assertTrue((new StringLength())->isValid(new \stdClass()));
         //nie równe
         $this->assertFalse((new StringLength([1, 2]))->isValid('abc'));
         $this->assertFalse((new StringLength([1, 3]))->isValid(''));

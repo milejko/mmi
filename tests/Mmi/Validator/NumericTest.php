@@ -17,12 +17,12 @@ class NumericTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         //równe
-        $this->assertTrue((new Numeric)->isValid(412));
-        $this->assertTrue((new Numeric)->isValid(412.32));
-        $this->assertTrue((new Numeric)->isValid(-318.14));
+        $this->assertTrue((new Numeric())->isValid(412));
+        $this->assertTrue((new Numeric())->isValid(412.32));
+        $this->assertTrue((new Numeric())->isValid(-318.14));
         //nie równe
-        $this->assertFalse((new Numeric)->isValid('-318,14'));
-        $this->assertFalse((new Numeric)->isValid('abc'));
-        $this->assertFalse((new Numeric)->isValid(null));
+        $this->assertFalse((new Numeric())->isValid('-318,14'));
+        $this->assertFalse((new Numeric())->isValid('abc'));
+        $this->assertFalse((new Numeric())->isValid(null));
     }
 }

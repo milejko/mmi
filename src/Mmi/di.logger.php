@@ -21,8 +21,8 @@ return [
     LoggerInterface::class => function (ContainerInterface $container) {
         $logger = new Logger('mmi');
         //default handler
-        $logger->pushHandler(new StreamHandler(BASE_PATH . '/var/log/app.log', $container->get('log.level')));
-        //no additional loger defined
+        $logger->pushHandler(new StreamHandler('php://stderr', $container->get('log.level')));
+        //no additional logger defined
         if (!$container->has('log.handler')) {
             return $logger;
         }

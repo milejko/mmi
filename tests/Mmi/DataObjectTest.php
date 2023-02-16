@@ -19,7 +19,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetParams()
     {
-        $do = new DataObject;
+        $do = new DataObject();
         $do->b = 'b';
         $this->assertInstanceOf('\Mmi\DataObject', $do->setParams(['a' => 'a'], true));
         $this->assertFalse(isset($do->b));
@@ -27,7 +27,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testSettersGetters()
     {
-        $do = new DataObject;
+        $do = new DataObject();
         $do->a = 'a';
         $do->b = 'b';
         $this->assertTrue(isset($do->a));

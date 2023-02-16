@@ -58,7 +58,7 @@ class Image
         $sx = ceil($width * $scale);
         $sy = ceil($height * $scale);
         //cropowanie zeskalowanego obrazu
-        return self::crop(self::scale($resource, $sx, $sy), abs($sx - $x) / 2, abs($sy - $y) / 2, $x, $y);
+        return self::crop(self::scale($resource, $sx, $sy), round(abs($sx - $x) / 2), round(abs($sy - $y) / 2), $x, $y);
     }
 
     /**

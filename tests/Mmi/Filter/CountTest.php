@@ -16,7 +16,7 @@ class CountTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals(3, (new Count)->filter(['x', 'a', 'b']));
-        $this->assertEquals(0, (new Count)->filter([]));
+        $this->assertEquals(3, (new Count())->filter(['x', 'a', 'b']));
+        $this->assertEquals(0, (new Count())->filter([]));
     }
 }

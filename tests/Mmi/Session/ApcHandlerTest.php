@@ -17,8 +17,7 @@ use Mmi\Session\ApcHandler;
  */
 class ApcHandlerTest extends \PHPUnit\Framework\TestCase
 {
-
-    const FILE_PATH = BASE_PATH . '/var/session/sess-';
+    public const FILE_PATH = BASE_PATH . '/var/session/sess-';
 
     public function testOpen()
     {

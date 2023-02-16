@@ -1,4 +1,5 @@
 <?php
+
 $requestedFile = __DIR__ . $_SERVER['PHP_SELF'];
 
 function getMimeType(string $fileName): string

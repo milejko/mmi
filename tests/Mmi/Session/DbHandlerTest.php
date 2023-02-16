@@ -20,7 +20,7 @@ class DbHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp(): void
     {
-        $dbConfig = new DbConfig;
+        $dbConfig = new DbConfig();
         $dbConfig->driver = 'sqlite';
         $dbConfig->host = BASE_PATH . '/var/test-db.sqlite';
         $db = new \Mmi\Db\Adapter\PdoSqlite($dbConfig);

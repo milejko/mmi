@@ -19,7 +19,7 @@ class OptionObjectTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetOptions()
     {
-        $oo = new OptionObject;
+        $oo = new OptionObject();
         $oo->setB('b');
         $this->assertInstanceOf('\Mmi\OptionObject', $oo->setOptions(['a' => 'a'], true));
         $this->assertFalse($oo->issetOption('b'));
@@ -32,7 +32,7 @@ class OptionObjectTest extends \PHPUnit\Framework\TestCase
     public function testSettersGetters()
     {
         $this->expectException(\Mmi\App\KernelException::class);
-        $oo = new OptionObject;
+        $oo = new OptionObject();
         $this->assertInstanceOf('\Mmi\OptionObject', $oo->setOption('a', 'a')
                 ->setB('b')
                 ->setC('c')

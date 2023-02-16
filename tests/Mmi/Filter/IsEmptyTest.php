@@ -16,11 +16,11 @@ class IsEmptyTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals(false, (new IsEmpty)->filter('abc'));
-        $this->assertEquals(false, (new IsEmpty)->filter([1,2]));
-        $this->assertEquals(true, (new IsEmpty)->filter(''));
-        $this->assertEquals(true, (new IsEmpty)->filter([]));
-        $this->assertEquals(true, (new IsEmpty)->filter(0));
-        $this->assertEquals(false, (new IsEmpty)->filter(12));
+        $this->assertEquals(false, (new IsEmpty())->filter('abc'));
+        $this->assertEquals(false, (new IsEmpty())->filter([1,2]));
+        $this->assertEquals(true, (new IsEmpty())->filter(''));
+        $this->assertEquals(true, (new IsEmpty())->filter([]));
+        $this->assertEquals(true, (new IsEmpty())->filter(0));
+        $this->assertEquals(false, (new IsEmpty())->filter(12));
     }
 }

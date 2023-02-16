@@ -19,7 +19,7 @@ class AclTest extends \PHPUnit\Framework\TestCase
      */
     public function testAdd()
     {
-        $this->assertInstanceOf('\Mmi\Security\Acl', $acl = (new Acl)
+        $this->assertInstanceOf('\Mmi\Security\Acl', $acl = (new Acl())
             ->add('god-content')
             ->add('news:user')
             ->add('news:admin')

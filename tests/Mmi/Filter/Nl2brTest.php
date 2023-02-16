@@ -16,7 +16,7 @@ class Nl2brTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $this->assertEquals('test<br />' . "\n" . 'test', (new Nl2br)->filter('test' . "\n" . 'test'));
-        $this->assertEquals('test<br />' . "\r\n" . 'test', (new Nl2br)->filter('test' . "\r\n" . 'test'));
+        $this->assertEquals('test<br />' . "\n" . 'test', (new Nl2br())->filter('test' . "\n" . 'test'));
+        $this->assertEquals('test<br />' . "\r\n" . 'test', (new Nl2br())->filter('test' . "\r\n" . 'test'));
     }
 }

@@ -17,8 +17,8 @@ class EmailAddressListTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         //równe
-        $this->assertTrue((new EmailAddressList)->isValid('test@example.com;a.test@a.com.pl;a+test@a.com.pl'));
+        $this->assertTrue((new EmailAddressList())->isValid('test@example.com;a.test@a.com.pl;a+test@a.com.pl'));
         //nie równe
-        $this->assertFalse((new EmailAddressList)->isValid('xyz,xyz@'));
+        $this->assertFalse((new EmailAddressList())->isValid('xyz,xyz@'));
     }
 }

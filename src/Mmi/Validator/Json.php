@@ -28,7 +28,7 @@ class Json extends ValidatorAbstract
     public function isValid($value)
     {
         try {
-            if (null === \json_decode($value, true)) {
+            if (null === \json_decode((string) $value, true)) {
                 return $this->_error(static::INVALID);
             }
         } catch (\Exception $e) {

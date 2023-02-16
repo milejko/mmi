@@ -96,6 +96,6 @@ class RequestServer extends \Mmi\DataObject
      */
     private function _filter($name, $filter = FILTER_SANITIZE_SPECIAL_CHARS)
     {
-        return isset($this->rawData[$name]) ? filter_var($this->rawData[$name], $filter) : null;
+        return isset($this->rawData[$name]) ? filter_var($this->rawData[$name], $filter) : '';
     }
 }
