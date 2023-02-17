@@ -39,7 +39,7 @@ class KernelEventHandler
      * @return bool
      * @throws KernelException
      */
-    public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    public static function errorHandler($errno, $errstr, $errfile, $errline)
     {
         throw new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
     }

@@ -121,17 +121,10 @@ class Deployer
         if (!trim($query)) {
             return;
         }
-        //start transakcji
-        \App\Registry::$db->beginTransaction();
-        //quera jeśli błędna rollback i die, jeśli poprawna commit
         try {
             //wykonanie zapytania
             \App\Registry::$db->query($query);
-            //commit
-            \App\Registry::$db->commit();
         } catch (\Mmi\Db\DbException $e) {
-            //rollback
-            \App\Registry::$db->rollBack();
             throw $e;
         }
     }
