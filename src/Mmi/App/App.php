@@ -10,7 +10,7 @@
 
 namespace Mmi\App;
 
-use Mmi\EventManager\EventManager;
+use Mmi\EventManager\EventManagerInterface;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Mvc\ActionHelper;
@@ -50,8 +50,8 @@ class App extends AppAbstract
             $this->profiler->event(self::PROFILER_PREFIX . 'interceptor beforeDispatch()');
         }
 
-        /** @var EventManager $eventManager */
-        $eventManager = $this->container->get(EventManager::class);
+        /** @var EventManagerInterface $eventManager */
+        $eventManager = $this->container->get(EventManagerInterface::class);
 
         //render content
         $content = $this->container->get(ActionHelper::class)->forward($request);

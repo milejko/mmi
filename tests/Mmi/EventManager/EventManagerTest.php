@@ -2,22 +2,20 @@
 
 namespace Tests\Mmi\EventManager;
 
-use _PHPStan_76800bfb5\Nette\Neon\Exception;
 use Mmi\App\App;
 use Mmi\App\AppMvcEvents;
 use Mmi\App\AppTesting;
-use Mmi\EventManager\EventManager;
+use Mmi\EventManager\EventManagerInterface;
 use Mmi\EventManager\ResponseCollection;
-use Mmi\Mvc\View;
 
 class EventManagerTest extends \PHPUnit\Framework\TestCase
 {
-    private function getEventManagerInstance(): EventManager
+    private function getEventManagerInstance(): EventManagerInterface
     {
         /** @var App $app */
         $app = AppTesting::$di->get(App::class);
-        /** @var EventManager $eventManager */
-        $eventManager = $app::$di->get(EventManager::class);
+        /** @var EventManagerInterface $eventManager */
+        $eventManager = $app::$di->get(EventManagerInterface::class);
 
         return $eventManager;
     }
