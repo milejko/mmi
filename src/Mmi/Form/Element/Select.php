@@ -43,7 +43,7 @@ class Select extends ElementAbstract
     {
         $value = $this->getValue();
         if ($this->issetOption('multiple')) {
-            $this->setName($this->getBaseName() . '[]');
+            $this->setName($this->getName() . '[]');
         }
         unset($this->_options['value']);
         //nagłówek selecta
