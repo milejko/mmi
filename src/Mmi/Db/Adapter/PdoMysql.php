@@ -28,26 +28,32 @@ class PdoMysql extends PdoAbstract
     /**
      * Tworzy połączenie z bazą danych
      */
-    public function connect(): self
+    public function connect(): void
     {
-        $this->_config->port = $this->_config->port ? $this->_config->port : 3306;
-        //nowy obiekt PDO do odczytu danych
-        $this->_downstreamPdo = new \PDO(
+        $this->_config->port = $this->_config->port ?? 3306;
+        $this->_config->upstreamHost = $this->_config->upstreamHost ?? $this->_config->host;
+        $this->_config->upstreamPort = $this->_config->upstreamPort ?? $this->_config->port;
+        //obiekt PDO do odczytu danych
+        $this->_upstreamPdo = $this->_downstreamPdo = new \PDO(
             $this->_config->driver . ':host=' . $this->_config->host . ';port=' . $this->_config->port . ';dbname=' . $this->_config->name . ';charset=utf8',
             $this->_config->user,
             $this->_config->password,
             [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
-        //nowy obiekt pdo do zapisu danych
+        $this->_connected = true;
+        //zgodny port i host dla upstream
+        if ($this->_config->host == $this->_config->upstreamHost &&
+            $this->_config->port == $this->_config->upstreamPort
+        ) {
+            return;
+        }
+        //oddzielny obiekt PDO upstream
         $this->_upstreamPdo = new \PDO(
-            $this->_config->driver . ':host=' . ($this->_config->upstreamHost ? $this->_config->upstreamHost : $this->_config->host) . ';port=' . ($this->_config->upstreamPort ? $this->_config->upstreamPort : $this->_config->port) . ';dbname=' . $this->_config->name . ';charset=utf8',
+            $this->_config->driver . ':host=' . ($this->_config->upstreamHost) . ';port=' . ($this->_config->upstreamPort) . ';dbname=' . $this->_config->name . ';charset=utf8',
             $this->_config->user,
             $this->_config->password,
             [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
-        //zmiana stanu na połączony
-        $this->_connected = true;
-        return $this;
     }
 
     /**
