@@ -10,12 +10,14 @@ use function DI\env;
 
 return [
     //db env
-    'db.driver'     => env('DB_DRIVER', 'mysql'),
-    'db.password'   => env('DB_PASSWORD', ''),
-    'db.host'       => env('DB_HOST', '127.0.0.1'),
-    'db.name'       => env('DB_NAME', 'test'),
-    'db.port'       => env('DB_PORT', 3306),
-    'db.user'       => env('DB_USER', 'test'),
+    'db.driver'         => env('DB_DRIVER', 'mysql'),
+    'db.password'       => env('DB_PASSWORD', ''),
+    'db.host'           => env('DB_HOST', '127.0.0.1'),
+    'db.name'           => env('DB_NAME', 'test'),
+    'db.port'           => env('DB_PORT', 3306),
+    'db.user'           => env('DB_USER', 'test'),
+    'db.upstream.host'  => env('DB_UPSTREAMHOST', env('DB_HOST', '127.0.0.1')),
+    'db.upstream.port'  => env('DB_UPSTREAMPORT', env('DB_PORT', 3306)),
 
     //db profiler
     DbProfilerInterface::class => autowire(DbProfiler::class),
@@ -24,13 +26,14 @@ return [
     DbInterface::class => function (ContainerInterface $container) {
         //create db config
         $dbConfig = new DbConfig();
-        //note: no upstream host/port supported here
-        $dbConfig->driver   = $container->get('db.driver');
-        $dbConfig->host     = $container->get('db.host');
-        $dbConfig->name     = $container->get('db.name');
-        $dbConfig->port     = $container->get('db.port');
-        $dbConfig->user     = $container->get('db.user');
-        $dbConfig->password = $container->get('db.password');
+        $dbConfig->driver       = $container->get('db.driver');
+        $dbConfig->host         = $container->get('db.host');
+        $dbConfig->name         = $container->get('db.name');
+        $dbConfig->port         = $container->get('db.port');
+        $dbConfig->user         = $container->get('db.user');
+        $dbConfig->password     = $container->get('db.password');
+        $dbConfig->upstreamHost = $container->get('db.upstream.host') ?: $dbConfig->host;
+        $dbConfig->upstreamPort = $container->get('db.upstream.port') ?: $dbConfig->port;
         //database not specified
         if (!$dbConfig->driver) {
             return;
