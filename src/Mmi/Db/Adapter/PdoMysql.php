@@ -30,7 +30,7 @@ class PdoMysql extends PdoAbstract
      */
     public function connect(): void
     {
-        $this->_config->port = $this->_config->port ?? 3306;
+        $this->_config->port = $this->_config->port ?: 3306;
         $this->_config->upstreamHost = $this->_config->upstreamHost ?: $this->_config->host;
         $this->_config->upstreamPort = $this->_config->upstreamPort ?: $this->_config->port;
         //obiekt PDO do odczytu danych
