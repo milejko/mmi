@@ -10,6 +10,7 @@
 
 namespace Mmi\App;
 
+use Exception;
 use Mmi\Http\Request;
 use Mmi\Http\Response;
 use Mmi\Http\ResponseTypes;
@@ -92,7 +93,7 @@ class AppErrorHandler implements AppErrorHandlerInterface
         //próba czyszczenie bufora
         try {
             ob_clean();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //nie było bufora
         }
         //logowanie wyjątku
@@ -110,16 +111,16 @@ class AppErrorHandler implements AppErrorHandlerInterface
             if ($this->view->isLayoutDisabled() || $this->response->getType() != ResponseTypes::searchType('html')) {
                 //domyślna prezentacja błędów
                 $this->response
-                    ->setContent($this->rawErrorResponse($this->response))
+                    ->setContent($this->rawErrorResponse($this->response, $exception->getMessage()))
                     ->send();
                 return;
             }
             //błąd z prezentacją HTML
             $this->response->setContent($this->actionHelper->forward(new Request(['module' => 'mmi', 'controller' => 'index', 'action' => 'error'])));
-        } catch (\Exception $renderException) {
+        } catch (Exception $renderException) {
             $this->logger->logException($renderException);
             //domyślna prezentacja błędów
-            $this->response->setContent($this->rawErrorResponse($this->response));
+            $this->response->setContent($this->rawErrorResponse($this->response, $renderException->getMessage()));
         }
         //send response
         $this->response->send();
@@ -128,9 +129,8 @@ class AppErrorHandler implements AppErrorHandlerInterface
     /**
      * Zwraca sformatowany błąd dla danego typu odpowiedzi
      */
-    private function rawErrorResponse(Response $response): string
+    private function rawErrorResponse(Response $response, ?string $message = 'Something went wrong'): string
     {
-        $message = 'Something went wrong';
         //wybór typów
         switch ($response->getType()) {
             //plaintext
