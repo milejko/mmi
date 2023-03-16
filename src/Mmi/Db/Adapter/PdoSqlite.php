@@ -33,10 +33,10 @@ class PdoSqlite extends PdoAbstract
             null,
             [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
-        //włączenie funkcjonalności kluczy obcych - domyślnie
-        $this->query('PRAGMA foreign_keys = ON');
         //połączono
         $this->_connected = true;
+        //włączenie funkcjonalności kluczy obcych - domyślnie
+        $this->query('PRAGMA foreign_keys = ON');
     }
 
     /**
