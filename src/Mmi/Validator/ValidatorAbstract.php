@@ -13,11 +13,16 @@ namespace Mmi\Validator;
 /**
  * Abstrakcyjna klasa walidatora
  *
- * @method self setMessage($message) ustawia własną wiadomość walidatora
+ * @method self setMessage($message) ustawia własną wiadomość walidatora
  * @method string getMessage() pobiera wiadomość
  */
 abstract class ValidatorAbstract extends \Mmi\OptionObject
 {
+    /**
+     * Komunikat błędu
+     */
+    public const INVALID = 'validator.default.message';
+
     /**
      * Wiadomość
      * @var string
@@ -27,11 +32,12 @@ abstract class ValidatorAbstract extends \Mmi\OptionObject
     /**
      * Ustawia opcje (domyślnie wiadomość)
      * @param array $options
+     * @param bool $reset
      * @return self
      */
     public function setOptions(array $options = [], $reset = false)
     {
-        return $this->setMessage(current($options));
+        return $this->setMessage(current($options) ?: $this::INVALID ?? '');
     }
 
     /**
@@ -39,6 +45,15 @@ abstract class ValidatorAbstract extends \Mmi\OptionObject
      * @param mixed $value wartość
      */
     abstract public function isValid($value);
+
+    /**
+     * Pobiera opis
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return null;
+    }
 
     /**
      * Pobiera błąd

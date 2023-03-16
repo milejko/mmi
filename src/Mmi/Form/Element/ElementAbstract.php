@@ -10,8 +10,17 @@
 
 namespace Mmi\Form\Element;
 
+use DI\DependencyException;
+use DI\NotFoundException;
+use Exception;
 use Mmi\App\App;
+use Mmi\App\KernelException;
+use Mmi\Filter\FilterAbstract;
+use Mmi\Form\Form;
+use Mmi\Form\FormException;
 use Mmi\Mvc\View;
+use Mmi\OptionObject;
+use Mmi\Validator\ValidatorAbstract;
 
 /**
  * Abstrakcyjna klasa elementu formularza
@@ -28,7 +37,7 @@ use Mmi\Mvc\View;
  * @method self setId($id) ustawia identyfikator
  * @method self setPlaceholder($placeholder) ustawia placeholder pola
  */
-abstract class ElementAbstract extends \Mmi\OptionObject
+abstract class ElementAbstract extends OptionObject
 {
     /**
      * Nazwa elementu
@@ -44,19 +53,19 @@ abstract class ElementAbstract extends \Mmi\OptionObject
 
     /**
      * Tablica walidatorów
-     * @var \Mmi\Validator\ValidatorAbstract[]
+     * @var ValidatorAbstract[]
      */
     protected $_validators = [];
 
     /**
      * Tablica filtrów
-     * @var \Mmi\Filter\FilterAbstract[]
+     * @var FilterAbstract[]
      */
     protected $_filters = [];
 
     /**
      * Formularz macierzysty
-     * @var \Mmi\Form\Form
+     * @var Form
      */
     protected $_form = null;
 
@@ -93,8 +102,8 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Konstruktor
      * @param string $name nazwa
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function __construct($name)
     {
@@ -171,10 +180,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject
 
     /**
      * Dodaje filtr
-     * @param \Mmi\Filter\FilterAbstract $filter
+     * @param FilterAbstract $filter
      * @return self
      */
-    final public function addFilter(\Mmi\Filter\FilterAbstract $filter)
+    final public function addFilter(FilterAbstract $filter)
     {
         //dodawanie filtra
         $this->_filters[] = $filter;
@@ -183,13 +192,17 @@ abstract class ElementAbstract extends \Mmi\OptionObject
 
     /**
      * Dodaje walidator
-     * @param \Mmi\Validator\ValidatorAbstract $validator
+     * @param ValidatorAbstract $validator
      * @return self
      */
-    final public function addValidator(\Mmi\Validator\ValidatorAbstract $validator)
+    final public function addValidator(ValidatorAbstract $validator)
     {
         //dodawanie walidodatora
         $this->_validators[] = $validator;
+        //dodawanie opisu na podstawie danych z walidatora
+        if (empty($this->getDescription())) {
+            $this->setDescription($validator->getDescription());
+        }
         return $this;
     }
 
@@ -323,10 +336,10 @@ abstract class ElementAbstract extends \Mmi\OptionObject
 
     /**
      * Ustawia form macierzysty
-     * @param \Mmi\Form\Form $form
+     * @param Form $form
      * @return self
      */
-    public function setForm(\Mmi\Form\Form $form)
+    public function setForm(Form $form)
     {
         $this->_form = $form;
         //ustawianie ID
@@ -340,13 +353,13 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Ustaw kolejność realizacji
      * @param array $renderingOrder
      * @return ElementAbstract
-     * @throws \Mmi\Form\FormException
+     * @throws FormException
      */
     final public function setRenderingOrder(array $renderingOrder = [])
     {
         foreach ($renderingOrder as $method) {
             if (!method_exists($this, $method)) {
-                throw new \Mmi\Form\FormException('Unknown rendering method');
+                throw new FormException('Unknown rendering method');
             }
         }
         $this->_renderingOrder = $renderingOrder;
@@ -409,7 +422,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
 
     /**
      * Pobiera walidatory
-     * @return \Mmi\Validator\ValidatorAbstract[]
+     * @return ValidatorAbstract[]
      */
     final public function getValidators()
     {
@@ -418,7 +431,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
 
     /**
      * Pobiera walidatory
-     * @return \Mmi\Filter\FilterAbstract[]
+     * @return FilterAbstract[]
      */
     final public function getFilters()
     {
@@ -473,7 +486,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
      * Filtruje daną wartość za pomocą filtrów pola
      * @param mixed $value wartość
      * @return mixed wynik filtracji
-     * @throws \Mmi\App\KernelException
+     * @throws KernelException
      */
     public function getFilteredValue()
     {
@@ -519,7 +532,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje kontener pola (początek)
      * @return string
-     * @throws \Mmi\App\KernelException
+     * @throws KernelException
      */
     final public function fetchBegin()
     {
@@ -541,7 +554,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje kontener pola (koniec)
      * @return string
-     * @throws \Mmi\App\KernelException
+     * @throws KernelException
      */
     final public function fetchEnd()
     {
@@ -554,7 +567,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje etykietę pola
      * @return string
-     * @throws \Mmi\App\KernelException
+     * @throws KernelException
      */
     public function fetchLabel()
     {
@@ -574,7 +587,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje pole
      * @return string
-     * @throws \Mmi\App\KernelException
+     * @throws KernelException
      */
     public function fetchField()
     {
@@ -589,7 +602,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje opis pola
      * @return string
-     * @throws \Mmi\App\KernelException
+     * @throws KernelException
      */
     final public function fetchDescription()
     {
@@ -606,7 +619,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     /**
      * Buduje błędy pola
      * @return string
-     * @throws \Mmi\App\KernelException
+     * @throws KernelException
      */
     final public function fetchErrors()
     {
@@ -631,7 +644,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
                 $html .= $this->{$method}();
             }
             return $html;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }

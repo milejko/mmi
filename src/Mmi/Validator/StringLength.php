@@ -15,11 +15,13 @@ namespace Mmi\Validator;
  *
  * @method self setFrom($from) ustawia od
  * @method self setTo($to) ustawia do
- * @method self setMessage($message) ustawia własną wiadomość walidatora
+ * @method self setMessageMin($messageMin) ustawia własną min. wiadomość walidatora
+ * @method self setMessageMax($messageMax) ustawia własną max. wiadomość walidatora
  *
  * @method integer getFrom() pobiera od
  * @method integer getTo() pobiera do
- * @method string getMessage() pobiera wiadomość
+ * @method string getMessageMin() pobiera wiadomość min.
+ * @method string getMessageMax() pobiera wiadomość max.
  */
 class StringLength extends ValidatorAbstract
 {
@@ -32,13 +34,25 @@ class StringLength extends ValidatorAbstract
     /**
      * Ustawia opcje
      * @param array $options
+     * @param bool $reset
      * @return self
      */
     public function setOptions(array $options = [], $reset = false)
     {
-        return $this->setFrom(current($options))
+        return $this
+            ->setFrom(current($options))
             ->setTo(next($options))
-            ->setMessage(next($options));
+            ->setMessageMin(next($options) ?: self::INVALID_MIN)
+            ->setMessageMax(next($options) ?: self::INVALID_MAX);
+    }
+
+    /**
+     * Pobiera opis
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Min. ' . $this->getFrom() . ' i maks. ' . $this->getTo() . ' zn.';
     }
 
     /**
@@ -51,11 +65,11 @@ class StringLength extends ValidatorAbstract
     {
         //za krótki
         if ($this->getFrom() && mb_strlen($value) < $this->getFrom()) {
-            return $this->_error([self::INVALID_MIN, [$this->getFrom()]]);
+            return $this->_error([$this->getMessageMin(), [$this->getFrom()]]);
         }
         //za długi
         if ($this->getTo() && mb_strlen($value) > $this->getTo()) {
-            return $this->_error([self::INVALID_MAX, [$this->getTo()]]);
+            return $this->_error([$this->getMessageMax(), [$this->getTo()]]);
         }
         return true;
     }
