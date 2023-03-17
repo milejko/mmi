@@ -24,22 +24,19 @@ class PdoSqlite extends PdoAbstract
     /**
      * Tworzy połączenie z bazą danych
      */
-    public function connect(): self
+    public function connect(): void
     {
-        //pdo do zapisu
-        $this->_upstreamPdo = new \PDO(
+        //pdo do zapisu i odczytu
+        $this->_downstreamPdo = $this->_upstreamPdo = new \PDO(
             $this->_config->driver . ':' . $this->_config->host,
             null,
             null,
             [\PDO::ATTR_PERSISTENT => $this->_config->persistent]
         );
-        //odczyt identycznie
-        $this->_downstreamPdo = $this->_upstreamPdo;
         //połączono
         $this->_connected = true;
         //włączenie funkcjonalności kluczy obcych - domyślnie
         $this->query('PRAGMA foreign_keys = ON');
-        return $this;
     }
 
     /**

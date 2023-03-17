@@ -25,7 +25,7 @@ interface DbInterface
     /**
      * Tworzy połączenie z bazą danych
      */
-    public function connect(): self;
+    public function connect(): void;
 
     /**
      * Zwraca informację o kolumnach tabeli

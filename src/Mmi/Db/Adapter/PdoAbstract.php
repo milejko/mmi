@@ -69,7 +69,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Tworzy połączenie z bazą danych
      */
-    abstract public function connect(): self;
+    abstract public function connect(): void;
 
     /**
      * Zwraca informację o kolumnach tabeli
