@@ -35,10 +35,9 @@ class KernelEventHandler
      * @param string $errstr treść błędu
      * @param string $errfile plik
      * @param string $errline linia z błędem
-     * @param string $errcontext kontekst
      * @return boolean
      */
-    public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    public static function errorHandler($errno, $errstr, $errfile, $errline)
     {
         throw new KernelException($errno . ': ' . $errstr . '[' . $errfile . ' (' . $errline . ')]');
     }
