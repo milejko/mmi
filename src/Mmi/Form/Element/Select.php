@@ -47,7 +47,7 @@ class Select extends ElementAbstract
         }
         unset($this->_options['value']);
         //nagłówek selecta
-        $html = '<select ' . $this->_getHtmlOptions() . '>';
+        $html = '<select ' . $this->_getHtmlOptions() . '><option value hidden disabled selected>' . $this->view->_('form.select.choose.label') . '</option>';
         //generowanie opcji
         foreach (($this->getMultioptions() ? $this->getMultioptions() : []) as $key => $caption) {
             $disabled = '';
