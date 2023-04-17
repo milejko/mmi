@@ -23,7 +23,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             ->setMultioptions(['foo' => 'bar', 'baz' => 'baz']);
         self::assertEquals('single', $element->getName());
         self::assertEquals('single', $element->getBaseName());
-        self::assertEquals('<select name="single" data-requiredAsterisk="*" data-labelPostfix=":" class="field" ><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
+        self::assertEquals('<select name="single" data-requiredAsterisk="*" data-labelPostfix=":" class="field" ><option value hidden disabled selected>form.select.choose.label</option><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
     }
 
     public function testIfMultiselectIsProperlyRendered(): void
@@ -33,6 +33,6 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             ->setMultioptions(['foo' => 'bar', 'baz' => 'baz']);
         self::assertEquals('multi', $element->getName());
         self::assertEquals('multi', $element->getBaseName());
-        self::assertEquals('<select name="multi[]" data-requiredAsterisk="*" data-labelPostfix=":" class="field" multiple="" ><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
+        self::assertEquals('<select name="multi[]" data-requiredAsterisk="*" data-labelPostfix=":" class="field" multiple="" ><option value hidden disabled selected>form.select.choose.label</option><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
     }
 }
