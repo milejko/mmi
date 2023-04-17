@@ -16,22 +16,15 @@ namespace Mmi\Cache;
 class Cache implements CacheInterface, SystemCacheInterface
 {
     /**
-     * Konfiguracja bufora
-     * @var CacheConfig
-     */
-    private $_config;
-
-    /**
      * Handler bufora
      * @var CacheHandlerInterface
      */
-    private $_handler;
+    private $handler;
 
     /**
      * Rejestr bufora
-     * @var CacheRegistry
      */
-    private $_registry;
+    private array $registry = [];
 
     /**
      * Maksymalna długość bufora
@@ -41,12 +34,8 @@ class Cache implements CacheInterface, SystemCacheInterface
     /**
      * Konstruktor, wczytuje konfigurację i ustawia handler
      */
-    public function __construct(CacheConfig $config)
+    public function __construct(private CacheConfig $config)
     {
-        //ustawienie configu
-        $this->_config = $config;
-        //powoływanie rejestru
-        $this->_registry = new CacheRegistry();
     }
 
     /**
@@ -55,7 +44,7 @@ class Cache implements CacheInterface, SystemCacheInterface
      */
     public function getConfig(): CacheConfig
     {
-        return $this->_config;
+        return $this->config;
     }
 
     /**
@@ -64,18 +53,18 @@ class Cache implements CacheInterface, SystemCacheInterface
      * @return mixed
      * @throws CacheException
      */
-    public function load(string $key)
+    public function load(string $key): mixed
     {
         //bufor nieaktywny
         if (!$this->isActive()) {
             return null;
         }
-        //pobranie z rejestru aplikacji jeśli istnieje
-        if ($this->getRegistry()->issetOption($key)) {
-            return $this->getRegistry()->getOption($key);
+        //pobranie z rejestru jeśli istnieje
+        if (array_key_exists($key, $this->registry)) {
+            return $this->registry[$key];
         }
         //zwrot zwalidowanych danych
-        return $this->validateAndPrepareBackendData($key, $this->_handler->load($key));
+        return $this->validateAndPrepareBackendData($key, $this->handler->load($key));
     }
 
     /**
@@ -93,12 +82,12 @@ class Cache implements CacheInterface, SystemCacheInterface
         //brak podanego klucza (użycie domyślnego z cache)
         if (!$lifetime) {
             //jeśli null - użycie domyślnego, jeśli zero lub false to maksymalny
-            $lifetime = $lifetime === null ? $this->_config->lifetime : ($lifetime == 0 ? self::MAX_LIFETIME : $lifetime);
+            $lifetime = $lifetime === null ? $this->config->lifetime : ($lifetime == 0 ? self::MAX_LIFETIME : $lifetime);
         }
         //zapis w rejestrze
-        $this->getRegistry()->setOption($key, $data);
+        $this->registry[$key] = $data;
         //zapis w handlerzie
-        return (bool)$this->_handler->save($key, $this->_setCacheData($data, time() + $lifetime), $lifetime);
+        return (bool)$this->handler->save($key, $this->setCacheData($data, time() + $lifetime), $lifetime);
     }
 
     /**
@@ -114,9 +103,9 @@ class Cache implements CacheInterface, SystemCacheInterface
             return true;
         }
         //usunięcie z rejestru
-        $this->getRegistry()->unsetOption($key);
+        unset($this->registry[$key]);
         //usunięcie handlerem
-        return (bool)$this->_handler->delete($key);
+        return (bool)$this->handler->delete($key);
     }
 
     /**
@@ -129,9 +118,9 @@ class Cache implements CacheInterface, SystemCacheInterface
             return;
         }
         //czyszczenie rejestru
-        $this->getRegistry()->setOptions([], true);
-        //czyszczenie do handler
-        $this->_handler->deleteAll();
+        $this->registry = [];
+        //czyszczenie w handlerze
+        $this->handler->deleteAll();
     }
 
     /**
@@ -142,30 +131,18 @@ class Cache implements CacheInterface, SystemCacheInterface
     public function isActive(): bool
     {
         //sprawdzenie aktywności
-        if (!$this->_config->active) {
+        if (!$this->config->active) {
             return false;
         }
         //ustawienie handleru
-        $this->_setupHandler();
+        $this->setupHandler();
         return true;
     }
 
     /**
-     * Zwraca rejestr bufora
-     * @return CacheRegistry
-     */
-    protected function getRegistry()
-    {
-        return $this->_registry;
-    }
-
-    /**
      * Serializuje dane i stempluje datą wygaśnięcia
-     * @param mixed $data dane
-     * @param int $expire wygasa
-     * @return string
      */
-    protected function _setCacheData($data, $expire)
+    protected function setCacheData(mixed $data, int $expire): string
     {
         return \serialize(['d' => $data, 'e' => $expire]);
     }
@@ -174,9 +151,9 @@ class Cache implements CacheInterface, SystemCacheInterface
      * Ustawia handler bufora
      * @param CacheHandlerInterface $handler
      */
-    protected function _setHandler(CacheHandlerInterface $handler)
+    protected function setHandler(CacheHandlerInterface $handler): void
     {
-        $this->_handler = $handler;
+        $this->handler = $handler;
     }
 
     /**
@@ -184,22 +161,26 @@ class Cache implements CacheInterface, SystemCacheInterface
      * @param mixed $data dane
      * @return mixed
      */
-    protected function validateAndPrepareBackendData($key, $data)
+    protected function validateAndPrepareBackendData($key, $data): mixed
     {
+        //brak danych
+        if (null === $data) {
+            return null;
+        }
         //niepoprawna serializacja
-        if (!($data = \unserialize($data ?? ''))) {
-            return;
+        if (!($data = \unserialize($data))) {
+            return null;
         }
         //dane niepoprawne
         if (!array_key_exists('e', $data) || !array_key_exists('d', $data)) {
-            return;
+            return null;
         }
         //dane wygasłe
         if ($data['e'] <= time()) {
-            return;
+            return null;
         }
         //zapis danych do rejestru
-        $this->getRegistry()->setOption($key, $data['d']);
+        $this->registry[$key] = $data['d'];
         //zwrot danych
         return $data['d'];
     }
@@ -208,15 +189,15 @@ class Cache implements CacheInterface, SystemCacheInterface
      * Ustawianie handlera
      * @throws CacheException
      */
-    protected function _setupHandler()
+    protected function setupHandler(): void
     {
         //handler już ustawiony
-        if (null !== $this->_handler) {
+        if (null !== $this->handler) {
             return;
         }
         //określanie klasy handlera
-        $handlerClassName = '\\Mmi\\Cache\\' . ucfirst($this->_config->handler) . 'Handler';
+        $handlerClassName = '\\Mmi\\Cache\\' . ucfirst($this->config->handler) . 'Handler';
         //powoływanie obiektu handlera
-        $this->_setHandler(new $handlerClassName($this));
+        $this->setHandler(new $handlerClassName($this));
     }
 }
