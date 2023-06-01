@@ -116,6 +116,9 @@ class Structure
                 continue;
             }
             $objectName = substr(basename($file), 0, -4);
+            if (!class_exists($namespace . '\\' . $objectName)) {
+                continue;
+            }
             $components[($namespaceAlias ?: $namespace) . '\\' . $objectName] = $namespace . '\\' . $objectName;
         }
     }
