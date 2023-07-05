@@ -194,6 +194,21 @@ abstract class ElementAbstract extends \Mmi\OptionObject
     }
 
     /**
+     * Pobiera walidator
+     * @param string $validatorClass
+     * @return self
+     */
+    final public function getValidator(string $validatorClass)
+    {
+        foreach ($this->getValidators() as $validator) {
+            if (get_class($validator) === $validatorClass) {
+                return $validator;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Usuwa walidator
      * @param string $validatorClass
      * @return self
