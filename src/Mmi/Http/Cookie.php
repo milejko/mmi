@@ -33,7 +33,7 @@ class Cookie
     public function __construct($name = null, $value = null, $domain = null, $expire = 0, $path = '/', $secure = false, $httpOnly = false)
     {
         if (!is_null($name)) {
-            setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+            setcookie((string) $name, (string) $value, $expire, (string) $path, (string) $domain, $secure, $httpOnly);
         }
         $this->_options['name'] = $name;
         $this->_options['value'] = $value;

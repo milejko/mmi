@@ -146,7 +146,7 @@ class HttpServerEnv
         $this->httpAcceptEncoding = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_ENCODING', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->httpHost = filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->httpOrigin = filter_input(INPUT_SERVER, 'HTTP_ORIGIN', FILTER_SANITIZE_SPECIAL_CHARS);
-        $this->httpReferer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING);
+        $this->httpReferer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_DEFAULT);
         $this->httpSecure = ((filter_input(INPUT_SERVER, 'HTTPS') == 'on') || (filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_PROTO') == 'https')) ? true : false;
         $this->httpUserAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->httpRange = filter_input(INPUT_SERVER, 'HTTP_RANGE', FILTER_SANITIZE_SPECIAL_CHARS);
