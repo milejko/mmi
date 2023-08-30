@@ -40,7 +40,7 @@ class File extends ElementAbstract
         //no value
         $this->setIgnore();
         $fieldName = str_replace(['[', ']'], '', $this->getName());
-        $fieldNameWithSquareBracket = $fieldName.'[]';
+        $fieldNameWithSquareBracket = $fieldName . '[]';
         //brak załadowanych plików
         if (App::$di->get(Request::class)->getFiles()->isEmpty()) {
             return $this;
@@ -98,7 +98,7 @@ class File extends ElementAbstract
             }
             $result = false;
             //dodawanie wiadomości z walidatora
-            $this->addError($validator->getMessage() ? $validator->getMessage() : $validator->getError());
+            $this->addError($validator->getError());
         }
         //zwrot rezultatu wszystkich walidacji (iloczyn)
         return $result;

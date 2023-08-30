@@ -458,7 +458,7 @@ abstract class ElementAbstract extends \Mmi\OptionObject
             }
             $result = false;
             //dodawanie wiadomości z walidatora
-            $this->addError($validator->getMessage() ? $validator->getMessage() : $validator->getError());
+            $this->addError($validator->getError());
         }
         //zwrot rezultatu wszystkich walidacji (iloczyn)
         return $result;
