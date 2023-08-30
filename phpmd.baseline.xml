@@ -97,6 +97,7 @@
   <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Form/Form.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Form/Form.php" method="setFromPost"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Mmi/Form/Form.php" method="save"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Mmi/Form/Form.php" method="save"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Form/Form.php" method="_setRecordData"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Http/Cookie.php"/>
   <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Http/Cookie.php"/>

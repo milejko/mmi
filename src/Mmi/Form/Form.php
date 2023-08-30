@@ -393,11 +393,14 @@ abstract class Form extends \Mmi\OptionObject
         }
         //wybranie DAO i rozpoczęcie transakcji
         App::$di->get(DbInterface::class)->beginTransaction();
+        if (false === $this->beforeSave()) {
+            return $this->_saved = false;
+        }
         //ustawianie danych rekordu
         $this->_setRecordData();
         //metoda przed zapisem, zapis rekordu
         //transakcja jest odrzucana w przypadku niepowodzenia którejkolwiek
-        if (false === $this->beforeSave() || false === $this->_record->save()) {
+        if (false === $this->_record->save()) {
             //odrzucenie transakcji
             App::$di->get(DbInterface::class)->rollback();
             return $this->_saved = false;
