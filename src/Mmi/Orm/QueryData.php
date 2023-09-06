@@ -130,6 +130,22 @@ class QueryData
 
     /**
      * Zwraca tablicę asocjacyjną (pary)
+     * @param string $valueName
+     * @return array
+     */
+    final public function findField($valueName)
+    {
+        //inicjalizacja pustej tablicy
+        $kv = [];
+        //iteracja po danych
+        foreach ($this->db->select($this->db->prepareField($valueName), $this->_prepareFrom(), $this->_query->getQueryCompile()->where, $this->_query->getQueryCompile()->groupBy, $this->_query->getQueryCompile()->order, $this->_query->getQueryCompile()->limit, $this->_query->getQueryCompile()->offset, $this->_query->getQueryCompile()->bind) as $row) {
+            $kv[] = current($row);
+        }
+        return $kv;
+    }
+
+    /**
+     * Zwraca tablicę asocjacyjną (pary)
      * @param string $keyName
      * @param string $valueName
      * @return array

@@ -355,6 +355,15 @@ class Query
     }
 
     /**
+     * Pobiera wartosci wybranego pole w postaci tablicy
+     * @return array
+     */
+    final public function findField(string $field)
+    {
+        return (new QueryData($this))->findField($field);
+    }
+
+    /**
      * Pobiera wybrane pola w postaci tabeli
      * @return array
      */
