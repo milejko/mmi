@@ -47,6 +47,7 @@ return [
         //próba powołania drivera
         $db = new $driver($dbConfig);
         //set DB profiler
+        $container->get('app.debug.enabled') ? $db->setProfiler($container->get(DbProfilerInterface::class)) : null;
         $db->setProfiler($container->get(DbProfilerInterface::class));
         $container->get(AppProfilerInterface::class)->event(DbInterface::class . ': database setup');
         return $db;
