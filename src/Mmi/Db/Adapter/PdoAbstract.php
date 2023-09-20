@@ -386,7 +386,7 @@ abstract class PdoAbstract implements DbInterface
     /**
      * Zwraca profiler
      */
-    final public function getProfiler(): DbProfiler
+    final public function getProfiler(): ?DbProfiler
     {
         return $this->_profiler;
     }
