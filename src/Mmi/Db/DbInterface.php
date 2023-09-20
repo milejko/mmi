@@ -166,5 +166,5 @@ interface DbInterface
     /**
      * Zwraca profiler
      */
-    public function getProfiler(): DbProfiler;
+    public function getProfiler(): ?DbProfiler;
 }
