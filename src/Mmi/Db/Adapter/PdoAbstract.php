@@ -178,8 +178,6 @@ abstract class PdoAbstract implements DbInterface
         } catch (PDOException $e) {
             throw new DbException(get_called_class() . ': ' . $e->getMessage() . ' --- ' . $sql);
         }
-        //przypisanie rezultatu do zmiennej w statement
-        $statement->result = $result;
         //jeśli rezultat to nie 1, wyrzucony zostaje wyjątek bazodanowy
         if ($result != 1) {
             $error = $statement->errorInfo();

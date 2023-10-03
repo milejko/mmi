@@ -7,7 +7,7 @@
 { pkgs ? import <nixpkgs> {}}:
 
 let
-    myPhp = pkgs.php81.buildEnv {
+    myPhp = pkgs.php82.buildEnv {
         extensions = ({ enabled, all }: enabled ++ [ all.xdebug ] ++ [ all.apcu ]);
         extraConfig = ''
             memory_limit=256M
