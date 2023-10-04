@@ -359,4 +359,5 @@
   <violation rule="PHPMD\Rule\Design\NumberOfChildren" file="src/Mmi/Validator/ValidatorAbstract.php"/>
   <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Mmi/Validator/ValidatorAbstract.php"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Validator/ValidatorAbstract.php" method="_error"/>
+  <violation rule="PHPMD\Rule\CleanCode\ErrorControlOperator" file="src/Mmi/Image/Image.php" method="inputToResource"/>
 </phpmd-baseline>

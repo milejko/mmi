@@ -33,7 +33,7 @@ class Image
         }
         //jeśli krótki content zakłada że to ścieżka pliku
         try {
-            $resource = imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
+            $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
         } catch (\Exception $e) {
             //nothing to do
         }
