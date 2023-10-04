@@ -35,7 +35,11 @@ class Image
         try {
             $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
         } catch (\Exception $e) {
-            //nothing to do
+            try {
+                $resource = @imagecreatefrompng($input);
+            } catch (\Exception $e) {
+                //do nothing
+            }
         }
         if (!isset($resource)) {
             throw new KernelException('Image invalid');
