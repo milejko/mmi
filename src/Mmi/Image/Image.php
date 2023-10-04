@@ -10,6 +10,8 @@
 
 namespace Mmi\Image;
 
+use Mmi\App\KernelException;
+
 /**
  * Klasa obróbki obrazów
  */
@@ -30,7 +32,14 @@ class Image
             return $input;
         }
         //jeśli krótki content zakłada że to ścieżka pliku
-        $resource = imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
+        try {
+            $resource = imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
+        } catch (\Exception $e) {
+            //nothing to do
+        }
+        if (!isset($resource)) {
+            throw new KernelException('Image invalid');
+        }
         //konwersja do truecolor
         if (!imageistruecolor($resource)) {
             imagepalettetotruecolor($resource);
