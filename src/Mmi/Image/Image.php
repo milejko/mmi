@@ -22,6 +22,7 @@ class Image
 
     /**
      * Konwertuje string, lub binaria do zasobu GD
+     * @TODO: remove duality of this function (allow only path)
      * @param mixed $input
      * @return resource
      */
@@ -32,17 +33,9 @@ class Image
             return $input;
         }
         //jeśli krótki content zakłada że to ścieżka pliku
-        try {
-            $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
-        } catch (\Exception $e) {
-            try {
-                $resource = @imagecreatefrompng($input);
-            } catch (\Exception $e) {
-                //do nothing
-            }
-        }
-        if (!isset($resource)) {
-            throw new KernelException('Image invalid');
+        $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
+        if (null === $resource) {
+            $resource = @imagecreatefrompng($input);
         }
         //konwersja do truecolor
         if (!imageistruecolor($resource)) {
