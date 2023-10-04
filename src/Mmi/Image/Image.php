@@ -33,8 +33,9 @@ class Image
             return $input;
         }
         //jeśli krótki content zakłada że to ścieżka pliku
-        $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
-        if (null === $resource) {
+        try {
+            $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
+        } catch (\Exception $e) {
             $resource = @imagecreatefrompng($input);
         }
         //konwersja do truecolor
