@@ -54,21 +54,25 @@ class RequestFiles
 
     /**
      * Obsługa prostego formularza (pola z nazwami string)
-     * @param array $fileData
+     * @param array $fieldFiles
+     * @return array
+     * @throws HttpException
      */
-    private function _handleFieldFiles(array $fieldFiles)
+    private function _handleFieldFiles(array $fieldFiles): array
     {
-        //w polu znajduje się jeden plik
+        //w polu znajduje się jeden plik
         if (null !== ($file = $this->_handleSingleUpload($fieldFiles))) {
             return [$file];
         }
         //w polu znajduje się kilka plików (dołączanie plików)
-        return $this->_handleMultiUpload($fieldFiles);
+        return $this->_handleMultiUpload($this->_pivot($fieldFiles));
     }
 
     /**
      * Obsługa formularza z róznymi typami pól: typu files, user[files], lub user[file][]
      * @param array $data
+     * @param array $node
+     * @throws HttpException
      */
     private function _handleForm(array $data, array &$node)
     {
@@ -83,7 +87,7 @@ class RequestFiles
                 $this->_handleForm($expectedFieldFiles, $node[$nodeName]);
                 continue;
             }
-            //pusta ściezka, lub brak nazwy (uszkodzony plik)
+            //pusta ściezka, lub brak nazwy (uszkodzony plik)
             if ('' == $expectedFieldFiles[self::FILE_PATH_KEY] || !isset($expectedFieldFiles[self::FILE_NAME_KEY])) {
                 continue;
             }
@@ -94,17 +98,18 @@ class RequestFiles
     /**
      * Obsługa pojedynczego uploadu
      * @param array $fileData dane pliku
-     * @return \Mmi\Http\RequestFile
+     * @return RequestFile|null
+     * @throws HttpException
      */
-    private function _handleSingleUpload(array $fileData)
+    private function _handleSingleUpload(array $fileData): ?RequestFile
     {
+        //brak ścieżki pliku
+        if (!isset($fileData[self::FILE_PATH_KEY]) || '' === $fileData[self::FILE_PATH_KEY]) {
+            return null;
+        }
         //multiupload (pomijany w tej metodzie)
         if (is_array($fileData[self::FILE_NAME_KEY])) {
-            return;
-        }
-        //brak ściezki pliku
-        if ('' == $fileData[self::FILE_PATH_KEY]) {
-            return;
+            return null;
         }
         //tworzenie obiektu plików na tablicy z danymi
         return new RequestFile($fileData);
@@ -114,32 +119,18 @@ class RequestFiles
      * Obsługa uploadu wielu plików (HTML5)
      * @param array $fieldFiles dane plików
      * @return RequestFile[]
+     * @throws HttpException
      */
-    private function _handleMultiUpload(array $fieldFiles)
+    private function _handleMultiUpload(array $fieldFiles): array
     {
         $files = [];
         //iteracja po plikach
-        foreach ($this->_pivot($fieldFiles) as $fileName => $fileData) {
-            //plik uszkodzony, lub brak ściezki pliku
-            if (isset($fileData[self::FILE_PATH_KEY]) && '' != $fileData[self::FILE_PATH_KEY]) {
-                //dodawanie pliku do tabeli
-                is_int($fileName) ?
-                    $files[$fileName] = new RequestFile($fileData) : $files[$fileName][] = new RequestFile($fileData);
+        foreach ($fieldFiles as $fileName => $fileData) {
+            if (!is_array($fileData)) {
                 continue;
             }
-            if (!isset($files[$fileName])) {
-                $files[$fileName] = [];
-            }
-            //iterate multiple files in multiupload
-            foreach ($fileData as $singleFile) {
-                if (isset($singleFile[self::FILE_PATH_KEY]) && '' != $singleFile[self::FILE_PATH_KEY]) {
-                    //dodawanie pliku do tabeli
-                    $files[$fileName][] = new RequestFile($singleFile);
-                }
-            }
-            //empty field
-            if (empty($files[$fileName])) {
-                unset($files[$fileName]);
+            if ($file = $this->_handleSingleUpload($fileData) ?? $this->_handleMultiUpload($fileData)) {
+                $files[$fileName] = $file;
             }
         }
         return $files;
@@ -160,18 +151,26 @@ class RequestFiles
                 continue;
             }
             //iteracja po polach
-            foreach ($propertyValues as $fieldName => $propertyValue) {
-                //wartość skalarna (jeden plik w multiuploaderze)
-                if (!is_array($propertyValue)) {
-                    $pivot[$fieldName][$fileProperty] = $propertyValue;
-                    continue;
-                }
-                //wiele plików w multiuploaderze
-                foreach ($propertyValue as $index => $scalarPropertyValue) {
-                    $pivot[$fieldName][$index][$fileProperty] = $scalarPropertyValue;
-                }
-            }
+            $this->_completePivot($fileProperty, $propertyValues, $pivot);
         }
         return $pivot;
+    }
+
+    /**
+     * Kompletuje tablice z danymi do grafik
+     * @param string $fileProperty
+     * @param array $propertyValues
+     * @param $pivot
+     * @return void
+     */
+    private function _completePivot(string $fileProperty, array $propertyValues, &$pivot): void
+    {
+        foreach ($propertyValues as $key => $value) {
+            if (is_array($value)) {
+                $this->_completePivot($fileProperty, $value, $pivot[$key]);
+                continue;
+            }
+            $pivot[$key][$fileProperty] = $value;
+        }
     }
 }
