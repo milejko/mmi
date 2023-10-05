@@ -10,8 +10,6 @@
 
 namespace Mmi\Image;
 
-use Mmi\App\KernelException;
-
 /**
  * Klasa obróbki obrazów
  */
@@ -22,7 +20,6 @@ class Image
 
     /**
      * Konwertuje string, lub binaria do zasobu GD
-     * @TODO: remove duality of this function (allow only path)
      * @param mixed $input
      * @return resource
      */
@@ -32,12 +29,9 @@ class Image
         if (\is_resource($input) || \is_object($input)) {
             return $input;
         }
+        error_reporting(0);
         //jeśli krótki content zakłada że to ścieżka pliku
-        try {
-            $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
-        } catch (\Exception $e) {
-            $resource = @imagecreatefrompng($input);
-        }
+        $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
         //konwersja do truecolor
         if (!imageistruecolor($resource)) {
             imagepalettetotruecolor($resource);
