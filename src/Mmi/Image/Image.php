@@ -29,7 +29,7 @@ class Image
         if (\is_resource($input) || \is_object($input)) {
             return $input;
         }
-        $nullErrorHandler = set_error_handler(function() {
+        $nullErrorHandler = set_error_handler(function () {
             restore_error_handler();
             return true;
         });
