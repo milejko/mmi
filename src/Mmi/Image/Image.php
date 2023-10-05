@@ -29,6 +29,8 @@ class Image
         if (\is_resource($input) || \is_object($input)) {
             return $input;
         }
+        $nullErrorHandler = set_error_handler(function() { return true; });
+        set_error_handler($nullErrorHandler);
         error_reporting(0);
         //jeśli krótki content zakłada że to ścieżka pliku
         $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
