@@ -484,7 +484,7 @@ abstract class Form extends \Mmi\OptionObject
         //rendering poszczególnych elementów
         foreach ($this->_elements as $element) {
             //ustawienie nazwy po nazwie forma
-            $element->setBaseName($this->getBaseName() . '[' . rtrim($element->getBaseName(), '[]') . ']' . (substr($element->getBaseName(), -2) == '[]' ? '[]' : ''));
+            $element->setName($this->getBaseName() . '[' . rtrim($element->getBaseName(), '[]') . ']' . (substr($element->getBaseName(), -2) == '[]' ? '[]' : ''));
             /* @var $element \Mmi\Form\Element\ElementAbstract */
             $html .= $element->__toString();
         }
