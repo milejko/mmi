@@ -50,7 +50,7 @@
         ],
         "report:metrics": "phpmetrics --report-html=./web/build/metrics ./src",
         "test:security-checker": "security-checker security:check",
-        "test:phpstan": "phpstan --level=1 --no-progress --memory-limit=512M --xdebug analyse src tests -c phpstan-baseline.neon",
+        "test:phpstan": "XDEBUG_MODE=off phpstan --level=1 --no-progress --memory-limit=512M analyse src tests -c phpstan-baseline.neon",
         "test:phpcs": "phpcs",
         "test:phpmd": "phpmd ./src text phpmd.xml.dist",
         "test:phpunit": "XDEBUG_MODE=coverage phpunit --coverage-clover ./.phpunit.coverage.clover.xml --coverage-html ./web/build/phpunit",

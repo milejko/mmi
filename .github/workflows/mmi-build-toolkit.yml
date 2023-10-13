@@ -1,14 +1,36 @@
-name: "Code analysis and tests"
+name: "Code analysis and checks"
+
 on:
+
   pull_request:
   push:
+
 jobs:
-  mmi-build-toolkit:
+
+  php81-checks:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v18
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Build docker image
+      uses: docker/build-push-action@v5
       with:
-        nix_path: nixpkgs=channel:nixos-unstable
-    - run: nix-build
-    - run: nix-shell --run "composer test:all"
+        push: false
+        file: php81.Dockerfile
+        tags: php81-checks
+    - name: Run tests
+      run: docker run php81-checks sh -c "composer install && composer test:all"
+
+  php82-checks:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Build docker image
+      uses: docker/build-push-action@v5
+      with:
+        push: false
+        file: php82.Dockerfile
+        tags: php82-checks
+    - name: Run tests
+      run: docker run php82-checks sh -c "composer install && composer test:all"
