@@ -16,12 +16,10 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: false
-        file: Dockerfile@8.1
-        tags: mmi81
-    - name: Install dependencies
-      run: docker run mmi81 composer install
+        file: php81.Dockerfile
+        tags: php81-checks
     - name: Run tests
-      run: docker run mmi81 sh -c "composer install && composer test:all"
+      run: docker run php81-checks sh -c "composer install && composer test:all"
 
   php82-checks:
     runs-on: ubuntu-latest
@@ -32,6 +30,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: false
-        tags: mmi82
+        file: php82.Dockerfile
+        tags: php82-checks
     - name: Run tests
-      run: docker run mmi82 sh -c "composer install && composer test:all"
+      run: docker run php82-checks sh -c "composer install && composer test:all"
