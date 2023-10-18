@@ -37,7 +37,7 @@ class Image
         //jeśli krótki content zakłada że to ścieżka pliku
         $resource = @imagecreatefromstring((strlen($input) < self::BINARY_MIN_LENGTH) ? file_get_contents($input) : $input);
         //konwersja do truecolor
-        if (!imageistruecolor($resource)) {
+        if (false !== $resource && !imageistruecolor($resource)) {
             imagepalettetotruecolor($resource);
         }
         return $resource;
