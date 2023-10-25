@@ -4,10 +4,14 @@ on:
 
   pull_request:
   push:
-
+    
 jobs:
 
-  php81-checks:
+  php8-checks:
+    strategy:
+      matrix:
+        version: ['8.1', '8.2']
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -16,20 +20,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: false
-        tags: php81-checks
-        build-args: PHP_VERSION=8.1
+        tags: php${{ matrix.version }}-checks
+        build-args: PHP_VERSION=${{ matrix.version }}
     - name: Run tests
-      run: docker run php81-checks sh -c "composer install && composer test:all"
-
-  php82-checks:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Build docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: false
-        tags: php82-checks
-    - name: Run tests
-      run: docker run php82-checks sh -c "composer install && composer test:all"
+      run: docker run php${{ matrix.version }}-checks sh -c "composer install && composer test:all"
