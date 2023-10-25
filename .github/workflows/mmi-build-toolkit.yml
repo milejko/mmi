@@ -16,8 +16,8 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: false
-        file: php81.Dockerfile
         tags: php81-checks
+        build-args: PHP_VERSION=8.1
     - name: Run tests
       run: docker run php81-checks sh -c "composer install && composer test:all"
 
@@ -30,7 +30,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: false
-        file: php82.Dockerfile
         tags: php82-checks
     - name: Run tests
       run: docker run php82-checks sh -c "composer install && composer test:all"
