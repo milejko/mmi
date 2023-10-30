@@ -109,7 +109,9 @@ abstract class ElementAbstract extends OptionObject
     {
         //ustawia nazwę i opcje domyślne
         $this->_baseName = $name;
-        $this->setName($name)
+        $this
+            ->setId($name)
+            ->setName($name)
             ->setRequired(false)
             ->setRequiredAsterisk('*')
             ->setLabelPostfix(':')
@@ -121,7 +123,7 @@ abstract class ElementAbstract extends OptionObject
     }
 
     /**
-     * Ustawia nazwę podstawową
+     * Pobiera nazwę podstawową
      * @return string
      */
     public function getBaseName()
@@ -350,10 +352,7 @@ abstract class ElementAbstract extends OptionObject
     public function setForm(Form $form)
     {
         $this->_form = $form;
-        //ustawianie ID
-        $this->setId($form->getBaseName() . '-' . $this->getBaseName());
-        //ustawienie nazwy po nazwie forma
-        $this->setName($this->_form->getBaseName() . '[' . rtrim($this->getBaseName(), '[]') . ']' . (substr($this->getBaseName(), -2) == '[]' ? '[]' : ''));
+
         return $this;
     }
 

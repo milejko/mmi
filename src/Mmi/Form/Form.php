@@ -129,6 +129,10 @@ abstract class Form extends \Mmi\OptionObject
     {
         //ustawianie opcji na elemencie
         $this->_elements[$element->getBaseName()] = $element->setForm($this);
+        //ustawianie domyslne ID dla dodawanego elementu
+        $element->setId($this->getBaseName() . '-' . $element->getBaseName());
+        //ustawienie domyslna nazwe dla dodawanego elementu
+        $element->setName($this->getBaseName() . '[' . $element->getBaseName() . ']');
         return $this;
     }
 
@@ -483,9 +487,6 @@ abstract class Form extends \Mmi\OptionObject
         $html = $this->start();
         //rendering poszczególnych elementów
         foreach ($this->_elements as $element) {
-            //ustawienie nazwy po nazwie forma
-            $element->setName($this->getBaseName() . '[' . rtrim($element->getBaseName(), '[]') . ']' . (substr($element->getBaseName(), -2) == '[]' ? '[]' : ''));
-            /* @var $element \Mmi\Form\Element\ElementAbstract */
             $html .= $element->__toString();
         }
         return $html . $this->end();
