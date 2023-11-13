@@ -23,13 +23,13 @@ jobs:
       with:
         push: false
         build-args: PHP_VERSION=${{ matrix.version }}
-        tags: mmi-php${{ matrix.version }}:latest
-        outputs: type=docker,dest=/tmp/mmi-php${{ matrix.version }}.tar
+        tags: mmi${{ matrix.version }}:latest
+        outputs: type=docker,dest=/tmp/mmi${{ matrix.version }}.tar
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: mmi-php${{ matrix.version }}:latest
-        path: /tmp/mmi-php${{ matrix.version }}.tar
+        name: mmi${{ matrix.version }}
+        path: /tmp/mmi${{ matrix.version }}.tar
 
   PHPUnit:
     needs: build-images
@@ -42,12 +42,12 @@ jobs:
     - name: Download image
       uses: actions/download-artifact@v3
       with:
-        name: mmi-php${{ matrix.version }}
+        name: mmi${{ matrix.version }}
         path: /tmp
     - name: Run PHPUnit
       run: |
-        docker load --input /tmp/mmi-php${{ matrix.version }}
-        docker run mmi-php${{ matrix.version }}:latest composer test:all
+        docker load --input /tmp/mmi${{ matrix.version }}.tar
+        docker run mmi${{ matrix.version }}:latest composer test:all
 
   PHPMD:
     needs: build-images
@@ -60,11 +60,11 @@ jobs:
     - name: Download image
       uses: actions/download-artifact@v3
       with:
-        name: mmi-php${{ matrix.version }}
+        name: mmi${{ matrix.version }}
         path: /tmp
     - name: Run PHPUnit
       run: |
-        docker load --input /tmp/mmi-php${{ matrix.version }}
+        docker load --input /tmp/mmi${{ matrix.version }}.tar
         docker run mmi-php${{ matrix.version }}:latest composer test:phpmd
 
   PHPCS:
@@ -78,11 +78,11 @@ jobs:
     - name: Download image
       uses: actions/download-artifact@v3
       with:
-        name: mmi-php${{ matrix.version }}
+        name: mmi${{ matrix.version }}
         path: /tmp
     - name: Run PHPUnit
       run: |
-        docker load --input /tmp/mmi-php${{ matrix.version }}
+        docker load --input /tmp/mmi${{ matrix.version }}.tar
         docker run mmi-php${{ matrix.version }}:latest composer test:cs    
         
   PHPSTAN:
@@ -96,9 +96,9 @@ jobs:
     - name: Download image
       uses: actions/download-artifact@v3
       with:
-        name: mmi-php${{ matrix.version }}
+        name: mmi${{ matrix.version }}
         path: /tmp
     - name: Run PHPUnit
       run: |
-        docker load --input /tmp/mmi-php${{ matrix.version }}
+        docker load --input /tmp/mmi${{ matrix.version }}.tar
         docker run mmi-php${{ matrix.version }}:latest composer test:phpstan  
