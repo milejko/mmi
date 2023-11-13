@@ -7,7 +7,7 @@ on:
     
 jobs:
 
-  php8-checks:
+  build-images:
     strategy:
       matrix:
         version: ['8.1', '8.2']
@@ -20,7 +20,24 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: false
-        tags: php${{ matrix.version }}-checks
+        tags: mmi-php${{ matrix.version }}:latest
+        outputs: type=docker,dest=/tmp/mmi-php${{ matrix.version }}.tar
         build-args: PHP_VERSION=${{ matrix.version }}
-    - name: Run tests
-      run: docker run php${{ matrix.version }}-checks composer test:all
+
+  php8-checks:
+    needs: build-images
+    strategy:
+      matrix:
+        version: ['8.1', '8.2']
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download image
+      uses: actions/download-artifact@v3
+      with:
+        name: mmi-php${{ matrix.version }}
+        path: /tmp
+    - name: Run PHPUnit
+      run: |
+        docker load --input /tmp/mmi-php${{ matrix.version }}
+        docker run mmi-php${{ matrix.version }}:latest composer test:all
