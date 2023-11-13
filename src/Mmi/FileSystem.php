@@ -124,6 +124,7 @@ class FileSystem
         try {
             rmdir($dirName);
         } catch (\Exception $e) {
+            return false;
         }
         return true;
     }
