@@ -7,7 +7,7 @@ on:
     
 jobs:
 
-  build-images:
+  php8-checks:
     strategy:
       matrix:
         version: ['8.1', '8.2']
@@ -16,89 +16,11 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
     - name: Build docker image
       uses: docker/build-push-action@v5
       with:
         push: false
+        tags: php${{ matrix.version }}-checks
         build-args: PHP_VERSION=${{ matrix.version }}
-        tags: mmi${{ matrix.version }}:latest
-        outputs: type=docker,dest=/tmp/mmi${{ matrix.version }}.tar
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: mmi${{ matrix.version }}
-        path: /tmp/mmi${{ matrix.version }}.tar
-
-  PHPUnit:
-    needs: build-images
-    strategy:
-      matrix:
-        version: ['8.1', '8.2']
-      fail-fast: true
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download image
-      uses: actions/download-artifact@v3
-      with:
-        name: mmi${{ matrix.version }}
-        path: /tmp
-    - name: Run PHPUnit
-      run: |
-        docker load --input /tmp/mmi${{ matrix.version }}.tar
-        docker run mmi${{ matrix.version }}:latest composer test:all
-
-  PHPMD:
-    needs: build-images
-    strategy:
-      matrix:
-        version: ['8.1', '8.2']
-      fail-fast: true
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download image
-      uses: actions/download-artifact@v3
-      with:
-        name: mmi${{ matrix.version }}
-        path: /tmp
-    - name: Run PHPUnit
-      run: |
-        docker load --input /tmp/mmi${{ matrix.version }}.tar
-        docker run mmi-php${{ matrix.version }}:latest composer test:phpmd
-
-  PHPCS:
-    needs: build-images
-    strategy:
-      matrix:
-        version: ['8.1', '8.2']
-      fail-fast: true
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download image
-      uses: actions/download-artifact@v3
-      with:
-        name: mmi${{ matrix.version }}
-        path: /tmp
-    - name: Run PHPUnit
-      run: |
-        docker load --input /tmp/mmi${{ matrix.version }}.tar
-        docker run mmi-php${{ matrix.version }}:latest composer test:cs    
-        
-  PHPSTAN:
-    needs: build-images
-    strategy:
-      matrix:
-        version: ['8.1', '8.2']
-      fail-fast: true
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download image
-      uses: actions/download-artifact@v3
-      with:
-        name: mmi${{ matrix.version }}
-        path: /tmp
-    - name: Run PHPUnit
-      run: |
-        docker load --input /tmp/mmi${{ matrix.version }}.tar
-        docker run mmi-php${{ matrix.version }}:latest composer test:phpstan  
+    - name: Run tests
+      run: docker run php${{ matrix.version }}-checks sh -c "composer test:all"
