@@ -10,7 +10,7 @@ jobs:
   php8-checks:
     strategy:
       matrix:
-        version: ['8.1', '8.2', '8.0']
+        version: ['8.1', '8.2']
       fail-fast: true
     runs-on: ubuntu-latest
     steps:
