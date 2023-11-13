@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\$event of method Mmi\\\\App\\\\ComposerInstaller\\:\\:_initAutoload\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			message: "#^Parameter \\$event of method Mmi\\\\App\\\\ComposerInstaller\\:\\:initAutoload\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
 			count: 1
 			path: src/Mmi/App/ComposerInstaller.php
 

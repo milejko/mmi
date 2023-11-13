@@ -11,6 +11,7 @@
 namespace Mmi\App;
 
 use Composer\Script\Event;
+use Mmi\FileSystem;
 
 /**
  * Klasa używana przy instalacji composerem
@@ -18,18 +19,24 @@ use Composer\Script\Event;
 class ComposerInstaller
 {
     /**
-     * Pliki dystrybucyjne
-     * @var array
-     */
-    protected static $_distFiles = [
-        'dist' => '',
-    ];
-
-    /**
      * Katalogi systemowe
      * @var array
      */
-    protected static $_sysDirs = ['bin', 'var/cache', 'var/data', 'var/log', 'var/session', 'web/data', 'web/resource'];
+    protected static $sysDirs = ['bin', 'var/cache', 'var/data', 'var/log', 'var/session', 'web/data', 'web/resource'];
+
+    /**
+     * Inicjalizacja autoloadera
+     * @param Event $event
+     */
+    protected static function initAutoload(Event $event)
+    {
+        //określenie katalogu vendorów
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        //ustawianie ścieżki bazowej projektu
+        define('BASE_PATH', realpath($vendorDir . '/../'));
+        //wczytanie autoloadera
+        require $vendorDir . '/autoload.php';
+    }
 
     /**
      * Po aktualizacji
@@ -37,12 +44,7 @@ class ComposerInstaller
      */
     public static function postUpdate(Event $event)
     {
-        //inicjalizacja autoloadera
-        self::_initAutoload($event);
-        //linkowanie zasobów web
-        self::linkModuleWebResources();
-        //kopiowanie binariów z modułów
-        self::_copyExecutables();
+        self::postInstall($event);
     }
 
     /**
@@ -52,68 +54,33 @@ class ComposerInstaller
     public static function postInstall(Event $event)
     {
         //inicjalizacja autoloadera
-        self::_initAutoload($event);
-        //kopiowanie plików z dystrybucji
-        self::_copyDistFiles();
-        //linkowanie zasobów web
-        self::linkModuleWebResources();
+        self::initAutoload($event);
+        //czyszczenie web/resource
+        FileSystem::rmdirRecursive(BASE_PATH . '/web/resource');
+        //tworzenie katalogów systemowych
+        self::createSysDirs();
         //kopiowanie binariów z modułów
-        self::_copyExecutables();
-        //kopiowanie routera dla php -S (tylko w trybie dev)
+        self::copyExecutables();
+        //w trybie deweloperskim linkowanie zasobów i routera dla php -S
         if ($event->isDevMode()) {
+            self::linkModuleWebResources();
             copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/php-serve-router.php', BASE_PATH . '/web/php-serve-router.php');
+            return;
         }
-    }
-
-    /**
-     * Inicjalizacja autoloadera
-     * @param Event $event
-     */
-    protected static function _initAutoload(Event $event)
-    {
-        //określenie katalogu vendorów
-        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
-        //ustawianie ścieżki bazowej projektu
-        define('BASE_PATH', realpath($vendorDir . '/../'));
-        //kopiowanie plików dist
-        self::_createSysDirs();
-        self::_copyDistFiles();
-        //wczytanie autoloadera
-        require $vendorDir . '/autoload.php';
+        //kopiowanie zasobów do web/data
+        self::copyModuleWebResources();
     }
 
     /**
      * Tworzenie katalogów
      */
-    protected static function _createSysDirs()
+    protected static function createSysDirs()
     {
         //iteracja po katalogach obowiązkowych
-        foreach (self::$_sysDirs as $dir) {
+        foreach (self::$sysDirs as $dir) {
             //tworzenie katalogu
             !file_exists(BASE_PATH . '/' . $dir) ? mkdir(BASE_PATH . '/' . $dir, 0777, true) : null;
             chmod($dir, 0777);
-        }
-    }
-
-    /**
-     * Kopiuje pliki z dystrybucji
-     */
-    protected static function _copyDistFiles()
-    {
-        //iteracja po wymaganych plikach
-        foreach (self::$_distFiles as $src => $dest) {
-            //kalkulacja ścieżki
-            $source = BASE_PATH . $src;
-            //brak pliku
-            if (!file_exists($source)) {
-                continue;
-            }
-            //kopiowanie katalogów
-            \Mmi\FileSystem::copyRecursive($source, BASE_PATH . $dest, false);
-            //usuwanie źródła
-            \Mmi\FileSystem::rmdirRecursive($source);
-            //usuwanie placeholderów
-            \Mmi\FileSystem::unlinkRecursive('.placeholder', BASE_PATH . $dest);
         }
     }
 
@@ -126,15 +93,6 @@ class ComposerInstaller
         foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
             //kalkulacja ścieżki linku
             $linkName = BASE_PATH . '/web/resource/' . lcfirst(basename($module));
-            //link istnieje
-            if (is_link($linkName)) {
-                continue;
-            }
-            //czyszczenie katalogu który ma być linkiem
-            if (file_exists($linkName)) {
-                //usuwanie kaskadowe
-                \Mmi\FileSystem::rmdirRecursive($linkName);
-            }
             //istnieje resource web
             if (file_exists($module . '/Resource/web')) {
                 //tworzenie linku
@@ -144,9 +102,26 @@ class ComposerInstaller
     }
 
     /**
+     * Kopiuje zasoby publiczne do /web
+     */
+    public static function copyModuleWebResources()
+    {
+        //iteracja po modułach
+        foreach (\Mmi\Mvc\StructureParser::getModules() as $module) {
+            //kalkulacja ścieżki linku
+            $dirName = BASE_PATH . '/web/resource/' . lcfirst(basename($module));
+            //istnieje resource web
+            if (file_exists($module . '/Resource/web')) {
+                //tworzenie linku
+                FileSystem::copyRecursive($module . '/Resource/web', $dirName);
+            }
+        }
+    }
+
+    /**
      * Kopiuje binaria do /bin
      */
-    protected static function _copyExecutables()
+    protected static function copyExecutables()
     {
         copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/index.php', BASE_PATH . '/web/index.php');
         copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/mmi', BASE_PATH . '/bin/mmi');

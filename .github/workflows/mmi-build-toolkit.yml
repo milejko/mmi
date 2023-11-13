@@ -23,4 +23,4 @@ jobs:
         tags: php${{ matrix.version }}-checks
         build-args: PHP_VERSION=${{ matrix.version }}
     - name: Run tests
-      run: docker run php${{ matrix.version }}-checks sh -c "composer install && composer test:all"
+      run: docker run php${{ matrix.version }}-checks composer test:all

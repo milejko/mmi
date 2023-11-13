@@ -8,6 +8,8 @@ RUN apt update && apt install -yq \
     php${PHP_VERSION}-ldap \
     php${PHP_VERSION}-xdebug
 
-COPY --link . /app
-
 WORKDIR /app
+
+COPY --link . .
+
+RUN composer install
