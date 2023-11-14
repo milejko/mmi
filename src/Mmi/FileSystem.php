@@ -70,8 +70,8 @@ class FileSystem
             if ($file->isDot()) {
                 continue;
             }
-            //katalog
-            if ($file->isDir()) {
+            //katalog (ale nie symlink)
+            if ($file->isDir() && !$file->isLink()) {
                 //zejście rekurencyjne
                 self::unlinkRecursive($fileName, $file->getPathname());
                 continue;
@@ -97,22 +97,8 @@ class FileSystem
      */
     public static function rmdirRecursive($dirName)
     {
-        //próba zbadania czy jest plikiem
-        try {
-            $isFile = is_file($dirName);
-        } catch (\Exception $e) {
+        if (!is_dir($dirName)) {
             return false;
-        }
-        //zwykły plik
-        if ($isFile) {
-            //próba usunięcia
-            try {
-                unlink($dirName);
-            } catch (\Exception $e) {
-                //prawdopodobnie już usunięty
-                return false;
-            }
-            return true;
         }
         //próba otwarcia katalogu
         try {
@@ -122,19 +108,22 @@ class FileSystem
             return false;
         }
         //iteracja po katalogu
-        foreach ($directoryIterator as $dir) {
+        foreach ($directoryIterator as $file) {
             //katalog .
-            if ($dir->isDot()) {
+            if ($file->isDot()) {
                 continue;
             }
-            //usunięcie rekurencyjne
-            self::rmdirRecursive($dir->getPathname());
+            if ($file->isDir() && !$file->isLink()) {
+                //usunięcie rekurencyjne
+                self::rmdirRecursive($file->getPathname());
+                continue;
+            }
+            unlink($file->getPathname());
         }
         //próba usunięcia pustego katalogu
         try {
             rmdir($dirName);
         } catch (\Exception $e) {
-            //prawdopodobnie już usunięty
             return false;
         }
         return true;
