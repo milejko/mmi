@@ -17,7 +17,7 @@ return [
     SystemCacheInterface::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
         $config->active     = $container->get('cache.system.enabled');
-        $config->handler    = \function_exists('apcu_fetch') ? 'apc' : 'file';
+        $config->handler    = 'file';
         $config->path       = BASE_PATH . '/var/cache';
         $config->lifetime   = 0;
         $container->get(AppProfilerInterface::class)->event(SystemCacheInterface::class . ': system cache setup');

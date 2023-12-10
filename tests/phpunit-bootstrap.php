@@ -25,9 +25,6 @@ putenv('DB_DRIVER=sqlite');
 require BASE_PATH . 'tests/Mock/test-query.php';
 require BASE_PATH . 'tests/Mock/test-record.php';
 require BASE_PATH . 'tests/Mock/test-auth-provider.php';
-if (!function_exists('apcu_fetch')) {
-    require BASE_PATH . 'tests/Mock/apc-stub.php';
-}
 if (!class_exists(Redis::class)) {
     require BASE_PATH . 'tests/Mock/redis-stub.php';
 }

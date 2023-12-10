@@ -22,7 +22,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public const TEST_DATA = 'unit-test-php';
     public const INVALID_CACHE_DATA = 'a:2:{s:1:"x";s:13:"unit-test-php";s:1:"e";i:1503324942;}';
 
-    protected $_backends = ['file', 'apc', 'redis'];
+    protected $_backends = ['file', 'redis'];
 
     public function testNew()
     {
@@ -45,18 +45,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         //umieszczanie w buforze uszkodzonego pliku
         file_put_contents($cacheConfig->path . '/test', self::INVALID_CACHE_DATA);
         $this->assertNull($cache->load('test'), 'Broken data');
-        $this->_testActiveCache($cache);
-    }
-
-    public function testApcHandler()
-    {
-        if (!function_exists('\apcu_fetch')) {
-            return;
-        }
-        $config = new CacheConfig();
-        $config->handler = 'apc';
-        $config->active = true;
-        $cache = new Cache($config);
         $this->_testActiveCache($cache);
     }
 
