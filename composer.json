@@ -16,6 +16,14 @@
         {
             "name": "Maciej Pawłowski",
             "email": "mac@macu.eu"
+        },
+        {
+            "name": "Krystian Gapski",
+            "email": "k.gapski@nowaera.pl"
+        },
+        {
+            "name": "Robert Pawłowski",
+            "email": "r.pawlowski@nowaera.pl"
         }
     ],
     "require": {
@@ -86,6 +94,6 @@
         }
     },
     "require-dev": {
-        "mmi/mmi-build-toolkit": "^1.0"
+        "mmi/mmi-build-toolkit": "*"
     }
 }

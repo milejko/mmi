@@ -83,7 +83,7 @@ class SessionConfig
 
     /**
      * Backend obsługujący sesje
-     * files | memcache
+     * files | redis
      * @var string
      */
     public $handler = 'files';

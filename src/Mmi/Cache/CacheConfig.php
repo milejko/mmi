@@ -26,13 +26,13 @@ class CacheConfig
 
     /**
      * Nazwa handlera obsługującego bufor:
-     * apc | file | redis | db | memcache
+     * file | redis | db
      * @var string
      */
     public $handler = 'file';
 
     /**
-     * Ścieżka dla handlerów plikowych i memcache
+     * Ścieżka dla handlerów plikowych
      * @var string
      */
     public $path = '/tmp';

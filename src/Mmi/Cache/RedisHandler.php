@@ -11,7 +11,7 @@
 namespace Mmi\Cache;
 
 /**
- * Handler memcache
+ * Handler Redis
  */
 class RedisHandler implements CacheHandlerInterface
 {
@@ -34,7 +34,7 @@ class RedisHandler implements CacheHandlerInterface
     private $_namespace;
 
     /**
-     * Ustawia obiekt Memcache
+     * Ustawia obiekt Redis
      * @param \Mmi\Cache\Cache $cache obiekt bufora
      */
     public function __construct(Cache $cache)

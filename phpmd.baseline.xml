@@ -14,7 +14,6 @@
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Mmi/App/ComposerInstaller.php"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/App/ComposerInstaller.php" method="_copyExecutables"/>
   <violation rule="PHPMD\Rule\Controversial\Superglobals" file="src/Mmi/App/KernelException.php" method="getExtendedMessage"/>
-  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Cache/ApcHandler.php"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Cache/Cache.php"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Cache/Cache.php" method="_setCacheData"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Cache/Cache.php" method="_setHandler"/>
@@ -313,10 +312,6 @@
   <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Security/Auth.php" method="_setAuthentication"/>
   <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Security/Auth.php" method="idAuthenticate"/>
   <violation rule="PHPMD\Rule\Design\ExitExpression" file="src/Mmi/Security/Auth.php"/>
-  <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Session/ApcHandler.php"/>
-  <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Session/ApcHandler.php" method="read"/>
-  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Session/ApcHandler.php"/>
-  <violation rule="PHPMD\Rule\Controversial\CamelCaseMethodName" file="src/Mmi/Session/ApcHandler.php" method="_validate"/>
   <violation rule="PHPMD\Rule\Controversial\CamelCasePropertyName" file="src/Mmi/Session/DbHandler.php"/>
   <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Mmi/Session/DbHandler.php"/>
   <violation rule="PHPMD\Rule\CleanCode\IfStatementAssignment" file="src/Mmi/Session/DbHandler.php" method="read"/>
