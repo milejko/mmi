@@ -8,3 +8,4 @@
 /vendor/
 /web/
 *.build
+.DS_Store
