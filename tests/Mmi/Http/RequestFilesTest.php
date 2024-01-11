@@ -14,7 +14,7 @@ use Mmi\Http\RequestFiles;
 
 class RequestFilesTest extends \PHPUnit\Framework\TestCase
 {
-    private $_sampleFile = ['name' => 'image.png', 'tmp_name' => BASE_PATH . '/tests/Mock/test.png'];
+    private $_sampleFile = ['name' => 'image.png', 'type' => 'image/png', 'tmp_name' => BASE_PATH . 'tests/Mock/test.png', 'size' => 26271];
     private $_sampleIncompleteFile = ['size' => 1];
     private $_anotherIncompleteFile = ['name' => 'image2.jpg'];
 
@@ -29,29 +29,33 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
 
     public function testMultiUpload()
     {
-        $rf = new RequestFiles(['fieldName' => [
-            'name' => [
-                0 => 'image.png',
-                1 => 'image2.png',
-                2 => 'image3.png'
-            ],
-            'type' => [
-                0 => 'text/plain',
-                1 => 'text/plain'
-            ],
-            'tmp_name' => [
-                0 => BASE_PATH . '/tests/Mock/test.png',
-                1 => BASE_PATH . '/tests/Mock/test.png',
-            ],
-            'error' => [
-                0 => 0,
-                1 => 0
-            ],
-            'size' => [
-                0 => 123,
-                1 => 456
-            ],
-        ]]);
+        $rf = new RequestFiles(
+            [
+                'fieldName' => [
+                    'name' => [
+                        0 => 'image.png',
+                        1 => 'image2.png',
+                        2 => 'image3.png'
+                    ],
+                    'type' => [
+                        0 => 'text/plain',
+                        1 => 'text/plain'
+                    ],
+                    'tmp_name' => [
+                        0 => BASE_PATH . 'tests/Mock/test.png',
+                        1 => BASE_PATH . 'tests/Mock/test.png',
+                    ],
+                    'error' => [
+                        0 => 0,
+                        1 => 0
+                    ],
+                    'size' => [
+                        0 => 123,
+                        1 => 456
+                    ],
+                ]
+            ]
+        );
         $this->assertFalse($rf->isEmpty());
         $files = $rf->getAsArray();
         $this->assertInstanceOf('\Mmi\Http\RequestFile', $files['fieldName'][0]);
@@ -61,15 +65,19 @@ class RequestFilesTest extends \PHPUnit\Framework\TestCase
 
     public function testNestedForms()
     {
-        $rf = new RequestFiles([
-            'formname' => [
-                'name' => ['field1' => 'image.jpg'],
-                'tmp_name' => ['field1' => BASE_PATH . '/tests/Mock/test.png'],
+        $rf = new RequestFiles(
+            [
+                'formname' => [
+                    'name' => ['field1' => 'image.jpg'],
+                    'type' => ['field1' => 'image/png'],
+                    'tmp_name' => ['field1' => BASE_PATH . 'tests/Mock/test.png'],
+                    'size' => ['field1' => 26271],
+                ]
             ]
-        ]);
+        );
         $this->assertFalse($rf->isEmpty());
         $files = $rf->getAsArray();
-        $firstFile = $files['formname']['field1'][0];
+        $firstFile = $files['formname']['field1'];
         $this->assertInstanceOf('\Mmi\Http\RequestFile', $firstFile);
         $this->assertEquals('image.jpg', $firstFile->name);
     }

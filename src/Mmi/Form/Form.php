@@ -12,7 +12,6 @@ namespace Mmi\Form;
 
 use Mmi\App\App;
 use Mmi\Db\DbInterface;
-use Mmi\Form\Element;
 use Mmi\Http\Request;
 use Mmi\Mvc\View;
 
@@ -378,6 +377,11 @@ abstract class Form extends \Mmi\OptionObject
      */
     public function save()
     {
+        //iteracja po elementach
+        foreach ($this->getElements() as $element) {
+            //powiadamianie elementu przed zapisaniem formularza
+            $element->beforeFormSave();
+        }
         //jeśli brak rekordu lub formularz nieprawidłowy
         if (!$this->isValid()) {
             return $this->_saved = false;
@@ -385,11 +389,6 @@ abstract class Form extends \Mmi\OptionObject
         //brak rekordu wywoływanie beforeSave() i afterSave()
         if (!$this->hasRecord()) {
             return $this->_saved = (false !== $this->beforeSave()) && (false !== $this->afterSave());
-        }
-        //iteracja po elementach
-        foreach ($this->getElements() as $element) {
-            //powiadamianie elementu przed zapisaniem formularza
-            $element->beforeFormSave();
         }
         //wybranie DAO i rozpoczęcie transakcji
         App::$di->get(DbInterface::class)->beginTransaction();

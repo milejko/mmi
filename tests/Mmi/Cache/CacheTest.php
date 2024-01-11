@@ -50,9 +50,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     public function testRedisHandler()
     {
-        if (!class_exists('\Redis')) {
-            return;
-        }
+        $this->assertTrue(class_exists('\Redis'));
+
         $config = new CacheConfig();
         $config->handler = 'redis';
         $config->path = 'udp://user:pass@127.0.0.1:6379/1';
@@ -75,7 +74,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     protected function _testActiveCache(Cache $cache)
     {
         $this->assertNull($cache->flush(), 'Flush should always return null');
-        $this->assertLessThan(2, (int) $cache->remove('surely-inexistent-key'));
+        $this->assertLessThan(2, (int)$cache->remove('surely-inexistent-key'));
         //nieistniejący klucz
         $this->assertNull($cache->load('surely-inexistent-key'));
         //null
