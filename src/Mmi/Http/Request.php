@@ -10,6 +10,8 @@
 
 namespace Mmi\Http;
 
+use Mmi\DataObject;
+
 /**
  * Klasa requesta
  *
@@ -17,34 +19,32 @@ namespace Mmi\Http;
  * @property string $controller kontroler
  * @property string $action akcja
  */
-class Request extends \Mmi\DataObject
+class Request extends DataObject
 {
     /**
      * Get values
-     * @var array
      */
-    private $get;
+    private RequestGet $get;
 
     /**
      * Post values
-     * @var array
      */
-    private $post;
+    private RequestPost $post;
 
     /**
-     * Cookie valuew
+     * Cookie values
      */
-    private $cookie;
+    private RequestCookie $cookie;
 
     /**
      * File values
      */
-    private $files;
+    private RequestFiles $files;
 
     /**
      * Server values
      */
-    private $server;
+    private RequestServer $server;
 
     public function __construct(
         array $query = [],
@@ -55,11 +55,11 @@ class Request extends \Mmi\DataObject
     ) {
         //populate for use with ::__get()
         parent::__construct($query);
-        $this->get    = $query;
-        $this->post   = $post;
-        $this->cookie = $cookie;
-        $this->files  = $files;
-        $this->server = $server;
+        $this->get    = new RequestGet($query);
+        $this->post   = new RequestPost($post);
+        $this->cookie = new RequestCookie($cookie);
+        $this->files  = new RequestFiles($files);
+        $this->server = new RequestServer($server);
     }
 
     /**
@@ -77,24 +77,29 @@ class Request extends \Mmi\DataObject
         );
     }
 
-    public function getPost(): RequestPost
-    {
-        return new RequestPost($this->post);
-    }
-
-    public function getServer(): RequestServer
-    {
-        return new RequestServer($this->server);
-    }
-
     public function getQuery(): RequestGet
     {
-        return new RequestGet($this->get);
+        return $this->get;
+    }
+
+    public function getPost(): RequestPost
+    {
+        return $this->post;
+    }
+
+    public function getCookie(): RequestFiles
+    {
+        return $this->cookie;
     }
 
     public function getFiles(): RequestFiles
     {
-        return new RequestFiles($this->files);
+        return $this->files;
+    }
+
+    public function getServer(): RequestServer
+    {
+        return $this->server;
     }
 
     /**
@@ -132,7 +137,7 @@ class Request extends \Mmi\DataObject
      */
     public function getReferer(): string
     {
-        return filter_var(isset($this->server['HTTP_REFERER']) ? $this->server['HTTP_REFERER'] : '');
+        return filter_var($this->getServer()->httpReferer);
     }
 
     /**
@@ -141,7 +146,7 @@ class Request extends \Mmi\DataObject
      */
     public function getModuleName()
     {
-        return (string) $this->module;
+        return (string)$this->module;
     }
 
     /**
@@ -150,7 +155,7 @@ class Request extends \Mmi\DataObject
      */
     public function getControllerName()
     {
-        return (string) $this->controller;
+        return (string)$this->controller;
     }
 
     /**
@@ -159,13 +164,13 @@ class Request extends \Mmi\DataObject
      */
     public function getActionName()
     {
-        return (string) $this->action;
+        return (string)$this->action;
     }
 
     /**
      * Ustawia moduł
      * @param string $value
-     * @return \Mmi\Http\Request
+     * @return Request
      */
     public function setModuleName($value)
     {
@@ -176,7 +181,7 @@ class Request extends \Mmi\DataObject
     /**
      * Ustawia kontroler
      * @param string $value
-     * @return \Mmi\Http\Request
+     * @return Request
      */
     public function setControllerName($value)
     {
@@ -187,7 +192,7 @@ class Request extends \Mmi\DataObject
     /**
      * Ustawia akcję
      * @param string $value
-     * @return \Mmi\Http\Request
+     * @return Request
      */
     public function setActionName($value)
     {
