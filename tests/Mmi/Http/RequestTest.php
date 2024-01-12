@@ -27,6 +27,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     public function testGetReferer()
     {
         $this->assertEmpty((new Request())->getReferer());
+        $this->assertEquals('test', (new Request([], [], [], [], ['HTTP_REFERER' => 'test']))->getReferer());
     }
 
     public function testGetHeader()
