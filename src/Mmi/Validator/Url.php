@@ -36,9 +36,9 @@ class Url extends ValidatorAbstract
                 \]  # an IPv6 address
             )
             (:[0-9]+)?                                                                          # a port (optional)
-            (?:/ (?:[\pL\pN\-._\~!$&\'()*+,;=:@]|%%[0-9A-Fa-f]{2})* )*                          # a path
-            (?:\? (?:[\pL\pN\-._\~!$&\'\[\]()*+,;=:@/?]|%%[0-9A-Fa-f]{2})* )?                   # a query (optional)
-            (?:\# (?:[\pL\pN\-._\~!$&\'()*+,;=:@/?]|%%[0-9A-Fa-f]{2})* )?                       # a fragment (optional)
+            (?:/ (?:[\pL\pN\-._\~!$&\'\[\]()*+,;=:@]|%[0-9A-Fa-f]{2})* )*                       # a path
+            (?:\? (?:[\pL\pN\-._\~!$&\'\[\]()*+,;=:@/?]|%[0-9A-Fa-f]{2})* )?                    # a query (optional)
+            (?:\# (?:[\pL\pN\-._\~!$&\'()*+,;=:@/?]|%[0-9A-Fa-f]{2})* )?                        # a fragment (optional)
         $~ixu';
 
     /**
