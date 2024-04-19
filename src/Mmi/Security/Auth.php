@@ -118,9 +118,9 @@ class Auth implements AuthInterface
      * Pobiera identyfikator użytkownika, lub null jeśli brak
      * @return mixed
      */
-    public function getId(): string
+    public function getId(): ?string
     {
-        return (string) $this->_session->id;
+        return isset($this->_session->id) ? (string) $this->_session->id : null;
     }
 
     /**
