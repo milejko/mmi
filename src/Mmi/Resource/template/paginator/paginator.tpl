@@ -1,4 +1,3 @@
-{* ustawianie zmiennych *}
 {$_showPages = (($_paginator->getOption('showPages') > 2) ? $_paginator->getOption('showPages') : 2) - 2}
 {$_halfPages = php_floor($_showPages / 2)}
 {$_pageVariable = $_paginator->getOption('pageVariable')}
@@ -10,23 +9,31 @@
 
 {$_modCtrlAct = ['module' => $_paginator->getRequest()->getModuleName(), 'controller' => $_paginator->getRequest()->getControllerName(), 'action' => $_paginator->getRequest()->getActionName()]}
 
-<div class="paginator">
-
-{* pierwsza strona *}
-{if $_page > 1}
-    {$_firstPage = (($_page - 1) > 1) ? ($_page - 1) : null}
-    {$_previousUrl = url($_modCtrlAct + [$_pageVariable => $_firstPage]) . $_hashHref}
-    {headLink(['rel' => 'prev', 'href' => $_previousUrl])}
-    <span class="previous page"><a data-page="{$_firstPage}" href="{$_previousUrl}">{$_previousLabel}</a></span>
-{else}
-    <span class="previous page">{$_previousLabel}</span>
+{if $_pagesCount < 2}
+    {exit}
 {/if}
 
-{* generowanie strony pierwszej *}
+<ul class="pagination">
+
+{* previous page *}
+{if $_page > 1}
+    {$_firstPage = (($_page - 1) > 1) ? ($_page - 1) : null}
+    {$_previousUrl = url($_modCtrlAct + [$_pageVariable => $_firstPage], false) . $_hashHref}
+    {headLink(['rel' => 'prev', 'href' => $_previousUrl])}
+    <li class="previous page page-item">
+        <a class="page-link" data-page="{$_firstPage}" href="{$_previousUrl}">{$_previousLabel}</a>
+    </li>
+{/if}
+
+{* the first page *}
 {if 1 == $_page}
-    <span class="current page">1</span>
+    <li class="first current active page page-item">
+        <a data-page="1" class="page-link" href="#">1</a>
+    </li>
 {else}
-    <span class="page"><a data-page="" href="{url($_modCtrlAct + [$_pageVariable => null]) . $_hashHref}">1</a></span>
+    <li class="first page page-item">
+        <a data-page="1" href="{url($_modCtrlAct + [$_pageVariable => null], false) . $_hashHref}">1</a>
+    </li>
 {/if}
 
 {* obliczanie zakresów *}
@@ -41,40 +48,52 @@
 {$_rangeEnd = (($_rangeEnd + $_rangeBeginExcess) < $_pagesCount) ? ($_rangeEnd + $_rangeBeginExcess) : $_pagesCount - 1}
 {$_rangeBegin = (($_rangeBegin - $_rangeEndExcess) > 2) ? ($_rangeBegin - $_rangeEndExcess) : 2}
 
-{* pierwsza strona w zakresie *}
+{* first dots *}
 {if $_rangeBegin > 2}
-    <span class="dots page">
-        <a data-page="{php_floor((1 + $_rangeBegin) / 2)}" href="{url($_modCtrlAct + [$_pageVariable => php_floor((1 + $_rangeBegin) / 2)]) . $_hashHref}">...</a>
-    </span>
+    <li class="dots page page-item">
+        {$_firstDots = php_floor($_rangeBegin / 2)}
+        <a class="page-link" data-page="{$_firstDots}" href="{url($_modCtrlAct + [$_pageVariable => $_firstDots], false) . $_hashHref}">...</a>
+    </li>
 {/if}
 
-{* generowanie stron w zakresie *}
+{* pages in the range *}
 {for $_i = $_rangeBegin; $_i <= $_rangeEnd; $_i++}
     {if $_i == $_page}
-        <span class="current page">{$_i}</span>
+        <li class="current active page page-item">
+            <a data-page="{$_i}" class="page-link" href="#">{$_i}</a>
+        </li>
     {else}
-        <span class="page"><a data-page="{$_i}" href="{url($_modCtrlAct + [$_pageVariable => $_i]) . $_hashHref}">{$_i}</a></span>
+        <li class="page page-item">
+            <a class="page-link" data-page="{$_i}" href="{url($_modCtrlAct + [$_pageVariable => $_i], false) . $_hashHref}">{$_i}</a>
+        </li>
     {/if}
 {/for}
 
-{* ostatnia strona w zakresie *}
+{* last dots *}
 {if $_rangeEnd < $_pagesCount - 1}
-    <span class="dots page"><a data-page="{php_ceil(($_rangeEnd + $_pagesCount) / 2)}" href="{url($_modCtrlAct + [$_pageVariable => ceil(($_rangeEnd + $_pagesCount) / 2)]) . $_hashHref}">...</a></span>
+    <li class="dots page page-item">
+        {$_lastDots = php_ceil(($_rangeEnd + $_pagesCount) / 2)}
+        <a class="page-link" data-page="{$_lastDots}" href="{url($_modCtrlAct + [$_pageVariable => $_lastDots], false) . $_hashHref}">...</a>
+    </li>
 {/if}
 
-{* ostatnia strona w ogóle *}
+{* the last page *}
 {if $_pagesCount == $_page}
-    <span class="last current page">{$_pagesCount}</span>
+    <li class="last current active page page-item">
+        <a data-page="{$_pagesCount}" class="page-link" href="#">{$_pagesCount}</a>
+    </li>
 {else}
-    <span class="last page"><a data-page="{$_pagesCount}" href="{url($_modCtrlAct + [$_pageVariable => $_pagesCount]) . $_hashHref}">{$_pagesCount}</a></span>
+    <li class="last page page-item">
+        <a class="page-link" data-page="{$_pagesCount}" href="{url($_modCtrlAct + [$_pageVariable => $_pagesCount], false) . $_hashHref}">{$_pagesCount}</a>
+    </li>
 {/if}
 
-{* generowanie guzika następny *}
+{* the next page *}
 {if $_page < $_pagesCount}
-    {$_nextUrl = url($_modCtrlAct + [$_pageVariable => $_page + 1]) . $_hashHref}
+    {$_nextUrl = url($_modCtrlAct + [$_pageVariable => $_page + 1], false) . $_hashHref}
     {headLink(['rel' => 'next', 'href' => $_nextUrl])}
-    <span class="next page"><a data-page="{$_page + 1}" href="{$_nextUrl}">{$_nextLabel}</a></span>
-{else}
-    <span class="next page">{$_nextLabel}</span>
+    <li class="next page page-item">
+        <a data-page="{$_page + 1}" href="{$_nextUrl}">{$_nextLabel}</a>
+    </li>
 {/if}
-</div>
+</ul>
