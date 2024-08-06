@@ -23,6 +23,6 @@ class Intval extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return (int)$value;
+        return (int) $value;
     }
 }

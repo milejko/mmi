@@ -35,6 +35,6 @@ class StripTags extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return strip_tags($value, $this->getExceptions() ? $this->getExceptions() : '');
+        return strip_tags((string) $value, $this->getExceptions() ? $this->getExceptions() : '');
     }
 }

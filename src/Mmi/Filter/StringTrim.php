@@ -40,6 +40,6 @@ class StringTrim extends \Mmi\Filter\FilterAbstract
         if ($this->getExtras()) {
             $chars .= $this->getExtras();
         }
-        return trim($value, $chars);
+        return trim((string) $value, $chars);
     }
 }

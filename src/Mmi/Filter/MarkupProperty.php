@@ -40,6 +40,6 @@ class MarkupProperty extends \Mmi\Filter\FilterAbstract
             '',
             '',
             '',
-            ], trim(strip_tags($value)));
+            ], trim(strip_tags((string) $value)));
     }
 }

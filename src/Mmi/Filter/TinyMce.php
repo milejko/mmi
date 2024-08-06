@@ -23,6 +23,6 @@ class TinyMce extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return strip_tags($value, '<img><em><b><strong><u><p><a><br><ul><ol><hr><table><th><tbody><thead><tr><td><li><span><div><h1><h2><h3><h4><h5><h6><sup><sub><iframe><code>');
+        return strip_tags((string) $value, '<img><em><b><strong><u><p><a><br><ul><ol><hr><table><th><tbody><thead><tr><td><li><span><div><h1><h2><h3><h4><h5><h6><sup><sub><iframe><code>');
     }
 }

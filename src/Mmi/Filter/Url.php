@@ -25,7 +25,7 @@ class Url extends \Mmi\Filter\FilterAbstract
     {
         if (!is_array($value)) {
             $ascii = new \Mmi\Filter\Ascii();
-            return trim(preg_replace('!\-+!', '-', preg_replace('/[^\p{L}\p{N}]/u', '-', strtolower($ascii->filter($value)))), '-');
+            return trim(preg_replace('!\-+!', '-', preg_replace('/[^\p{L}\p{N}]/u', '-', strtolower($ascii->filter((string) $value)))), '-');
         }
         foreach ($value as $key => $val) {
             $value[$key] = $this->filter($val);

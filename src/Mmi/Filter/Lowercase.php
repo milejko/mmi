@@ -24,6 +24,6 @@ class Lowercase extends \Mmi\Filter\FilterAbstract
     public function filter($value)
     {
         //null jeśli nie string
-        return is_string($value) ? mb_strtolower($value, mb_detect_encoding($value)) : null;
+        return is_string($value) ? mb_strtolower((string) $value, mb_detect_encoding((string) $value)) : null;
     }
 }
