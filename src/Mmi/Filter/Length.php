@@ -23,6 +23,9 @@ class Length extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
+        if (null === $value) {
+            return 0;
+        }
         //string lub numer
         if (is_string($value) || is_numeric($value)) {
             return mb_strlen((string) $value, mb_detect_encoding($value));

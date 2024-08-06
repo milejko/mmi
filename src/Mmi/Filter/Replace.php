@@ -38,6 +38,6 @@ class Replace extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return str_replace($this->getSearch(), $this->getReplace(), $value);
+        return str_replace($this->getSearch(), $this->getReplace(), (string) $value);
     }
 }

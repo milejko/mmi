@@ -23,6 +23,6 @@ class Nl2br extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return nl2br($value);
+        return nl2br((string) $value);
     }
 }

@@ -23,6 +23,6 @@ class Alnum extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return preg_replace('/[^\p{L}\p{N}]/u', '', $value);
+        return preg_replace('/[^\p{L}\p{N}]/u', '', (string) $value);
     }
 }

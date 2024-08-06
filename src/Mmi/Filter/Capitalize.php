@@ -23,6 +23,6 @@ class Capitalize extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return mb_convert_case($value, MB_CASE_TITLE, mb_detect_encoding($value));
+        return mb_convert_case((string) $value, MB_CASE_TITLE, mb_detect_encoding((string) $value));
     }
 }

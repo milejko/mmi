@@ -23,6 +23,6 @@ class Floatval extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return (float)$value;
+        return (float) $value;
     }
 }

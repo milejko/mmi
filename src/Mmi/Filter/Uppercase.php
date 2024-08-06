@@ -23,6 +23,6 @@ class Uppercase extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return mb_strtoupper($value, mb_detect_encoding($value));
+        return mb_strtoupper((string) $value, mb_detect_encoding((string) $value));
     }
 }

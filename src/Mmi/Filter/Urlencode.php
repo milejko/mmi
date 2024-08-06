@@ -23,6 +23,6 @@ class Urlencode extends \Mmi\Filter\FilterAbstract
      */
     public function filter($value)
     {
-        return urlencode($value);
+        return urlencode((string) $value);
     }
 }
