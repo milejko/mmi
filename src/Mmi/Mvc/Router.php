@@ -56,7 +56,7 @@ class Router
     public function decodeUrl($url)
     {
         //parsowanie url'a z zamianą hasha
-        $parsedUrl = parse_url($url);
+        $parsedUrl = parse_url(url: html_entity_decode($url));
         //inicjalizacja pustych parametrów
         $params = [];
         //dekodowanie ścieżki

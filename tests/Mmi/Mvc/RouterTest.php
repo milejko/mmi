@@ -25,7 +25,8 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             ->setRoutes([$sampleRoute])
             ->setRoute('test1', '/([a-z]+)-([a-z]+)-([a-z]+)/', ['module' => '$1', 'controller' => '$2', 'action' => '$3'])
             ->setRoute('test2', 'static', ['module' => 'static'], ['controller' => 'index', 'action' => 'index'])
-            ->setRoute('test3', '/numeric\/([0-9])+/', ['module' => 'test', 'val' => '$1'], ['controller' => 'index', 'action' => 'index']);
+            ->setRoute('test3', '/numeric\/([0-9])+/', ['module' => 'test', 'val' => '$1'], ['controller' => 'index', 'action' => 'index'])
+            ->setRoute('test4', "/weird-characters-('._-=)/", ['module' => 'test', 'controller' => 'index', 'action' => 'weird', 'characters' => '$1']);
 
         $router = new Router($config);
         $this->assertSame($config, $router->getConfig());
@@ -40,6 +41,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/test-index-index/?id=2', $router->encodeUrl(['module' => 'test', 'controller' => 'index', 'action' => 'index', 'id' => 2]));
         $this->assertEquals(['module' => 'test', 'controller' => 'index', 'action' => 'index', 'id' => 2], $router->decodeUrl('/test-index-index/?id=2'));
         $this->assertEquals('', $router->encodeUrl([]));
+        $this->assertEquals(['module' => 'test', 'controller' => 'index', 'action' => 'weird', 'characters' => '\'._-='], $router->decodeUrl('weird-characters-\'._-=/'));
 
         //czyszczenie routera
         $router->getConfig()->setRoutes([], true);
