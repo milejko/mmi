@@ -60,7 +60,7 @@ class Cache implements CacheInterface, SystemCacheInterface
             return null;
         }
         //pobranie z rejestru jeśli istnieje
-        if (array_key_exists($key, $this->registry)) {
+        if ($this->config->useRegistry && array_key_exists($key, $this->registry)) {
             return $this->registry[$key];
         }
         //zwrot zwalidowanych danych
