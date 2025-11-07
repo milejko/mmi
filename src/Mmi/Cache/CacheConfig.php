@@ -36,4 +36,10 @@ class CacheConfig
      * @var string
      */
     public $path = '/tmp';
+
+    /**
+     * Użyj najpierw bufor do odczytu danych
+     * @var bool
+     */
+    public $useRegistry = true;
 }
