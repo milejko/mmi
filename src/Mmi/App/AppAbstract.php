@@ -105,8 +105,7 @@ abstract class AppAbstract
         //configure and return builder
         $builder = (new ContainerBuilder())
             ->useAutowiring(true)
-            ->useAnnotations(true)
-            ->ignorePhpDocErrors(true)
+            ->useAttributes(true)
             ->enableCompilation($this->compilePath)
             ->writeProxiesToFile(true, $this->compilePath)
             //adding profiler instance

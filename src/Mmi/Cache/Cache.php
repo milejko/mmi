@@ -73,7 +73,7 @@ class Cache implements CacheInterface, SystemCacheInterface
      * @param mixed $data dane
      * @throws CacheException
      */
-    public function save($data, string $key, int $lifetime = null): bool
+    public function save($data, string $key, ?int $lifetime = null): bool
     {
         //bufor nieaktywny
         if (!$this->isActive()) {

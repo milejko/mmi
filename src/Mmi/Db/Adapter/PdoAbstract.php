@@ -77,14 +77,14 @@ abstract class PdoAbstract implements DbInterface
      * @param array $schema schemat
      * @return array
      */
-    abstract public function tableInfo(string $tableName, string $schema = null): array;
+    abstract public function tableInfo(string $tableName, ?string $schema = null): array;
 
     /**
      * Listuje tabele w schemacie bazy danych
      * @param string $schema
      * @return array
      */
-    abstract public function tableList(string $schema = null): array;
+    abstract public function tableList(?string $schema = null): array;
 
     /**
      * Ustawia domyślne parametry dla importu (długie zapytania)
@@ -276,11 +276,11 @@ abstract class PdoAbstract implements DbInterface
     final public function select(
         string $fields = '*',
         string $from = '',
-        string $where = null,
-        string $groupBy = null,
-        string $order = null,
-        int $limit = null,
-        int $offset = null,
+        ?string $where = null,
+        ?string $groupBy = null,
+        ?string $order = null,
+        ?int $limit = null,
+        ?int $offset = null,
         array $whereBind = []
     ): array {
         $sql = 'SELECT' .

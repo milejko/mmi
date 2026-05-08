@@ -25,7 +25,7 @@ interface CacheInterface
      * Saves to cache
      * @param mixed $data dane
      */
-    public function save($data, string $key, int $lifetime = null): bool;
+    public function save($data, string $key, ?int $lifetime = null): bool;
 
     /**
      * Deletes from cache

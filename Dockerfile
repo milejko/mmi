@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.3
+ARG PHP_VERSION=8.5
 
 FROM milejko/php:${PHP_VERSION}-cli
 

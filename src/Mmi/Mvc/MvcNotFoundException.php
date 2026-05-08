@@ -29,7 +29,7 @@ class MvcNotFoundException extends MvcException
      * @param integer $code
      * @param \Exception $previous
      */
-    public function __construct($message = "", $code = LogConfigInstance::INFO, \Exception $previous = null)
+    public function __construct($message = "", $code = LogConfigInstance::INFO, ?\Exception $previous = null)
     {
         //ignorowanie transakcji
         extension_loaded('newrelic') ? newrelic_ignore_transaction() : null;

@@ -21,9 +21,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $element = (new Select('single'))
             ->setMultioptions(['foo' => 'bar', 'baz' => 'baz']);
-        self::assertEquals('single', $element->getName());
-        self::assertEquals('single', $element->getBaseName());
-        self::assertEquals('<select name="single" data-requiredAsterisk="*" data-labelPostfix=":" class="field" ><option value hidden disabled selected>form.select.choose.label</option><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
+        $this->assertEquals('single', $element->getName());
+        $this->assertEquals('single', $element->getBaseName());
+        $this->assertEquals('<select name="single" data-requiredAsterisk="*" data-labelPostfix=":" class="field" ><option value hidden disabled selected>form.select.choose.label</option><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
     }
 
     public function testIfMultiselectIsProperlyRendered(): void
@@ -31,8 +31,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $element = (new Select('multi'))
             ->setMultiple()
             ->setMultioptions(['foo' => 'bar', 'baz' => 'baz']);
-        self::assertEquals('multi', $element->getName());
-        self::assertEquals('multi', $element->getBaseName());
-        self::assertEquals('<select name="multi[]" data-requiredAsterisk="*" data-labelPostfix=":" class="field" multiple="" ><option value hidden disabled selected>form.select.choose.label</option><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
+        $this->assertEquals('multi', $element->getName());
+        $this->assertEquals('multi', $element->getBaseName());
+        $this->assertEquals('<select name="multi[]" data-requiredAsterisk="*" data-labelPostfix=":" class="field" multiple="" ><option value hidden disabled selected>form.select.choose.label</option><option value="foo">bar</option><option value="baz">baz</option></select>', $element->fetchField());
     }
 }

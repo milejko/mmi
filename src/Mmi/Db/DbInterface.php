@@ -30,12 +30,12 @@ interface DbInterface
     /**
      * Zwraca informację o kolumnach tabeli
      */
-    public function tableInfo(string $tableName, string $schema = null): array;
+    public function tableInfo(string $tableName, ?string $schema = null): array;
 
     /**
      * Listuje tabele w schemacie bazy danych
      */
-    public function tableList(string $schema = null): array;
+    public function tableList(?string $schema = null): array;
 
     /**
      * Ustawia domyślne parametry dla importu (długie zapytania)
@@ -135,11 +135,11 @@ interface DbInterface
     public function select(
         string $fields = '*',
         string $from = '',
-        string $where = null,
-        string $groupBy = null,
-        string $order = null,
-        int $limit = null,
-        int $offset = null,
+        ?string $where = null,
+        ?string $groupBy = null,
+        ?string $order = null,
+        ?int $limit = null,
+        ?int $offset = null,
         array $whereBind = []
     ): array;
 

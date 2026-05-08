@@ -22,7 +22,7 @@ class Checked extends ValidatorAbstract
      * @param \Mmi\Form\Element\Checkbox $element
      * @return self
      */
-    public function setElement(\Mmi\Form\Element\Checkbox $element = null)
+    public function setElement(?\Mmi\Form\Element\Checkbox $element = null)
     {
         return $this->setOption('element', $element);
     }

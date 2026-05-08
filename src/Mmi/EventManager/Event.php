@@ -12,7 +12,7 @@ class Event implements EventInterface
 
     protected bool $stopPropagation = false;
 
-    public function __construct(string $name = null, ?object $target = null, ?array $params = null)
+    public function __construct(?string $name = null, ?object $target = null, ?array $params = null)
     {
         if (null !== $name) {
             $this->setName($name);

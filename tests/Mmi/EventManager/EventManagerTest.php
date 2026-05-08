@@ -2,7 +2,6 @@
 
 namespace Tests\Mmi\EventManager;
 
-use Mmi\App\App;
 use Mmi\App\AppMvcEvents;
 use Mmi\App\AppTesting;
 use Mmi\EventManager\EventManagerInterface;
@@ -12,12 +11,7 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
 {
     private function getEventManagerInstance(): EventManagerInterface
     {
-        /** @var App $app */
-        $app = AppTesting::$di->get(App::class);
-        /** @var EventManagerInterface $eventManager */
-        $eventManager = $app::$di->get(EventManagerInterface::class);
-
-        return $eventManager;
+        return AppTesting::$di->get(EventManagerInterface::class);
     }
 
     public function testEvent()

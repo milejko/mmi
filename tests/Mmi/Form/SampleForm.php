@@ -47,15 +47,15 @@ class SampleForm extends \Mmi\Form\Form
         $this->addElement(new Label('label'));
 
         $this->addElement((new MultiCheckbox('multicheckbox'))
-            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
+            ->setMultioptions(['' => '', 0 => 'NO', 1 => 'YES']));
 
         $this->addElement(new Password('password'));
 
         $this->addElement((new Radio('radio'))
-            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
+            ->setMultioptions(['' => '', 0 => 'NO', 1 => 'YES']));
 
         $this->addElement((new Select('select'))
-            ->setMultioptions([null => '', 0 => 'NO', 1 => 'YES']));
+            ->setMultioptions(['' => '', 0 => 'NO', 1 => 'YES']));
 
         $this->addElement(new Submit('submit'));
 

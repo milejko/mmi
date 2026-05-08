@@ -11,6 +11,7 @@
 namespace Mmi\Tests;
 
 use Mmi\Translate\Translate;
+use PHPUnit\Framework\Attributes\Depends;
 
 /**
  * Test obiektu tłumaczeń
@@ -27,20 +28,16 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         return $translate;
     }
 
-    /**
-     * @depends testAddTranslation
-     * @param Translate $translate
-     */
+    #[Depends('testAddTranslation')]
     public function testSetLocale(Translate $translate)
     {
         $this->assertInstanceOf(Translate::class, $translate->setLocale('pl'));
         $this->assertInstanceOf(Translate::class, $translate->addTranslationFile(BASE_PATH . '/tests/Mock/en.ini', 'en'));
         $this->assertEquals('pl', $translate->getLocale());
+        return $translate;
     }
 
-    /**
-     * @depends testAddTranslation
-     */
+    #[Depends('testSetLocale')]
     public function testTranslate(Translate $translate)
     {
         $this->assertEquals('chłopiec', $translate->translate('boy'));
