@@ -16,7 +16,7 @@ class ResponseTypes
      * Przechowuje kody HTTP
      * @var array
      */
-    private static $_httpCodes = [
+    private static $httpCodes = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         110 => 'Connection Timed Out',
@@ -68,7 +68,7 @@ class ResponseTypes
      * Przechowuje content-type
      * @var array
      */
-    private static $_contentTypes = [
+    private static $contentTypes = [
         'html' => 'text/html',
         'htm' => 'text/html',
         'shtml' => 'text/html',
@@ -132,7 +132,7 @@ class ResponseTypes
      */
     public static function getMessageByCode($code)
     {
-        return isset(self::$_httpCodes[$code]) ? self::$_httpCodes[$code] : null;
+        return isset(self::$httpCodes[$code]) ? self::$httpCodes[$code] : null;
     }
 
     /**
@@ -142,7 +142,7 @@ class ResponseTypes
      */
     public static function getExtensionByType($type)
     {
-        return empty($foundExtensions = array_keys(self::$_contentTypes, $type)) ? null : $foundExtensions[0];
+        return empty($foundExtensions = array_keys(self::$contentTypes, $type)) ? null : $foundExtensions[0];
     }
 
     /**
@@ -158,8 +158,8 @@ class ResponseTypes
             return $search;
         }
         //typ znaleziony na podstawie rozszerzenia
-        if (isset(self::$_contentTypes[$search])) {
-            return self::$_contentTypes[$search];
+        if (isset(self::$contentTypes[$search])) {
+            return self::$contentTypes[$search];
         }
         //typ nieodnaleziony
         throw new HttpException('Type not found');

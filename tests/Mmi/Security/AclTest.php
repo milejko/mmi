@@ -11,6 +11,7 @@
 namespace Tests\Mmi\Security;
 
 use Mmi\Security\Acl;
+use PHPUnit\Framework\Attributes\Depends;
 
 class AclTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,18 +28,14 @@ class AclTest extends \PHPUnit\Framework\TestCase
         return $acl;
     }
 
-    /**
-     * @depends testAdd
-     */
+    #[Depends('testAdd')]
     public function testHas(Acl $acl)
     {
         $this->assertTrue($acl->has('news:user'));
         $this->assertFalse($acl->has('news'));
     }
 
-    /**
-     * @depends testAdd
-     */
+    #[Depends('testAdd')]
     public function testAddRole(Acl $acl)
     {
         $this->assertInstanceOf('\Mmi\Security\Acl', $acl->addRole('guest')
@@ -47,9 +44,7 @@ class AclTest extends \PHPUnit\Framework\TestCase
         return $acl;
     }
 
-    /**
-     * @depends testAddRole
-     */
+    #[Depends('testAddRole')]
     public function testHasRole(Acl $acl)
     {
         $this->assertTrue($acl->hasRole('admin'));
@@ -58,9 +53,7 @@ class AclTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['guest', 'admin', 'member'], $acl->getRoles());
     }
 
-    /**
-     * @depends testAddRole
-     */
+    #[Depends('testAddRole')]
     public function testAllowDeny(Acl $acl)
     {
         $this->assertInstanceOf('\Mmi\Security\Acl', $acl->allow('admin', 'news')
@@ -71,9 +64,7 @@ class AclTest extends \PHPUnit\Framework\TestCase
         return $acl;
     }
 
-    /**
-     * @depends testAllowDeny
-     */
+    #[Depends('testAllowDeny')]
     public function testIsAllowed(Acl $acl)
     {
         $this->assertTrue($acl->isAllowed(['admin', 'guest'], 'news:admin'));

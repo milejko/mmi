@@ -66,7 +66,7 @@ abstract class Form extends \Mmi\OptionObject
      * @param \Mmi\Orm\Record $record obiekt recordu
      * @param array $options opcje
      */
-    public function __construct(\Mmi\Orm\Record $record = null, array $options = [])
+    public function __construct(?\Mmi\Orm\Record $record = null, array $options = [])
     {
         //podłączenie rekordu
         $this->_record = $record;
@@ -133,10 +133,10 @@ abstract class Form extends \Mmi\OptionObject
 
     /**
      * Usuwanie elementu formularza z gotowego obiektu
-     * @param \Mmi\Form\Element\ElementAbstract $element obiekt elementu formularza
+     * @param string $name obiekt elementu formularza
      * @return self
      */
-    public function removeElement($name)
+    public function removeElement(string $name)
     {
         if (isset($this->_elements[$name])) {
             unset($this->_elements[$name]);
@@ -224,7 +224,7 @@ abstract class Form extends \Mmi\OptionObject
     /**
      * Ustawia forma na podstawie obiektu POST
      * @param \Mmi\Http\RequestPost $post
-     * @return \Mmi\Form
+     * @return self
      */
     final public function setFromPost(\Mmi\Http\RequestPost $post)
     {
@@ -318,7 +318,7 @@ abstract class Form extends \Mmi\OptionObject
 
     /**
      * Pobiera nazwę klasy rekordu
-     * @return string
+     * @return ?string
      */
     final public function getRecordClass()
     {

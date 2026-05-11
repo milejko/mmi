@@ -88,7 +88,7 @@ class PdoMysql extends PdoAbstract
     /**
      * Zwraca informację o kolumnach tabeli
      */
-    public function tableInfo(string $tableName, string $schema = null): array
+    public function tableInfo(string $tableName, ?string $schema = null): array
     {
         return $this->_associateTableMeta($this->fetchAll('SELECT `column_name` as `name`, `data_type` AS `dataType`, `character_maximum_length` AS `maxLength`, `is_nullable` AS `null`, `column_default` AS `default`, `extra` AS `extra`, `column_key` AS `column_key` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = :name AND `table_schema` = :schema ORDER BY `ordinal_position`', [
                     ':name' => $tableName,
@@ -99,7 +99,7 @@ class PdoMysql extends PdoAbstract
     /**
      * Listuje tabele w schemacie bazy danych
      */
-    public function tableList(string $schema = null): array
+    public function tableList(?string $schema = null): array
     {
         $list = $this->fetchAll('SHOW TABLES;');
         $tables = [];

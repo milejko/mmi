@@ -115,7 +115,7 @@ class PdoSqlite extends PdoAbstract
     /**
      * Listuje tabele w schemacie bazy danych
      */
-    public function tableList(string $schema = null): array
+    public function tableList(?string $schema = null): array
     {
         //pobranie listy tabel
         $list = $this->fetchAll('SELECT name FROM sqlite_master WHERE type=\'table\'');

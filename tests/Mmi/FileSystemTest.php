@@ -12,6 +12,8 @@ namespace Mmi\Tests;
 
 use Mmi\FileSystem;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 /**
  * Test klasy obsługi dysku
  */
@@ -26,9 +28,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(file_exists(BASE_PATH . '/var/data/tests/Mmi/FileSystemTest.php'), 'File not found');
     }
 
-    /**
-     * @depends testCopyRecursive
-     */
+    #[Depends('testCopyRecursive')]
     public function testUnlinkRecursive()
     {
         //invalid path

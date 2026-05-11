@@ -35,7 +35,7 @@ class EventManager implements EventManagerInterface
         ));
     }
 
-    public function trigger(string $eventName, mixed $target = null, array $argv = [], object $callback = null): ResponseCollection
+    public function trigger(string $eventName, mixed $target = null, array $argv = [], ?object $callback = null): ResponseCollection
     {
         $event = clone $this->eventPrototype;
         $event->setName($eventName);
@@ -51,7 +51,7 @@ class EventManager implements EventManagerInterface
         return $this->triggerListeners($event);
     }
 
-    public function attach(string $eventName, object $listener = null, int $priority = 1): object
+    public function attach(string $eventName, ?object $listener = null, int $priority = 1): object
     {
         if (!is_string($eventName)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -65,7 +65,7 @@ class EventManager implements EventManagerInterface
         return $listener;
     }
 
-    public function detach(mixed $listener, string $eventName = null, bool $force = false): void
+    public function detach(mixed $listener, ?string $eventName = null, bool $force = false): void
     {
         if (null === $eventName || ('*' === $eventName && !$force)) {
             foreach (array_keys($this->events) as $eventName) {

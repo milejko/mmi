@@ -28,7 +28,7 @@ class HeadStyle extends HelperAbstract
      * @param string $conditional
      * @return \Mmi\Mvc\ViewHelper\HeadStyle
      */
-    public function headStyle(array $params = null, $prepend = false, $conditional = '')
+    public function headStyle(?array $params = null, $prepend = false, $conditional = '')
     {
         //brak parametrów
         if (!is_array($params)) {

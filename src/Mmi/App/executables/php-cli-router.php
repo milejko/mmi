@@ -8,13 +8,12 @@
  * @license    http://milejko.com/new-bsd.txt New BSD License
  */
 
-use Mmi\App\App;
+$requestedFile = __DIR__ . $_SERVER['PHP_SELF'];
 
-//define base path
-define('BASE_PATH', realpath(__DIR__ . '/../'));
+// serve requested file as is, if exists
+if (file_exists($requestedFile) && is_file($requestedFile)) {
+    return false;
+}
 
-//autoloader definition
-require BASE_PATH . '/vendor/autoload.php';
-
-//run application
-(new App())->run();
+//MMi application file
+require 'index.php';

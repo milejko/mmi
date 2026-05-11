@@ -13,54 +13,54 @@ final class ObservableCacheSandboxTest extends TestCase
     {
         $cacheSandbox = new ObservableCacheSandbox();
 
-        self::assertEmpty($cacheSandbox->load('some-key'));
-        self::assertEquals(['load'], $cacheSandbox->getEventLog());
+        $this->assertEmpty($cacheSandbox->load('some-key'));
+        $this->assertEquals(['load'], $cacheSandbox->getEventLog());
     }
 
     public function testIfValuesCanBeStoredLoadedAndRemoved(): void
     {
         $cacheSandbox = new ObservableCacheSandbox();
 
-        self::assertTrue($cacheSandbox->save([], 'other-key'));
-        self::assertEquals([], $cacheSandbox->load('other-key'));
-        self::assertEquals(['save', 'load'], $cacheSandbox->getEventLog());
+        $this->assertTrue($cacheSandbox->save([], 'other-key'));
+        $this->assertEquals([], $cacheSandbox->load('other-key'));
+        $this->assertEquals(['save', 'load'], $cacheSandbox->getEventLog());
 
-        self::assertTrue($cacheSandbox->remove('other-key'));
-        self::assertEmpty($cacheSandbox->load('other-key'));
-        self::assertEquals(['save', 'load', 'remove', 'load'], $cacheSandbox->getEventLog());
+        $this->assertTrue($cacheSandbox->remove('other-key'));
+        $this->assertEmpty($cacheSandbox->load('other-key'));
+        $this->assertEquals(['save', 'load', 'remove', 'load'], $cacheSandbox->getEventLog());
     }
 
     public function testIfValuesCanStoredLoadedAndFlushed(): void
     {
         $cacheSandbox = new ObservableCacheSandbox();
-        self::assertTrue($cacheSandbox->save([], 'key'));
-        self::assertTrue($cacheSandbox->save(new self(), 'another-key'));
-        self::assertEquals(['save', 'save'], $cacheSandbox->getEventLog());
+        $this->assertTrue($cacheSandbox->save([], 'key'));
+        $this->assertTrue($cacheSandbox->save(new \stdClass(), 'another-key'));
+        $this->assertEquals(['save', 'save'], $cacheSandbox->getEventLog());
 
-        self::assertEquals([], $cacheSandbox->load('key'));
-        self::assertInstanceOf(self::class, $cacheSandbox->load('another-key'));
-        self::assertEquals(['save', 'save', 'load', 'load'], $cacheSandbox->getEventLog());
+        $this->assertEquals([], $cacheSandbox->load('key'));
+        $this->assertInstanceOf(\stdClass::class, $cacheSandbox->load('another-key'));
+        $this->assertEquals(['save', 'save', 'load', 'load'], $cacheSandbox->getEventLog());
 
         $cacheSandbox->flush();
-        self::assertEquals(['save', 'save', 'load', 'load', 'flush'], $cacheSandbox->getEventLog());
+        $this->assertEquals(['save', 'save', 'load', 'load', 'flush'], $cacheSandbox->getEventLog());
 
-        self::assertEmpty($cacheSandbox->load('key'));
-        self::assertEmpty($cacheSandbox->load('another-key'));
-        self::assertEquals(['save', 'save', 'load', 'load', 'flush', 'load', 'load'], $cacheSandbox->getEventLog());
+        $this->assertEmpty($cacheSandbox->load('key'));
+        $this->assertEmpty($cacheSandbox->load('another-key'));
+        $this->assertEquals(['save', 'save', 'load', 'load', 'flush', 'load', 'load'], $cacheSandbox->getEventLog());
     }
 
     public function testIfEventLogCanBeFlushed(): void
     {
         $cacheSandbox = new ObservableCacheSandbox();
 
-        self::assertEmpty($cacheSandbox->load('some-key'));
-        self::assertEquals(['load'], $cacheSandbox->getEventLog());
+        $this->assertEmpty($cacheSandbox->load('some-key'));
+        $this->assertEquals(['load'], $cacheSandbox->getEventLog());
         $cacheSandbox->flushEventLog();
-        self::assertEmpty($cacheSandbox->getEventLog());
+        $this->assertEmpty($cacheSandbox->getEventLog());
     }
 
     public function testIfIsActiveGivesTrue(): void
     {
-        self::assertTrue((new ObservableCacheSandbox())->isActive());
+        $this->assertTrue((new ObservableCacheSandbox())->isActive());
     }
 }

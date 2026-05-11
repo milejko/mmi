@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/phpunit-bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" executionOrder="default">
-  <coverage>
-    <include>
-      <directory suffix=".php">./src/Mmi/</directory>
-    </include>
-    <report>
-      <html outputDirectory="./.build/phpunit" lowUpperBound="35" highLowerBound="70"/>
-    </report>
-  </coverage>
-  <testsuites>
-    <testsuite name="Mmi Test Suite">
-      <directory>./tests/Mmi</directory>
-    </testsuite>
-  </testsuites>
-  <logging/>
-  <php>
-    <ini name="date.timezone" value="UTC"/>
-  </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/phpunit-bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="false"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         failOnPhpunitDeprecation="true"
+         failOnRisky="true"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
 </phpunit>
