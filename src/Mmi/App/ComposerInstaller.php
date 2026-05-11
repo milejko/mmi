@@ -64,7 +64,7 @@ class ComposerInstaller
         //w trybie deweloperskim linkowanie zasobów i routera dla php -S
         if ($event->isDevMode()) {
             self::linkModuleWebResources();
-            copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/php-serve-router.php', BASE_PATH . '/web/php-serve-router.php');
+            copy(BASE_PATH . '/vendor/mmi/mmi/src/Mmi/App/executables/php-cli-router.php', BASE_PATH . '/web/php-cli-router.php');
             return;
         }
         //kopiowanie zasobów do web/data
