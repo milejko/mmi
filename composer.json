@@ -90,13 +90,6 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^13.0",
-        "phpmd/phpmd": "^2.13",
-        "squizlabs/php_codesniffer": "^3.7",
-        "enlightn/security-checker": "^1.11",
-        "php-http/mock-client": "^1.5",
-        "phpstan/phpstan": "^2.1",
-        "friendsofphp/php-cs-fixer": "^3.12",
-        "phpstan/phpstan-phpunit": "^2.0"
+       "mmi/mmi-build-toolkit": "^3.0"
     }
 }

@@ -14,26 +14,7 @@ Minimum supported PHP version is now **PHP 8.4**. PHP 8.3 and below are no longe
 
 `doctrine/annotations` is no longer a dependency. If your code relied on it directly, add it explicitly to your own `composer.json`.
 
-### Build toolkit replaced with explicit dev dependencies
-
-`mmi/mmi-build-toolkit` has been removed. Dev tools are now declared directly:
-
-```json
-"require-dev": {
-    "phpunit/phpunit": "^13.0",
-    "phpmd/phpmd": "^2.13",
-    "squizlabs/php_codesniffer": "^3.7",
-    "enlightn/security-checker": "*",
-    "php-http/mock-client": "^1.5",
-    "phpstan/phpstan": "^2.1",
-    "friendsofphp/php-cs-fixer": "^3.12",
-    "phpstan/phpstan-phpunit": "^2.0"
-}
-```
-
-Update your project's `require-dev` accordingly.
-
-## Router rename: php-serve-router.php => php-cli-router.php
+## PHP-cli development router rename: php-serve-router.php => php-cli-router.php
 
 `src/Mmi/App/executables/php-serve-router.php` has been renamed to `php-cli-router.php` and simplified — it no longer handles MIME types manually (PHP's built-in server handles static files natively).
 
