@@ -81,12 +81,11 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.1-dev"
+            "dev-master": "5.0-dev"
         }
     },
     "config": {
         "allow-plugins": {
-            "infection/extension-installer": true,
             "php-http/discovery": true
         }
     },
@@ -94,7 +93,7 @@
         "phpunit/phpunit": "^13.0",
         "phpmd/phpmd": "^2.13",
         "squizlabs/php_codesniffer": "^3.7",
-        "enlightn/security-checker": "*",
+        "enlightn/security-checker": "^1.11",
         "php-http/mock-client": "^1.5",
         "phpstan/phpstan": "^2.1",
         "friendsofphp/php-cs-fixer": "^3.12",
