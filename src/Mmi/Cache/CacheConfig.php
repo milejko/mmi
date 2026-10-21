@@ -38,7 +38,8 @@ class CacheConfig
     public $path = '/tmp';
 
     /**
-     * Użyj najpierw bufor do odczytu danych
+     * Użyj rejestru w pamięci procesu (odczyt i zapis)
+     * false: każde wywołanie idzie do handlera (długo działające procesy CLI)
      * @var bool
      */
     public $useRegistry = true;
