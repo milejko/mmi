@@ -85,7 +85,9 @@ class Cache implements CacheInterface, SystemCacheInterface
             $lifetime = $lifetime === null ? $this->config->lifetime : ($lifetime == 0 ? self::MAX_LIFETIME : $lifetime);
         }
         //zapis w rejestrze
-        $this->registry[$key] = $data;
+        if ($this->config->useRegistry) {
+            $this->registry[$key] = $data;
+        }
         //zapis w handlerzie
         return (bool)$this->handler->save($key, $this->setCacheData($data, time() + $lifetime), $lifetime);
     }
@@ -180,7 +182,9 @@ class Cache implements CacheInterface, SystemCacheInterface
             return null;
         }
         //zapis danych do rejestru
-        $this->registry[$key] = $data['d'];
+        if ($this->config->useRegistry) {
+            $this->registry[$key] = $data['d'];
+        }
         //zwrot danych
         return $data['d'];
     }

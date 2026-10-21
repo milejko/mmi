@@ -71,6 +71,75 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($cache->load(self::TEST_KEY), self::TEST_DATA);
     }
 
+    public function testRegistryOffSeesValuesChangedByAnotherInstance()
+    {
+        $path = $this->_createCachePath();
+        $cache = $this->_createFileCache($path, false);
+        $otherProcess = $this->_createFileCache($path, true);
+
+        $this->assertTrue($cache->save('first', self::TEST_KEY));
+        $this->assertEquals('first', $cache->load(self::TEST_KEY));
+        $this->assertTrue($otherProcess->save('second', self::TEST_KEY));
+        $this->assertEquals('second', $cache->load(self::TEST_KEY));
+        $this->assertTrue($otherProcess->remove(self::TEST_KEY));
+        $this->assertNull($cache->load(self::TEST_KEY));
+        $this->_removeCachePath($path);
+    }
+
+    public function testRegistryOffKeepsNothingInTheRegistry()
+    {
+        $path = $this->_createCachePath();
+        $cache = $this->_createFileCache($path, false);
+        $otherProcess = $this->_createFileCache($path, true);
+
+        $this->assertTrue($cache->save(self::TEST_DATA, 'saved-here'));
+        $this->assertTrue($otherProcess->save(self::TEST_DATA, 'saved-elsewhere'));
+        $this->assertEquals(self::TEST_DATA, $cache->load('saved-elsewhere'));
+        //registry back on: anything kept by save() or by the backend read would be served after removal
+        $cache->getConfig()->useRegistry = true;
+        $this->assertTrue($otherProcess->remove('saved-here'));
+        $this->assertTrue($otherProcess->remove('saved-elsewhere'));
+        $this->assertNull($cache->load('saved-here'));
+        $this->assertNull($cache->load('saved-elsewhere'));
+        $this->_removeCachePath($path);
+    }
+
+    public function testRegistryOnServesTheProcessCopy()
+    {
+        $this->assertTrue((new CacheConfig())->useRegistry, 'The registry is on by default');
+        $path = $this->_createCachePath();
+        $cache = $this->_createFileCache($path, true);
+        $otherProcess = $this->_createFileCache($path, true);
+
+        $this->assertTrue($cache->save('first', self::TEST_KEY));
+        $this->assertTrue($otherProcess->save('second', self::TEST_KEY));
+        $this->assertEquals('first', $cache->load(self::TEST_KEY));
+        $this->assertEquals('second', $otherProcess->load(self::TEST_KEY));
+        $this->_removeCachePath($path);
+    }
+
+    protected function _createFileCache(string $path, bool $useRegistry): Cache
+    {
+        $config = new CacheConfig();
+        $config->path = $path;
+        $config->active = true;
+        $config->useRegistry = $useRegistry;
+        return new Cache($config);
+    }
+
+    protected function _createCachePath(): string
+    {
+        $path = BASE_PATH . '/var/cache/registry-test-' . uniqid();
+        mkdir($path, 0777, true);
+        return $path;
+    }
+
+    protected function _removeCachePath(string $path): void
+    {
+        array_map('unlink', glob($path . '/*'));
+        rmdir($path);
+    }
+
     protected function _testActiveCache(Cache $cache)
     {
         $this->assertNull($cache->flush(), 'Flush should always return null');
