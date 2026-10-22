@@ -36,4 +36,11 @@ class CacheConfig
      * @var string
      */
     public $path = '/tmp';
+
+    /**
+     * Użyj rejestru w pamięci procesu (odczyt i zapis)
+     * false: każde wywołanie idzie do handlera (długo działające procesy CLI)
+     * @var bool
+     */
+    public $useRegistry = true;
 }

@@ -34,11 +34,11 @@ final class ObservableCacheSandboxTest extends TestCase
     {
         $cacheSandbox = new ObservableCacheSandbox();
         self::assertTrue($cacheSandbox->save([], 'key'));
-        self::assertTrue($cacheSandbox->save(new self(), 'another-key'));
+        self::assertTrue($cacheSandbox->save(new \stdClass(), 'another-key'));
         self::assertEquals(['save', 'save'], $cacheSandbox->getEventLog());
 
         self::assertEquals([], $cacheSandbox->load('key'));
-        self::assertInstanceOf(self::class, $cacheSandbox->load('another-key'));
+        self::assertInstanceOf(\stdClass::class, $cacheSandbox->load('another-key'));
         self::assertEquals(['save', 'save', 'load', 'load'], $cacheSandbox->getEventLog());
 
         $cacheSandbox->flush();

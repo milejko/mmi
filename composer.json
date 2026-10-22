@@ -94,6 +94,7 @@
         }
     },
     "require-dev": {
-        "mmi/mmi-build-toolkit": "*"
+        "mmi/mmi-build-toolkit": "*",
+        "phpunit/phpunit": "^9.6"
     }
 }
