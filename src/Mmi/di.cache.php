@@ -13,6 +13,7 @@ return [
     'cache.public.handler'      => env('CACHE_PUBLIC_HANDLER', 'file'),
     'cache.public.path'         => env('CACHE_PUBLIC_PATH', BASE_PATH . '/var/cache'),
     'cache.public.lifetime'     => env('CACHE_PUBLIC_LIFETIME', 300),
+    'cache.public.registry'     => env('CACHE_PUBLIC_REGISTRY', true),
 
     SystemCacheInterface::class => function (ContainerInterface $container) {
         $config = new CacheConfig();
@@ -29,6 +30,7 @@ return [
         $config->handler     = $container->get('cache.public.handler');
         $config->path        = $container->get('cache.public.path');
         $config->lifetime    = $container->get('cache.public.lifetime');
+        $config->useRegistry = $container->get('cache.public.registry');
         $container->get(AppProfilerInterface::class)->event(CacheInterface::class . ': public cache setup');
         return new Cache($config);
     },
